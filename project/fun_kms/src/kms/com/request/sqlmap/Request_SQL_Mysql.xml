@@ -1,0 +1,1880 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsRequestDAO">
+
+	<typeAlias alias="egovMap"
+		type="egovframework.rte.psl.dataaccess.util.EgovMap" />
+	<typeAlias alias="RequestVO"
+		type="kms.com.request.vo.RequestVO" />
+	<typeAlias alias="RequestFm"
+		type="kms.com.request.fm.RequestFm" />
+	<typeAlias alias="ReqTaskVO"
+		type="kms.com.request.vo.ReqTaskVO" />
+	<typeAlias alias="ReqTaskFm"
+		type="kms.com.request.fm.ReqTaskFm" />
+	<typeAlias alias="ReviewVO"
+		type="kms.com.request.vo.ReviewVO" />
+	<typeAlias alias="RequestReceiveVO"
+		type="kms.com.request.vo.RequestReceiveVO" />
+	<typeAlias alias="RequestDailyVO"
+		type="kms.com.request.vo.RequestDailyVO" />
+
+	<!-- TENY_170514 요구사항 관련 resultMap -->
+	<resultMap id="mapRequestVO" class="RequestVO">
+		<result property="no" column="NO" />
+		<result property="reqId" column="REQ_ID" />
+		<result property="title" column="TITLE" />
+		<result property="reqType" column="REQ_TYPE" />
+		<result property="status" column="STATUS" />
+		<result property="priority" column="PRIORITY" />
+		<result property="writerNo" column="WRITER_NO" />
+		<result property="writerId" column="WRITER_ID" />
+		<result property="writerName" column="WRITER_NAME" />
+		<result property="dueDate" column="DUE_DATE" />
+		<result property="regDatetime" column="REG_DATETIME" />
+		<result property="startDate" column="START_DATE" />
+		<result property="endDate" column="END_DATE" />
+		<result property="finishDatetime" column="FINISH_DATETIME" />
+		<result property="contents" column="CONTENTS" />
+		<result property="atchFileId" column="ATCH_FILE_ID" />
+		<result property="managerNo" column="MANAGER_NO" />
+		<result property="managerId" column="MANAGER_ID" />
+		<result property="managerName" column="MANAGER_NAME" />
+		<result property="managerMixesMain" column="MAIN_MANAGER" />
+		<result property="mainManagerNo" column="MAIN_MANAGER_NO" />
+		<result property="writerMixes" column="WRITER_MANAGER" />
+		<result property="modifyerNo" column="MODIFYER_NO" />
+		<result property="modifyerName" column="MODIFYER_NAME" />
+	</resultMap>
+
+	<resultMap id="mapRequestVOList" class="RequestVO">
+		<result property="no" column="NO" />
+		<result property="reqId" column="REQ_ID" />
+		<result property="title" column="TITLE" />
+		<result property="reqType" column="REQ_TYPE" />
+		<result property="status" column="STATUS" />
+		<result property="priority" column="PRIORITY" />
+		<result property="writerNo" column="WRITER_NO" />
+		<result property="writerId" column="WRITER_ID" />
+		<result property="writerName" column="WRITER_NAME" />
+		<result property="dueDate" column="DUE_DATE" />
+		<result property="regDatetime" column="REG_DATETIME" />
+		<result property="startDate" column="START_DATE" />
+		<result property="endDate" column="END_DATE" />
+		<result property="finishDatetime" column="FINISH_DATETIME" />		
+
+		<result property="managerNo" column="MANAGER_NO" />
+		<result property="managerId" column="MANAGER_ID" />
+		<result property="managerName" column="MANAGER_NAME" />
+		<result property="managerNameList" column="MANAGER_NAME_LIST" />
+		<result property="managerMixesMain" column="MAIN_MANAGER" />
+	</resultMap>
+
+	<resultMap id="mapRequestStatVOList" class="RequestVO">
+		<result property="managerNo" column="MANAGER_NO" />
+		<result property="managerId" column="MANAGER_ID" />
+		<result property="managerName" column="MANAGER_NAME" />
+		<result property="newRequest" column="NEW_REQUEST" />
+		<result property="finishRequest" column="FINISH_REQUEST" />
+		<result property="remainRequest" column="REMAIN_REQUEST" />
+	</resultMap>
+
+	<!-- TENY_170517 작업 관련 resultMap -->
+	<resultMap id="mapReqTaskVO" class="ReqTaskVO">
+		<result property="reqNo" column="REQ_NO" />
+		<result property="reqId" column="REQ_ID" />
+		<result property="reqTitle" column="REQ_TITLE" />
+		<result property="no" column="NO" />
+		<result property="taskId" column="TASK_ID" />
+		<result property="title" column="TITLE" />
+		<result property="writerNo" column="WRITER_NO" />
+		<result property="writerId" column="WRITER_ID" />
+		<result property="writerName" column="WRITER_NAME" />
+		<result property="regDatetime" column="REG_DATETIME" />
+		<result property="startDatetime" column="START_DATETIME" />
+		<result property="finishDatetime" column="FINISH_DATETIME" />
+		<result property="contents" column="CONTENTS" />
+		<result property="status" column="STATUS" />
+		<result property="workerNo" column="WORKER_NO" />
+		<result property="workerId" column="WORKER_ID" />
+		<result property="workerName" column="WORKER_NAME" />
+		<result property="taskType" column="TASK_TYPE" />
+		<result property="priority" column="PRIORITY" />
+	</resultMap>
+
+	<resultMap id="mapReqTaskVOList" class="ReqTaskVO">
+		<result property="no" column="NO" />
+		<result property="reqNo" column="REQ_NO" />
+		<result property="taskId" column="TASK_ID" />
+		<result property="title" column="TITLE" />
+		<result property="writerNo" column="WRITER_NO" />
+		<result property="writerId" column="WRITER_ID" />
+		<result property="writerName" column="WRITER_NAME" />
+		<result property="regDatetime" column="REG_DATETIME" />
+		<result property="startDatetime" column="START_DATETIME" />
+		<result property="finishDatetime" column="FINISH_DATETIME" />
+		<result property="status" column="STATUS" />
+		<result property="workerNo" column="WORKER_NO" />
+		<result property="workerId" column="WORKER_ID" />
+		<result property="workerName" column="WORKER_NAME" />
+		<result property="taskType" column="TASK_TYPE" />
+		<result property="priority" column="PRIORITY" />
+	</resultMap>
+
+	<resultMap id="mapReqTaskStatVOList" class="ReqTaskVO">
+		<result property="workerNo" column="WORKER_NO" />
+		<result property="workerId" column="WORKER_ID" />
+		<result property="workerName" column="WORKER_NAME" />
+		<result property="newTask" column="NEW_TASK" />
+		<result property="finishTask" column="FINISH_TASK" />
+		<result property="remainTask" column="REMAIN_TASK" />
+	</resultMap>
+
+	<resultMap id="mapReviewVO" class="ReviewVO">
+		<result property="no" column="NO" />
+		<result property="reqNo" column="REQ_NO" />
+		<result property="writerNo" column="WRITER_NO" />
+		<result property="writerId" column="WRITER_ID" />
+		<result property="writerName" column="WRITER_NAME" />
+		<result property="regDatetime" column="REG_DATETIME" />
+		<result property="contents" column="CONTENTS" />
+	</resultMap>
+
+	<!-- 요구사항관리 복수 담당자 VO -->
+	<resultMap id="mapRequestReceiveVO" class="RequestReceiveVO">
+		<result property="no" column="NO" />
+		<result property="reqId" column="REQ_ID" />
+		<result property="userNo" column="USER_NO" />
+		<result property="userNm" column="USER_NM" />
+		<result property="userId" column="USER_ID" />
+		<result property="completeStatus" column="COMPLETE_STATUS" />
+		<result property="completeDateTime" column="COMPLETE_DATETIME" />
+	</resultMap>
+
+	<!-- 나의 업무에 보여줄 요구사항 댓글 내용 -->
+	<resultMap id="mapReqDailyVOList" class="RequestDailyVO">
+		<result property="no" column="NO" />
+		<result property="reqId" column="REQ_ID" />
+		<result property="title" column="TITLE" />
+		<result property="contents" column="CONTENTS" />
+		<result property="status" column="STATUS" />
+		<result property="prjId" column="PRJ_ID" />
+		<result property="prjNm" column="PRJ_NM" />
+	</resultMap>
+
+
+	<!-- TENY_170514 요구사항 목록을 리스트 하는 조회문 -->
+	<select id="KmsRequestDAO.selectRequestList"
+		parameterClass="RequestFm" resultMap="mapRequestVOList">
+		SELECT
+		r.NO AS NO,
+		r.REQ_ID AS REQ_ID,
+		r.TITLE AS TITLE,
+		r.REQ_TYPE AS
+		REQ_TYPE,
+		r.STATUS AS STATUS,
+		r.PRIORITY AS PRIORITY,
+		u.NO AS WRITER_NO,
+		u.USER_ID AS WRITER_ID,
+		u.USER_NM AS WRITER_NAME,
+		DATE_FORMAT(r.DUE_DATE, '%y.%m.%d') AS DUE_DATE,
+		DATE_FORMAT(r.REG_DATETIME, '%y.%m.%d') AS REG_DATETIME,
+		DATE_FORMAT(r.START_DATE, '%y.%m.%d') AS START_DATE,
+		DATE_FORMAT(r.END_DATE, '%y.%m.%d') AS END_DATE,
+		DATE_FORMAT(r.FINISH_DATETIME, '%y.%m.%d') AS FINISH_DATETIME,
+		IFNULL(r.MANAGER_NO, 0) AS MANAGER_NO,
+		IFNULL(u2.USER_ID, '') AS
+		MANAGER_ID,
+		IFNULL(u2.USER_NM, '') AS MANAGER_NAME,
+		(SELECT
+		GROUP_CONCAT(USER_NM SEPARATOR ',')
+		FROM
+		hm_request_receive
+
+		WHERE
+		REQ_ID =
+		r.REQ_ID) as MANAGER_NAME_LIST,
+		r.MAIN_MANAGER AS MAIN_MANAGER
+
+		FROM hm_request r
+		JOIN tbl_userinfo u
+		ON r.WRITER_NO = u.NO
+		LEFT JOIN tbl_userinfo
+		u2
+		ON r.MANAGER_NO = u2.NO
+		LEFT JOIN hm_request_receive hr
+		ON
+		r.req_id=hr.req_id
+		WHERE
+		TRUE
+		<isNotEqual prepend="AND" property="firstOpen"
+			compareValue="0"> 
+			<![CDATA[
+				(r.STATUS & 15 and DUE_DATE <= #nextMonthEnd# and due_DATE != '')
+			]]>
+		</isNotEqual>
+		<isNotEqual prepend="AND" property="searchReqType"
+			compareValue="0"> 
+			<![CDATA[
+				r.REQ_TYPE & #searchReqType#
+			]]>
+		</isNotEqual>
+		<isNotEqual prepend="AND" property="searchStatus"
+			compareValue="0">
+			<isEmpty property="searchManagerMixesList">
+				<![CDATA[
+					r.STATUS & #searchStatus# AND (r.DUE_DATE != '')
+				]]>
+			</isEmpty>
+			<isNotEmpty property="searchManagerMixesList">
+				<isEqual property="searchStatus" compareValue="8">
+					<![CDATA[
+						((r.STATUS & #searchStatus# OR hr.COMPLETE_STATUS=1) AND r.STATUS != 16) AND (r.DUE_DATE != '')
+					]]>
+				</isEqual>
+				<isNotEqual property="searchStatus" compareValue="8">
+					<![CDATA[
+						r.STATUS & #searchStatus# AND (r.DUE_DATE != '')
+					]]>
+				</isNotEqual>
+			</isNotEmpty>
+		</isNotEqual>
+		<isNotEqual prepend="AND" property="untreated"
+			compareValue="0"> 
+			<![CDATA[
+			(#today# > r.DUE_DATE) AND (r.DUE_DATE != '')  
+			]]>
+		</isNotEqual>
+		<isNotEqual prepend="AND" property="lastCreate"
+			compareValue="0"> 
+			<![CDATA[
+				(r.STATUS & 32)
+			]]>
+		</isNotEqual>
+		<isNotEqual prepend="AND" property="weekChk"
+			compareValue="0"> 
+			<![CDATA[
+				(r.DUE_DATE >= date_format(subdate(curdate()+0,date_format(curdate()+0,'%w')-1), '%Y%m%d')
+				AND r.DUE_DATE <= date_format(subdate(curdate()+0,date_format(curdate()+0,'%w')-14), '%Y%m%d')
+				OR r.DUE_DATE < date_format(curdate(), '%Y%m%d'))
+			]]>
+		</isNotEqual>
+		<isNotEqual prepend="AND" property="monthChk"
+			compareValue="0"> 
+			<![CDATA[
+				(r.DUE_DATE > date_format(subdate(curdate()+0,date_format(curdate()+0,'%w')-1), '%Y%m%d')
+				AND r.DUE_DATE <= date_format(subdate(curdate()+0,date_format(curdate()+0,'%w')-30), '%Y%m%d')
+				OR r.DUE_DATE < date_format(curdate(), '%Y%m%d'))
+			]]>
+		</isNotEqual>
+		<isNotEqual prepend="AND" property="searchPriority"
+			compareValue="0"> 
+			<![CDATA[
+				r.STATUS & #searchPriority#
+			]]>
+		</isNotEqual>
+		<isNotEmpty prepend="AND" property="searchManagerMixesList">
+			CONCAT(hr.USER_NM, '(', hr.USER_ID, ')' ) IN
+			<iterate property="searchManagerMixesList" open="(" close=")"
+				conjunction=",">
+				#searchManagerMixesList[]#
+			</iterate>
+
+			<isEqual prepend="AND" property="modeChk" compareValue="0">
+				<isNotEqual property="searchStatus" compareValue="8">
+					(hr.COMPLETE_STATUS=0 OR r.MAIN_MANAGER = hr.USER_NM)
+				</isNotEqual>
+			</isEqual>
+
+		</isNotEmpty>
+
+		<isNotEmpty prepend="AND" property="searchTitle">
+			r.TITLE LIKE CONCAT('%',
+			#searchTitle#, '%')
+		</isNotEmpty>
+		<!-- <isNotEmpty prepend="AND" property="searchWriterMixes"> CONCAT(hr.USER_NM, 
+			'(', hr.USER_ID, ')' ) = #searchWriterMixes# r.WRITER_NO = (SELECT NO FROM 
+			tbl_userinfo usr where CONCAT(usr.USER_NM, '(', usr.USER_ID, ')' ) = #searchWriterMixes#) 
+			</isNotEmpty> -->
+
+		<isNotEmpty prepend="AND" property="searchWriterMixesList">
+			r.WRITER_NO IN
+			<iterate property="searchWriterMixesList" open="(" close=")"
+				conjunction=",">
+				((SELECT NO FROM tbl_userinfo usr where
+				CONCAT(usr.USER_NM, '(', usr.USER_ID, ')' ) =
+				#searchWriterMixesList[]#))
+			</iterate>
+		</isNotEmpty>
+
+		<isNotEmpty prepend="AND" property="searchDateFrom">
+<![CDATA[
+			DATE(r.REG_DATETIME) >= CONCAT(SUBSTR(#searchDateFrom#, 1, 4), '-' , SUBSTR(#searchDateFrom#, 5, 2), '-' , SUBSTR(#searchDateFrom#, 7, 2))
+]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDateTo">
+<![CDATA[
+			DATE(r.REG_DATETIME) <= CONCAT(SUBSTR(#searchDateTo#, 1, 4), '-' , SUBSTR(#searchDateTo#, 5, 2), '-' , SUBSTR(#searchDateTo#, 7, 2))
+]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDueDateFrom">
+<![CDATA[
+			DUE_DATE >= #searchDueDateFrom#
+]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDueDateTo">
+<![CDATA[
+			DUE_DATE <= #searchDueDateTo#
+]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchFinishDateFrom">
+<![CDATA[
+			DATE(r.FINISH_DATETIME) >= CONCAT(SUBSTR(#searchFinishDateFrom#, 1, 4), '-' , SUBSTR(#searchFinishDateFrom#, 5, 2), '-' , SUBSTR(#searchFinishDateFrom#, 7, 2))
+]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchFinishDateTo">
+<![CDATA[
+			DATE(r.FINISH_DATETIME) <= CONCAT(SUBSTR(#searchFinishDateTo#, 1, 4), '-' , SUBSTR(#searchFinishDateTo#, 5, 2), '-' , SUBSTR(#searchFinishDateTo#, 7, 2))
+]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchPrjId">
+			r.PRJ_ID = #searchPrjId#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDueNULL">
+			DUE_DATE = ''
+		</isNotEmpty>
+		GROUP BY r.REQ_ID
+		ORDER BY r.REG_DATETIME ASC , DUE_DATE ASC, (CASE
+		WHEN r.STATUS = '8' THEN '1' END) ASC
+		<isNotEmpty property="recordCountPerPage">
+			LIMIT
+			#recordCountPerPage# OFFSET
+			#firstIndex#
+		</isNotEmpty>
+
+	</select>
+
+
+	<!-- lys_20180712 요구사항 REQ_ID 를 구하기 위한 SQL -->
+	<select id="KmsRequestDAO.selectRequestReqId"
+		resultClass="java.lang.String">
+		<!-- SELECT CONCAT(SUBSTR(YEAR(SYSDATE()), 3, 2), '-', COUNT(r.NO) + 1) 
+			FROM hm_request r WHERE YEAR(r.REG_DATETIME) = YEAR(SYSDATE()) -->
+		(
+		SELECT CONCAT (
+		SUBSTR(YEAR(SYSDATE()), 3, 2)
+		,'-'
+		,SUBSTRING_INDEX(req_id, '-', - 1) + 1
+		)
+		FROM hm_request
+		WHERE
+		YEAR(REG_DATETIME) = YEAR(SYSDATE())
+		ORDER BY NO DESC LIMIT 1
+		)
+
+		UNION ALL
+
+		(
+		SELECT CONCAT (
+		SUBSTR(YEAR(SYSDATE()), 3, 2)
+		,'-'
+		,'1'
+		) AS 'req_id'
+		FROM dual
+		WHERE NOT EXISTS (
+		SELECT ''
+		FROM hm_request
+		WHERE
+		YEAR(REG_DATETIME) = YEAR(SYSDATE())
+		ORDER BY NO DESC LIMIT 1
+		)
+		)
+	</select>
+
+	<!-- 요구사항 관련 SQL문들 -->
+	<!-- INSERT 문들 -->
+	<!-- TENY_170514 요구사항을 등록하기위한 SQL문 -->
+	<insert id="KmsRequestDAO.insertRequest"
+		parameterClass="RequestVO">
+		INSERT INTO hm_request (
+		REQ_ID,
+		TITLE,
+		REQ_TYPE,
+		STATUS,
+		PRIORITY,
+		CONTENTS,
+		WRITER_NO,
+		<isNotEmpty property="managerMixes">
+			MANAGER_NO,
+		</isNotEmpty>
+		REG_DATETIME,
+		<isNotEmpty property="startDate">
+			START_DATE,
+		</isNotEmpty>
+		<isNotEmpty property="endDate">
+			END_DATE,
+		</isNotEmpty>
+		DUE_DATE,
+		PRJ_ID,
+		ATCH_FILE_ID
+		<isNotEmpty property="managerMixesMain">
+			,MAIN_MANAGER
+		</isNotEmpty>
+		)
+		VALUES (
+		#reqId#,
+		#title#,
+		#reqType#,
+		#status#,
+		#priority#,
+		#contents#,
+		<isNotEmpty property="writerMixes">
+			(SELECT NO FROM TBL_USERINFO WHERE
+			CONCAT(USER_NM,'(',USER_ID,')') =
+			#writerMixes#),
+		</isNotEmpty>
+		<isNotEmpty property="managerMixes">
+			(SELECT NO FROM TBL_USERINFO WHERE
+			CONCAT(USER_NM,'(',USER_ID,')') =
+			#managerMixes#),
+		</isNotEmpty>
+		<isEmpty property="regDatetime">
+			SYSDATE(),
+		</isEmpty>
+		<isNotEmpty property="regDatetime">
+			#regDatetime#,
+		</isNotEmpty>
+		<isNotEmpty property="startDate">
+			#startDate#,
+		</isNotEmpty>
+		<isNotEmpty property="endDate">
+			#endDate#,
+		</isNotEmpty>
+		#dueDate#,
+		#prjId#,
+		#atchFileId#
+		<isNotEmpty property="managerMixesMain">
+			,(SELECT USER_NM FROM TBL_USERINFO
+			WHERE CONCAT(USER_NM,'(',USER_ID,')') =
+			#managerMixesMain#)
+		</isNotEmpty>
+		)
+	</insert>
+
+	<!-- lys_20180712 요구사항 담당자를 복수로 지정하기 위한 SQL -->
+	<insert id="KmsRequestDAO.insertRequestReceive"
+		parameterClass="RequestReceiveVO">
+		INSERT INTO hm_request_receive
+		(
+		USER_NO
+		,REQ_ID
+		,USER_ID
+		,USER_NM
+		)(
+		SELECT
+		USER_NO
+		,REQ_ID
+		,USER_ID
+		,USER_NM
+		FROM(
+		SELECT
+		NO AS USER_NO, #reqId# AS
+		REQ_ID , USER_ID, USER_NM
+		FROM TBL_USERINFO
+		<iterate prepend="WHERE USER_ID IN " open="(" conjunction=","
+			close=")" property="reqUserIdList">
+			#reqUserIdList[]#
+		</iterate>
+		)k
+		)
+	</insert>
+
+	<!-- LYS_1807116 담당자 삭제 SQL문 -->
+	<delete id="KmsRequestDAO.deleteRequestReceive"
+		parameterClass="RequestReceiveVO">
+		DELETE FROM hm_request_receive
+		WHERE
+		REQ_ID = #reqId#
+	</delete>
+
+	<select id="KmsRequestDAO.getRequestReceive"
+		resultMap="mapRequestReceiveVO">
+		SELECT
+		a.NO, a.USER_NO, a.USER_NM, a.USER_ID, a.REQ_ID,
+		a.COMPLETE_STATUS,
+		a.COMPLETE_DATETIME
+		FROM
+		hm_request_receive a
+		WHERE
+		a.REQ_ID = #reqId#
+	</select>
+
+	<select id="KmsRequestDAO.getRequestReceiveComplete"
+		resultClass="java.lang.Integer">
+		SELECT
+		IFNULL(EXP(SUM(LOG(complete_status))),0)
+		FROM
+		hm_request_receive
+		WHERE REQ_ID = #reqId#
+		GROUP BY complete_status
+	</select>
+
+	<!-- TENY_170514 등록된 요청을 한개 조회하기위한 SQL문 -->
+	<select id="KmsRequestDAO.getRequest" resultMap="mapRequestVO">
+		SELECT
+		r.NO AS
+		NO,
+		r.REQ_ID AS REQ_ID,
+		r.TITLE AS TITLE,
+		r.REQ_TYPE AS REQ_TYPE,
+		r.STATUS AS STATUS,
+		r.PRIORITY AS PRIORITY,
+		u.NO AS WRITER_NO,
+		u.USER_ID
+		AS WRITER_ID,
+		u.USER_NM AS WRITER_NAME,
+		DATE_FORMAT(r.REG_DATETIME,
+		'%Y%m%d') AS REG_DATETIME,
+		DATE_FORMAT(r.FINISH_DATETIME, '%y.%m.%d
+		%H:%i') AS FINISH_DATETIME,
+		DATE_FORMAT(r.START_DATE, '%Y%m%d') AS START_DATE,
+		DATE_FORMAT(r.END_DATE, '%Y%m%d') AS END_DATE,
+		IFNULL(r.CONTENTS, '') AS CONTENTS,
+		r.DUE_DATE AS DUE_DATE,
+		r.ATCH_FILE_ID AS ATCH_FILE_ID,
+		IFNULL(r.MANAGER_NO, 0) AS MANAGER_NO,
+		IFNULL(u2.USER_ID, '') AS MANAGER_ID,
+		IFNULL(u2.USER_NM, '') AS
+		MANAGER_NAME,
+		(SELECT CONCAT(USER_NM,'(',USER_ID,')') FROM TBL_USERINFO
+		WHERE USER_NM =
+		r.MAIN_MANAGER AND GHOST = '0' AND ORGNZT_ID !=
+		'ORGAN_RET_ORGAN_CODE'
+		AND ORGNZT_ID != 'ORGAN_STD_ORGAN_CODE' limit 1)
+		AS MAIN_MANAGER,
+		IFNULL((SELECT NO FROM TBL_USERINFO WHERE USER_NM =
+		r.MAIN_MANAGER AND GHOST
+		= '0' AND ORGNZT_ID != 'ORGAN_RET_ORGAN_CODE'
+		AND ORGNZT_ID !=
+		'ORGAN_STD_ORGAN_CODE' limit 1), 0) AS MAIN_MANAGER_NO,
+		CONCAT(u.USER_NM,'(',u.USER_ID,')') AS WRITER_MANAGER,
+		IFNULL(r.MODIFYER_NO, 0) AS MODIFYER_NO,
+		IFNULL(r.MODIFYER_NAME, '') AS
+		MODIFYER_NAME
+		FROM hm_request r
+		JOIN tbl_userinfo u
+		ON r.WRITER_NO = u.NO
+		LEFT JOIN tbl_userinfo u2
+		ON
+		r.MANAGER_NO = u2.NO
+		WHERE
+		r.NO = #no#
+	</select>
+
+	<!-- TENY_170514 요구사항을 수정하기 위한 SQL문 -->
+	<update id="KmsRequestDAO.updateRequest">
+		UPDATE hm_request
+		SET
+		NO = #no#
+		<isNotEmpty prepend=", " property="title"> TITLE = #title#						</isNotEmpty>
+		<isNotEmpty prepend=", " property="reqType"> REQ_TYPE = #reqType#					</isNotEmpty>
+		<isNotEmpty prepend=", " property="status"> STATUS = #status#					</isNotEmpty>
+		<isNotEmpty prepend=", " property="priority"> PRIORITY = #priority#					</isNotEmpty>
+		<isNotEmpty prepend=", " property="prjId"> PRJ_ID = #prjId#						</isNotEmpty>
+		<isNotEmpty prepend=", " property="contents"> CONTENTS = #contents#				</isNotEmpty>
+		<isNotEmpty prepend=", " property="dueDate"> DUE_DATE = #dueDate#				</isNotEmpty>
+		<isNotEmpty prepend=", " property="startDate"> START_DATE = #startDate#			</isNotEmpty>
+		<isNotEmpty prepend=", " property="endDate"> END_DATE = #endDate#				</isNotEmpty>
+		<isNotEmpty prepend=", " property="atchFileId"> ATCH_FILE_ID =
+			#atchFileId#
+		</isNotEmpty>
+		<isNotEmpty prepend=", " property="writerMixes">
+			WRITER_NO = (SELECT NO
+			FROM TBL_USERINFO WHERE CONCAT(USER_NM,'(',USER_ID,')')
+			=
+			#writerMixes#)
+		</isNotEmpty>
+		<isNotEmpty prepend=", " property="managerMixes">
+			MANAGER_NO = (SELECT NO
+			FROM TBL_USERINFO WHERE CONCAT(USER_NM,'(',USER_ID,')')
+			=
+			#managerMixes#)
+		</isNotEmpty>
+		<isNotEmpty prepend=", " property="managerMixesMain">
+			MAIN_MANAGER = (SELECT
+			USER_NM FROM TBL_USERINFO WHERE
+			CONCAT(USER_NM,'(',USER_ID,')') =
+			#managerMixesMain#)
+		</isNotEmpty>
+		<isNotEmpty prepend=", " property="regDatetime">
+			REG_DATETIME =
+			#regDatetime#
+		</isNotEmpty>
+		<isEqual prepend=", " property="status" compareValue="16">
+			FINISH_DATETIME = SYSDATE()
+		</isEqual>
+		<isNotEqual prepend=", " property="status"
+			compareValue="16">
+			FINISH_DATETIME = NULL
+		</isNotEqual>
+		<isNotEmpty prepend=", " property="modifyerNo">
+			MODIFYER_NO =
+			#modifyerNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=", " property="modifyerName">
+			MODIFYER_NAME =
+			#modifyerName#
+		</isNotEmpty>
+		WHERE
+		NO = #no#
+	</update>
+
+	<update id="KmsRequestDAO.updateRequestModifyer">
+		UPDATE hm_request
+		SET
+		NO = #no#
+		<isNotEmpty prepend=", " property="modifyerNo">
+			MODIFYER_NO =
+			#modifyerNo#
+		</isNotEmpty>
+		<isNotEmpty prepend=", " property="modifyerName">
+			MODIFYER_NAME =
+			#modifyerName#
+		</isNotEmpty>
+		WHERE
+		NO = #no#
+	</update>
+
+	<update id="KmsRequestDAO.updateRequestReceiveComplete">
+		UPDATE
+		hm_request_receive
+		SET
+		COMPLETE_STATUS =
+		#completeStatus#
+		,COMPLETE_DATETIME = #completeDateTime#
+		WHERE
+		NO = #no#
+	</update>
+
+	<update id="KmsRequestDAO.updateRequestReceiveCompleteAll">
+		UPDATE hm_request_receive
+		SET
+		COMPLETE_STATUS = 1
+		,COMPLETE_DATETIME = #completeDateTime#
+		WHERE
+		REQ_ID = #reqId#
+	</update>
+
+	<update id="KmsRequestDAO.updateRequestStatus">
+		UPDATE hm_request
+		SET
+		STATUS = #status#
+		WHERE
+		REQ_ID =
+		#reqId#
+	</update>
+
+
+	<select id="KmsRequestDAO.selectRequestListTotCnt"
+		resultClass="java.lang.Integer">
+
+		SELECT COUNT(r.NO)
+		FROM(
+		SELECT
+		r.NO
+		FROM hm_request r
+		JOIN tbl_prj p
+		ON
+		r.PRJ_ID = p.PRJ_ID
+		JOIN tbl_userinfo u
+		ON r.WRITER_NO = u.NO
+		LEFT JOIN
+		tbl_userinfo u2
+		ON r.MANAGER_NO = u2.NO
+		LEFT JOIN hm_request_receive hr
+		ON r.req_id=hr.req_id
+		WHERE
+		TRUE
+		<isNotEqual prepend="AND" property="firstOpen"
+			compareValue="0"> 
+				<![CDATA[
+					(r.STATUS & 15 and DUE_DATE <= #nextMonthEnd# and due_DATE != '')
+				]]>
+		</isNotEqual>
+		<isNotEqual prepend="AND" property="searchReqType"
+			compareValue="0"> 
+				<![CDATA[
+					r.REQ_TYPE & #searchReqType#
+				]]>
+		</isNotEqual>
+		<isNotEqual prepend="AND" property="searchStatus"
+			compareValue="0">
+			<isEmpty property="searchManagerMixesList">
+					<![CDATA[
+						r.STATUS & #searchStatus# AND (r.DUE_DATE != '')
+					]]>
+			</isEmpty>
+			<isNotEmpty property="searchManagerMixesList">
+				<isEqual property="searchStatus" compareValue="8">
+						<![CDATA[
+							((r.STATUS & #searchStatus# OR hr.COMPLETE_STATUS=1) AND r.STATUS != 16) AND (r.DUE_DATE != '')
+						]]>
+				</isEqual>
+				<isNotEqual property="searchStatus" compareValue="8">
+						<![CDATA[
+							r.STATUS & #searchStatus# AND (r.DUE_DATE != '')
+						]]>
+				</isNotEqual>
+			</isNotEmpty>
+		</isNotEqual>
+		<isNotEqual prepend="AND" property="untreated"
+			compareValue="0"> 
+				<![CDATA[
+				(#today# > r.DUE_DATE) AND (r.DUE_DATE != '')  
+				]]>
+		</isNotEqual>
+		<isNotEqual prepend="AND" property="lastCreate"
+			compareValue="0"> 
+				<![CDATA[
+					(r.STATUS & 32)
+				]]>
+		</isNotEqual>
+		<isNotEqual prepend="AND" property="weekChk"
+			compareValue="0"> 
+				<![CDATA[
+					(r.DUE_DATE >= date_format(subdate(curdate()+0,date_format(curdate()+0,'%w')-1), '%Y%m%d')
+					AND r.DUE_DATE <= date_format(subdate(curdate()+0,date_format(curdate()+0,'%w')-14), '%Y%m%d')
+					OR r.DUE_DATE < date_format(curdate(), '%Y%m%d'))
+				]]>
+		</isNotEqual>
+		<isNotEqual prepend="AND" property="monthChk"
+			compareValue="0"> 
+				<![CDATA[
+					(r.DUE_DATE > date_format(subdate(curdate()+0,date_format(curdate()+0,'%w')-1), '%Y%m%d')
+					AND r.DUE_DATE <= date_format(subdate(curdate()+0,date_format(curdate()+0,'%w')-30), '%Y%m%d')
+					OR r.DUE_DATE < date_format(curdate(), '%Y%m%d'))
+				]]>
+		</isNotEqual>
+		<isNotEqual prepend="AND" property="searchPriority"
+			compareValue="0"> 
+				<![CDATA[
+					r.STATUS & #searchPriority#
+				]]>
+		</isNotEqual>
+		<isNotEmpty prepend="AND" property="searchManagerMixesList">
+			CONCAT(hr.USER_NM, '(', hr.USER_ID, ')' ) IN
+			<iterate property="searchManagerMixesList" open="(" close=")"
+				conjunction=",">
+				#searchManagerMixesList[]#
+			</iterate>
+			<isNotEqual property="searchStatus" compareValue="8">
+				<isEqual prepend="AND" property="modeChk" compareValue="0">
+					<isNotEqual property="searchStatus" compareValue="8">
+						(hr.COMPLETE_STATUS=0 OR r.MAIN_MANAGER = hr.USER_NM)
+					</isNotEqual>
+				</isEqual>
+			</isNotEqual>
+		</isNotEmpty>
+		<!-- <isNotEqual prepend="AND" property="modeChk" compareValue="0"> (hr.COMPLETE_STATUS=0 
+			OR r.MAIN_MANAGER = hr.USER_NM) </isNotEqual> -->
+		<isNotEmpty prepend="AND" property="searchTitle">
+			r.TITLE LIKE CONCAT('%',
+			#searchTitle#, '%')
+		</isNotEmpty>
+		<!-- <isNotEmpty prepend="AND" property="searchWriterMixes"> CONCAT(u.USER_NM, 
+			'(', u.USER_ID, ')' ) = #searchWriterMixes# r.WRITER_NO = (SELECT NO FROM 
+			tbl_userinfo usr where CONCAT(usr.USER_NM, '(', usr.USER_ID, ')' ) = #searchWriterMixes#) 
+			</isNotEmpty> -->
+
+		<isNotEmpty prepend="AND" property="searchWriterMixesList">
+			r.WRITER_NO IN
+			<iterate property="searchWriterMixesList" open="(" close=")"
+				conjunction=",">
+				((SELECT NO FROM tbl_userinfo usr where
+				CONCAT(usr.USER_NM, '(',
+				usr.USER_ID, ')' ) =
+				#searchWriterMixesList[]#))
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDateFrom">
+	<![CDATA[
+				DATE(r.REG_DATETIME) >= CONCAT(SUBSTR(#searchDateFrom#, 1, 4), '-' , SUBSTR(#searchDateFrom#, 5, 2), '-' , SUBSTR(#searchDateFrom#, 7, 2))
+	]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDateTo">
+	<![CDATA[
+				DATE(r.REG_DATETIME) <= CONCAT(SUBSTR(#searchDateTo#, 1, 4), '-' , SUBSTR(#searchDateTo#, 5, 2), '-' , SUBSTR(#searchDateTo#, 7, 2))
+	]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDueDateFrom">
+	<![CDATA[
+				DUE_DATE >= #searchDueDateFrom#
+	]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDueDateTo">
+	<![CDATA[
+				DUE_DATE <= #searchDueDateTo#
+	]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchFinishDateFrom">
+	<![CDATA[
+				DATE(r.FINISH_DATETIME) >= CONCAT(SUBSTR(#searchFinishDateFrom#, 1, 4), '-' , SUBSTR(#searchFinishDateFrom#, 5, 2), '-' , SUBSTR(#searchFinishDateFrom#, 7, 2))
+	]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchFinishDateTo">
+	<![CDATA[
+				DATE(r.FINISH_DATETIME) <= CONCAT(SUBSTR(#searchFinishDateTo#, 1, 4), '-' , SUBSTR(#searchFinishDateTo#, 5, 2), '-' , SUBSTR(#searchFinishDateTo#, 7, 2))
+	]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchPrjId">
+			r.PRJ_ID = #searchPrjId#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDueNULL">
+			DUE_DATE = ''
+		</isNotEmpty>
+		GROUP BY r.REQ_ID
+		)r
+	</select>
+
+	<!-- TENY_170611 요구사항 처리통계를 리스트 하는 조회문 -->
+	<select id="KmsRequestDAO.selectRequestStat"
+		parameterClass="RequestFm" resultMap="mapRequestStatVOList">
+		SELECT
+		u.NO AS MANAGER_NO,
+		u.USER_ID AS MANAGER_ID,
+		u.USER_NM AS
+		MANAGER_NAME,
+		IFNULL(new.NEW_REQUEST, 0) AS
+		NEW_REQUEST,
+		IFNULL(finish.FINISH_REQUEST, 0) AS FINISH_REQUEST,
+		IFNULL(remain.REMAIN_REQUEST, 0) AS REMAIN_REQUEST
+		FROM tbl_userinfo u
+		JOIN tbl_orgnzt o
+		ON u.ORGNZT_ID = o.ORGNZT_ID
+		LEFT JOIN (
+		SELECT
+		hr.USER_NO AS MANAGER_NO,
+		COUNT(*) AS NEW_REQUEST
+		FROM hm_request r
+		LEFT
+		JOIN hm_request_receive hr
+		ON r.REQ_ID=hr.REQ_ID
+		WHERE 
+			<![CDATA[
+				r.STATUS & 29
+			]]>
+		<isNotEmpty prepend="AND" property="searchDueDateFrom">
+<![CDATA[
+			r.DUE_DATE >= #searchDueDateFrom#
+]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDueDateTo">
+<![CDATA[
+			r.DUE_DATE <= #searchDueDateTo#
+]]>
+		</isNotEmpty>
+		AND r.due_date != ''
+		GROUP BY hr.USER_NO ) new
+		ON u.no = new.MANAGER_NO
+		LEFT JOIN (
+		SELECT
+		hr.USER_NO AS MANAGER_NO,
+		COUNT(*) AS FINISH_REQUEST
+		FROM hm_request r
+		LEFT JOIN hm_request_receive hr
+		ON r.REQ_ID=hr.REQ_ID
+		WHERE 
+			<![CDATA[
+				r.STATUS & 16
+			]]>
+		<isNotEmpty prepend="AND" property="searchDueDateFrom">
+<![CDATA[
+			r.DUE_DATE >= #searchDueDateFrom#
+]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDueDateTo">
+<![CDATA[
+			r.DUE_DATE <= #searchDueDateTo#
+]]>
+		</isNotEmpty>
+		AND r.due_date != ''
+		GROUP BY hr.USER_NO ) finish
+		ON u.no =
+		finish.MANAGER_NO
+		LEFT JOIN (
+		SELECT
+		hr.USER_NO AS MANAGER_NO,
+		COUNT(*) AS
+		REMAIN_REQUEST
+		FROM hm_request r
+		LEFT JOIN hm_request_receive hr
+		ON
+		r.REQ_ID=hr.REQ_ID
+		WHERE 
+			<![CDATA[
+				r.STATUS & 13
+			]]>
+		<isNotEmpty prepend="AND" property="searchDueDateFrom">
+<![CDATA[
+			r.DUE_DATE >= #searchDueDateFrom#
+]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDueDateTo">
+<![CDATA[
+			r.DUE_DATE <= #searchDueDateTo#
+]]>
+		</isNotEmpty>
+		AND r.due_date != ''
+		GROUP BY hr.USER_NO) remain
+		ON u.no =
+		remain.MANAGER_NO
+		WHERE
+		u.WORK_ST = 'W'
+		<isNotEmpty prepend="AND" property="searchManagerMixesList">
+			CONCAT(u.USER_NM, '(', u.USER_ID, ')' ) IN
+			<iterate property="searchManagerMixesList" open="(" close=")"
+				conjunction=",">
+				#searchManagerMixesList[]#
+			</iterate>
+		</isNotEmpty>
+		<isEmpty prepend="AND" property="searchManagerMixesList">
+			o.ORG_TREE LIKE
+			'%ORGAN_00000000000012%'
+		</isEmpty>
+		ORDER BY u.ORGNZT_ID, u.RANK_ID, u.POSITION
+	</select>
+
+	<!-- TENY_170805 요구사항의 처리현황통계를 조회하는 SQL -->
+	<select id="KmsRequestDAO.selectRequestProcessStat"
+		parameterClass="RequestFm" resultClass="egovMap">
+
+		SELECT (
+		SELECT COUNT(REQ_ID)
+		FROM (
+		SELECT r.REQ_ID
+		FROM hm_request r
+		LEFT JOIN hm_request_receive hr ON r.REQ_ID = hr.REQ_ID
+		WHERE 
+			<![CDATA[
+				(r.STATUS & 125)
+			]]>
+		<isNotEmpty prepend="AND" property="searchDueDateFrom">
+			<![CDATA[
+				 r.DUE_DATE >= #searchDueDateFrom#
+			]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDueDateTo">
+				<![CDATA[
+					r.DUE_DATE <= #searchDueDateTo#
+				]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchManagerMixesList">
+			CONCAT(hr.USER_NM, '(', hr.USER_ID, ')' ) IN
+			<iterate property="searchManagerMixesList" open="(" close=")"
+				conjunction=",">
+				#searchManagerMixesList[]#
+			</iterate>
+		</isNotEmpty>
+		AND r.due_date != ''
+		GROUP BY r.req_id
+		) a
+		) AS ST_TOTAL
+		,(
+		SELECT
+		COUNT(REQ_ID)
+		FROM (
+		SELECT r.REQ_ID
+		FROM hm_request r
+		LEFT JOIN
+		hm_request_receive hr ON r.REQ_ID = hr.REQ_ID
+		WHERE 
+			<![CDATA[
+				(r.STATUS & 1)
+			]]>
+		<isNotEmpty prepend="AND" property="searchDueDateFrom">
+				<![CDATA[
+					 r.DUE_DATE >= #searchDueDateFrom#
+				]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDueDateTo">
+				<![CDATA[
+					r.DUE_DATE <= #searchDueDateTo#
+				]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchManagerMixesList">
+			CONCAT(hr.USER_NM, '(', hr.USER_ID, ')' ) IN
+			<iterate property="searchManagerMixesList" open="(" close=")"
+				conjunction=",">
+				#searchManagerMixesList[]#
+			</iterate>
+		</isNotEmpty>
+		AND r.due_date != ''
+		GROUP BY r.req_id
+		) a
+		) AS ST_REQUEST
+		,(
+		SELECT
+		COUNT(REQ_ID)
+		FROM (
+		SELECT r.REQ_ID
+		FROM hm_request r
+		LEFT JOIN
+		hm_request_receive hr ON r.REQ_ID = hr.REQ_ID
+		WHERE
+			<![CDATA[
+				(r.STATUS & 4)
+			]]>
+		<isNotEmpty prepend="AND" property="searchDueDateFrom">
+				<![CDATA[
+					 r.DUE_DATE >= #searchDueDateFrom#
+				]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDueDateTo">
+				<![CDATA[
+					r.DUE_DATE <= #searchDueDateTo#
+				]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchManagerMixesList">
+			CONCAT(hr.USER_NM, '(', hr.USER_ID, ')' ) IN
+			<iterate property="searchManagerMixesList" open="(" close=")"
+				conjunction=",">
+				#searchManagerMixesList[]#
+			</iterate>
+		</isNotEmpty>
+		AND r.due_date != ''
+		GROUP BY r.req_id
+		) a
+		) AS ST_PROCESS
+		,(
+		SELECT
+		COUNT(REQ_ID)
+		FROM (
+		SELECT r.REQ_ID
+		FROM hm_request r
+		LEFT JOIN
+		hm_request_receive hr ON r.REQ_ID = hr.REQ_ID
+		WHERE
+			<![CDATA[
+				 (r.STATUS & 16)
+			]]>
+		<isNotEmpty prepend="AND" property="searchDueDateFrom">
+				<![CDATA[
+					r.DUE_DATE >= #searchDueDateFrom#
+				]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDueDateTo">
+				<![CDATA[
+					r.DUE_DATE <= #searchDueDateTo#
+				]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchManagerMixesList">
+			CONCAT(hr.USER_NM, '(', hr.USER_ID, ')' ) IN
+			<iterate property="searchManagerMixesList" open="(" close=")"
+				conjunction=",">
+				#searchManagerMixesList[]#
+			</iterate>
+		</isNotEmpty>
+		AND r.due_date != ''
+		GROUP BY r.req_id
+		) a
+		) AS ST_COMPLETE
+		,(
+		SELECT
+		COUNT(REQ_ID)
+		FROM (
+		SELECT r.REQ_ID
+		FROM hm_request r
+		LEFT JOIN
+		hm_request_receive hr ON r.REQ_ID = hr.REQ_ID
+		WHERE
+			<![CDATA[ 
+				(r.STATUS &32)
+			]]>
+		<isNotEmpty prepend="AND" property="searchDueDateFrom">
+				<![CDATA[
+					r.DUE_DATE >= #searchDueDateFrom#
+				]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDueDateTo">
+				<![CDATA[
+					r.DUE_DATE <= #searchDueDateTo#
+				]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchManagerMixesList">
+			CONCAT(hr.USER_NM, '(', hr.USER_ID, ')' ) IN
+			<iterate property="searchManagerMixesList" open="(" close=")"
+				conjunction=",">
+				#searchManagerMixesList[]#
+			</iterate>
+		</isNotEmpty>
+		AND r.due_date != ''
+		GROUP BY r.req_id
+		) a
+		) AS ST_DEFER
+		,(
+		SELECT
+		COUNT(REQ_ID)
+		FROM (
+		SELECT r.REQ_ID
+		FROM hm_request r
+		LEFT JOIN
+		hm_request_receive hr ON r.REQ_ID = hr.REQ_ID
+		WHERE
+			<![CDATA[ 
+				(r.STATUS &64)
+			]]>
+		<isNotEmpty prepend="AND" property="searchDueDateFrom">
+				<![CDATA[
+					r.DUE_DATE >= #searchDueDateFrom#
+				]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDueDateTo">
+				<![CDATA[
+					r.DUE_DATE <= #searchDueDateTo#
+				]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchManagerMixesList">
+			CONCAT(hr.USER_NM, '(', hr.USER_ID, ')' ) IN
+			<iterate property="searchManagerMixesList" open="(" close=")"
+				conjunction=",">
+				#searchManagerMixesList[]#
+			</iterate>
+		</isNotEmpty>
+		AND r.due_date != ''
+		GROUP BY r.req_id
+		) a
+		) AS ST_DELETE
+		FROM DUAL
+
+
+
+
+
+
+
+		<!-- SELECT <![CDATA[ (SELECT COUNT(*) FROM hm_request r WHERE r.STATUS 
+			& 125 ]]> <isNotEmpty prepend="AND" property="weekStart"> <![CDATA[ DATE(r.REG_DATETIME) 
+			>= DATE_FORMAT(#weekStart#, '%Y-%m-%d') ]]> </isNotEmpty> <isNotEmpty prepend="AND" 
+			property="weekEnd"> <![CDATA[ DATE(r.REG_DATETIME) <= DATE_FORMAT(#weekEnd#, 
+			'%Y-%m-%d') ]]> </isNotEmpty> ) AS ST_TOTAL, <![CDATA[ (SELECT COUNT(*) FROM 
+			hm_request r WHERE r.STATUS & 1 ]]> <isNotEmpty prepend="AND" property="weekStart"> 
+			<![CDATA[ DATE(r.REG_DATETIME) >= DATE_FORMAT(#weekStart#, '%Y-%m-%d') ]]> 
+			</isNotEmpty> <isNotEmpty prepend="AND" property="weekEnd"> <![CDATA[ DATE(r.REG_DATETIME) 
+			<= DATE_FORMAT(#weekEnd#, '%Y-%m-%d') ]]> </isNotEmpty> ) AS ST_REQUEST, 
+			<![CDATA[ (SELECT COUNT(*) FROM hm_request r WHERE r.STATUS & 2 ]]> <isNotEmpty 
+			prepend="AND" property="weekStart"> <![CDATA[ DATE(r.REG_DATETIME) >= DATE_FORMAT(#weekStart#, 
+			'%Y-%m-%d') ]]> </isNotEmpty> <isNotEmpty prepend="AND" property="weekEnd"> 
+			<![CDATA[ DATE(r.REG_DATETIME) <= DATE_FORMAT(#weekEnd#, '%Y-%m-%d') ]]> 
+			</isNotEmpty> ) AS ST_REVIEW, <![CDATA[ (SELECT COUNT(*) FROM hm_request 
+			r WHERE r.STATUS & 12 ]]> <isNotEmpty prepend="AND" property="weekStart"> 
+			<![CDATA[ DATE(r.REG_DATETIME) >= DATE_FORMAT(#weekStart#, '%Y-%m-%d') ]]> 
+			</isNotEmpty> <isNotEmpty prepend="AND" property="weekEnd"> <![CDATA[ DATE(r.REG_DATETIME) 
+			<= DATE_FORMAT(#weekEnd#, '%Y-%m-%d') ]]> </isNotEmpty> ) AS ST_PROCESS, 
+			<![CDATA[ (SELECT COUNT(*) FROM hm_request r WHERE r.STATUS & 16 ]]> <isNotEmpty 
+			prepend="AND" property="weekStart"> <![CDATA[ DATE(r.REG_DATETIME) >= DATE_FORMAT(#weekStart#, 
+			'%Y-%m-%d') ]]> </isNotEmpty> <isNotEmpty prepend="AND" property="weekEnd"> 
+			<![CDATA[ DATE(r.REG_DATETIME) <= DATE_FORMAT(#weekEnd#, '%Y-%m-%d') ]]> 
+			</isNotEmpty> ) AS ST_COMPLETE, <![CDATA[ (SELECT COUNT(*) FROM hm_request 
+			r WHERE r.STATUS & 32 ]]> <isNotEmpty prepend="AND" property="weekStart"> 
+			<![CDATA[ DATE(r.REG_DATETIME) >= DATE_FORMAT(#weekStart#, '%Y-%m-%d') ]]> 
+			</isNotEmpty> <isNotEmpty prepend="AND" property="weekEnd"> <![CDATA[ DATE(r.REG_DATETIME) 
+			<= DATE_FORMAT(#weekEnd#, '%Y-%m-%d') ]]> </isNotEmpty> ) AS ST_DEFER, <![CDATA[ 
+			(SELECT COUNT(*) FROM hm_request r WHERE r.STATUS & 64 ]]> <isNotEmpty prepend="AND" 
+			property="weekStart"> <![CDATA[ DATE(r.REG_DATETIME) >= DATE_FORMAT(#weekStart#, 
+			'%Y-%m-%d') ]]> </isNotEmpty> <isNotEmpty prepend="AND" property="weekEnd"> 
+			<![CDATA[ DATE(r.REG_DATETIME) <= DATE_FORMAT(#weekEnd#, '%Y-%m-%d') ]]> 
+			</isNotEmpty> ) AS ST_DELETE FROM DUAL -->
+
+	</select>
+
+	<!-- TENY_170805 요구사항의 처리현황통계를 조회하는 SQL -->
+	<select id="KmsRequestDAO.selectRequestProcessPlan"
+		resultClass="egovMap">
+
+		SELECT
+		(SELECT COUNT(REQ_ID) FROM (SELECT r.REQ_ID FROM hm_request r
+		LEFT JOIN
+		hm_request_receive hr ON r.REQ_ID=hr.REQ_ID WHERE <![CDATA[(r.STATUS & 15)]]>
+
+		AND <![CDATA[(#today# > r.DUE_DATE) AND (r.DUE_DATE != '')  ]]>
+
+		<isNotEmpty property="userNo">
+			AND (hr.USER_NO=#userNo#)
+			AND
+			(hr.COMPLETE_STATUS=0 OR r.MAIN_MANAGER = hr.USER_NM)
+		</isNotEmpty>
+		group by r.req_id)a) AS NOT_DONE,
+		(SELECT COUNT(REQ_ID) FROM(
+		SELECT
+		r.REQ_ID
+		FROM hm_request r
+		LEFT JOIN hm_request_receive hr ON
+		r.REQ_ID=hr.REQ_ID
+		WHERE  <![CDATA[(r.STATUS & 16) AND (#weekStart# <= r.DUE_DATE) AND (r.DUE_DATE <= #weekEnd#)]]>
+		<isNotEmpty property="userNo">
+			AND (hr.USER_NO=#userNo#)
+			AND
+			(hr.COMPLETE_STATUS=0 OR r.MAIN_MANAGER = hr.USER_NM)
+		</isNotEmpty>
+		GROUP BY r.req_id)a) AS WEEK_DONE,
+		(SELECT COUNT(REQ_ID) FROM(
+		SELECT
+		r.REQ_ID
+		FROM hm_request r
+		LEFT JOIN hm_request_receive hr ON r.REQ_ID =
+		hr.REQ_ID
+		WHERE <![CDATA[(r.STATUS & 15)]]>
+		<isEqual prepend="AND" property="weekChk" compareValue="0"> 
+			<![CDATA[
+				(#weekStart# <= r.DUE_DATE) AND (r.DUE_DATE <= #weekEnd#)				
+			]]>
+		</isEqual>
+		<isEqual prepend="AND" property="weekChk" compareValue="1"> 
+			<![CDATA[
+				(r.DUE_DATE >= date_format(subdate(curdate()+0,date_format(curdate()+0,'%w')-1), '%Y%m%d')
+				AND r.DUE_DATE <= date_format(subdate(curdate()+0,date_format(curdate()+0,'%w')-14), '%Y%m%d')
+				OR r.DUE_DATE < date_format(curdate(), '%Y%m%d'))					
+			]]>
+		</isEqual>
+		<isNotEmpty property="userNo">
+			AND (hr.USER_NO=#userNo#)
+			AND
+			(hr.COMPLETE_STATUS=0 OR r.MAIN_MANAGER = hr.USER_NM)
+		</isNotEmpty>
+		GROUP BY r.req_id)a) AS WEEK_TODO,
+		(SELECT COUNT(REQ_ID) FROM(
+		SELECT
+		r.REQ_ID
+		FROM hm_request r
+		LEFT JOIN hm_request_receive hr ON r.REQ_ID =
+		hr.REQ_ID
+		WHERE <![CDATA[(r.STATUS & 16) AND (#thisMonth# = SUBSTR(r.DUE_DATE, 1, 6))]]>
+		<isNotEmpty property="userNo">
+			AND (hr.USER_NO=#userNo#)
+			AND
+			(hr.COMPLETE_STATUS=0 OR r.MAIN_MANAGER = hr.USER_NM)
+		</isNotEmpty>
+		GROUP BY r.req_id)a) AS MONTH_DONE,
+		(SELECT COUNT(REQ_ID) FROM(
+		SELECT
+		r.REQ_ID
+		FROM hm_request r
+		LEFT JOIN hm_request_receive hr ON r.REQ_ID =
+		hr.REQ_ID
+		WHERE <![CDATA[(r.STATUS & 15)]]>
+
+		<isEqual prepend="AND" property="weekChk" compareValue="0"> 
+			<![CDATA[
+				(#thisMonth# = SUBSTR(r.DUE_DATE, 1, 6))		
+			]]>
+		</isEqual>
+		<isEqual prepend="AND" property="weekChk" compareValue="0"> 
+			<![CDATA[
+				(r.DUE_DATE > date_format(LAST_DAY(NOW() - interval 1 month),'%Y%m%d')
+				AND r.DUE_DATE <= date_format(LAST_DAY(NOW()),'%Y%m%d')
+				OR r.DUE_DATE < date_format(curdate(), '%Y%m%d'))
+			]]>
+		</isEqual>
+
+		<isNotEmpty property="userNo">
+			AND (hr.USER_NO=#userNo#)
+			AND
+			(hr.COMPLETE_STATUS=0 OR r.MAIN_MANAGER = hr.USER_NM)
+		</isNotEmpty>
+		GROUP BY r.req_id)a) AS MONTH_TODO,
+		(SELECT COUNT(REQ_ID) FROM(
+		SELECT
+		r.REQ_ID
+		FROM hm_request r
+		LEFT JOIN hm_request_receive hr ON r.REQ_ID =
+		hr.REQ_ID
+		WHERE <![CDATA[(r.STATUS & 15) AND (#nextMonth# = SUBSTR(r.DUE_DATE, 1, 6))]]>
+		<isNotEmpty property="userNo">
+			AND (hr.USER_NO=#userNo#)
+			AND
+			(hr.COMPLETE_STATUS=0 OR r.MAIN_MANAGER = hr.USER_NM)
+		</isNotEmpty>
+		GROUP BY r.req_id)a) AS NEXT_MONTH_TODO,
+		(SELECT COUNT(REQ_ID) FROM(
+		SELECT r.REQ_ID
+		FROM hm_request r
+		LEFT JOIN hm_request_receive hr ON
+		r.REQ_ID = hr.REQ_ID
+		WHERE <![CDATA[(r.STATUS & 32)]]>
+		<isNotEmpty property="userNo">
+			AND (hr.USER_NO=#userNo#)
+			AND
+			(hr.COMPLETE_STATUS=0 OR r.MAIN_MANAGER = hr.USER_NM)
+		</isNotEmpty>
+		GROUP BY r.req_id)a) AS NEXT_TODO,
+		(SELECT COUNT(REQ_ID) FROM(
+		SELECT
+		r.REQ_ID
+		FROM hm_request r
+		LEFT JOIN hm_request_receive hr ON r.REQ_ID =
+		hr.REQ_ID
+		WHERE <![CDATA[(r.STATUS & 15) AND (r.DUE_DATE = '')]]>
+		<isNotEmpty property="userNo">
+			AND (hr.USER_NO=#userNo#)
+			AND
+			(hr.COMPLETE_STATUS=0 OR r.MAIN_MANAGER = hr.USER_NM)
+		</isNotEmpty>
+		GROUP BY r.req_id)a) AS UNKNOWN,
+		(SELECT COUNT(REQ_ID) FROM(
+		SELECT
+		r.REQ_ID
+		FROM hm_request r
+		LEFT JOIN hm_request_receive hr ON r.REQ_ID =
+		hr.REQ_ID
+		WHERE
+		<isEmpty property="userNo">
+				<![CDATA[(r.STATUS & 8) AND (r.DUE_DATE != '') ]]>
+		</isEmpty>
+		<isNotEmpty property="userNo">
+				<![CDATA[((r.STATUS & 8 OR hr.COMPLETE_STATUS=1) AND r.STATUS != 16) AND (r.DUE_DATE != '') ]]>
+			AND (hr.USER_NO=#userNo#)
+		</isNotEmpty>
+		GROUP BY r.req_id)a) AS COMPLETE_TODO
+		FROM DUAL
+	</select>
+
+	<!-- ########################################### -->
+	<!-- ########################################### -->
+	<!-- ########################################### -->
+	<!-- 작업 관련 SQL문들 -->
+	<!-- TENY_170516 작업을 등록하기위한 SQL문 -->
+	<insert id="KmsRequestDAO.insertReqTask"
+		parameterClass="ReqTaskVO">
+		INSERT INTO hm_request_task (
+		REQ_NO,
+		TASK_ID,
+		TASK_TYPE,
+		TITLE,
+		CONTENTS,
+		STATUS,
+		PRIORITY,
+		WRITER_NO,
+		<isNotEmpty property="workerMixes">
+			WORKER_NO,
+		</isNotEmpty>
+		REG_DATETIME
+		)
+		VALUES (
+		#reqNo#,
+		(SELECT CONCAT(#reqId#, '-', COUNT(rt.NO)
+		+ 1) FROM
+		hm_request_task rt WHERE rt.REQ_NO = #reqNo#),
+		#taskType#,
+		#title#,
+		#contents#,
+		1,
+		#priority#,
+		#writerNo#,
+		<isNotEmpty property="workerMixes">
+			(SELECT NO FROM TBL_USERINFO WHERE
+			CONCAT(USER_NM,'(',USER_ID,')') LIKE
+			CONCAT('%', #workerMixes#, '%')),
+		</isNotEmpty>
+		SYSDATE()
+		)
+	</insert>
+
+	<!-- TENY_170514 등록된 작업을 한개 조회하기위한 SQL문 -->
+	<select id="KmsRequestDAO.getReqTask" resultMap="mapReqTaskVO">
+		SELECT
+		rt.REQ_NO
+		AS REQ_NO,
+		r.REQ_ID AS REQ_ID,
+		r.TITLE AS REQ_TITLE,
+		rt.NO AS NO,
+		rt.TASK_ID AS TASK_ID,
+		rt.TASK_TYPE AS TASK_TYPE,
+		rt.TITLE AS TITLE,
+		rt.WRITER_NO AS WRITER_NO,
+		u.USER_ID AS WRITER_ID,
+		u.USER_NM AS
+		WRITER_NAME,
+		DATE_FORMAT(rt.REG_DATETIME, '%y.%m.%d %H:%i') AS
+		REG_DATETIME,
+		DATE_FORMAT(rt.START_DATETIME, '%y.%m.%d %H:%i') AS
+		START_DATETIME,
+		DATE_FORMAT(rt.FINISH_DATETIME, '%y.%m.%d %H:%i') AS
+		FINISH_DATETIME,
+		rt.WORKER_NO AS WORKER_NO,
+		u2.USER_ID AS WORKER_ID,
+		u2.USER_NM AS WORKER_NAME,
+		rt.CONTENTS AS CONTENTS,
+		rt.STATUS AS STATUS,
+		rt.PRIORITY AS PRIORITY
+		FROM hm_request_task rt
+		JOIN hm_request r
+		ON r.NO
+		= rt.REQ_NO
+		JOIN tbl_userinfo u
+		ON rt.WRITER_NO = u.NO
+		LEFT JOIN
+		tbl_userinfo u2
+		ON rt.WORKER_NO = u2.NO
+		WHERE
+		rt.NO = #no#
+	</select>
+
+	<!-- TENY_170514 작업의 정보를 수정하기 위한 SQL문 -->
+	<update id="KmsRequestDAO.updateReqTask">
+		UPDATE hm_request_task
+		SET
+		NO = #no#
+		<isNotEmpty prepend=", " property="taskType"> TASK_TYPE = #taskType#					</isNotEmpty>
+		<isNotEmpty prepend=", " property="title"> TITLE = #title#							</isNotEmpty>
+		<isNotEmpty prepend=", " property="contents"> CONTENTS = #contents#					</isNotEmpty>
+		<isNotEmpty prepend=", " property="status"> STATUS = #status#						</isNotEmpty>
+		<isNotEmpty prepend=", " property="priority"> PRIORITY = #priority#						</isNotEmpty>
+		<isNotEmpty prepend=", " property="workerMixes">
+			WORKER_NO = (SELECT NO
+			FROM TBL_USERINFO WHERE CONCAT(USER_NM,'(',USER_ID,')')
+			=
+			#workerMixes#)
+		</isNotEmpty>
+		<isEqual prepend=", " property="status" compareValue="2">
+			START_DATETIME = SYSDATE()
+		</isEqual>
+		<isEqual prepend=", " property="status" compareValue="4">
+			FINISH_DATETIME = SYSDATE()
+		</isEqual>
+		<isNotEqual prepend=", " property="status" compareValue="4">
+			FINISH_DATETIME = NULL
+		</isNotEqual>
+		WHERE
+		NO = #no#
+	</update>
+
+	<update id="KmsRequestDAO.updateReqTaskStatus">
+		UPDATE hm_request_task
+		SET
+		NO = #no#,
+		STATUS = #status#
+		<isEqual prepend=", " property="status" compareValue="2">
+			START_DATETIME = SYSDATE()
+		</isEqual>
+		<isEqual prepend=", " property="status" compareValue="4">
+			FINISH_DATETIME = SYSDATE()
+		</isEqual>
+		<isNotEqual prepend=", " property="status" compareValue="4">
+			FINISH_DATETIME = NULL
+		</isNotEqual>
+		WHERE
+		NO = #no#
+	</update>
+
+	<!-- TENY_170514 작업 목록을 리스트 하는 조회문 -->
+	<select id="KmsRequestDAO.selectReqTaskList"
+		resultMap="mapReqTaskVOList">
+		SELECT
+		rt.NO AS NO,
+		rt.REQ_NO AS REQ_NO,
+		rt.TASK_ID AS TASK_ID,
+		rt.TASK_TYPE AS TASK_TYPE,
+		rt.TITLE AS TITLE,
+		rt.WRITER_NO AS WRITER_NO,
+		u.USER_ID AS WRITER_ID,
+		u.USER_NM AS WRITER_NAME,
+		DATE_FORMAT(rt.REG_DATETIME, '%y.%m.%d') AS REG_DATETIME,
+		DATE_FORMAT(rt.START_DATETIME, '%y.%m.%d') AS START_DATETIME,
+		DATE_FORMAT(rt.FINISH_DATETIME, '%y.%m.%d') AS FINISH_DATETIME,
+		rt.WORKER_NO AS WORKER_NO,
+		u2.USER_ID AS WORKER_ID,
+		u2.USER_NM AS
+		WORKER_NAME,
+		rt.STATUS AS STATUS,
+		rt.PRIORITY AS PRIORITY
+		FROM
+		hm_request_task rt
+		JOIN tbl_userinfo u
+		ON rt.WRITER_NO = u.NO
+		LEFT JOIN
+		tbl_userinfo u2
+		ON rt.WORKER_NO = u2.NO
+		WHERE
+		TRUE
+		<isNotEmpty prepend="AND" property="searchReqNo">
+			rt.REQ_NO =
+			#searchReqNo#
+		</isNotEmpty>
+		<isNotEqual prepend="AND" property="searchTaskType"
+			compareValue="0"> 
+			<![CDATA[
+				rt.TASK_TYPE & #searchTaskType#
+			]]>
+		</isNotEqual>
+		<isNotEqual prepend="AND" property="searchStatus"
+			compareValue="0"> 
+			<![CDATA[
+				rt.STATUS & #searchStatus#
+			]]>
+		</isNotEqual>
+		<isNotEqual prepend="AND" property="searchPriority"
+			compareValue="0"> 
+			<![CDATA[
+				rt.PRIORITY & #searchPriority#
+			]]>
+		</isNotEqual>
+		<isNotEmpty prepend="AND" property="searchWorkerMixesList">
+			CONCAT(u2.USER_NM, '(', u2.USER_ID, ')' ) IN
+			<iterate property="searchWorkerMixesList" open="(" close=")"
+				conjunction=",">
+				#searchWorkerMixesList[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchTitle">
+			rt.TITLE LIKE
+			CONCAT('%', #searchTitle#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchWriterMixes">
+			CONCAT(u.USER_NM, '(',
+			u.USER_ID, ')' ) = #searchWriterMixes#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDateFrom">
+<![CDATA[
+			DATE(rt.REG_DATETIME) >= CONCAT(SUBSTR(#searchDateFrom#, 1, 4), '-' , SUBSTR(#searchDateFrom#, 5, 2), '-' , SUBSTR(#searchDateFrom#, 7, 2))
+]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDateTo">
+<![CDATA[
+			DATE(rt.REG_DATETIME) <= CONCAT(SUBSTR(#searchDateTo#, 1, 4), '-' , SUBSTR(#searchDateTo#, 5, 2), '-' , SUBSTR(#searchDateTo#, 7, 2))
+]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchFinishDateFrom">
+<![CDATA[
+			DATE(rt.FINISH_DATETIME) >= CONCAT(SUBSTR(#searchFinishDateFrom#, 1, 4), '-' , SUBSTR(#searchFinishDateFrom#, 5, 2), '-' , SUBSTR(#searchFinishDateFrom#, 7, 2))
+]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchFinishDateTo">
+<![CDATA[
+			DATE(rt.FINISH_DATETIME) <= CONCAT(SUBSTR(#searchFinishDateTo#, 1, 4), '-' , SUBSTR(#searchFinishDateTo#, 5, 2), '-' , SUBSTR(#searchFinishDateTo#, 7, 2))
+]]>
+		</isNotEmpty>
+		ORDER BY rt.REG_DATETIME DESC
+		<isNotEmpty property="recordCountPerPage">
+			LIMIT
+			#recordCountPerPage# OFFSET
+			#firstIndex#
+		</isNotEmpty>
+	</select>
+
+	<select id="KmsRequestDAO.selectReqTaskListTotCnt"
+		resultClass="java.lang.Integer">
+		SELECT
+		COUNT(rt.NO)
+		FROM hm_request_task rt
+		JOIN tbl_userinfo u
+		ON
+		rt.WRITER_NO = u.NO
+		LEFT JOIN tbl_userinfo u2
+		ON rt.WORKER_NO = u2.NO
+		WHERE
+		TRUE
+		<isNotEmpty prepend="AND" property="searchReqNo">
+			rt.REQ_NO =
+			#searchReqNo#
+		</isNotEmpty>
+		<isNotEqual prepend="AND" property="searchTaskType"
+			compareValue="0"> 
+			<![CDATA[
+				rt.TASK_TYPE & #searchTaskType#
+			]]>
+		</isNotEqual>
+		<isNotEqual prepend="AND" property="searchStatus"
+			compareValue="0"> 
+			<![CDATA[
+				rt.STATUS & #searchStatus#
+			]]>
+		</isNotEqual>
+		<isNotEqual prepend="AND" property="searchPriority"
+			compareValue="0"> 
+			<![CDATA[
+				rt.PRIORITY & #searchPriority#
+			]]>
+		</isNotEqual>
+		<isNotEmpty prepend="AND" property="searchWorkerMixesList">
+			CONCAT(u2.USER_NM, '(', u2.USER_ID, ')' ) IN
+			<iterate property="searchWorkerMixesList" open="(" close=")"
+				conjunction=",">
+				#searchWorkerMixesList[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchTitle">
+			rt.TITLE LIKE
+			CONCAT('%', #searchTitle#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchWriterMixes">
+			CONCAT(u.USER_NM, '(',
+			u.USER_ID, ')' ) = #searchWriterMixes#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDateFrom">
+<![CDATA[
+			DATE(rt.REG_DATETIME) >= CONCAT(SUBSTR(#searchDateFrom#, 1, 4), '-' , SUBSTR(#searchDateFrom#, 5, 2), '-' , SUBSTR(#searchDateFrom#, 7, 2))
+]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDateTo">
+<![CDATA[
+			DATE(rt.REG_DATETIME) <= CONCAT(SUBSTR(#searchDateTo#, 1, 4), '-' , SUBSTR(#searchDateTo#, 5, 2), '-' , SUBSTR(#searchDateTo#, 7, 2))
+]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchFinishDateFrom">
+<![CDATA[
+			DATE(rt.FINISH_DATETIME) >= CONCAT(SUBSTR(#searchFinishDateFrom#, 1, 4), '-' , SUBSTR(#searchFinishDateFrom#, 5, 2), '-' , SUBSTR(#searchFinishDateFrom#, 7, 2))
+]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchFinishDateTo">
+<![CDATA[
+			DATE(rt.FINISH_DATETIME) <= CONCAT(SUBSTR(#searchFinishDateTo#, 1, 4), '-' , SUBSTR(#searchFinishDateTo#, 5, 2), '-' , SUBSTR(#searchFinishDateTo#, 7, 2))
+]]>
+		</isNotEmpty>
+	</select>
+
+	<!-- TENY_170518 내가 처리해야하는 작업 목록을 리스트 하는 조회문 -->
+	<select id="KmsRequestDAO.selectMyReqTaskList"
+		resultMap="mapReqTaskVOList">
+		SELECT
+		rt.NO AS NO,
+		rt.REQ_NO AS REQ_NO,
+		rt.TASK_ID AS TASK_ID,
+		rt.TASK_TYPE AS TASK_TYPE,
+		rt.TITLE AS TITLE,
+		rt.WRITER_NO AS WRITER_NO,
+		u.USER_ID AS WRITER_ID,
+		u.USER_NM AS WRITER_NAME,
+		DATE_FORMAT(rt.REG_DATETIME, '%y.%m.%d') AS REG_DATETIME,
+		DATE_FORMAT(rt.START_DATETIME, '%y.%m.%d') AS START_DATETIME,
+		DATE_FORMAT(rt.FINISH_DATETIME, '%y.%m.%d') AS FINISH_DATETIME,
+		rt.WORKER_NO AS WORKER_NO,
+		u2.USER_ID AS WORKER_ID,
+		u2.USER_NM AS
+		WORKER_NAME,
+		rt.STATUS AS STATUS,
+		rt.PRIORITY AS PRIORITY
+		FROM
+		hm_request_task rt
+		JOIN tbl_userinfo u
+		ON rt.WRITER_NO = u.NO
+		LEFT JOIN
+		tbl_userinfo u2
+		ON rt.WORKER_NO = u2.NO
+		WHERE
+		rt.WORKER_NO = #workerNo#
+<![CDATA[
+			AND rt.STATUS < 4
+]]>
+		ORDER BY rt.REG_DATETIME DESC
+	</select>
+
+	<!-- TENY_170611 일정기간동안의 개인별 작업 처리건수를 조회하는 조회문 -->
+	<select id="KmsRequestDAO.selectReqTaskStat"
+		resultMap="mapReqTaskStatVOList">
+		SELECT
+		u.NO AS WORKER_NO,
+		u.USER_ID AS WORKER_ID,
+		u.USER_NM AS
+		WORKER_NAME,
+		IFNULL(new.NEW_TASK, 0) AS
+		NEW_TASK,
+		IFNULL(finish.FINISH_TASK, 0) AS FINISH_TASK,
+		IFNULL(remain.REMAIN_TASK, 0) AS REMAIN_TASK
+		FROM tbl_userinfo u
+		JOIN
+		tbl_orgnzt o
+		ON u.ORGNZT_ID = o.ORGNZT_ID
+		LEFT JOIN (
+		SELECT
+		rt.WORKER_NO
+		AS WORKER_NO,
+		COUNT(*) AS NEW_TASK
+		FROM hm_request_task rt
+		WHERE
+		TRUE
+		<isNotEmpty prepend="AND" property="searchDateFrom">
+<![CDATA[
+			DATE(rt.REG_DATETIME) >= CONCAT(SUBSTR(#searchDateFrom#, 1, 4), '-' , SUBSTR(#searchDateFrom#, 5, 2), '-' , SUBSTR(#searchDateFrom#, 7, 2))
+]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDateTo">
+<![CDATA[
+			DATE(rt.REG_DATETIME) <= CONCAT(SUBSTR(#searchDateTo#, 1, 4), '-' , SUBSTR(#searchDateTo#, 5, 2), '-' , SUBSTR(#searchDateTo#, 7, 2))
+]]>
+		</isNotEmpty>
+		GROUP BY rt.WORKER_NO ) new
+		ON u.no = new.WORKER_NO
+		LEFT JOIN (
+		SELECT
+		rt.WORKER_NO AS WORKER_NO,
+		COUNT(*) AS FINISH_TASK
+		FROM hm_request_task
+		rt
+		WHERE
+		rt.STATUS = 4
+		<isNotEmpty prepend="AND" property="searchDateFrom">
+<![CDATA[
+			DATE(rt.FINISH_DATETIME) >= CONCAT(SUBSTR(#searchDateFrom#, 1, 4), '-' , SUBSTR(#searchDateFrom#, 5, 2), '-' , SUBSTR(#searchDateFrom#, 7, 2))
+]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDateTo">
+<![CDATA[
+			DATE(rt.FINISH_DATETIME) <= CONCAT(SUBSTR(#searchDateTo#, 1, 4), '-' , SUBSTR(#searchDateTo#, 5, 2), '-' , SUBSTR(#searchDateTo#, 7, 2))
+]]>
+		</isNotEmpty>
+		GROUP BY rt.WORKER_NO ) finish
+		ON u.no = finish.WORKER_NO
+		LEFT JOIN (
+		SELECT
+		rt.WORKER_NO AS WORKER_NO,
+		COUNT(*) AS REMAIN_TASK
+		FROM
+		hm_request_task rt
+		WHERE
+		rt.STATUS != 4
+		GROUP BY rt.WORKER_NO) remain
+		ON
+		u.no = remain.WORKER_NO
+		WHERE
+		u.WORK_ST = 'W'
+		<isNotEmpty prepend="AND" property="searchWorkerMixesList">
+			CONCAT(u.USER_NM, '(', u.USER_ID, ')' ) IN
+			<iterate property="searchWorkerMixesList" open="(" close=")"
+				conjunction=",">
+				#searchWorkerMixesList[]#
+			</iterate>
+		</isNotEmpty>
+		<isEmpty prepend="AND" property="searchWorkerMixesList">
+			o.ORG_TREE LIKE
+			'%ORGAN_00000000000012%'
+		</isEmpty>
+		ORDER BY u.ORGNZT_ID, u.RANK_ID, u.POSITION
+	</select>
+
+	<!-- ########################################### -->
+	<!-- ########################################### -->
+	<!-- ########################################### -->
+	<!-- 요구사항 검토 관련 SQL문들 -->
+	<!-- TENY_170522 요구사항 검토내용을 등록하기위한 SQL문 -->
+	<insert id="KmsRequestDAO.insertReview"
+		parameterClass="ReviewVO">
+		INSERT INTO hm_request_review (
+		REQ_NO,
+		WRITER_NO,
+		REG_DATETIME,
+		CONTENTS
+		)
+		VALUES (
+		#reqNo#,
+		#writerNo#,
+		SYSDATE(),
+		#contents#
+		)
+	</insert>
+
+	<!-- TENY_170514 등록된 검토내용을 한개 조회하기위한 SQL문 -->
+	<select id="KmsRequestDAO.getReview" resultMap="mapReviewVO">
+		SELECT
+		rv.NO AS
+		NO,
+		rv.REQ_NO AS REQ_NO,
+		rv.WRITER_NO AS WRITER_NO,
+		u.USER_ID AS
+		WRITER_ID,
+		u.USER_NM AS WRITER_NAME,
+		DATE_FORMAT(rv.REG_DATETIME,
+		'%y.%m.%d %H:%i') AS REG_DATETIME,
+		rv.CONTENTS AS CONTENTS
+		FROM
+		hm_request_review rv
+		JOIN tbl_userinfo u
+		ON rv.WRITER_NO = u.NO
+		WHERE
+		rv.NO = #no#
+	</select>
+
+	<!-- TENY_170514 검토내용을 수정하기 위한 SQL문 -->
+	<update id="KmsRequestDAO.updateReview">
+		UPDATE hm_request_review
+		SET
+		NO = #no#
+		<isNotEmpty prepend=", " property="contents"> CONTENTS = #contents#					</isNotEmpty>
+		WHERE
+		NO = #no#
+	</update>
+
+	<!-- TENY_170514 등록된 검토내용을 한개 조회하기위한 SQL문 -->
+	<delete id="KmsRequestDAO.deleteReview">
+		DELETE FROM hm_request_review
+		WHERE
+		NO = #no#
+	</delete>
+
+	<!-- TENY_170514 검토 목록을 리스트 하는 조회문 -->
+	<select id="KmsRequestDAO.selectReviewList"
+		resultMap="mapReviewVO">
+		SELECT
+		rv.NO AS NO,
+		rv.REQ_NO AS REQ_NO,
+		rv.WRITER_NO AS WRITER_NO,
+		u.USER_ID AS WRITER_ID,
+		u.USER_NM AS WRITER_NAME,
+		DATE_FORMAT(rv.REG_DATETIME, '%y.%m.%d %H:%i') AS REG_DATETIME,
+		rv.CONTENTS AS CONTENTS
+		FROM hm_request_review rv
+		JOIN tbl_userinfo u
+		ON
+		rv.WRITER_NO = u.NO
+		WHERE
+		TRUE
+		<isNotEmpty prepend="AND" property="searchReqNo">
+			rv.REQ_NO =
+			#searchReqNo#
+		</isNotEmpty>
+
+		UNION ALL
+
+		SELECT dr.NO AS NO
+		,dr.REQ_NO AS REQ_NO
+		,dr.WRITER_NO AS
+		WRITER_NO
+		,u.USER_ID AS WRITER_ID
+		,u.USER_NM AS WRITER_NAME
+		,DATE_FORMAT(dr.REG_DATETIME, '%y.%m.%d %H:%i') AS REG_DATETIME
+		,dr.CONTENTS AS CONTENTS
+		FROM hm_daily_result dr
+		INNER JOIN tbl_userinfo
+		u ON
+		dr.WRITER_NO = u.NO
+		WHERE TRUE
+		<isNotEmpty prepend="AND" property="searchReqNo">
+			dr.REQ_NO =
+			#searchReqNo#
+		</isNotEmpty>
+		ORDER BY REG_DATETIME DESC
+	</select>
+
+
+	<!-- 나의 업무에 보여줄 요구사항 작업 목록 내용 -->
+	<select id="KmsRequestDAO.selectMyDailyTaskList"
+		resultMap="mapReqDailyVOList">
+		SELECT req.NO
+		,req.REQ_ID
+		,req.TITLE
+		,req.CONTENTS
+		,req.STATUS
+		,req.PRJ_ID
+		,CONCAT ('[',prj_cd,'] ',prj_nm) AS prj_nm
+		FROM hm_request req
+		LEFT JOIN
+		hm_request_receive rec ON req.REQ_ID = rec.REQ_ID
+		INNER JOIN tbl_prj p
+		ON req.PRJ_ID = p.PRJ_ID
+		WHERE <![CDATA[ req.req_type & 15 ]]>
+			<![CDATA[ AND req.STATUS & 13 ]]>
+		AND (req.DUE_DATE != '')
+		AND rec.USER_NO = #workerNo#
+
+	</select>
+</sqlMap>

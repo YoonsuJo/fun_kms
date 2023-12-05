@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC 
+    "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1//EN" 
+    "http://jakarta.apache.org/commons/dtds/validator_1_1.dtd">
+
+<form-validation>
+
+    <formset>
+		<form name="commSche">
+			<field property="scheSj" depends="required, maxlength">
+        		<arg0 key="제목" />
+        		<arg1 key="200" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>200</var-value>
+				</var>
+			</field>			
+			<field property="scheTyp" depends="required">
+        		<arg0 key="구분" />
+			</field> 
+			<field property="date" depends="required">
+        		<arg0 key="날짜" />
+			</field>
+			<field property="scheTmTyp" depends="required">
+        		<arg0 key="시간 구분" />
+			</field>
+			<field property="scheCn" depends="required, maxlength">
+        		<arg0 key="내용" />
+        		<arg1 key="16777215" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>16777215</var-value>
+				</var>
+			</field>
+		</form>
+    </formset>
+
+</form-validation>

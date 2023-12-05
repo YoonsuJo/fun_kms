@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC 
+    "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1//EN" 
+    "http://jakarta.apache.org/commons/dtds/validator_1_1.dtd">
+
+<form-validation>
+
+    <formset>
+		<form name="ProductRequest">
+			<field property="requestNm" depends="required">
+        		<arg0 key="기능오류명" />
+			</field>
+			<field property="adminMixes" depends="required">
+        		<arg0 key="처리담당자" />
+			</field>
+			<field property="partId" depends="required">
+        		<arg0 key="관련구성품" />
+			</field>
+			<field property="requestCn" depends="required">
+        		<arg0 key="내용" />
+			</field>
+		</form>
+    </formset>
+
+</form-validation>

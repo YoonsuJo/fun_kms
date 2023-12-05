@@ -1,0 +1,2817 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="MemberDAO">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="memberVO" type="kms.com.member.service.MemberVO"/>
+	<typeAlias  alias="mobileDeviceVO" type="kms.com.member.service.MobileDeviceVO"/>
+	<typeAlias  alias="mvucVO" type="kms.com.community.service.MvucVO"/>
+	<typeAlias  alias="msn" type="kms.com.member.service.Msn"/>
+	<typeAlias  alias="positionHistoryVO" type="kms.com.member.service.PositionHistoryVO"/>
+
+	<resultMap id="memberList" class="kms.com.member.service.MemberVO">
+		<result property="no"				column="NO"					columnIndex="1"/>
+		<result property="userId"			column="USER_ID"			columnIndex="2"/>
+		<result property="userNm"			column="USER_NM"			columnIndex="3"/>
+		<result property="userEnm"			column="USER_ENM"			columnIndex="4"/>
+		<result property="password"			column="PASSWORD"			columnIndex="5"/>
+		<result property="sabun"			column="SABUN"				columnIndex="6"/>
+		<result property="ihidNum"			column="IHIDNUM"			columnIndex="7"/>
+		<result property="sexDstnCode"		column="SEXDSTN_CODE"		columnIndex="8"/>
+		<result property="brth"				column="BRTH"				columnIndex="9"/>
+		<result property="greLun"			column="GRE_LUN"			columnIndex="10"/>
+		<result property="homeAdres"		column="HOME_ADRES"			columnIndex="11"/>
+		<result property="moblphonNo"		column="MOBLPHON_NO"		columnIndex="12"/>
+		<result property="homeTelno"		column="HOME_TELNO"			columnIndex="13"/>
+		<result property="offmId"			column="OFFM_ID"			columnIndex="14"/>
+		<result property="offmNm"			column="OFFM_NM"			columnIndex="15"/>
+		<result property="offmAdres"		column="OFFM_ADRES"			columnIndex="16"/>
+		<result property="offmTelno"		column="OFFM_TELNO"			columnIndex="17"/>
+		<result property="offmTelnoInner"	column="OFFM_TELNO_INNER"	columnIndex="18"/>
+		<result property="emailAdres"		column="EMAIL_ADRES"		columnIndex="19"/>
+		<result property="emailAdres2"		column="EMAIL_ADRES2"		columnIndex="20"/>
+		<result property="expCompId"		column="EXP_COMP_ID"		columnIndex="21"/>
+		<result property="expCompNm"		column="EXP_COMP_NM"		columnIndex="22"/>
+		<result property="compnyId"			column="COMPNY_ID"			columnIndex="23"/>
+		<result property="compnyNm"			column="COMPNY_NM"			columnIndex="24"/>
+		<result property="compnyNmShort"	column="COMPNY_NM_SHORT"	columnIndex="25"/>
+		<result property="orgnztId"			column="ORGNZT_ID"			columnIndex="26"/>
+		<result property="orgnztNm"			column="ORGNZT_NM"			columnIndex="27"/>
+		<result property="rankId"			column="RANK_ID"			columnIndex="28"/>
+		<result property="rankNm"			column="RANK_NM"			columnIndex="29"/>
+		<result property="position"			column="POSITION"			columnIndex="30"/>
+		<result property="compinDt"			column="COMPIN_DT"			columnIndex="31"/>
+		<result property="acceptCompinDt"	column="ACCEPT_COMPIN_DT"	columnIndex="31"/>
+		<result property="compotDt"			column="COMPOT_DT"			columnIndex="32"/>
+		<result property="workSt"			column="WORK_ST"			columnIndex="33"/>
+		<result property="carId"			column="CAR_ID"				columnIndex="34"/>
+		<result property="carLicTyp"		column="CAR_LIC_TYP"		columnIndex="35"/>
+		<result property="abutMe"			column="ABUTME"				columnIndex="36"/>
+		<result property="picFileId"		column="PIC_FILE_ID"		columnIndex="37"/>
+		<result property="picFileId2"		column="PIC_FILE_ID2"		columnIndex="38"/>
+		<result property="adminNote"		column="ADMIN_NOTE"			columnIndex="39"/>
+		<result property="headNm"			column="HEAD_NM"			columnIndex="40"/>
+		<result property="subHeadNm"		column="SUBHEAD_NM"			columnIndex="41"/>
+		<result property="workMonth"		column="WORK_MONTH"			columnIndex="42"/>
+		<result property="wsTyp"			column="WS_TYP"				columnIndex="43"/>
+		<result property="initial"			column="INITIAL"			columnIndex="44"/>
+		<result property="carOwn"			column="CAR_OWN"			columnIndex="45"/>
+		<result property="recommender"		column="RECOMMENDER"		columnIndex="45"/>
+		<result property="degree"			column="DEGREE"				columnIndex="46"/>
+		<result property="promotionYear"	column="PROMOTION_YEAR"		columnIndex="47"/>
+		<result property="careerMonth"		column="CAREER_MONTH"		columnIndex="48"/>
+		<result property="age"				column="AGE"				columnIndex="49"/>
+		<result property="ageKor"			column="AGE_KOR"			columnIndex="50"/>	
+		<!-- 2013.07.24 김대현 웹메일 주소-->
+	    <result property="emailLink"		column="EMAIL_LINK"		    columnIndex="51"/>
+	    <!-- 2013.07.24 김대현 전체소속경로로 표시 -->
+	    <result property="orgnztNmFull"		column="ORGNZT_NM_FULL"			columnIndex="52"/>
+	    
+	    <!-- //2013.08.20 김대현 PUSH 적용 -->
+		<result property="deviceType"		column="DEVICE_TYPE"			columnIndex="53"/>
+	    <result property="tokenInfo"		column="TOKEN_INFO"			columnIndex="54"/>
+
+		<!-- 2014.08.11 김동우 겸직부서 적용-->
+		<result property="orgnztIdSec"		column="ORGNZT_ID_SEC"			columnIndex="55"/>
+		<result property="orgnztNmSec"		column="ORGNZT_NM_SEC"			columnIndex="56"/>
+	    		
+	</resultMap>
+	
+	<resultMap id="memberListMain" class="kms.com.member.service.MemberVO">
+		<result property="no"				column="NO"					columnIndex="1"/>
+		<result property="userId"			column="USER_ID"			columnIndex="2"/>
+		<result property="userNm"			column="USER_NM"			columnIndex="3"/>
+		<result property="userEnm"			column="USER_ENM"			columnIndex="4"/>
+		<result property="password"			column="PASSWORD"			columnIndex="5"/>
+		<result property="sabun"			column="SABUN"				columnIndex="6"/>
+		<result property="ihidNum"			column="IHIDNUM"			columnIndex="7"/>
+		<result property="sexDstnCode"		column="SEXDSTN_CODE"		columnIndex="8"/>
+		<result property="brth"				column="BRTH"				columnIndex="9"/>
+		<result property="greLun"			column="GRE_LUN"			columnIndex="10"/>
+		<result property="homeAdres"		column="HOME_ADRES"			columnIndex="11"/>
+		<result property="moblphonNo"		column="MOBLPHON_NO"		columnIndex="12"/>
+		<result property="homeTelno"		column="HOME_TELNO"			columnIndex="13"/>
+		<result property="offmId"			column="OFFM_ID"			columnIndex="14"/>
+		<result property="offmTelno"		column="OFFM_TELNO"			columnIndex="15"/>
+		<result property="offmTelnoInner"	column="OFFM_TELNO_INNER"	columnIndex="16"/>
+		<result property="emailAdres"		column="EMAIL_ADRES"		columnIndex="17"/>
+		<result property="emailAdres2"		column="EMAIL_ADRES2"		columnIndex="18"/>
+		<result property="expCompId"		column="EXP_COMP_ID"		columnIndex="19"/>
+		<result property="compnyId"			column="COMPNY_ID"			columnIndex="20"/>
+		<result property="orgnztId"			column="ORGNZT_ID"			columnIndex="21"/>
+		<result property="rankId"			column="RANK_ID"			columnIndex="22"/>
+		<result property="position"			column="POSITION"			columnIndex="23"/>
+		<result property="compinDt"			column="COMPIN_DT"			columnIndex="24"/>
+		<result property="acceptCompinDt"	column="ACCEPT_COMPIN_DT"	columnIndex="25"/>
+		<result property="compotDt"			column="COMPOT_DT"			columnIndex="26"/>
+		<result property="workSt"			column="WORK_ST"			columnIndex="27"/>
+		<result property="carId"			column="CAR_ID"				columnIndex="28"/>
+		<result property="carLicTyp"		column="CAR_LIC_TYP"		columnIndex="29"/>
+		<result property="abutMe"			column="ABUTME"				columnIndex="30"/>
+		<result property="picFileId"		column="PIC_FILE_ID"		columnIndex="31"/>
+		<result property="picFileId2"		column="PIC_FILE_ID2"		columnIndex="32"/>
+		<result property="adminNote"		column="ADMIN_NOTE"			columnIndex="33"/>
+		<result property="initial"			column="INITIAL"			columnIndex="34"/>
+		<result property="carOwn"			column="CAR_OWN"			columnIndex="35"/>
+		<result property="recommender"		column="RECOMMENDER"		columnIndex="36"/>
+		<result property="degree"			column="DEGREE"				columnIndex="37"/>
+		<result property="promotionYear"	column="PROMOTION_YEAR"		columnIndex="38"/>
+		<result property="careerMonth"		column="CAREER_MONTH"		columnIndex="39"/>
+		<result property="deviceType"		column="DEVICE_TYPE"			columnIndex="40"/>
+		<result property="tokenInfo"		column="TOKEN_INFO"			columnIndex="41"/>
+		<result property="orgnztIdSec"		column="ORGNZT_ID_SEC"			columnIndex="42"/>
+	    		
+	</resultMap>
+	
+	<resultMap id="memberInfo" class="kms.com.member.service.MemberVO">
+		<result property="no"				column="NO"					columnIndex="1"/>
+		<result property="userId"			column="USER_ID"			columnIndex="2"/>
+		<result property="userNm"			column="USER_NM"			columnIndex="3"/>
+		<result property="userEnm"			column="USER_ENM"			columnIndex="4"/>
+		<result property="password"			column="PASSWORD"			columnIndex="5"/>
+		<result property="sabun"			column="SABUN"				columnIndex="6"/>
+		<result property="ihidNum"			column="IHIDNUM"			columnIndex="7"/>
+		<result property="sexDstnCode"		column="SEXDSTN_CODE"		columnIndex="8"/>
+		<result property="brth"				column="BRTH"				columnIndex="9"/>
+		<result property="greLun"			column="GRE_LUN"			columnIndex="10"/>
+		<result property="homeAdres"		column="HOME_ADRES"			columnIndex="11"/>
+		<result property="moblphonNo"		column="MOBLPHON_NO"		columnIndex="12"/>
+		<result property="homeTelno"		column="HOME_TELNO"			columnIndex="13"/>
+		<result property="offmId"			column="OFFM_ID"			columnIndex="14"/>
+		<result property="offmNm"			column="OFFM_NM"			columnIndex="15"/>
+		<result property="offmAdres"		column="OFFM_ADRES"			columnIndex="16"/>
+		<result property="offmTelno"		column="OFFM_TELNO"			columnIndex="17"/>
+		<result property="offmTelnoInner"	column="OFFM_TELNO_INNER"	columnIndex="18"/>
+		<result property="emailAdres"		column="EMAIL_ADRES"		columnIndex="19"/>
+		<result property="emailAdres2"		column="EMAIL_ADRES2"		columnIndex="20"/>
+		<result property="expCompId"		column="EXP_COMP_ID"		columnIndex="21"/>
+		<result property="expCompNm"		column="EXP_COMP_NM"		columnIndex="22"/>
+		<result property="compnyId"			column="COMPNY_ID"			columnIndex="23"/>
+		<result property="compnyNm"			column="COMPNY_NM"			columnIndex="24"/>
+		<result property="compnyNmShort"	column="COMPNY_NM_SHORT"	columnIndex="25"/>
+		<result property="orgnztId"			column="ORGNZT_ID"			columnIndex="26"/>
+		<result property="orgnztNm"			column="ORGNZT_NM"			columnIndex="27"/>
+		<result property="rankId"			column="RANK_ID"			columnIndex="28"/>
+		<result property="rankNm"			column="RANK_NM"			columnIndex="29"/>
+		<result property="position"			column="POSITION"			columnIndex="30"/>
+		<result property="compinDt"			column="COMPIN_DT"			columnIndex="31"/>
+		<result property="acceptCompinDt"	column="ACCEPT_COMPIN_DT"	columnIndex="31"/>		
+		<result property="compotDt"			column="COMPOT_DT"			columnIndex="32"/>
+		<result property="workSt"			column="WORK_ST"			columnIndex="33"/>
+		<result property="carId"			column="CAR_ID"				columnIndex="34"/>
+		<result property="carLicTyp"		column="CAR_LIC_TYP"		columnIndex="35"/>
+		<result property="abutMe"			column="ABUTME"				columnIndex="36"/>
+		<result property="picFileId"		column="PIC_FILE_ID"		columnIndex="37"/>
+		<result property="picFileId2"		column="PIC_FILE_ID2"		columnIndex="38"/>
+		<result property="adminNote"		column="ADMIN_NOTE"			columnIndex="39"/>
+		<result property="headNm"			column="HEAD_NM"			columnIndex="40"/>
+		<result property="subHeadNm"		column="SUBHEAD_NM"			columnIndex="41"/>
+		<result property="workMonth"		column="WORK_MONTH"			columnIndex="42"/>
+		<result property="orgnztNmFull"		column="ORGNZT_NM_FULL"		columnIndex="43"/>
+		<result property="initial"			column="INITIAL"			columnIndex="44"/>
+		<result property="carOwn"			column="CAR_OWN"			columnIndex="45"/>
+		<result property="recommender"		column="RECOMMENDER"		columnIndex="45"/>		
+		<result property="degree"			column="DEGREE"				columnIndex="46"/>
+		<result property="promotionYear"	column="PROMOTION_YEAR"		columnIndex="47"/>		
+		<result property="careerMonth"		column="CAREER_MONTH"		columnIndex="48"/>
+		<result property="age"				column="AGE"				columnIndex="49"/>
+		<result property="ageKor"			column="AGE_KOR"			columnIndex="50"/>
+		<!-- 2013.07.24 김대현 웹메일 주소-->
+	    <result property="emailLink"		column="EMAIL_LINK"		    columnIndex="51"/>
+	    <!-- 2014.08.11 김동우 겸직부서 적용-->
+		<result property="orgnztIdSec"		column="ORGNZT_ID_SEC"			columnIndex="52"/>
+		<result property="orgnztNmSec"		column="ORGNZT_NM_SEC"			columnIndex="53"/>
+
+	</resultMap>
+	
+	<resultMap id="msnList" class="kms.com.member.service.Msn">
+		<result property="no" column="NO" columnIndex="1"/>
+		<result property="userNo" column="USER_NO" columnIndex="2"/>
+		<result property="msnTyp" column="MSN_TYP" columnIndex="3"/>
+		<result property="msnAdres" column="MSN_ADRES" columnIndex="4"/>
+	</resultMap>
+
+	<resultMap id="mapUserVO" class="kms.com.member.vo.UserVO">
+		<result property="userNo"		column="NO" 				/>
+		<result property="userId" 		column="USER_ID" 			/>
+		<result property="userName" 	column="USER_NM" 		/>
+		<result property="orgId" 			column="ORGNZT_ID" 		/>
+		<result property="orgName" 		column="ORGNZT_NM" 	/>
+	</resultMap>
+
+	<!--
+	<resultMap id="memberInfo_career" class="kms.com.member.service.MemberVO">
+		<result property="bno" 				column="NO" 				columnIndex="1"/>
+		<result property="bname" 			column="BNAME" 				columnIndex="2"/>
+		<result property="bposition"		column="BPOSITION" 			columnIndex="3"/>
+		<result property="career_dt" 		column="CAREER_DT" 			columnIndex="4"/>
+		<result property="age"				column="AGE" 				columnIndex="5"/>
+		<result property="military_service" column="MILITARY_SERVICE" 	columnIndex="6"/>
+		<result property="ms_st_dt" 		column="MS_ST_DT" 			columnIndex="7"/>
+		<result property="ms_ed_dt" 		column="MS_ED_DT" 			columnIndex="8"/>
+		<result property="ms_level" 		column="MS_LEVEL" 			columnIndex="9"/>
+		<result property="sbasis" 			column="SBASIS" 			columnIndex="10"/>
+		<result property="snum" 			column="SNUM" 				columnIndex="11"/>
+		<result property="license" 			column="LICENSE" 			columnIndex="12"/>
+		<result property="skill" 			column="SKILL" 				columnIndex="13"/>
+		<result property="swLevel" 			column="SW_LEVEL" 			columnIndex="14"/>
+		<result property="attach_file_id" 	column="ATTACH_FILE_ID" 	columnIndex="15"/>	
+		<result property="user_no" 			column="USER_NO" 			columnIndex="16"/>			
+	</resultMap>
+	
+	<resultMap id="memberList_career" class="kms.com.member.service.MemberVO">
+		<result property="userNm" 			column="USER_NM" 			columnIndex="1"/>
+		<result property="sabun" 			column="SABUN" 				columnIndex="2"/>
+		<result property="no"	 			column="NO" 				columnIndex="3"/>
+		<result property="userId" 			column="USER_ID" 			columnIndex="4"/>
+		<result property="bname" 			column="BNAME" 				columnIndex="5"/>
+		<result property="swLevel" 			column="SW_LEVEL" 			columnIndex="6"/>
+		<result property="ihidnum" 			column="IHIDNUM" 			columnIndex="7"/>
+		<result property="age" 				column="AGE" 				columnIndex="8"/>
+		<result property="career_dt" 		column="CAREER_DT" 			columnIndex="9"/>
+		<result property="bposition" 		column="BPOSITION" 			columnIndex="10"/>
+		<result property="postcpNm" 		column="POSTCP_NM" 			columnIndex="11"/>
+		<result property="orgnztNm" 		column="ORGNZT_NM" 			columnIndex="12"/>
+		<result property="user_no" 			column="USER_NO" 			columnIndex="13"/>
+		<result property="updat" 			column="UPDAT" 				columnIndex="14"/>
+	</resultMap>
+			
+	<resultMap id="edu_level" class="kms.com.member.service.MemberVO">
+		<result property="eno" column="NO" columnIndex="1"/>
+		<result property="sname" column="SNAME" columnIndex="2"/>
+		<result property="major" column="MAJOR" columnIndex="3"/>
+		<result property="estDt" column="EST_DT" columnIndex="4"/>
+		<result property="eedDt" column="EED_DT" columnIndex="5"/>
+		<result property="graduationYn" column="GRADUATION_YN" columnIndex="6"/>
+		<result property="sabun" column="SABUN" columnIndex="7"/>
+		<result property="user_no" column="USER_NO" columnIndex="8"/>
+	</resultMap>
+	
+	<resultMap id="career" class="kms.com.member.service.MemberVO">
+		<result property="cno" column="CNO" columnIndex="1"/>
+		<result property="prjId" column="PRJ_ID" columnIndex="2"/>
+		<result property="cstDt" column="CST_DT" columnIndex="3"/>
+		<result property="cedDt" column="CED_DT" columnIndex="4"/>
+		<result property="business" column="BUSINESS" columnIndex="5"/>
+		<result property="corder" column="CORDER" columnIndex="6"/>
+		<result property="etc" column="ETC" columnIndex="7"/>
+		<result property="sabun" column="SABUN" columnIndex="8"/>
+		<result property="user_no" column="USER_NO" columnIndex="9"/>
+	</resultMap>
+	
+	-->
+		
+	<select id="MemberDAO.selectMemberListMain" resultMap="memberListMain" parameterClass="memberVO">
+		SELECT
+			a.NO, a.USER_ID, a.USER_NM, a.USER_ENM, a.PASSWORD, a.SABUN, a.IHIDNUM, a.SEXDSTN_CODE, a.BRTH, a.GRE_LUN,
+			a.HOME_ADRES, a.MOBLPHON_NO, a.HOME_TELNO, a.OFFM_ID, 
+			a.OFFM_TELNO, a.OFFM_TELNO_INNER, a.EMAIL_ADRES, a.EMAIL_ADRES2,
+			<!-- 2013.07.24 김대현 웹메일 주소-->
+		    a.EMAIL_LINK,
+			a.EXP_COMP_ID, a.COMPNY_ID, 
+			a.ORGNZT_ID, a.RANK_ID, a.POSITION,
+			a.COMPIN_DT, 
+			IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) as ACCEPT_COMPIN_DT,
+			a.COMPOT_DT, a.WORK_ST, a.CAR_ID, a.CAR_LIC_TYP, a.ABUTME, a.PIC_FILE_ID, a.PIC_FILE_ID2, a.ADMIN_NOTE,
+			A.INITIAL, A.CAR_OWN, A.RECOMMENDER, A.DEGREE, A.PROMOTION_YEAR, A.CAREER_MONTH
+			,a.DEVICE_TYPE
+			,a.TOKEN_INFO
+			,a.ORGNZT_ID_SEC
+		FROM
+			TBL_USERINFO a
+		WHERE
+			a.GHOST = '0'
+			<isNotEmpty prepend="AND" property="searchNm">
+			(A.USER_NM LIKE CONCAT('%', #searchNm#, '%') OR b.ORGNZT_NM LIKE CONCAT('%', #searchNm#, '%'))
+			</isNotEmpty>
+			
+			<isNotEmpty prepend="AND" property="workStList">
+				<iterate prepend="a.WORK_ST IN" property="workStList" open="(" close=")" conjunction=",">
+					#workStList[]#
+				</iterate>
+			</isNotEmpty>
+			<isEmpty prepend="AND" property="workStList">
+				a.WORK_ST IN ('W', 'L')
+			</isEmpty>
+			<isEqual property="searchCondition" compareValue="0">
+				<isNotEmpty prepend="AND" property="rankId">
+					a.RANK_ID = #rankId#
+				</isNotEmpty>
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				CONCAT(a.USER_NM, '(', a.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+			</isEqual>
+			<isEqual property="searchCondition" compareValue="2">
+				<isNotEmpty prepend="AND" property="searchOrgIdList"> 
+					<iterate prepend="a.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+						#searchOrgIdList[]#
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+			
+			<isEqual property="searchCondition" compareValue="teamMember">
+				<isNotEmpty prepend="AND" property="orgnztId">
+					a.ORGNZT_ID = #orgnztId#
+				</isNotEmpty>
+			</isEqual>
+
+			<isEqual property="searchCondition" compareValue="teamLeader">
+				<isNotEmpty property="orgnztId">
+					AND a.ORGNZT_ID IN (SELECT ORGNZT_ID FROM tbl_orgnzt
+						WHERE ORG_TREE LIKE CONCAT('%',#orgnztId#, '%')
+						AND USE_YN = 'Y')
+					AND a.POSITION = 'H'	
+				</isNotEmpty>
+			</isEqual>
+			
+		<isNotEmpty property="orderBy">
+			<isEqual property="orderBy" compareValue="new">
+				ORDER BY a.COMPIN_DT DESC
+					, a.SABUN DESC
+			</isEqual>
+			<isEqual property="orderBy" compareValue="birth">
+				ORDER BY IF(SUBSTRING(a.BRTH,5,4) >= DATE_FORMAT(SYSDATE(), '%m%d'), 0, 1) ASC
+					,CASE
+						WHEN a.BRTH IS NULL OR a.BRTH = '' THEN 9999
+						ELSE SUBSTRING(a.BRTH,5,4)
+					END ASC
+			</isEqual>
+			<isEqual property="orderBy" compareValue="enter">
+				ORDER BY IF(SUBSTRING(a.COMPIN_DT,5,4) >= DATE_FORMAT(SYSDATE(), '%m%d'), 0, 1) ASC
+					,CASE
+						WHEN a.COMPIN_DT IS NULL OR a.COMPIN_DT = '' THEN 9999
+						ELSE SUBSTRING(a.COMPIN_DT,5,4)
+					END ASC
+			</isEqual>
+			<isEqual property="orderBy" compareValue="name">
+				ORDER BY USER_NM ASC
+			</isEqual>
+			<isEqual property="orderBy" compareValue="RetireDate">
+				ORDER BY IFNULL(COMPOT_DT, 999) ASC
+			</isEqual>
+		</isNotEmpty>		
+		<isEmpty property="orderBy">
+			ORDER BY IFNULL(SABUN, '9999') ASC
+		</isEmpty>
+		<isNotEmpty property="recordCountPerPage">
+			LIMIT #recordCountPerPage# OFFSET #firstIndex#
+		</isNotEmpty>
+	</select>
+	
+	<select id="MemberDAO.selectMemberList" resultMap="memberList" parameterClass="memberVO">
+		SELECT
+			a.NO, a.USER_ID, a.USER_NM, a.USER_ENM, a.PASSWORD, a.SABUN, a.IHIDNUM, a.SEXDSTN_CODE, a.BRTH, a.GRE_LUN,
+			a.HOME_ADRES, a.MOBLPHON_NO, a.HOME_TELNO, a.OFFM_ID, d.CODE_NM AS OFFM_NM, d.COLUMN1 AS OFFM_ADRES,
+			a.OFFM_TELNO, a.OFFM_TELNO_INNER, a.EMAIL_ADRES, a.EMAIL_ADRES2,
+			<!-- 2013.07.24 김대현 웹메일 주소-->
+		    a.EMAIL_LINK,
+			a.EXP_COMP_ID, f.CODE_NM AS EXP_COMP_NM, a.COMPNY_ID, e.CODE_NM AS COMPNY_NM, e.CODE_DC AS COMPNY_NM_SHORT,
+			a.ORGNZT_ID, b.ORGNZT_NM AS ORGNZT_NM, a.RANK_ID, c.CODE_NM RANK_NM, a.POSITION,
+			a.COMPIN_DT, 
+			IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) as ACCEPT_COMPIN_DT,
+			a.COMPOT_DT, a.WORK_ST, a.CAR_ID, a.CAR_LIC_TYP, a.ABUTME, a.PIC_FILE_ID, a.PIC_FILE_ID2, a.ADMIN_NOTE,
+			b.POSTCP_NM AS HEAD_NM, b.POSTCP_RNM AS SUBHEAD_NM
+			,FN_GET_MEMBER_WORK_PERIOD(A.NO) AS WORK_MONTH
+		   	<!-- 2013.07.24 김대현 전체소속경로로 표시 -->
+			,FN_CREATE_ORGAN_FNM(a.ORGNZT_ID) AS ORGNZT_NM_FULL
+		    ,(SELECT WK.WS_TYP
+			   FROM TBL_WORK_STATE WK
+				    LEFT JOIN TBL_USERINFO USR1 ON WK.USER_NO = USR1.NO
+				    LEFT JOIN TBL_USERINFO USR2 ON WK.WRITER_NO = USR2.NO
+				    LEFT JOIN TBL_ORGNZT ORG ON USR2.ORGNZT_ID = ORG.ORGNZT_ID
+			  WHERE WK.USE_AT = 'Y'
+			    AND((WK.WS_TYP = 'O' AND WK.WS_BGN_DE = DATE_FORMAT(SYSDATE(), '%Y%m%d')) 
+			     OR(WK.WS_TYP IN ('S', 'T', 'V') 
+			        AND DATEDIFF(DATE_FORMAT(SYSDATE(), '%Y%m%d'), WK.WS_BGN_DE) >= 0
+					AND DATEDIFF(WK.WS_END_DE, DATE_FORMAT(SYSDATE(), '%Y%m%d')) >= 0) 
+				 OR(WK.WS_TYP IN ('N')
+					AND DATEDIFF(DATE_FORMAT(SYSDATE(), '%Y%m%d'), WK.WS_BGN_DE) = 1))
+			    AND fn_get_orgid_history(USR1.NO, DATE_FORMAT(SYSDATE(), '%Y%m%d')) != 'ORGAN_RET_ORGAN_CODE'
+			    AND a.NO = WK.USER_NO
+			  ORDER BY WK.WS_TYP DESC LIMIT 1) AS WS_TYP
+			,A.INITIAL, A.CAR_OWN, A.RECOMMENDER, A.DEGREE, A.PROMOTION_YEAR, A.CAREER_MONTH
+			,FN_GET_MEMBER_AGE(A.NO, '') AS AGE, FN_GET_MEMBER_AGE_KOR(A.NO, '') AS AGE_KOR
+			<!-- //2013.08.20 김대현 PUSH 적용 -->
+			,a.DEVICE_TYPE
+			,a.TOKEN_INFO
+			,a.ORGNZT_ID_SEC, g.ORGNZT_NM AS ORGNZT_NM_SEC	<!-- 겸직부서 -->
+		FROM
+			TBL_USERINFO a
+			<isNotEmpty property="searchPrjId">
+			INNER JOIN (
+				SELECT
+					USER_NO
+				FROM
+					TBL_PRJ_INPUT 
+				WHERE
+					PRJ_ID = #searchPrjId#
+					AND YEAR >= DATE_FORMAT(SYSDATE(),"%Y") 
+					AND MONTH >= DATE_FORMAT(SYSDATE(),"%m")
+				GROUP BY 
+					USER_NO
+				) B
+				ON A.NO = B.USER_NO
+			</isNotEmpty>
+			LEFT JOIN TBL_ORGNZT b ON a.ORGNZT_ID = b.ORGNZT_ID
+			LEFT JOIN COMTCCMMNDETAILCODE c ON a.RANK_ID = c.CODE and c.CODE_ID ='KMS003'
+			LEFT JOIN COMTCCMMNDETAILCODE d ON d.CODE_ID = 'KMS005' AND a.OFFM_ID = d.CODE
+			LEFT JOIN COMTCCMMNDETAILCODE e ON e.CODE_ID = 'KMS007' AND a.COMPNY_ID = e.CODE
+			LEFT JOIN COMTCCMMNDETAILCODE f ON f.CODE_ID = 'KMS007' AND a.EXP_COMP_ID = f.CODE
+			LEFT JOIN TBL_ORGNZT g ON a.ORGNZT_ID_SEC = g.ORGNZT_ID
+		WHERE
+			a.GHOST = '0'
+			<isNotEmpty prepend="AND" property="searchNm">
+			(A.USER_NM LIKE CONCAT('%', #searchNm#, '%') OR b.ORGNZT_NM LIKE CONCAT('%', #searchNm#, '%'))
+			</isNotEmpty>
+			
+			<isNotEmpty prepend="AND" property="workStList">
+				<iterate prepend="a.WORK_ST IN" property="workStList" open="(" close=")" conjunction=",">
+					#workStList[]#
+				</iterate>
+			</isNotEmpty>
+			<isEmpty prepend="AND" property="workStList">
+				a.WORK_ST IN ('W', 'L')
+			</isEmpty>
+			<isEqual property="searchCondition" compareValue="0">
+				<isNotEmpty prepend="AND" property="rankId">
+					a.RANK_ID = #rankId#
+				</isNotEmpty>
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				CONCAT(a.USER_NM, '(', a.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+			</isEqual>
+			<isEqual property="searchCondition" compareValue="2">
+				<isNotEmpty prepend="AND" property="searchOrgIdList"> 
+					<iterate prepend="a.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+						#searchOrgIdList[]#
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+			
+			<isEqual property="searchCondition" compareValue="teamMember">
+				<isNotEmpty prepend="AND" property="orgnztId">
+					a.ORGNZT_ID = #orgnztId#
+				</isNotEmpty>
+			</isEqual>
+
+			<isEqual property="searchCondition" compareValue="teamLeader">
+				<isNotEmpty property="orgnztId">
+					AND a.ORGNZT_ID IN (SELECT ORGNZT_ID FROM tbl_orgnzt
+						WHERE ORG_TREE LIKE CONCAT('%',#orgnztId#, '%')
+						AND USE_YN = 'Y')
+					AND a.POSITION = 'H'	
+				</isNotEmpty>
+			</isEqual>
+							
+			
+		<isNotEmpty property="orderBy">
+			<isEqual property="orderBy" compareValue="new">
+				ORDER BY a.COMPIN_DT DESC
+					, a.SABUN DESC
+			</isEqual>
+			<isEqual property="orderBy" compareValue="birth">
+				ORDER BY IF(SUBSTRING(a.BRTH,5,4) >= DATE_FORMAT(SYSDATE(), '%m%d'), 0, 1) ASC
+					,CASE
+						WHEN a.BRTH IS NULL OR a.BRTH = '' THEN 9999
+						ELSE SUBSTRING(a.BRTH,5,4)
+					END ASC
+			</isEqual>
+			<isEqual property="orderBy" compareValue="enter">
+				ORDER BY IF(SUBSTRING(a.COMPIN_DT,5,4) >= DATE_FORMAT(SYSDATE(), '%m%d'), 0, 1) ASC
+					,CASE
+						WHEN a.COMPIN_DT IS NULL OR a.COMPIN_DT = '' THEN 9999
+						ELSE SUBSTRING(a.COMPIN_DT,5,4)
+					END ASC
+			</isEqual>
+			<isEqual property="orderBy" compareValue="name">
+				ORDER BY USER_NM ASC
+			</isEqual>
+			<isEqual property="orderBy" compareValue="RetireDate">
+				ORDER BY IFNULL(COMPOT_DT, 999) ASC
+			</isEqual>
+		</isNotEmpty>		
+		<isEmpty property="orderBy">
+			ORDER BY IFNULL(SABUN, '9999') ASC
+		</isEmpty>
+		<isNotEmpty property="recordCountPerPage">
+			LIMIT #recordCountPerPage# OFFSET #firstIndex#
+		</isNotEmpty>
+	</select>
+		
+	<select id="MemberDAO.selectMemberListTotCnt" resultClass="java.lang.Integer" parameterClass="memberVO">
+		SELECT
+			COUNT(*)
+		FROM
+			TBL_USERINFO a
+			<isNotEmpty property="searchPrjId">
+			INNER JOIN (
+				SELECT
+					USER_NO
+				FROM
+					TBL_PRJ_INPUT 
+				WHERE
+					PRJ_ID = #searchPrjId#
+					AND YEAR >= DATE_FORMAT(SYSDATE(),"%Y") 
+					AND MONTH >= DATE_FORMAT(SYSDATE(),"%m")
+				GROUP BY 
+					USER_NO
+				) B
+				ON A.NO = B.USER_NO
+			</isNotEmpty>
+			LEFT JOIN TBL_ORGNZT b ON a.ORGNZT_ID = b.ORGNZT_ID
+			LEFT JOIN COMTCCMMNDETAILCODE c ON a.RANK_ID = c.CODE and c.CODE_ID ='KMS003'
+			LEFT JOIN COMTCCMMNDETAILCODE d ON d.CODE_ID = 'KMS005' AND a.OFFM_ID = d.CODE
+			LEFT JOIN COMTCCMMNDETAILCODE e ON e.CODE_ID = 'KMS007' AND a.COMPNY_ID = e.CODE
+			LEFT JOIN COMTCCMMNDETAILCODE f ON f.CODE_ID = 'KMS007' AND a.EXP_COMP_ID = f.CODE
+		WHERE
+			a.GHOST = '0'
+			<isNotEmpty prepend="AND" property="searchNm">
+			(A.USER_NM LIKE CONCAT('%', #searchNm#, '%') OR b.ORGNZT_NM LIKE CONCAT('%', #searchNm#, '%'))
+			</isNotEmpty>
+			
+			<isNotEmpty prepend="AND" property="workStList">
+				<iterate prepend="a.WORK_ST IN" property="workStList" open="(" close=")" conjunction=",">
+					#workStList[]#
+				</iterate>
+			</isNotEmpty>
+			<isEmpty prepend="AND" property="workStList">
+				a.WORK_ST IN ('W', 'L')
+			</isEmpty>
+			<isEqual property="searchCondition" compareValue="0">
+				<isNotEmpty prepend="AND" property="rankId">
+					a.RANK_ID = #rankId#
+				</isNotEmpty>
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				CONCAT(a.USER_NM, '(', a.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+			</isEqual>
+			<isEqual property="searchCondition" compareValue="2">
+				<isNotEmpty prepend="AND" property="searchOrgIdList"> 
+					<iterate prepend="a.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+						#searchOrgIdList[]#
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+	</select>
+	
+	
+	<select id="MemberDAO.selectMember" resultMap="memberInfo" parameterClass="memberVO">
+		SELECT
+			a.NO, a.USER_ID, a.USER_NM, a.USER_ENM, a.PASSWORD, a.SABUN, a.IHIDNUM, a.SEXDSTN_CODE, a.BRTH, a.GRE_LUN,
+			a.HOME_ADRES, a.MOBLPHON_NO, a.HOME_TELNO, a.OFFM_ID, d.CODE_NM AS OFFM_NM, d.COLUMN1 AS OFFM_ADRES,
+			a.OFFM_TELNO, a.OFFM_TELNO_INNER, a.EMAIL_ADRES, a.EMAIL_ADRES2,
+			<!-- 2013.07.24 김대현 웹메일 주소-->
+		    a.EMAIL_LINK,
+			a.EXP_COMP_ID, f.CODE_NM AS EXP_COMP_NM, a.COMPNY_ID, e.CODE_NM AS COMPNY_NM, e.CODE_DC AS COMPNY_NM_SHORT,
+			a.ORGNZT_ID, b.ORGNZT_NM AS ORGNZT_NM, a.RANK_ID, c.CODE_NM RANK_NM, a.POSITION,
+			a.COMPIN_DT, 
+			IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) as ACCEPT_COMPIN_DT,
+			a.COMPOT_DT, a.WORK_ST, a.CAR_ID, a.CAR_LIC_TYP, a.ABUTME, a.PIC_FILE_ID, a.PIC_FILE_ID2, a.ADMIN_NOTE,
+			b.POSTCP_NM AS HEAD_NM, b.POSTCP_RNM AS SUBHEAD_NM
+			,FN_GET_MEMBER_WORK_PERIOD(A.NO) AS WORK_MONTH
+			,FN_CREATE_ORGAN_FNM(a.ORGNZT_ID) AS ORGNZT_NM_FULL
+			,A.INITIAL, A.CAR_OWN, A.RECOMMENDER, A.DEGREE, A.PROMOTION_YEAR, A.CAREER_MONTH
+			,FN_GET_MEMBER_AGE(A.NO, '') AS AGE, FN_GET_MEMBER_AGE_KOR(A.NO, '') AS AGE_KOR
+			,a.ORGNZT_ID_SEC, g.ORGNZT_NM AS ORGNZT_NM_SEC	<!-- 겸직부서 -->
+		FROM
+			TBL_USERINFO a
+			LEFT JOIN TBL_ORGNZT b ON a.ORGNZT_ID = b.ORGNZT_ID
+			LEFT JOIN COMTCCMMNDETAILCODE c ON a.RANK_ID = c.CODE and c.CODE_ID ='KMS003'
+			LEFT JOIN COMTCCMMNDETAILCODE d ON d.CODE_ID = 'KMS005' AND a.OFFM_ID = d.CODE
+			LEFT JOIN COMTCCMMNDETAILCODE e ON e.CODE_ID = 'KMS007' AND a.COMPNY_ID = e.CODE
+			LEFT JOIN COMTCCMMNDETAILCODE f ON f.CODE_ID = 'KMS007' AND a.EXP_COMP_ID = f.CODE
+			LEFT JOIN TBL_ORGNZT g ON a.ORGNZT_ID = g.ORGNZT_ID
+		WHERE
+			a.NO = #no#
+	</select>
+	
+	<select id="MemberDAO.selectMemberByIdNew" resultMap="memberInfo" parameterClass="memberVO">
+		SELECT
+			a.NO, a.USER_ID, a.USER_NM, a.USER_ENM, a.PASSWORD, a.SABUN, a.IHIDNUM, a.SEXDSTN_CODE, a.BRTH, a.GRE_LUN,
+			a.HOME_ADRES, a.MOBLPHON_NO, a.HOME_TELNO, a.OFFM_ID, d.CODE_NM AS OFFM_NM, d.COLUMN1 AS OFFM_ADRES,
+			a.OFFM_TELNO, a.OFFM_TELNO_INNER, a.EMAIL_ADRES, a.EMAIL_ADRES2,
+			<!-- 2013.07.24 김대현 웹메일 주소-->
+		    a.EMAIL_LINK,
+			a.EXP_COMP_ID, f.CODE_NM AS EXP_COMP_NM, a.COMPNY_ID, e.CODE_NM AS COMPNY_NM, e.CODE_DC AS COMPNY_NM_SHORT,
+			a.ORGNZT_ID, b.ORGNZT_NM AS ORGNZT_NM, a.RANK_ID, c.CODE_NM RANK_NM, a.POSITION,
+			a.COMPIN_DT, 
+			IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) as ACCEPT_COMPIN_DT,
+			a.COMPOT_DT, a.WORK_ST, a.CAR_ID, a.CAR_LIC_TYP, a.ABUTME, a.PIC_FILE_ID, a.PIC_FILE_ID2, a.ADMIN_NOTE,
+			b.POSTCP_NM AS HEAD_NM, b.POSTCP_RNM AS SUBHEAD_NM
+<!--			PERIOD_DIFF( IFNULL(IF(SUBSTRING(a.COMPOT_DT,1,6) = '', DATE_FORMAT(SYSDATE(), '%Y%m'), SUBSTRING(a.COMPOT_DT,1,6)),DATE_FORMAT(SYSDATE(), '%Y%m')), SUBSTRING(a.COMPIN_DT,1,6) ) AS WORK_MONTH-->
+			,FN_GET_MEMBER_WORK_PERIOD(A.NO) AS WORK_MONTH
+			,FN_CREATE_ORGAN_FNM(a.ORGNZT_ID) AS ORGNZT_NM_FULL
+			,A.INITIAL, A.CAR_OWN, A.RECOMMENDER, A.DEGREE, A.PROMOTION_YEAR, A.CAREER_MONTH
+			,FN_GET_MEMBER_AGE(A.NO, '') AS AGE, FN_GET_MEMBER_AGE_KOR(A.NO, '') AS AGE_KOR
+			,a.ORGNZT_ID_SEC, g.ORGNZT_NM AS ORGNZT_NM_SEC	<!-- 겸직부서 -->
+		FROM
+			TBL_USERINFO a
+			LEFT JOIN TBL_ORGNZT b ON a.ORGNZT_ID = b.ORGNZT_ID
+			LEFT JOIN COMTCCMMNDETAILCODE c ON a.RANK_ID = c.CODE and c.CODE_ID ='KMS003'
+			LEFT JOIN COMTCCMMNDETAILCODE d ON d.CODE_ID = 'KMS005' AND a.OFFM_ID = d.CODE
+			LEFT JOIN COMTCCMMNDETAILCODE e ON e.CODE_ID = 'KMS007' AND a.COMPNY_ID = e.CODE
+			LEFT JOIN COMTCCMMNDETAILCODE f ON f.CODE_ID = 'KMS007' AND a.EXP_COMP_ID = f.CODE
+			LEFT JOIN TBL_ORGNZT g ON a.ORGNZT_ID = g.ORGNZT_ID
+		WHERE
+			a.USER_ID = #userId#
+	</select>
+	
+	<select id="MemberDAO.mobileSelectMember" resultMap="memberInfo" parameterClass="memberVO">
+		SELECT
+			a.NO, a.USER_ID, a.USER_NM, a.USER_ENM, a.PASSWORD, a.SABUN, a.IHIDNUM, a.SEXDSTN_CODE, a.BRTH, a.GRE_LUN,
+			a.HOME_ADRES, a.MOBLPHON_NO, a.HOME_TELNO, a.OFFM_ID, d.CODE_NM AS OFFM_NM, d.COLUMN1 AS OFFM_ADRES,
+			a.OFFM_TELNO, a.OFFM_TELNO_INNER, a.EMAIL_ADRES, a.EMAIL_ADRES2,
+			<!-- 2013.07.24 김대현 웹메일 주소-->
+		    a.EMAIL_LINK,
+			a.EXP_COMP_ID, f.CODE_NM AS EXP_COMP_NM, a.COMPNY_ID, e.CODE_NM AS COMPNY_NM, e.CODE_DC AS COMPNY_NM_SHORT,
+			a.ORGNZT_ID, b.ORGNZT_NM AS ORGNZT_NM, a.RANK_ID, c.CODE_NM RANK_NM, a.POSITION,
+			a.COMPIN_DT, 
+			IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) as ACCEPT_COMPIN_DT,
+			a.COMPOT_DT, a.WORK_ST, a.CAR_ID, a.CAR_LIC_TYP, a.ABUTME, a.PIC_FILE_ID, a.PIC_FILE_ID2, a.ADMIN_NOTE,
+			b.POSTCP_NM AS HEAD_NM, b.POSTCP_RNM AS SUBHEAD_NM
+<!--			PERIOD_DIFF( IFNULL(IF(SUBSTRING(a.COMPOT_DT,1,6) = '', DATE_FORMAT(SYSDATE(), '%Y%m'), SUBSTRING(a.COMPOT_DT,1,6)),DATE_FORMAT(SYSDATE(), '%Y%m')), SUBSTRING(a.COMPIN_DT,1,6) ) AS WORK_MONTH-->
+			,FN_GET_MEMBER_WORK_PERIOD(A.NO) AS WORK_MONTH
+			,FN_CREATE_ORGAN_FNM(a.ORGNZT_ID) AS ORGNZT_NM_FULL
+			,A.INITIAL, A.CAR_OWN, A.RECOMMENDER, A.DEGREE, A.PROMOTION_YEAR, A.CAREER_MONTH
+			,FN_GET_MEMBER_AGE(A.NO, '') AS AGE, FN_GET_MEMBER_AGE_KOR(A.NO, '') AS AGE_KOR
+			,a.ORGNZT_ID_SEC, g.ORGNZT_NM AS ORGNZT_NM_SEC	<!-- 겸직부서 -->
+		FROM
+			TBL_USERINFO a
+			LEFT JOIN TBL_ORGNZT b ON a.ORGNZT_ID = b.ORGNZT_ID
+			LEFT JOIN COMTCCMMNDETAILCODE c ON a.RANK_ID = c.CODE and c.CODE_ID ='KMS003'
+			LEFT JOIN COMTCCMMNDETAILCODE d ON d.CODE_ID = 'KMS005' AND a.OFFM_ID = d.CODE
+			LEFT JOIN COMTCCMMNDETAILCODE e ON e.CODE_ID = 'KMS007' AND a.COMPNY_ID = e.CODE
+			LEFT JOIN COMTCCMMNDETAILCODE f ON f.CODE_ID = 'KMS007' AND a.EXP_COMP_ID = f.CODE
+			LEFT JOIN TBL_ORGNZT g ON a.ORGNZT_ID = g.ORGNZT_ID
+		WHERE
+			a.USER_ID = #userId#
+	</select>
+	
+	<update id="MemberDAO.updtMember">
+		UPDATE TBL_USERINFO
+		SET
+			USER_ENM = #userEnm#
+			,BRTH = #brthDb#
+			,EMAIL_ADRES = #emailAdres#
+			,EMAIL_ADRES2 = #emailAdres2#
+			<!-- 2013.07.24 김대현 웹메일 주소-->
+			,EMAIL_LINK = #emailLink#
+			,HOME_ADRES = #homeAdres#
+			,MOBLPHON_NO = #moblphonNo#
+			,HOME_TELNO = #homeTelno#
+			,OFFM_ID = #offmId#
+			,OFFM_TELNO = #offmTelno#
+			,OFFM_TELNO_INNER = #offmTelnoInner#
+			,CAR_ID = #carId#
+			,CAR_LIC_TYP = #carLicTyp#
+			,ABUTME = #abutMe#
+		
+		<isNotEmpty prepend="," property="userId">
+			USER_ID = #userId#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="userNm">
+			USER_NM = #userNm#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="sabun">
+			SABUN = LPAD(#sabun#,4,'0')
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="ihidNum">
+			IHIDNUM = #ihidNum#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="expCompId">
+			EXP_COMP_ID = #expCompId#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="sexDstnCode">
+			SEXDSTN_CODE = #sexDstnCode#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="adminNote">
+			ADMIN_NOTE = #adminNote#
+		</isNotEmpty>
+		<isNull prepend="," property="greLun">
+			GRE_LUN = 'G'
+		</isNull>
+		<isNotNull prepend="," property="greLun">
+			GRE_LUN = #greLun#
+		</isNotNull>
+		<isNotEmpty prepend="," property="password">
+			PASSWORD = #password#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="initial">
+			INITIAL = #initial#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="carOwn">
+			CAR_OWN = #carOwn#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="recommender">
+			RECOMMENDER = #recommender#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="degree">
+			DEGREE = #degree#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="promotionYear">
+			PROMOTION_YEAR = #promotionYear#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="careerMonth">
+			CAREER_MONTH = #careerMonth#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="acceptCompinDt">
+			ACCEPT_COMPIN_DT = #acceptCompinDt#
+		</isNotEmpty>
+		WHERE
+			NO = #no#
+	</update>
+	
+	
+	<!-- 
+	2013.07.25 김대현 웹메일 주소
+	상단 메뉴에서 회사 웹메일 링크 주소를 변경
+     -->
+	<update id="MemberDAO.updtMemberEmailLink">
+		UPDATE TBL_USERINFO
+		SET    EMAIL_LINK = #emailLink#
+		WHERE  NO = #no#
+	</update>
+	
+	
+	
+	<update id="MemberDAO.updtMember2">
+		UPDATE TBL_USERINFO
+		SET
+			USER_ENM = USER_ENM
+		<isNotEmpty prepend="," property="userEnm">
+			USER_ENM = #userEnm#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="brthDb">
+			BRTH = #brthDb#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="emailAdres">
+			EMAIL_ADRES = #emailAdres#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="emailAdres2">
+			EMAIL_ADRES2 = #emailAdres2#
+		</isNotEmpty>	
+		<!-- 2013.07.24 김대현 웹메일 주소-->
+		<isNotEmpty prepend="," property="emailLink">
+			EMAIL_LINK = #emailLink#
+		</isNotEmpty>
+			
+		<isNotEmpty prepend="," property="homeAdres">
+			HOME_ADRES = #homeAdres#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="moblphonNo">
+			MOBLPHON_NO = #moblphonNo#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="homeTelno">
+			HOME_TELNO = #homeTelno#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="offmId">
+			OFFM_ID = #offmId#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="offmTelno">
+			OFFM_TELNO = #offmTelno#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="offmTelnoInner">
+			OFFM_TELNO_INNER = #offmTelnoInner#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="carId">
+			CAR_ID = #carId#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="carLicTyp">
+			CAR_LIC_TYP = #carLicTyp#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="abutMe">
+			ABUTME = #abutMe#
+		</isNotEmpty>
+		
+		<isNotEmpty prepend="," property="userId">
+			USER_ID = #userId#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="userNm">
+			USER_NM = #userNm#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="sabun">
+			SABUN = LPAD(#sabun#,4,'0')
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="ihidNum">
+			IHIDNUM = #ihidNum#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="expCompId">
+			EXP_COMP_ID = #expCompId#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="sexDstnCode">
+			SEXDSTN_CODE = #sexDstnCode#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="adminNote">
+			ADMIN_NOTE = #adminNote#
+		</isNotEmpty>
+		<isNull prepend="," property="greLun">
+			GRE_LUN = 'G'
+		</isNull>
+		<isNotNull prepend="," property="greLun">
+			GRE_LUN = #greLun#
+		</isNotNull>
+		<isNotEmpty prepend="," property="password">
+			PASSWORD = #password#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="initial">
+			INITIAL = #initial#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="carOwn">
+			CAR_OWN = #carOwn#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="recommender">
+			RECOMMENDER = #recommender#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="degree">
+			DEGREE = #degree#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="promotionYear">
+			PROMOTION_YEAR = #promotionYear#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="careerMonth">
+			CAREER_MONTH = #careerMonth#
+		</isNotEmpty>
+		WHERE
+			NO = #no#
+	</update>
+	
+	<update id="MemberDAO.updtMemberUiSetting">
+		UPDATE TBL_USERINFO
+		SET
+			SHOW_RIGHT = #showRight#
+			,DAY_REPORT_TYP = #dayReportTyp#
+		WHERE
+			NO = #no#
+	</update>
+
+	<!-- /* 2013.08.19 김대현  TOKEN_INFO 중복 제거*/  -->
+  	<update id="MemberDAO.deleteDeviceInfo" parameterClass="memberVO">
+		UPDATE TBL_USERINFO SET
+			   MAC_ADDR = '',
+			   DEVICE_TYPE = '',
+			   TOKEN_INFO = ''
+		 WHERE TOKEN_INFO = #tokenInfo#
+	</update>
+	
+	<update id="MemberDAO.updateDeviceInfo" parameterClass="memberVO">
+		UPDATE TBL_USERINFO SET
+			   MAC_ADDR = #macAddr#,
+			   DEVICE_TYPE = #deviceType#,
+			   TOKEN_INFO = #tokenInfo#
+		 WHERE USER_ID = #userId#
+		   AND PASSWORD = #password#
+	</update>
+	
+	<update id="MemberDAO.versionUpdate" parameterClass="memberVO">
+		UPDATE TBL_USERINFO SET
+			   APP_VERSION = #version#
+		 WHERE USER_ID = #userId#
+	</update>
+	
+	<update id="MemberDAO.mvucUpdate" parameterClass="mvucVO">
+		UPDATE COMTCCMMNDETAILCODE SET
+			   CODE_DC = #code_dc#
+		 WHERE CODE_ID = 'KMS020'
+		   AND CODE = #update_code#
+	</update>
+	
+	<update id="MemberDAO.updateMemberPosition">
+		UPDATE 
+			TBL_USERINFO
+		SET
+			ORGNZT_ID = #orgnztId#,			
+			COMPNY_ID = #compnyId#,
+			POSITION = #position#,
+			WORK_ST = #workSt#
+		<isNotNull prepend="," property="rankId">
+			RANK_ID = #rankId#
+		</isNotNull>
+		<isNotNull prepend="," property="compinDt">
+			COMPIN_DT = #compinDt# 
+		</isNotNull>
+		<isNotNull prepend="," property="acceptCompinDt">
+			ACCEPT_COMPIN_DT = #acceptCompinDt# 
+		</isNotNull>
+		<isNotNull prepend="," property="compotDt">
+			COMPOT_DT = #compotDt#
+		</isNotNull>
+		WHERE
+			NO = #no#
+	</update>
+	
+	<update id="MemberDAO.uploadPhoto">
+		UPDATE TBL_USERINFO
+		SET
+		<isNotNull property="picFileId">
+			PIC_FILE_ID = #picFileId#
+		</isNotNull>
+		<isNotNull property="picFileId2">
+			PIC_FILE_ID2 = #picFileId2#
+		</isNotNull>
+		WHERE
+			NO = #no#
+	</update>
+	
+	
+	
+	
+	
+	<select id="MemberDAO.selectMemberInsa" resultClass="egovMap" parameterClass="memberVO">
+		SELECT
+			NO, FILE_TYP, ATCH_FILE_ID, NOTE
+		FROM
+			TBL_USERINFO_INSA
+		WHERE
+			USER_NO = #no#
+	</select>
+	<insert id="MemberDAO.insertMemberInsa">
+		INSERT INTO TBL_USERINFO_INSA
+		(
+			USER_NO, FILE_TYP, ATCH_FILE_ID, NOTE
+		) VALUES (
+			#userNo#, #fileTyp#, #atchFileId#, #note#
+		)
+	</insert>
+	<delete id="MemberDAO.deleteMemberInsa">
+		DELETE FROM TBL_USERINFO_INSA
+		WHERE NO = #no#
+	</delete>
+	
+	<select id="MemberDAO.selectMemberMsn" resultMap="msnList" parameterClass="memberVO">
+		SELECT
+			NO, USER_NO, MSN_TYP, MSN_ADRES
+		FROM
+			TBL_USERINFO_MSN
+		WHERE
+			USER_NO = #no#
+	</select>
+	<insert id="MemberDAO.insertMemberMsn">
+		INSERT INTO TBL_USERINFO_MSN
+		(
+			USER_NO, MSN_TYP, MSN_ADRES
+		) VALUES (
+			#userNo#, #msnTyp#, #msnAdres#
+		)
+	</insert>
+	<delete id="MemberDAO.deleteMemberMsn">
+		DELETE FROM TBL_USERINFO_MSN
+		WHERE
+			NO = #no#
+	</delete>
+
+	
+	<select id="MemberDAO.memberIdChk" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			TBL_USERINFO
+		WHERE
+			USER_ID = #userId#
+	</select>
+	
+	<insert id="MemberDAO.insertMember">
+		INSERT INTO TBL_USERINFO
+		(
+			USER_ID, USER_NM, USER_ENM, PASSWORD, SABUN, IHIDNUM, SEXDSTN_CODE, BRTH, GRE_LUN,
+			HOME_ADRES, MOBLPHON_NO, HOME_TELNO, OFFM_ID, OFFM_TELNO, OFFM_TELNO_INNER,
+			EMAIL_ADRES, EMAIL_ADRES2, 
+			<!-- 2013.07.24 김대현 웹메일 주소-->
+		    EMAIL_LINK,
+		    COMPNY_ID, CAR_ID, CAR_LIC_TYP, ABUTME, ADMIN_NOTE, INITIAL
+		)VALUES(
+			#userId#, #userNm#, #userEnm#, #password#, LPAD(#sabun#,4,'0'), #ihidNum#, #sexDstnCode#, #brthDb#, #greLun#,
+			#homeAdres#, #moblphonNo#, #homeTelno#, #offmId#, #offmTelno#, #offmTelnoInner#,
+			#emailAdres#, #emailAdres#, 
+			<!-- 2013.07.24 김대현 웹메일 주소-->
+		    #emailLink#,
+			#compnyId#, #carId#, #carLicTyp#, #abutMe#, #adminNote#, #initial#
+		)
+	</insert>
+	
+	
+	
+	<select id="MemberDAO.selectSimpleMemberList" resultClass="egovMap" parameterClass="memberVO">
+		SELECT
+			a.NO, a.USER_ID,a.USER_NM, 
+			CONCAT(a.USER_NM,"(",a.USER_ID,") ",C.CODE_NM, " " , b.ORGNZT_NM, " [", A.INITIAL, "]") AS LABEL
+<!--			CONCAT(a.USER_NM,"(",a.USER_ID,")","  ", b.ORGNZT_NM, " [", A.INITIAL, "]") as LABEL-->
+			,c.CODE_NM RANK_NM, e.CODE_NM AS COMPNY_NM, A.INITIAL
+		FROM
+			TBL_USERINFO a
+			LEFT JOIN TBL_ORGNZT b ON a.ORGNZT_ID = b.ORGNZT_ID
+			LEFT JOIN COMTCCMMNDETAILCODE c ON a.RANK_ID = c.CODE and c.CODE_ID ='KMS003'
+			LEFT JOIN COMTCCMMNDETAILCODE d ON d.CODE_ID = 'KMS005' AND a.OFFM_ID = d.CODE
+			LEFT JOIN COMTCCMMNDETAILCODE e ON e.CODE_ID = 'KMS007' AND a.COMPNY_ID = e.CODE
+			
+		WHERE
+			a.GHOST = '0'
+			AND A.ORGNZT_ID != 'ORGAN_RET_ORGAN_CODE'
+			AND A.ORGNZT_ID != 'ORGAN_STD_ORGAN_CODE'
+		ORDER BY SABUN ASC
+	</select>
+	
+	
+	<select id="MemberDAO.selectUserTreeList" parameterClass="memberVO" resultClass="egovMap">
+		SELECT
+			ORG.ORGNZT_ID
+			,ORGNZT_NM
+			,ORG_UP
+			,USE_YN
+			,POSTCP_NM
+			,POSTCP_RNM
+			<!-- 부서장이 먼저오도록 하기위해 아래와 같이 세팅 -->
+			,CONCAT(ORG.ORG_TREE_ORD, "/"
+				,CASE 
+					WHEN POSITION = 'H' THEN '000' 
+					WHEN POSITION = 'S' THEN '001' 
+					ELSE '002'
+				END
+				,"_"
+				,USER_NM
+			) AS SN
+			,FN_STR_COUNT(CONCAT(ORG.ORG_TREE,"/",USR.NO),"/") AS ORG_LV
+			,USR.NO
+			,USR.USER_ID
+			,USR.USER_NM
+		FROM
+			TBL_USERINFO USR
+			LEFT OUTER JOIN TBL_ORGNZT ORG
+				ON USR.ORGNZT_ID = ORG.ORGNZT_ID
+		WHERE
+			USR.GHOST = '0'
+			AND USE_YN = 'Y'
+						
+		UNION
+		
+		SELECT
+			ORGNZT_ID
+			,ORGNZT_NM
+			,ORG_UP
+			,USE_YN
+			,POSTCP_NM
+			,POSTCP_RNM
+			,ORG.ORG_TREE_ORD AS SN
+			,FN_STR_COUNT(ORG.ORG_TREE,"/") AS ORG_LV
+			,NULL AS NO
+			,NULL AS USER_ID
+			,NULL AS USER_NM
+		FROM
+			TBL_ORGNZT ORG
+		WHERE
+			USE_YN = 'Y'
+		ORDER BY SN
+	</select>
+	
+	<select id="MemberDAO.selectUserTreeListOld" parameterClass="memberVO" resultClass="egovMap">
+		SELECT
+			ORG.ORGNZT_ID
+			,ORGNZT_NM
+			,ORG_UP
+			,USE_YN
+			,POSTCP_NM
+			,POSTCP_RNM
+			<!-- 부서장이 먼저오도록 하기위해 아래와 같이 세팅 -->
+			,CONCAT(ORG.ORG_TREE, "/"
+				,CASE 
+					WHEN POSITION = 'H' THEN '000' 
+					WHEN POSITION = 'S' THEN '001' 
+					ELSE '002'
+				END
+				,"_"
+				,USER_NM
+			) AS SN
+			,FN_STR_COUNT(CONCAT(ORG.ORG_TREE,"/",USR.NO),"/") AS ORG_LV
+			,USR.NO
+			,USR.USER_ID
+			,USR.USER_NM
+		FROM
+			TBL_USERINFO USR
+			LEFT OUTER JOIN TBL_ORGNZT ORG
+				ON USR.ORGNZT_ID = ORG.ORGNZT_ID
+		WHERE
+			USR.GHOST = '0'
+			AND USE_YN = 'Y'
+						
+		UNION
+		
+		SELECT
+			ORGNZT_ID
+			,ORGNZT_NM
+			,ORG_UP
+			,USE_YN
+			,POSTCP_NM
+			,POSTCP_RNM
+			,ORG.ORG_TREE AS SN
+			,FN_STR_COUNT(ORG.ORG_TREE,"/") AS ORG_LV
+			,NULL AS NO
+			,NULL AS USER_ID
+			,NULL AS USER_NM
+		FROM
+			TBL_ORGNZT ORG
+		WHERE
+			USE_YN = 'Y'
+		ORDER BY SN
+	</select>
+	
+	<select id="MemberDAO.selectUserTreeTeamList" parameterClass="memberVO" resultClass="egovMap">
+		SELECT
+			ORG.ORGNZT_ID
+			,ORGNZT_NM
+			,ORG_UP
+			,USE_YN
+			,POSTCP_NM
+			,POSTCP_RNM
+			<!-- 부서장이 먼저오도록 하기위해 아래와 같이 세팅 -->
+			,CONCAT(ORG.ORG_TREE_ORD, "/"
+				,CASE 
+					WHEN POSITION = 'H' THEN '00' 
+					WHEN POSITION = 'S' THEN '01' 
+					ELSE '02'
+				END
+				,"_"
+				,USER_NM
+			) AS SN
+			,FN_STR_COUNT(CONCAT(ORG.ORG_TREE,"/",USR.NO),"/") AS ORG_LV
+			,USR.NO
+			,USR.USER_ID
+			,USR.USER_NM
+		FROM
+			TBL_USERINFO USR
+			LEFT OUTER JOIN TBL_ORGNZT ORG
+				ON USR.ORGNZT_ID = ORG.ORGNZT_ID
+		WHERE
+			USR.GHOST = '0'
+			AND USE_YN = 'Y'
+			AND ORG.ORG_TREE LIKE CONCAT ("%", #orgnztId#,"%")
+		UNION
+		
+		SELECT
+			ORGNZT_ID
+			,ORGNZT_NM
+			,ORG_UP
+			,USE_YN
+			,POSTCP_NM
+			,POSTCP_RNM
+			,ORG.ORG_TREE_ORD AS SN
+			,FN_STR_COUNT(ORG.ORG_TREE,"/") AS ORG_LV
+			,NULL AS NO
+			,NULL AS USER_ID
+			,NULL AS USER_NM
+		FROM
+			TBL_ORGNZT ORG
+		WHERE
+			USE_YN = 'Y'
+			AND ORG.ORG_TREE LIKE CONCAT ("%", #orgnztId#,"%")
+		ORDER BY SN
+	</select>
+	
+	
+	<select id="MemberDAO.selectUserTreeTeamList_Admin" parameterClass="memberVO" resultClass="egovMap">
+		SELECT
+			ORG.ORGNZT_ID
+			,ORGNZT_NM
+			,ORG_UP
+			,USE_YN
+			,POSTCP_NM
+			,POSTCP_RNM
+			<!-- 부서장이 먼저오도록 하기위해 아래와 같이 세팅 -->
+			,CONCAT(ORG.ORG_TREE_ORD, "/"
+				,CASE 
+					WHEN POSITION = 'H' THEN '00' 
+					WHEN POSITION = 'S' THEN '01' 
+					ELSE '02'
+				END
+				,"_"
+				,USER_NM
+			) AS SN
+			,FN_STR_COUNT(CONCAT(ORG.ORG_TREE,"/",USR.NO),"/") AS ORG_LV
+			,USR.NO
+			,USR.USER_ID
+			,USR.USER_NM
+		FROM
+			TBL_USERINFO USR
+			LEFT OUTER JOIN TBL_ORGNZT ORG
+				ON USR.ORGNZT_ID = ORG.ORGNZT_ID
+		WHERE
+			USR.GHOST = '0'
+			AND USE_YN = 'Y'
+	        AND USR.ORGNZT_ID != 'ORGAN_RET_ORGAN_CODE' 
+	        AND USR.ORGNZT_ID != 'ORGAN_STD_ORGAN_CODE'
+			AND ORG.ORG_TREE LIKE CONCAT ("%", #orgnztId#,"%")
+		UNION
+		
+		SELECT
+			ORGNZT_ID
+			,ORGNZT_NM
+			,ORG_UP
+			,USE_YN
+			,POSTCP_NM
+			,POSTCP_RNM
+			,ORG.ORG_TREE_ORD AS SN
+			,FN_STR_COUNT(ORG.ORG_TREE,"/") AS ORG_LV
+			,NULL AS NO
+			,NULL AS USER_ID
+			,NULL AS USER_NM
+		FROM
+			TBL_ORGNZT ORG
+		WHERE
+			USE_YN = 'Y'
+			AND ORG.ORG_TREE LIKE CONCAT ("%", #orgnztId#,"%")
+		ORDER BY SN
+	</select>
+	
+	
+	
+	<select id="MemberDAO.checkValidUserMix" parameterClass="java.lang.String" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			TBL_USERINFO
+		WHERE
+			CONCAT(USER_NM , "(" ,USER_ID, ")") = #userMix#
+	</select>
+	
+	
+	<select id="MemberDAO.checkValidUserMixTeam"  parameterClass="memberVO" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			TBL_USERINFO USR
+			LEFT OUTER JOIN TBL_ORGNZT ORG ON USR.ORGNZT_ID = ORG.ORGNZT_ID
+		WHERE
+			1=1			
+			<isNotEqual property="isAdmin" compareValue="true">
+			AND (
+					ORG.ORG_TREE LIKE CONCAT ("%", #orgnztId#,"%")
+			 	OR	ORG.ORG_TREE LIKE CONCAT ("%", #orgnztIdSec#,"%")
+			 )
+			</isNotEqual>
+			AND CONCAT(USR.USER_NM , "(" ,USR.USER_ID, ")") = #userNm#
+	</select>
+	
+	
+	<select id="MemberDAO.selectMemberById" resultClass="egovMap">
+		SELECT
+			NO, USER_ID, USER_NM,
+			CONVERT(IF(LEFT(DATE_FORMAT(SYSDATE(),'%Y%m%d'),8)>BRTH,
+				LEFT(DATE_FORMAT(SYSDATE(),'%Y%m%d'),4)-LEFT(BRTH,4),
+				LEFT(DATE_FORMAT(SYSDATE(),'%Y%m%d'),4)-LEFT(BRTH,4)-1), UNSIGNED) AS AGE,
+			CAR_LIC_TYP
+		FROM
+			TBL_USERINFO
+		WHERE
+			USER_ID = #userId#
+	</select>
+	
+	<select id="MemberDAO.selectMemberByMoblNoCnt" parameterClass="memberVO" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			TBL_USERINFO
+		WHERE 1=1
+		<isNotEmpty prepend="AND" property="moblphonNo">
+			WORK_ST = 'W'
+			AND MOBLPHON_NO = #moblphonNo#
+		</isNotEmpty>
+	</select>
+	
+	<select id="MemberDAO.selectMemberListById" resultMap="memberList">
+		SELECT
+			a.NO, a.USER_ID, a.USER_NM, a.USER_ENM, a.PASSWORD, a.SABUN, a.IHIDNUM, a.SEXDSTN_CODE, a.BRTH, a.GRE_LUN,
+			a.HOME_ADRES, a.MOBLPHON_NO, a.HOME_TELNO, a.OFFM_ID, d.CODE_NM AS OFFM_NM, d.COLUMN1 AS OFFM_ADRES,
+			a.OFFM_TELNO, a.OFFM_TELNO_INNER, a.EMAIL_ADRES, a.EMAIL_ADRES2,
+			<!-- 2013.07.24 김대현 웹메일 주소-->
+		    a.EMAIL_LINK,
+			a.EXP_COMP_ID, f.CODE_NM AS EXP_COMP_NM, a.COMPNY_ID, e.CODE_NM AS COMPNY_NM, e.CODE_DC AS COMPNY_NM_SHORT,
+			a.ORGNZT_ID, b.ORGNZT_NM AS ORGNZT_NM, a.RANK_ID, c.CODE_NM RANK_NM, a.POSITION,
+			a.COMPIN_DT, 
+			IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) as ACCEPT_COMPIN_DT,
+			a.COMPOT_DT, a.WORK_ST, a.CAR_ID, a.CAR_LIC_TYP, a.ABUTME, a.PIC_FILE_ID, a.PIC_FILE_ID2, a.ADMIN_NOTE,
+			b.POSTCP_NM AS HEAD_NM, b.POSTCP_RNM AS SUBHEAD_NM
+<!--			PERIOD_DIFF( IFNULL(IF(SUBSTRING(a.COMPOT_DT,1,6) = '', DATE_FORMAT(SYSDATE(), '%Y%m'), SUBSTRING(a.COMPOT_DT,1,6)),DATE_FORMAT(SYSDATE(), '%Y%m')), SUBSTRING(a.COMPIN_DT,1,6) ) AS WORK_MONTH,-->
+			,FN_GET_MEMBER_WORK_PERIOD(A.NO) AS WORK_MONTH
+			,'' WS_TYP
+			,A.INITIAL, A.CAR_OWN, A.RECOMMENDER, A.DEGREE, A.PROMOTION_YEAR, A.CAREER_MONTH
+			,FN_GET_MEMBER_AGE(A.NO, '') AS AGE, FN_GET_MEMBER_AGE_KOR(A.NO, '') AS AGE_KOR
+			<!-- 2013.07.24 김대현 전체소속경로로 표시 -->
+			,FN_CREATE_ORGAN_FNM(a.ORGNZT_ID) AS ORGNZT_NM_FULL	
+			<!-- //2013.08.20 김대현 PUSH 적용 -->
+			,a.DEVICE_TYPE
+			,a.TOKEN_INFO
+			,a.ORGNZT_ID_SEC, '' AS ORGNZT_NM_SEC
+		FROM
+			TBL_USERINFO a
+			LEFT JOIN TBL_ORGNZT b ON a.ORGNZT_ID = b.ORGNZT_ID
+			LEFT JOIN COMTCCMMNDETAILCODE c ON a.RANK_ID = c.CODE and c.CODE_ID ='KMS003'
+			LEFT JOIN COMTCCMMNDETAILCODE d ON d.CODE_ID = 'KMS005' AND a.OFFM_ID = d.CODE
+			LEFT JOIN COMTCCMMNDETAILCODE e ON e.CODE_ID = 'KMS007' AND a.COMPNY_ID = e.CODE
+			LEFT JOIN COMTCCMMNDETAILCODE f ON f.CODE_ID = 'KMS007' AND a.EXP_COMP_ID = f.CODE
+		WHERE
+			a.GHOST = '0'
+		<iterate prepend="AND CONCAT(a.USER_NM, '(', a.USER_ID, ')') IN " open="(" close=")" conjunction="," property="userMixList">
+			#userMixList[]#
+		</iterate>
+		
+		<!-- 2013.08.13 업무연락 알람 ON/OFF -->
+		<isNotEqual property="alarmUserList" compareValue="0"> 
+		<iterate prepend="AND a.NO NOT IN " open="(" close=")" conjunction="," property="alarmUserList">
+			#alarmUserList[]#
+		</iterate>		
+		</isNotEqual>
+	</select>
+	
+	<select id="MemberDAO.selectUserNoList" resultClass="java.lang.Integer">
+		SELECT
+			NO
+		FROM
+			TBL_USERINFO
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="OR" property="userMixList">
+				<iterate prepend="CONCAT(USER_NM, '(', USER_ID, ')') IN " open="(" close=")" conjunction="," property="userMixList">
+					#userMixList[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty prepend="OR" property="userMixList">
+				<iterate prepend="USER_NM IN " open="(" close=")" conjunction="," property="userMixList">
+					#userMixList[]#
+				</iterate>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="MemberDAO.selectUserNo" resultClass="java.lang.Integer">
+		SELECT
+			NO
+		FROM
+			TBL_USERINFO
+		WHERE
+			CONCAT(USER_NM, '(', USER_ID, ')') = #searchUserNm#
+		LIMIT 1
+	</select>	
+	
+	<select id="MemberDAO.selectMemberListHeadSearch" resultMap="memberList">
+		SELECT
+			a.NO, a.USER_ID, a.USER_NM, a.USER_ENM, a.PASSWORD, a.SABUN, a.IHIDNUM, a.SEXDSTN_CODE, a.BRTH, a.GRE_LUN,
+			a.HOME_ADRES, a.MOBLPHON_NO, a.HOME_TELNO, a.OFFM_ID, d.CODE_NM AS OFFM_NM, d.COLUMN1 AS OFFM_ADRES,
+			a.OFFM_TELNO, a.OFFM_TELNO_INNER, a.EMAIL_ADRES, a.EMAIL_ADRES2,
+			<!-- 2013.07.24 김대현 웹메일 주소-->
+		    a.EMAIL_LINK,
+			a.EXP_COMP_ID, f.CODE_NM AS EXP_COMP_NM, a.COMPNY_ID, e.CODE_NM AS COMPNY_NM, e.CODE_DC AS COMPNY_NM_SHORT,
+			a.ORGNZT_ID, b.ORGNZT_NM AS ORGNZT_NM, a.RANK_ID, c.CODE_NM RANK_NM, a.POSITION,
+			a.COMPIN_DT, 
+			IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) as ACCEPT_COMPIN_DT,
+			a.COMPOT_DT, a.WORK_ST, a.CAR_ID, a.CAR_LIC_TYP, a.ABUTME, a.PIC_FILE_ID, a.PIC_FILE_ID2, a.ADMIN_NOTE,
+			b.POSTCP_NM AS HEAD_NM, b.POSTCP_RNM AS SUBHEAD_NM
+<!--			PERIOD_DIFF( IFNULL(IF(SUBSTRING(a.COMPOT_DT,1,6) = '', DATE_FORMAT(SYSDATE(), '%Y%m'), SUBSTRING(a.COMPOT_DT,1,6)),DATE_FORMAT(SYSDATE(), '%Y%m')), SUBSTRING(a.COMPIN_DT,1,6) ) AS WORK_MONTH,-->
+			,FN_GET_MEMBER_WORK_PERIOD(A.NO) AS WORK_MONTH
+			,'' WS_TYP
+			,A.INITIAL, A.CAR_OWN, A.RECOMMENDER, A.DEGREE, A.PROMOTION_YEAR, A.CAREER_MONTH
+			,FN_GET_MEMBER_AGE(A.NO, '') AS AGE, FN_GET_MEMBER_AGE_KOR(A.NO, '') AS AGE_KOR
+			<!-- 2013.07.24 김대현 전체소속경로로 표시 -->
+			,FN_CREATE_ORGAN_FNM(a.ORGNZT_ID) AS ORGNZT_NM_FULL
+			<!-- //2013.08.20 김대현 PUSH 적용 -->
+			,a.DEVICE_TYPE
+			,a.TOKEN_INFO
+			,a.ORGNZT_ID_SEC, '' AS ORGNZT_NM_SEC
+		FROM
+			TBL_USERINFO a
+			LEFT JOIN TBL_ORGNZT b ON a.ORGNZT_ID = b.ORGNZT_ID
+			LEFT JOIN COMTCCMMNDETAILCODE c ON a.RANK_ID = c.CODE and c.CODE_ID ='KMS003'
+			LEFT JOIN COMTCCMMNDETAILCODE d ON d.CODE_ID = 'KMS005' AND a.OFFM_ID = d.CODE
+			LEFT JOIN COMTCCMMNDETAILCODE e ON e.CODE_ID = 'KMS007' AND a.COMPNY_ID = e.CODE
+			LEFT JOIN COMTCCMMNDETAILCODE f ON f.CODE_ID = 'KMS007' AND a.EXP_COMP_ID = f.CODE
+		WHERE
+			a.GHOST = '0'
+			
+			<!-- 2013.07.24 김대현 퇴사자는 관리자만 검색되도록 -->
+			<isEqual property="isAdmin" compareValue="false">
+			AND a.WORK_ST NOT IN ('R')
+			</isEqual>
+			
+			AND (
+				A.USER_ID LIKE CONCAT('%',#searchKeyword#,'%')
+				OR A.USER_NM LIKE CONCAT('%',#searchKeyword#,'%')
+				OR B.ORGNZT_NM LIKE CONCAT('%',#searchKeyword#,'%')
+				OR A.SABUN LIKE CONCAT('%',#searchKeyword#,'%')
+				OR A.INITIAL LIKE CONCAT('%',#searchKeyword#,'%')
+				OR C.CODE_NM LIKE CONCAT('%',#searchKeyword#,'%')
+				OR E.CODE_NM LIKE CONCAT('%',#searchKeyword#,'%')
+				OR A.HOME_TELNO LIKE CONCAT('%',#searchKeyword#,'%')
+				OR A.MOBLPHON_NO LIKE CONCAT('%',#searchKeyword#,'%')
+				OR A.OFFM_TELNO LIKE CONCAT('%',#searchKeyword#,'%')
+				OR A.OFFM_TELNO_INNER LIKE CONCAT('%',#searchKeyword#,'%')
+			)
+	</select>
+		
+	<sql id="SQL_MemberStateAbsent">
+	SELECT
+		CASE a.WS_TYP
+			WHEN 'S' THEN '파견'
+			ELSE '본사'
+		END AS GUBUN
+		, b.OFFM_TELNO
+		, CASE a.WS_TYP
+			WHEN 'V' THEN '휴가'
+			WHEN 'O' THEN '외근'
+			WHEN 'T' THEN '출장'
+			WHEN 'S' THEN '파견'
+			ELSE '-'
+		END AS STATE
+		, a.WS_PLACE
+		, '' AS MT_PLACE
+		, CASE a.WS_TYP
+			WHEN 'O' THEN CONCAT(a.WS_BGN_TM, ':00~', a.WS_END_TM, ':00')
+			WHEN 'V' THEN CONCAT(DATE_FORMAT(a.WS_BGN_DE, '%Y.%m.%d(%a)'), IF(e.ST_AMPM = 1, ' 오전', ' 오후'), ' ~ ', DATE_FORMAT(a.WS_END_DE, '%Y.%m.%d(%a)'), IF(e.ED_AMPM = 1, ' 오전', ' 오후'))
+			WHEN 'T' THEN CONCAT(DATE_FORMAT(a.WS_BGN_DE, '%Y.%m.%d(%a)'), ' ~ ', DATE_FORMAT(a.WS_END_DE, '%Y.%m.%d(%a)'))
+			WHEN 'S' THEN CONCAT(DATE_FORMAT(a.WS_BGN_DE, '%Y.%m.%d(%a)'), ' ~ ', DATE_FORMAT(a.WS_END_DE, '%Y.%m.%d(%a)'))
+			ELSE '-'
+		END AS PERIOD
+		, b.MOBLPHON_NO
+		, b.OFFM_TELNO_INNER
+		, F.ATTEND_TM AS ATTEND_TM
+	FROM
+		TBL_WORK_STATE a
+		LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+		LEFT JOIN TBL_USERINFO c ON a.WRITER_NO = c.NO
+		LEFT JOIN TBL_ORGNZT d ON b.ORGNZT_ID = d.ORGNZT_ID
+		LEFT JOIN (
+			SELECT
+				doc.WRITER_NO
+				, vac.*
+				, 1 AS VAC
+			FROM
+				TBL_EAPP_DOC doc
+				INNER JOIN TBL_EAPP_VAC vac
+				ON doc.DOC_ID = vac.DOC_ID
+			WHERE
+				doc.DOC_STAT IN ('APP004', 'APP005')
+				AND doc.NEW_AT = 1
+				<![CDATA[
+				AND CONCAT(DATE_FORMAT(SYSDATE(), '%Y%m%d'), IF(DATE_FORMAT(SYSDATE(),'%H') >= '12', '2', '1')) >= CONCAT(vac.ST_DT, vac.ST_AMPM)
+				AND CONCAT(vac.ED_DT, vac.ED_AMPM) >= CONCAT(DATE_FORMAT(SYSDATE(), '%Y%m%d'), IF(DATE_FORMAT(SYSDATE(),'%H') >= '12', '2', '1'))
+				]]>
+		) e ON a.USER_NO = e.WRITER_NO
+			AND a.WS_TYP = 'V'
+		LEFT JOIN TBL_ATTEND_CHECK F
+			ON A.USER_NO = F.USER_NO
+			AND F.ATTEND_DT = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+	WHERE
+		USE_AT = 'Y'
+		AND
+		(
+			<![CDATA[
+			(
+				a.WS_TYP = 'O'
+				AND a.WS_BGN_DE = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+				AND DATE_FORMAT(SYSDATE(),'%H') >= a.WS_BGN_TM
+				AND a.WS_END_TM > DATE_FORMAT(SYSDATE(),'%H')
+			) OR (
+				a.WS_TYP IN ('S', 'T')
+				AND DATEDIFF(DATE_FORMAT(SYSDATE(), '%Y%m%d'), a.WS_BGN_DE) >= 0
+				AND DATEDIFF(a.WS_END_DE, DATE_FORMAT(SYSDATE(), '%Y%m%d')) >= 0
+			) OR (
+				a.WS_TYP IN ('V')
+				AND e.VAC = 1
+				AND DATEDIFF(DATE_FORMAT(SYSDATE(), '%Y%m%d'), a.WS_BGN_DE) >= 0
+				AND DATEDIFF(a.WS_END_DE, DATE_FORMAT(SYSDATE(), '%Y%m%d')) >= 0
+			)
+			]]>
+		)
+		AND fn_get_orgid_history(b.NO, DATE_FORMAT(SYSDATE(), '%Y%m%d')) != 'ORGAN_RET_ORGAN_CODE'
+		AND b.NO = #no#
+	</sql>
+		
+	<sql id="SQL_MemberStateNotAttend">
+	SELECT
+		'본사' AS GUBUN
+		, b.OFFM_TELNO
+		<![CDATA[
+		, IF(DATE_FORMAT(SYSDATE(), '%H') < 9, '출근이전',  IF(a.ATTEND_CD = 'NT', '야근', '지각')) AS STATE
+		]]>		
+		, '출근중' AS WS_PLACE
+		, '' AS MT_PLACE
+		, '' AS PERIOD
+		, b.MOBLPHON_NO
+		, b.OFFM_TELNO_INNER
+		, '' AS ATTEND_TM
+	FROM
+		TBL_ATTEND_CHECK a
+		LEFT JOIN (
+			SELECT
+				usr.*
+				, IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'executive', ',%'), 'Y', 'N') AS IS_LEADER
+			FROM
+				TBL_USERINFO usr
+				LEFT JOIN TBL_USER_AUTH auth
+				ON usr.NO = auth.USER_NO
+			WHERE
+				usr.GHOST = '0'
+				AND usr.COMPIN_DT IS NOT NULL
+			GROUP BY
+				usr.NO
+		) b ON a.USER_NO = b.NO
+		LEFT JOIN TBL_USERINFO c ON a.USER_NO = c.NO
+		LEFT JOIN TBL_ORGNZT d ON b.ORGNZT_ID = d.ORGNZT_ID
+		LEFT JOIN TBL_WORK_STATE e ON a.USER_NO = e.USER_NO
+		AND DATEDIFF(SYSDATE(), e.WS_BGN_DE) = 1
+		AND e.WS_TYP = 'N'
+	WHERE
+		a.ATTEND_DT = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+		AND DATE_FORMAT(SYSDATE(), '%H:%i') >= '09:00'
+		AND	(
+				 (
+					a.ATTEND_CD IS NULL
+<!--					AND B.IS_LEADER = 'N'-->
+			) OR (
+				a.ATTEND_CD = 'NT'
+				AND a.ATTEND_TM IS NULL
+			)
+		)
+		AND b.NO = #no#
+	</sql>
+	
+	<sql id="SQL_MemberStateAttend">
+	SELECT
+		CASE F.ATTEND_CD 			
+			WHEN 'LT' THEN '지각'
+			ELSE '출근'
+		END AS GUBUN
+		, OFFM_TELNO
+		, IF(DATE_FORMAT(SYSDATE(),'%H') > 17, '근무시간이후', '근무') AS STATE
+		, IFNULL(D.CODE_NM, '근무장소 미입력') AS WS_PLACE
+		, 
+		<![CDATA[
+			(
+			SELECT MAX(a.MT_PLACE) AS MT_PLACE
+			  FROM TBL_MEETING_ROOM a
+			  INNER JOIN TBL_MEETING_ROOM_RECIEVE b
+			  ON a.MT_ID = b.MT_ID
+			  AND b.RECIEVE_TYP IN ('WR', 'RE')
+			 WHERE a.MT_DATE = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+			   AND a.MT_FRTM <= DATE_FORMAT(SYSDATE(), '%H')
+			   AND a.MT_TOTM >= DATE_FORMAT(SYSDATE(), '%H')
+			   AND b.USER_NO = USR.NO
+				) AS MT_PLACE
+		]]>
+		, CONCAT (IFNULL(SUBSTRING(F.ATTEND_TM,1,5), '09:00'), ' ~ ', IFNULL(A.WS_BGN_TM, '18'), ':00' ) AS PERIOD
+		, MOBLPHON_NO
+		, OFFM_TELNO_INNER
+		, F.ATTEND_TM AS ATTEND_TM
+	FROM
+		TBL_USERINFO USR
+		LEFT JOIN (		
+			SELECT * 
+			FROM TBL_WORK_STATE A 
+			WHERE
+				A.USE_AT = 'Y'
+<!--				#외근이나 오후 반차인경우-->
+				AND A.WS_TYP IN ('O', 'V')
+				AND A.WS_BGN_DE = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+				AND A.WS_BGN_TM > DATE_FORMAT(SYSDATE(),'%H')
+			ORDER BY A.WS_BGN_TM		
+		)A ON USR.NO = A.USER_NO
+		LEFT JOIN COMTCCMMNDETAILCODE D ON D.CODE_ID = 'KMS005' AND USR.OFFM_ID = D.CODE
+		LEFT JOIN TBL_ATTEND_CHECK F
+			ON USR.NO = F.USER_NO
+			AND F.ATTEND_DT = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+	WHERE
+		USR.NO = #no#
+	</sql>
+	
+	<select id="MemberDAO.selectMemberState" resultClass="egovMap">
+	
+		SELECT
+			result.*
+		FROM (
+				(
+				<include refid="SQL_MemberStateAbsent"/>
+			) UNION ALL (
+				<include refid="SQL_MemberStateNotAttend"/>
+			) UNION ALL (
+				<include refid="SQL_MemberStateAttend"/>				
+			) 
+		) result
+		LIMIT
+			1	
+	</select>
+	
+	
+	<select id="MemberDAO.selectMemberStateStatusBoard" resultClass="egovMap">
+	SELECT
+		result.*
+	FROM
+	(
+		(
+			SELECT
+				a.USER_NO
+				,b.USER_NM
+				,b.USER_ID
+				,CASE a.WS_TYP
+					WHEN 'V' THEN '휴가'
+					WHEN 'O' THEN '외근'
+					WHEN 'T' THEN '출장'
+					ELSE '-'
+				END AS STATE
+				,CASE a.WS_TYP
+					WHEN 'O' THEN CONCAT(a.WS_BGN_TM, '시~', a.WS_END_TM, '시')
+					WHEN 'V' THEN CONCAT(DATE_FORMAT(a.WS_BGN_DE, '%m.%d'), '~', DATE_FORMAT(a.WS_END_DE, '%m.%d'))
+					WHEN 'T' THEN CONCAT(DATE_FORMAT(a.WS_BGN_DE, '%m.%d'), '~', DATE_FORMAT(a.WS_END_DE, '%m.%d'))
+					ELSE '-'
+				END AS PERIOD
+				<![CDATA[
+				,CASE a.WS_TYP
+					WHEN 'V' THEN CONCAT('사유 : ', a.WS_PURPOSE, '<br/>기간 : ', CONCAT(DATE_FORMAT(a.WS_BGN_DE, '%m.%d'), '~', DATE_FORMAT(a.WS_END_DE, '%m.%d')))
+					WHEN 'O' THEN CONCAT('장소 : ', a.WS_PLACE, '<br/>목적 : ', a.WS_PURPOSE, '<br/>기간 : ', CONCAT(a.WS_BGN_TM, '시~', a.WS_END_TM, '시'))
+					WHEN 'T' THEN CONCAT('장소 : ', a.WS_PLACE, '<br/>목적 : ', a.WS_PURPOSE, '<br/>기간 : ', CONCAT(DATE_FORMAT(a.WS_BGN_DE, '%m.%d'), '~', DATE_FORMAT(a.WS_END_DE, '%m.%d')))
+					ELSE '-'
+				END AS WS_INFO
+				]]>
+				,b.ORD
+				,b.POSITION
+			FROM
+				TBL_WORK_STATE a
+				LEFT JOIN (
+					SELECT
+						users.*
+					FROM
+					(
+						(
+						SELECT
+							a.*
+							,0 AS ORD
+						FROM
+							TBL_USERINFO a
+						WHERE
+							a.GHOST = '0'
+							AND a.ORGNZT_ID = #orgnztId#
+							AND a.NO != #userNo#
+						ORDER BY
+							CASE a.POSITION
+								WHEN 'H' THEN 0
+								WHEN 'S' THEN 1
+								WHEN 'N' THEN 2
+								ELSE 3
+							END ASC
+						) UNION ALL (
+						SELECT
+							a.*
+							,1 AS ORD
+						FROM
+							TBL_USERINFO a
+						WHERE
+							a.GHOST = '0'
+							AND FN_ORGAN_TREE(#orgnztId#) LIKE CONCAT('%',a.ORGNZT_ID,'%')
+							AND a.ORGNZT_ID != #orgnztId#
+							AND a.POSITION IN ('H','S')
+						ORDER BY FN_ORGAN_TREE(a.ORGNZT_ID)
+						) UNION ALL (
+						SELECT
+							a.*
+							,2 AS ORD
+						FROM
+							TBL_USERINFO a
+						WHERE
+							a.GHOST = '0'
+							AND FN_ORGAN_TREE(a.ORGNZT_ID) LIKE CONCAT('%',#orgnztId#,'%')
+							AND a.ORGNZT_ID != #orgnztId#
+							AND a.POSITION IN ('H','S')
+						ORDER BY FN_STR_COUNT(FN_ORGAN_TREE(a.ORGNZT_ID),'/')
+						)
+						<isEqual property="userNo" compareValue="2">
+						UNION (
+							SELECT
+								a.*
+								,2 AS ORD
+							FROM
+								TBL_USERINFO a
+							WHERE
+								a.RANK_ID IN ('03','11','12')
+								AND a.POSITION IN ('H','S')
+							ORDER BY FN_STR_COUNT(FN_ORGAN_TREE(a.ORGNZT_ID),'/')
+						)
+						</isEqual>
+					) users
+				) b ON a.USER_NO = b.NO
+				LEFT JOIN TBL_USERINFO c ON a.WRITER_NO = c.NO
+				LEFT JOIN TBL_ORGNZT d ON b.ORGNZT_ID = d.ORGNZT_ID
+				LEFT JOIN (
+					SELECT
+						doc.WRITER_NO
+						, vac.*
+						, 1 AS VAC
+					FROM
+						TBL_EAPP_DOC doc
+						INNER JOIN TBL_EAPP_VAC vac
+						ON doc.DOC_ID = vac.DOC_ID
+					WHERE
+						doc.DOC_STAT IN ('APP004', 'APP005')
+						AND doc.NEW_AT = 1
+						AND CONCAT(DATE_FORMAT(SYSDATE(), '%Y%m%d'), IF(DATE_FORMAT(SYSDATE(),'%H') >= '12', '2', '1')) >= CONCAT(vac.ST_DT, vac.ST_AMPM)
+						AND CONCAT(vac.ED_DT, vac.ED_AMPM) >= CONCAT(DATE_FORMAT(SYSDATE(), '%Y%m%d'), IF(DATE_FORMAT(SYSDATE(),'%H') >= '12', '2', '1'))
+				) e ON a.USER_NO = e.WRITER_NO
+				AND a.WS_TYP = 'V'
+			WHERE
+				USE_AT = 'Y'
+				AND (
+						(
+						a.WS_TYP = 'O'
+						AND a.WS_BGN_DE = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+						AND DATE_FORMAT(SYSDATE(),'%H') >= a.WS_BGN_TM
+						AND a.WS_END_TM >= DATE_FORMAT(SYSDATE(),'%H')
+					) OR (
+						a.WS_TYP IN ('T')
+						AND DATEDIFF(DATE_FORMAT(SYSDATE(), '%Y%m%d'), a.WS_BGN_DE) >= 0
+						AND DATEDIFF(a.WS_END_DE, DATE_FORMAT(SYSDATE(), '%Y%m%d')) >= 0
+					) OR (
+						a.WS_TYP IN ('V')
+						AND e.VAC = 1
+						AND DATEDIFF(DATE_FORMAT(SYSDATE(), '%Y%m%d'), a.WS_BGN_DE) >= 0
+						AND DATEDIFF(a.WS_END_DE, DATE_FORMAT(SYSDATE(), '%Y%m%d')) >= 0
+					)
+				)
+				AND fn_get_orgid_history(b.NO, DATE_FORMAT(SYSDATE(), '%Y%m%d')) != 'ORGAN_RET_ORGAN_CODE'
+		) UNION ALL (
+			SELECT
+				a.USER_NO
+				,b.USER_NM
+				,b.USER_ID
+				,CASE a.ATTEND_CD
+					WHEN 'NT' THEN '전일야근'
+					ELSE '지각'
+				END AS STATE
+				,CASE a.ATTEND_CD
+					WHEN 'NT' THEN CONCAT(e.WS_BGN_TM, '시')
+					ELSE '-'
+				END AS PERIOD
+				,CASE a.ATTEND_CD
+					WHEN 'NT' THEN CONCAT('사유 : ', e.WS_PURPOSE)
+					ELSE '-'
+				END AS WS_INFO
+				,b.ORD
+				,b.POSITION
+			FROM
+				TBL_ATTEND_CHECK a
+				LEFT JOIN (
+					SELECT
+						usr.*
+						, IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'executive', ',%'), 'Y', 'N') AS IS_LEADER
+					FROM (
+							SELECT
+								users.*
+							FROM (
+									(
+								SELECT
+									a.*
+									,0 AS ORD
+								FROM
+									TBL_USERINFO a
+								WHERE
+									a.GHOST = '0'
+									AND a.ORGNZT_ID = #orgnztId#
+									AND a.NO != 115
+								ORDER BY
+									CASE a.POSITION
+										WHEN 'H' THEN 0
+										WHEN 'S' THEN 1
+										WHEN 'N' THEN 2
+										ELSE 3
+									END ASC
+								) UNION ALL (
+								SELECT
+									a.*
+									,1 AS ORD
+								FROM
+									TBL_USERINFO a
+								WHERE
+									a.GHOST = '0'
+									AND FN_ORGAN_TREE(#orgnztId#) LIKE CONCAT('%',a.ORGNZT_ID,'%')
+									AND a.ORGNZT_ID != #orgnztId#
+									AND a.POSITION IN ('H','S')
+								ORDER BY FN_ORGAN_TREE(a.ORGNZT_ID)
+								) UNION ALL (
+								SELECT
+									a.*
+									,2 AS ORD
+								FROM
+									TBL_USERINFO a
+								WHERE
+									a.GHOST = '0'
+									AND FN_ORGAN_TREE(a.ORGNZT_ID) LIKE CONCAT('%',#orgnztId#,'%')
+									AND a.ORGNZT_ID != #orgnztId#
+									AND a.POSITION IN ('H','S')
+								ORDER BY FN_STR_COUNT(FN_ORGAN_TREE(a.ORGNZT_ID),'/')
+								)
+								<isEqual property="userNo" compareValue="2">
+								UNION (
+									SELECT
+										a.*
+										,2 AS ORD
+									FROM
+										TBL_USERINFO a
+									WHERE
+										a.RANK_ID IN ('03','11','12')
+										AND a.POSITION IN ('H','S')
+									ORDER BY FN_STR_COUNT(FN_ORGAN_TREE(a.ORGNZT_ID),'/')
+								)
+								</isEqual>
+							) users
+						) usr
+						LEFT JOIN TBL_USER_AUTH auth
+						ON usr.NO = auth.USER_NO
+					GROUP BY
+						usr.NO
+				) b ON a.USER_NO = b.NO
+				LEFT JOIN TBL_USERINFO c ON a.USER_NO = c.NO
+				LEFT JOIN TBL_ORGNZT d ON b.ORGNZT_ID = d.ORGNZT_ID
+				LEFT JOIN TBL_WORK_STATE e ON a.USER_NO = e.USER_NO
+				AND DATEDIFF(SYSDATE(), e.WS_BGN_DE) = 1
+				AND e.WS_TYP = 'N'
+			WHERE
+				a.ATTEND_DT = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+				AND DATE_FORMAT(SYSDATE(), '%H:%i') >= '09:00'
+				AND B.IS_LEADER = 'N'
+<!--				<isEqual property="excludeLeader" compareValue="Y">-->
+<!--					AND B.IS_LEADER = 'N'-->
+<!--				</isEqual>-->
+<!--				<isNotEmpty property="exceptionUsersList">-->
+<!--					AND B.NO NOT IN-->
+<!--					<iterate property="exceptionUsersList" open="(" close=")" conjunction=",">-->
+<!--		           		 #exceptionUsersList[]#-->
+<!--					</iterate>				-->
+<!--				</isNotEmpty>-->
+				AND (
+					a.ATTEND_CD IS NULL
+					OR (
+						a.ATTEND_CD = 'NT'
+						AND a.ATTEND_TM IS NULL
+					)
+				)
+		)
+	) result
+	ORDER BY result.ORD ASC
+		,CASE result.POSITION
+			WHEN 'H' THEN 0
+			WHEN 'S' THEN 1
+			WHEN 'N' THEN 2
+			ELSE 3
+		END ASC
+		<!-- LIMIT 7 -->
+	</select>
+	
+	<select id="MemberDAO.selectMemberPositionChk" resultMap="memberList">
+		SELECT
+			a.NO, a.USER_ID, a.USER_NM, a.USER_ENM, a.PASSWORD, a.SABUN, a.IHIDNUM, a.SEXDSTN_CODE, a.BRTH, a.GRE_LUN,
+			a.HOME_ADRES, a.MOBLPHON_NO, a.HOME_TELNO, a.OFFM_ID, d.CODE_NM AS OFFM_NM, d.COLUMN1 AS OFFM_ADRES,
+			a.OFFM_TELNO, a.OFFM_TELNO_INNER, a.EMAIL_ADRES, a.EMAIL_ADRES2,
+			<!-- 2013.07.24 김대현 웹메일 주소-->
+		    a.EMAIL_LINK,
+			a.EXP_COMP_ID, f.CODE_NM AS EXP_COMP_NM, a.COMPNY_ID, e.CODE_NM AS COMPNY_NM, e.CODE_DC AS COMPNY_NM_SHORT,
+			a.ORGNZT_ID, b.ORGNZT_NM AS ORGNZT_NM, a.RANK_ID, c.CODE_NM RANK_NM, a.POSITION,
+			a.COMPIN_DT, 
+			IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) as ACCEPT_COMPIN_DT,
+			a.COMPOT_DT, a.WORK_ST, a.CAR_ID, a.CAR_LIC_TYP, a.ABUTME, a.PIC_FILE_ID, a.PIC_FILE_ID2, a.ADMIN_NOTE,
+			b.POSTCP_NM AS HEAD_NM, b.POSTCP_RNM AS SUBHEAD_NM
+			,FN_GET_MEMBER_WORK_PERIOD(A.NO) AS WORK_MONTH
+			,'' WS_TYP
+			,A.INITIAL, A.CAR_OWN, A.RECOMMENDER, A.DEGREE, A.PROMOTION_YEAR, A.CAREER_MONTH
+			,FN_GET_MEMBER_AGE(A.NO, '') AS AGE, FN_GET_MEMBER_AGE_KOR(A.NO, '') AS AGE_KOR
+		     <!-- 2013.07.24 김대현 전체소속경로로 표시 -->
+			,FN_CREATE_ORGAN_FNM(a.ORGNZT_ID) AS ORGNZT_NM_FULL
+			<!-- //2013.08.20 김대현 PUSH 적용 -->
+			,a.DEVICE_TYPE
+			,a.TOKEN_INFO
+			,a.ORGNZT_ID_SEC, '' AS ORGNZT_NM_SEC
+		FROM
+			TBL_USERINFO a
+			LEFT JOIN TBL_ORGNZT b ON a.ORGNZT_ID = b.ORGNZT_ID
+			LEFT JOIN COMTCCMMNDETAILCODE c ON a.RANK_ID = c.CODE and c.CODE_ID ='KMS003'
+			LEFT JOIN COMTCCMMNDETAILCODE d ON d.CODE_ID = 'KMS005' AND a.OFFM_ID = d.CODE
+			LEFT JOIN COMTCCMMNDETAILCODE e ON e.CODE_ID = 'KMS007' AND a.COMPNY_ID = e.CODE
+			LEFT JOIN COMTCCMMNDETAILCODE f ON f.CODE_ID = 'KMS007' AND a.EXP_COMP_ID = f.CODE
+		WHERE
+			a.WORK_ST IN ('W', 'L')
+			AND a.ORGNZT_ID = #orgnztId#
+			AND a.POSITION IN ('H', 'S')
+	</select>
+		
+	<select id="MemberDAO.selectSearchLayerMemberList" resultMap="memberList" parameterClass="memberVO">
+		SELECT
+			a.NO, a.USER_ID, a.USER_NM, a.USER_ENM, a.PASSWORD, a.SABUN, a.IHIDNUM, a.SEXDSTN_CODE, a.BRTH, a.GRE_LUN,
+			a.HOME_ADRES, a.MOBLPHON_NO, a.HOME_TELNO, a.OFFM_ID, d.CODE_NM AS OFFM_NM, d.COLUMN1 AS OFFM_ADRES,
+			a.OFFM_TELNO, a.OFFM_TELNO_INNER, a.EMAIL_ADRES, a.EMAIL_ADRES2,
+			<!-- 2013.07.24 김대현 웹메일 주소-->
+		    a.EMAIL_LINK,
+			a.EXP_COMP_ID, f.CODE_NM AS EXP_COMP_NM, a.COMPNY_ID, e.CODE_NM AS COMPNY_NM, e.CODE_DC AS COMPNY_NM_SHORT,
+			a.ORGNZT_ID, b.ORGNZT_NM AS ORGNZT_NM, a.RANK_ID, c.CODE_NM RANK_NM, a.POSITION,
+			a.COMPIN_DT, 
+			IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) as ACCEPT_COMPIN_DT,
+			a.COMPOT_DT, a.WORK_ST, a.CAR_ID, a.CAR_LIC_TYP, a.ABUTME, a.PIC_FILE_ID, a.PIC_FILE_ID2, a.ADMIN_NOTE,
+			b.POSTCP_NM AS HEAD_NM, b.POSTCP_RNM AS SUBHEAD_NM
+			,FN_GET_MEMBER_WORK_PERIOD(A.NO) AS WORK_MONTH
+			,'' WS_TYP
+			,A.INITIAL, A.CAR_OWN, A.RECOMMENDER, A.DEGREE, A.PROMOTION_YEAR, A.CAREER_MONTH
+			,FN_GET_MEMBER_AGE(A.NO, '') AS AGE, FN_GET_MEMBER_AGE_KOR(A.NO, '') AS AGE_KOR
+			<!-- 2013.07.24 김대현 전체소속경로로 표시 -->
+			,FN_CREATE_ORGAN_FNM(a.ORGNZT_ID) AS ORGNZT_NM_FULL
+			<!-- //2013.08.20 김대현 PUSH 적용 -->
+			,a.DEVICE_TYPE
+			,a.TOKEN_INFO
+			,a.ORGNZT_ID_SEC, '' AS ORGNZT_NM_SEC
+		FROM  
+			TBL_USERINFO a
+			LEFT JOIN TBL_ORGNZT b ON a.ORGNZT_ID = b.ORGNZT_ID
+			LEFT JOIN COMTCCMMNDETAILCODE c ON a.RANK_ID = c.CODE and c.CODE_ID ='KMS003'
+			LEFT JOIN COMTCCMMNDETAILCODE d ON d.CODE_ID = 'KMS005' AND a.OFFM_ID = d.CODE
+			LEFT JOIN COMTCCMMNDETAILCODE e ON e.CODE_ID = 'KMS007' AND a.COMPNY_ID = e.CODE
+			LEFT JOIN COMTCCMMNDETAILCODE f ON f.CODE_ID = 'KMS007' AND a.EXP_COMP_ID = f.CODE
+		WHERE
+			a.GHOST = '0'
+			AND A.ORGNZT_ID != 'ORGAN_RET_ORGAN_CODE'	
+			<isNotEmpty prepend="AND" property="searchKeywordList">
+				(
+				<iterate prepend="" property="searchKeywordList"  conjunction=" OR ">
+					a.USER_ID like CONCAT('%',#searchKeywordList[]#,'%')
+				</iterate>
+					OR
+				<iterate prepend="" property="searchKeywordList"  conjunction=" OR ">
+					a.USER_NM like CONCAT('%',#searchKeywordList[]#,'%')
+				</iterate>
+					OR
+				<iterate prepend="" property="searchKeywordList"  conjunction=" OR ">
+					b.ORGNZT_NM like CONCAT('%',#searchKeywordList[]#,'%')
+				</iterate>
+					OR
+				<iterate prepend="" property="searchKeywordList"  conjunction=" OR ">
+					a.INITIAL like CONCAT('%',#searchKeywordList[]#,'%')
+				</iterate>				
+				)
+			</isNotEmpty>
+		ORDER BY USER_NM ASC
+	</select>
+	
+	<select id="MemberDAO.selectLateMemberList" resultMap="memberList">
+		SELECT
+			a.NO, a.USER_ID, a.USER_NM, a.USER_ENM, a.PASSWORD, a.SABUN, a.IHIDNUM, a.SEXDSTN_CODE, a.BRTH, a.GRE_LUN
+			,a.HOME_ADRES, a.MOBLPHON_NO, a.HOME_TELNO, a.OFFM_ID, d.CODE_NM AS OFFM_NM, d.COLUMN1 AS OFFM_ADRES
+			,a.OFFM_TELNO, a.OFFM_TELNO_INNER, a.EMAIL_ADRES, a.EMAIL_ADRES2
+			<!-- 2013.07.24 김대현 웹메일 주소-->
+		    ,a.EMAIL_LINK
+			,a.EXP_COMP_ID, f.CODE_NM AS EXP_COMP_NM, a.COMPNY_ID, e.CODE_NM AS COMPNY_NM, e.CODE_DC AS COMPNY_NM_SHORT
+			,a.ORGNZT_ID, b.ORGNZT_NM AS ORGNZT_NM, a.RANK_ID, c.CODE_NM RANK_NM, a.POSITION
+			,a.COMPIN_DT 
+			,IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) as ACCEPT_COMPIN_DT
+			,a.COMPOT_DT, a.WORK_ST, a.CAR_ID, a.CAR_LIC_TYP, a.ABUTME, a.PIC_FILE_ID, a.PIC_FILE_ID2, a.ADMIN_NOTE
+			,b.POSTCP_NM AS HEAD_NM, b.POSTCP_RNM AS SUBHEAD_NM
+			,FN_GET_MEMBER_WORK_PERIOD(A.NO) AS WORK_MONTH
+			,'' WS_TYP
+			,A.INITIAL, A.CAR_OWN, A.RECOMMENDER, A.DEGREE, A.PROMOTION_YEAR, A.CAREER_MONTH
+			,FN_GET_MEMBER_AGE(A.NO, '') AS AGE, FN_GET_MEMBER_AGE_KOR(A.NO, '') AS AGE_KOR
+			<!-- 2013.07.24 김대현 전체소속경로로 표시 -->
+			,FN_CREATE_ORGAN_FNM(a.ORGNZT_ID) AS ORGNZT_NM_FULL
+			<!-- //2013.08.20 김대현 PUSH 적용 -->
+			,a.DEVICE_TYPE
+			,a.TOKEN_INFO
+			,a.ORGNZT_ID_SEC, '' AS ORGNZT_NM_SEC
+		FROM
+			TBL_USERINFO a
+			LEFT JOIN TBL_ORGNZT b 
+				ON a.ORGNZT_ID = b.ORGNZT_ID
+			LEFT JOIN COMTCCMMNDETAILCODE c 
+				ON a.RANK_ID = c.CODE 
+				AND c.CODE_ID ='KMS003'
+			LEFT JOIN COMTCCMMNDETAILCODE d 
+				ON d.CODE_ID = 'KMS005' 
+				AND a.OFFM_ID = d.CODE
+			LEFT JOIN COMTCCMMNDETAILCODE e 
+				ON e.CODE_ID = 'KMS007' 
+				AND a.COMPNY_ID = e.CODE
+			LEFT JOIN COMTCCMMNDETAILCODE f 
+				ON f.CODE_ID = 'KMS007' 
+				AND a.EXP_COMP_ID = f.CODE
+			INNER JOIN TBL_ATTEND_CHECK chk 
+				ON a.NO = chk.USER_NO 
+				AND chk.ATTEND_DT = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+		WHERE
+			a.GHOST = '0'
+			AND a.COMPIN_DT IS NOT NULL
+			AND (
+				chk.ATTEND_CD IS NULL
+				OR chk.ATTEND_CD = 'LT'
+			)
+	</select>
+	
+	<resultMap id="memberInfo_birthday" class="kms.com.member.service.MemberVO">
+		<result property="no" 			column="NO" 			columnIndex="1"/>
+		<result property="userNm" 		column="USER_NM" 		columnIndex="2"/>
+		<result property="brth"			column="BRTH" 			columnIndex="3"/>
+		<result property="greLun"		column="GRE_LUN" 		columnIndex="4"/>
+		<result property="orgnztId" 	column="ORGNZT_ID" 		columnIndex="5"/>
+		<result property="orgnztNm"		column="ORGNZT_NM" 		columnIndex="6"/>
+		<result property="rankNm" 		column="RANK_NM" 		columnIndex="7"/>
+		<result property="receiverList"	column="recieverList" 	columnIndex="8"/>				
+	</resultMap>
+	
+	<select id="MemberDAO.selectBirthdayMemberList" resultMap="memberInfo_birthday">		
+		SELECT
+			A.NO, A.USER_NM , A.BRTH, A.GRE_LUN, A.ORGNZT_ID
+			, FN_CREATE_ORGAN_FNM2(A.ORGNZT_ID) AS ORGNZT_NM
+			, C.CODE_NM AS RANK_NM
+			, GROUP_CONCAT(B.USER_ID) AS recieverList
+		FROM
+			TBL_USERINFO A
+			INNER JOIN
+			TBL_ORGNZT ORG
+				ON A.ORGNZT_ID = ORG.ORGNZT_ID
+			INNER JOIN COMTCCMMNDETAILCODE C 
+				ON A.RANK_ID = c.CODE 
+				AND c.CODE_ID ='KMS003'
+			INNER JOIN
+			TBL_USERINFO B
+				ON (A.ORGNZT_ID = B.ORGNZT_ID
+				AND A.NO != B.NO)
+				OR ORG.ORG_UP = B.ORGNZT_ID
+		WHERE
+			A.GHOST = 0
+			AND A.WORK_ST = 'W'
+			AND A.NO != 2
+			AND IF(DAYOFWEEK(SYSDATE()) = 6 <!-- #6 금요일 #3 화요일  -->
+			, DATEDIFF(CONCAT(DATE_FORMAT(SYSDATE(), '%Y'), SUBSTRING(A.BRTH,5,4)), SYSDATE()) BETWEEN 0 AND 2
+			, SUBSTRING(A.BRTH,5,4) = DATE_FORMAT(SYSDATE(), '%m%d'))
+		GROUP BY 
+			NO
+		ORDER BY 
+			SUBSTRING(A.BRTH,5,4)
+	</select>
+	
+	<update id="MemberDAO.updateAttendCheckTable">
+		UPDATE
+			TBL_ATTEND_CHECK AS CHK
+			INNER JOIN (
+				SELECT
+					a.NO AS USER_NO
+					,CASE						
+						WHEN b.WS_TYP = 'O' THEN 'OT'
+						WHEN b.WS_TYP = 'S' THEN 'SD'
+						WHEN b.WS_TYP = 'T' THEN 'TR'
+						WHEN b.WS_TYP = 'V' THEN 'VC'
+						WHEN b.WS_TYP = 'N' THEN 'NT'
+						WHEN c.IS_LEADER = 'Y' THEN 'LD'
+						ELSE NULL
+					END AS ATTEND_CD
+					,DATE_FORMAT(SYSDATE(), '%Y%m%d') AS ATTEND_DT
+				FROM
+					TBL_USERINFO a
+					INNER JOIN (
+						SELECT
+							USER_NO
+							,MAX(WS_TYP) AS WS_TYP
+						FROM
+							TBL_WORK_STATE
+						WHERE
+							USE_AT = 'Y'
+							AND (
+									(
+									WS_TYP = 'O'
+									AND WS_BGN_DE = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+									AND (
+										SELECT CONCAT(DATE_FORMAT(SYSDATE(), '%Y-%m-%d '), LPAD(CODE_DC, 2, '0'), ':00:00')
+										FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'KMS014'
+									) > DATE_FORMAT(REG_DT, '%Y-%m-%d %H:%i:%s')
+								) OR (
+									WS_TYP = 'T'
+									AND DATEDIFF(SYSDATE(), WS_BGN_DE) >= 0
+									AND DATEDIFF(WS_END_DE, SYSDATE()) >= 0
+									AND (
+										SELECT CONCAT(DATE_FORMAT(SYSDATE(), '%Y-%m-%d '), LPAD(CODE_DC,2,'0'), ':00:00')
+										FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'KMS014'
+									) > DATE_FORMAT(REG_DT, '%Y-%m-%d %H:%i:%s')
+								) OR (
+									WS_TYP = 'N'
+									AND DATEDIFF(SYSDATE(), WS_BGN_DE) = 1
+									AND (
+										SELECT CONCAT(DATE_FORMAT(SYSDATE(), '%Y-%m-%d '), LPAD(CODE_DC,2,'0'), ':00:00')
+										FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'KMS014'
+									) > DATE_FORMAT(REG_DT, '%Y-%m-%d %H:%i:%s')
+								) OR (
+									WS_TYP IN ('S', 'V')
+									AND DATEDIFF(SYSDATE(), WS_BGN_DE) >= 0
+									AND DATEDIFF(WS_END_DE, SYSDATE()) >= 0
+								)
+							)
+						GROUP BY USER_NO
+					)b ON a.NO = b.USER_NO
+					LEFT JOIN (
+						SELECT
+							usr.NO AS USER_NO,
+							IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'admin', ',%'), 'Y', 'N') AS IS_ADMIN,
+							IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'board', ',%'), 'Y', 'N') AS IS_BOARD,
+							IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'executive', ',%'), 'Y', 'N') AS IS_LEADER
+						FROM
+							TBL_USERINFO usr
+							LEFT JOIN TBL_USER_AUTH auth ON usr.NO = auth.USER_NO
+						GROUP BY usr.NO
+					) c ON a.NO = c.USER_NO
+				WHERE
+					a.WORK_ST = 'W'
+			) WS
+			ON CHK.USER_NO = WS.USER_NO
+			AND CHK.ATTEND_DT = WS.ATTEND_DT
+		SET
+			CHK.ATTEND_CD = WS.ATTEND_CD
+		WHERE
+			CHK.USER_NO = WS.USER_NO
+			AND CHK.ATTEND_DT = WS.ATTEND_DT
+			AND CHK.ATTEND_TM IS NULL
+			AND CHK.ATTEND_CD != 'ET'
+	</update>
+	
+	
+	<select id="MemberDAO.getWorkOutsideYn" resultClass="java.lang.String" parameterClass="memberVO">
+		SELECT CASE WHEN g.WS_TYP IN ('O','S','T','V') THEN 'Y' ELSE 'N' END 
+		  FROM TBL_USERINFO a
+			   LEFT JOIN TBL_ORGNZT b ON a.ORGNZT_ID = b.ORGNZT_ID
+			   LEFT JOIN COMTCCMMNDETAILCODE c ON a.RANK_ID = c.CODE and c.CODE_ID ='KMS003'
+			   LEFT JOIN COMTCCMMNDETAILCODE d ON d.CODE_ID = 'KMS005' AND a.OFFM_ID = d.CODE
+			   LEFT JOIN COMTCCMMNDETAILCODE e ON e.CODE_ID = 'KMS007' AND a.COMPNY_ID = e.CODE
+			   LEFT JOIN COMTCCMMNDETAILCODE f ON f.CODE_ID = 'KMS007' AND a.EXP_COMP_ID = f.CODE
+               LEFT JOIN (SELECT WK.WS_TYP,WK.USER_NO
+		                    FROM TBL_WORK_STATE WK
+			                     LEFT JOIN TBL_USERINFO USR1 ON WK.USER_NO = USR1.NO
+			                     LEFT JOIN TBL_USERINFO USR2 ON WK.WRITER_NO = USR2.NO
+			                     LEFT JOIN TBL_ORGNZT ORG ON USR2.ORGNZT_ID = ORG.ORGNZT_ID
+		                   WHERE WK.USE_AT = 'Y'
+			                 AND(
+									(
+										WK.WS_TYP = 'O'
+										AND WK.WS_BGN_DE = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+									) OR (
+										WK.WS_TYP IN ('S', 'T', 'V')
+										AND DATEDIFF(DATE_FORMAT(SYSDATE(), '%Y%m%d'), WK.WS_BGN_DE) >= 0
+										AND DATEDIFF(WK.WS_END_DE, DATE_FORMAT(SYSDATE(), '%Y%m%d')) >= 0
+									) OR (
+										WK.WS_TYP IN ('N')
+										AND DATEDIFF(DATE_FORMAT(SYSDATE(), '%Y%m%d'), WK.WS_BGN_DE) = 1
+									)
+							    )
+			                 AND fn_get_orgid_history(USR1.NO, DATE_FORMAT(SYSDATE(), '%Y%m%d')) != 'ORGAN_RET_ORGAN_CODE') g
+		      ON a.NO = g.USER_NO	    			
+		 WHERE a.GHOST = '0'
+		   AND a.USER_ID = #userId#
+		   AND a.PASSWORD = #password#
+	</select>
+	
+	
+	<select id="MemberDAO.getDeviceInfo" resultClass="mobileDeviceVO" parameterClass="java.lang.String">
+		SELECT MAC_ADDR as macAddr, 
+		       DEVICE_TYPE as deviceType, 
+		       TOKEN_INFO as tokenInfo,
+		       NO as userNo,
+		       USER_ID as userId
+		  FROM TBL_USERINFO
+		 WHERE NO = #sabun# 
+	</select>	
+	
+	<select id="MemberDAO.selectMvucView" resultClass="mvucVO">
+		SELECT 
+			MAX(A.CONNECT) AS CONNECT,
+			MAX(A.Download_PC) AS DOWNLOAD_PC,
+			MAX(A.Download_Androi) AS DOWNLOAD_ANDROI,
+			MAX(A.Download_IOS) AS DOWNLOAD_IOS
+		FROM 
+			(SELECT CASE WHEN CODE = 'Connect' THEN CODE_DC ELSE '' END AS CONNECT
+		    ,CASE WHEN CODE = 'Download_PC' THEN CODE_DC ELSE '' END AS DOWNLOAD_PC
+		    ,CASE WHEN CODE = 'Download_Androi' THEN CODE_DC ELSE '' END AS DOWNLOAD_ANDROI
+		    ,CASE WHEN CODE = 'Download_IOS' THEN CODE_DC ELSE '' END AS DOWNLOAD_IOS
+		 	FROM COMTCCMMNDETAILCODE 
+			WHERE CODE_ID = 'KMS020') A
+	</select>	
+	
+	<select id="MemberDAO.versionConfirm" resultClass="java.lang.String" parameterClass="java.lang.String">
+		SELECT APP_VERSION
+		  FROM TBL_USERINFO
+		 WHERE USER_ID = #userId# 
+	</select>	
+		
+	<!-- 이력관리 시작 -->	
+	<!-- 이력관리 검색목록 명단조회 -->
+	<select id="MemberDAO.selectMemberCareerList" resultClass="egovMap" parameterClass="memberVO">				
+		SELECT  
+			USR.NO, USR.SABUN, USR.USER_NM, USR.USER_ID
+			, C.CODE_NM AS RANK_NM , ORG.ORGNZT_NM
+			, FN_CREATE_ORGAN_FNM2(USR.ORGNZT_ID) AS ORGNZT_NM_FULL
+			, FN_GET_MEMBER_AGE(USR.NO, '') AS AGE, FN_GET_MEMBER_AGE_KOR(USR.NO, '') AS AGE_KOR
+			, FLOOR(PERIOD_DIFF(LEFT(CURDATE()+0, 6), LEFT(CAREER_DT,6))/12) AS WORK_YEAR
+			, PERIOD_DIFF(LEFT(CURDATE()+0, 6), LEFT(CAREER_DT,6))%12 AS WORK_MONTH
+			, PERIOD_DIFF(LEFT(CURDATE()+0, 6), LEFT(CAREER_DT,6))AS WORK_MONTH_ALL
+			, B.UP_DT
+			, IF(DATEDIFF(SYSDATE(), B.UP_DT) > 180, 1, 0) AS NEED_UPDATE
+			, IF((SELECT COUNT(*) FROM TBL_CAREER_EDU WHERE USER_NO = USR.NO) > 0, 0, 1)
+<!--			+ IF((SELECT COUNT(*) FROM TBL_CAREER_LICENSE WHERE USER_NO = USR.NO) > 0, 0, 1)-->
+			+ IF((SELECT COUNT(*) FROM TBL_CAREER_SKILL WHERE USER_NO = USR.NO) > 0, 0, 1)
+<!--			+ IF((SELECT COUNT(*) FROM TBL_CAREER_TRAIN WHERE USER_NO = USR.NO) > 0, 0, 1)-->
+			+ IF((SELECT COUNT(*) FROM TBL_CAREER_WORK WHERE USER_NO = USR.NO) > 0, 0, 1) AS BLANK_INFO_COUNT
+			, B.CAREER_DT, B.MILITARY_SERVICE, B.MS_ST_DT, B.MS_ED_DT, B.MS_LEVEL
+			, B.SECURITY_BASIS, B.SECURITY_NO, B.SW_LEVEL, B.DELETE_YN	
+			, B.ATCH_FILE_ID, B.SKILL_LANG, B.SKILL_DBMS, B.SKILL_TOOL, B.SKILL_OS
+			, C.ORD
+			, GROUP_CONCAT(L.LICENSE_NM) AS LICENSE_NM
+			, L.LICENSE_NM AS LICENSE_NM_TOP	
+		FROM 
+			TBL_USERINFO USR
+			LEFT JOIN TBL_CAREER_MAIN B
+				ON B.USER_NO = USR.NO
+			LEFT JOIN TBL_ORGNZT ORG
+				ON ORG.ORGNZT_ID = USR.ORGNZT_ID
+			LEFT JOIN COMTCCMMNDETAILCODE C 
+				ON USR.RANK_ID = C.CODE 
+				AND C.CODE_ID = 'KMS003'
+			LEFT JOIN TBL_CAREER_LICENSE L
+				ON USR.NO = L.USER_NO
+		WHERE
+			USR.GHOST = 0
+			AND USR.SABUN != ''
+			<isEmpty prepend="AND" property="workStList">
+				USR.WORK_ST IN ('W', 'L')
+			</isEmpty>
+			<isNotEmpty prepend="AND" property="workStList">
+				<iterate prepend="USR.WORK_ST IN" property="workStList" open="(" close=")" conjunction=",">
+					#workStList[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="rankIdFrom">
+				(SELECT ORD FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'KMS003' AND CODE = #rankIdFrom#) >= C.ORD 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="rankIdTo">
+				C.ORD >= (SELECT ORD FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'KMS003' AND CODE = #rankIdTo#)
+			</isNotEmpty>
+			
+<!--			<isNotEmpty prepend="AND" property="searchUserMix">-->
+<!--				<iterate open="(" close=")" conjunction="OR" property="searchUserIdList">-->
+<!--					CONCAT(USR.USER_NM, '(', USR.USER_ID, ')') LIKE CONCAT('%', #searchUserMixList[]#, '%')-->
+<!--				</iterate>-->
+<!--			</isNotEmpty>-->
+			<isNotEmpty prepend="AND" property="searchUserIdList">
+				<iterate prepend="USR.USER_ID IN " property="searchUserIdList" open="(" close=")" conjunction=",">
+					#searchUserIdList[]#
+				</iterate>
+			</isNotEmpty>
+		
+			<isNotEmpty prepend="AND" property="searchOrgIdList"> 
+				<iterate prepend="USR.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+					#searchOrgIdList[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchSkill">
+				( B.SKILL_LANG LIKE CONCAT('%', #searchSkill#, '%')
+				OR B.SKILL_DBMS LIKE CONCAT('%', #searchSkill#, '%')
+				OR B.SKILL_TOOL LIKE CONCAT('%', #searchSkill#, '%')
+				
+				OR B.SKILL_OS LIKE CONCAT('%', #searchSkill#, '%') )
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="swLevel">
+				B.SW_LEVEL = #swLevel# 
+			</isNotEmpty>			 
+		GROUP BY 
+			USR.NO
+		HAVING
+			1=1
+			<isNotEmpty prepend="AND" property="careerFrom">
+				WORK_YEAR >= #careerFrom# 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="careerTo">
+				#careerTo# * 12 >= WORK_MONTH_ALL
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchLicense">
+				LICENSE_NM LIKE CONCAT('%', #searchLicense#, '%')
+			</isNotEmpty>
+			<isEqual prepend="AND" property="hasLicense" compareValue="Y">
+				LENGTH(LICENSE_NM) > 0
+			</isEqual>
+			<isEqual prepend="AND" property="needUpdate" compareValue="Y">
+				(NEED_UPDATE = 1
+				OR BLANK_INFO_COUNT > 0)
+			</isEqual>
+		ORDER BY 
+			USER_NM
+	</select>
+		
+	<!-- 이력관리 메인 -->
+	<select id="MemberDAO.selectMemberCareerMain" resultClass="egovMap" parameterClass="memberVO">
+		SELECT 
+			USER_NO,
+			CAREER_DT,
+			FLOOR(PERIOD_DIFF(LEFT(CURDATE()+0, 6), LEFT(CAREER_DT,6))/12) AS WORK_YEAR,
+			PERIOD_DIFF(LEFT(CURDATE()+0, 6), LEFT(CAREER_DT,6))%12 AS WORK_MONTH,
+			MILITARY_SERVICE,
+			MS_ST_DT,
+			MS_ED_DT,
+			MS_LEVEL,
+			SECURITY_BASIS,
+			SECURITY_NO,
+			SW_LEVEL,
+			DELETE_YN,
+			UP_DT,
+			ATCH_FILE_ID,
+			SKILL_LANG,
+			SKILL_DBMS,
+			SKILL_TOOL,
+			SKILL_OS
+		FROM 
+			TBL_CAREER_MAIN
+		WHERE 
+			USER_NO= #no#
+	</select>	
+	<!-- 이력관리 교육 -->
+	<select id="MemberDAO.selectMemberCareerEdu" resultClass="egovMap" parameterClass="memberVO">
+		SELECT 
+			NO,
+			SCHOOL_NAME,
+			MAJOR,
+			ST_DT,
+			ED_DT,
+			GRADUATION_YN,
+			USER_NO
+		FROM 
+			TBL_CAREER_EDU
+		WHERE 
+			USER_NO= #no#
+		ORDER BY
+			ST_DT DESC
+	</select>	
+	<!-- 이력관리 자격증 -->
+	<select id="MemberDAO.selectMemberCareerLicense" resultClass="egovMap" parameterClass="memberVO">
+		SELECT 
+			NO,
+			LICENSE_NM,
+			ISSUED_ORG,
+			LICENSE_NO,
+			PASSED_DATE,
+			USER_NO
+		FROM 
+			TBL_CAREER_LICENSE
+		WHERE 
+			USER_NO= #no#
+		ORDER BY
+			PASSED_DATE DESC
+	</select>	
+	<!-- 이력관리 교육훈련 -->
+	<select id="MemberDAO.selectMemberCareerTrain" resultClass="egovMap" parameterClass="memberVO">
+		SELECT 
+			NO,
+			TRAIN_NM,
+			TRAIN_ORG_NM,
+			ST_DT,
+			ED_DT,
+			TRAIN_NO,
+			USER_NO
+		FROM 
+			TBL_CAREER_TRAIN
+		WHERE 
+			USER_NO= #no#
+		ORDER BY
+			ST_DT DESC
+	</select>
+	<!-- 이력관리 근무처경력 -->
+	<select id="MemberDAO.selectMemberCareerWork" resultClass="egovMap" parameterClass="memberVO">
+		SELECT 
+			NO,
+			COMPANY_NM,
+			ST_DT,
+			ED_DT,
+			TASK,
+			ORGNZT_NM,
+			RANK_NM,
+			USER_NO
+		FROM 
+			TBL_CAREER_WORK
+		WHERE 
+			USER_NO= #no#
+		ORDER BY
+			ST_DT DESC
+	</select>
+	<!-- 이력관리 기술경력 -->
+	<select id="MemberDAO.selectMemberCareerSkill" resultClass="egovMap" parameterClass="memberVO">
+		SELECT 
+			NO,
+			PRJ_NM,
+			ST_DT,
+			ED_DT,
+			TASK,
+			CLIENT_NM,
+			NOTE,
+			USER_NO
+		FROM 
+			TBL_CAREER_SKILL
+		WHERE 
+			USER_NO= #no#
+		ORDER BY
+			ST_DT DESC
+	</select>
+	
+	<!-- 이력등록 여부체크 -->
+	<select id="MemberDAO.selectCareerChk" resultClass="java.lang.Integer" parameterClass="memberVO">
+		SELECT 
+			COUNT(*)
+		FROM 
+			TBL_CAREER_MAIN
+		WHERE 
+			USER_NO = #no#
+	</select>
+	
+	<!-- 이력관리 입력쿼리 -->
+	<insert id="MemberDAO.insertCareerMain">
+		INSERT INTO TBL_CAREER_MAIN
+		            (USER_NO,
+		             CAREER_DT,
+		             MILITARY_SERVICE,
+		             MS_ST_DT,
+		             MS_ED_DT,
+		             MS_LEVEL,
+		             SECURITY_BASIS,
+		             SECURITY_NO,
+		             SW_LEVEL,
+		             DELETE_YN,
+		             UP_DT,
+		             ATCH_FILE_ID,
+		             SKILL_LANG,
+		             SKILL_DBMS,
+		             SKILL_TOOL,
+		             SKILL_OS)
+		VALUES (#no#,
+		        #careerDt#,
+		        #militaryService#,
+		        #msStDt#,
+		        #msEdDt#,
+		        #msLevel#,
+		        #securityBasis#,
+		        #securityNo#,
+		        #swLevel#,
+		        'N',
+		        DATE_FORMAT(NOW(), '%Y%m%d'),
+		        #atchFileId#,
+		        #skillLang#,
+		        #skillDbms#,
+		        #skillTool#,
+		        #skillOs#)       
+	</insert>
+	
+	<insert id="MemberDAO.insertCareerEdu">
+		INSERT INTO TBL_CAREER_EDU
+            (SCHOOL_NAME,
+             MAJOR,
+             ST_DT,
+             ED_DT,
+             GRADUATION_YN,
+             USER_NO)
+		VALUES (#schoolName#,
+		        #major#,
+		        #stDt#,
+		        #edDt#,
+		        #graduationYn#,
+		        #no#);
+	</insert>
+	
+	<insert id="MemberDAO.insertCareerLicense">
+		INSERT INTO TBL_CAREER_LICENSE
+            (LICENSE_NM,
+             ISSUED_ORG,
+             LICENSE_NO,
+             PASSED_DATE,
+             USER_NO)
+		VALUES (#licenseNm#,
+		        #issuedOrg#,
+		        #licenseNo#,
+		        #passedDate#,
+		        #no#);
+	</insert>
+	<insert id="MemberDAO.insertCareerSkill">
+		INSERT INTO TBL_CAREER_SKILL
+            (PRJ_NM,
+             ST_DT,
+             ED_DT,
+             TASK,
+             CLIENT_NM,
+             NOTE,
+             USER_NO)
+		VALUES (#prjNm#,
+		        #stDt#,
+		        #edDt#,
+		        #task#,
+		        #clientNm#,
+		        #note#,
+		        #no#);
+	</insert>
+	<insert id="MemberDAO.insertCareerTrain">
+		INSERT INTO TBL_CAREER_TRAIN
+            (TRAIN_NM,
+             TRAIN_ORG_NM,
+             ST_DT,
+             ED_DT,
+             TRAIN_NO,
+             USER_NO)
+		VALUES (#trainNm#,
+		        #trainOrgNm#,
+		        #stDt#,
+		        #edDt#,
+		        #trainNo#,
+		        #no#);
+	</insert>
+	<insert id="MemberDAO.insertCareerWork">
+		INSERT INTO TBL_CAREER_WORK
+            (COMPANY_NM,
+             ST_DT,
+             ED_DT,
+             TASK,
+             ORGNZT_NM,
+             RANK_NM,
+             USER_NO)
+		VALUES (#companyNm#,
+		        #stDt#,
+		        #edDt#,
+		        #task#,
+		        #orgnztNm#,
+		        #rankNm#,
+		        #no#);
+	</insert>
+	
+	<update id="MemberDAO.updtMemberCareerDeleteYn">
+		UPDATE
+			TBL_CAREER_MAIN
+		SET
+			DELETE_YN = #deleteYn#
+		WHERE
+			USER_NO = #no#		
+	</update>	
+	
+	<!-- 이력관리 삭제쿼리 -->
+	<delete id="MemberDAO.deleteCareerEdu">
+		DELETE FROM TBL_CAREER_EDU
+		WHERE USER_NO = #no#
+	</delete>
+	<delete id="MemberDAO.deleteCareerLicense">
+		DELETE FROM TBL_CAREER_LICENSE
+		WHERE USER_NO = #no#
+	</delete>
+	<delete id="MemberDAO.deleteCareerMain">
+		DELETE FROM TBL_CAREER_MAIN
+		WHERE USER_NO = #no#
+	</delete>
+	<delete id="MemberDAO.deleteCareerSkill">
+		DELETE FROM TBL_CAREER_SKILL
+		WHERE USER_NO = #no#
+	</delete>
+	<delete id="MemberDAO.deleteCareerTrain">
+		DELETE FROM TBL_CAREER_TRAIN
+		WHERE USER_NO = #no#
+	</delete>	
+	<delete id="MemberDAO.deleteCareerWork">
+		DELETE FROM TBL_CAREER_WORK
+		WHERE USER_NO = #no#
+	</delete>	
+	<!-- 이력관리 종료 -->
+	
+	
+	
+	<select id="MemberDAO.selectOrgTreeListForLaborUser" resultClass="egovMap">
+		SELECT
+			(SELECT b.ORG_TREE FROM tbl_orgnzt b WHERE a.ORGNZT_ID = b.ORGNZT_ID)  as ORG_TREE
+		FROM
+			tbl_userinfo a
+			where 1=1
+				<iterate prepend="AND CONCAT(a.USER_NM, '(', a.USER_ID, ')') IN " open="(" close=")" conjunction="," property="userMixList">
+					#userMixList[]#
+				</iterate>
+	</select>
+	
+		
+	<select id="MemberDAO.selectLeaderListForLaborUser" resultClass="egovMap">
+		SELECT CONCAT(a.USER_NM, '(', a.USER_ID, ')') AS userMix 
+		  FROM tbl_userinfo a JOIN tbl_orgnzt b
+		  	ON a.ORGNZT_ID = b.ORGNZT_ID
+				where 1=1
+			        <iterate prepend="AND a.ORGNZT_ID IN " open="(" close=")" conjunction="," property="orgnztList">
+						#orgnztList[]#
+					</iterate>
+			AND a.POSITION IN ('H', 'S')
+			AND a.SABUN NOT IN ('0001')
+			<![CDATA[
+			AND b.POSTCP_NM <> '부문장'
+			]]>
+	</select>
+	
+	
+	
+	<select id="MemberDAO.selectGoodMorningState" resultClass="egovMap">
+		SELECT
+				IFNULL((SELECT MAX(NTT_ID) FROM COMTNBBS WHERE 1=1 AND USE_AT = 'Y' AND BBS_ID = 'BBSMSTR_000000000082' AND DATE_FORMAT(FRST_REGISTER_PNTTM, '%Y%m%d%H') >=  DATE_FORMAT(SYSDATE(), '%Y%m%d06')),'') AS ID 
+				,			
+				CASE
+				WHEN (SELECT MAX(NTT_ID) FROM COMTNBBS WHERE 1=1 AND USE_AT = 'Y' AND BBS_ID = 'BBSMSTR_000000000082' AND DATE_FORMAT(FRST_REGISTER_PNTTM, '%Y%m%d%H') >=  DATE_FORMAT(SYSDATE(), '%Y%m%d06') AND FRST_REGISTER_ID = #no#) > 0 THEN 'Y'
+				WHEN COUNT(*)  > 0 THEN 'Y'
+				ELSE 'N'
+				END AS READ_BOOL
+		FROM TBL_BBSREAD a
+		JOIN COMTNBBS b ON a.BBS_ID = b.BBS_ID AND a.NTT_ID = b.NTT_ID
+		WHERE 1=1 
+				AND a.BBS_ID = 'BBSMSTR_000000000082' 			
+				AND DATE_FORMAT(a.READTIME, '%Y%m%d') =  DATE_FORMAT(SYSDATE(), '%Y%m%d')
+				AND a.NTT_ID = (SELECT MAX(NTT_ID) FROM COMTNBBS WHERE 1=1 AND USE_AT = 'Y' AND BBS_ID = 'BBSMSTR_000000000082' AND DATE_FORMAT(FRST_REGISTER_PNTTM, '%Y%m%d%H') >=  DATE_FORMAT(SYSDATE(), '%Y%m%d06'))
+				AND b.USE_AT = 'Y'
+				AND a.USER_NO = #no#	
+	</select>
+	
+	
+	<select id="MemberDAO.selectLateArrivalList" resultClass="egovMap">
+		SELECT *
+		  FROM (
+			<!-- # 2레벨 이하 부서팀장 권한 사용자, 하위 임직원 모두 체크 -->
+			SELECT A.NO AS HEADER_NO
+				, A.USER_ID AS HEADER_ID
+				, GROUP_CONCAT(B.NO) AS LATE_ARRIVAL_LIST
+			  FROM (
+			  	<!-- # A : 팀장 리스트 -->
+				SELECT USR.NO
+					, USR.USER_ID
+					, FN_ORGAN_LOW_TREE(USR.ORGNZT_ID) AS ORGLIST
+				  FROM TBL_USERINFO AS USR
+				  INNER JOIN V_PRJ_TREE AS TREE
+				    ON USR.ORGNZT_ID = TREE.ID
+				 WHERE TREE.LV > 1
+				   AND USR.POSITION IN ('H', 'S')
+				UNION
+				SELECT USR.NO
+					, USR.USER_ID
+					, FN_ORGAN_LOW_TREE(USR.ORGNZT_ID_SEC) AS ORGLIST
+				  FROM TBL_USERINFO AS USR
+				  INNER JOIN V_PRJ_TREE AS TREE
+				    ON USR.ORGNZT_ID_SEC = TREE.ID
+				 WHERE TREE.LV > 1
+				   AND USR.POSITION IN ('H', 'S')
+				   <![CDATA[
+				   AND IFNULL(USR.ORGNZT_ID_SEC,'') <> ''
+				   ]]>
+				) AS A
+				LEFT JOIN
+				<!-- # B : 예하 지각자 명단 -->
+				(
+				SELECT DISTINCT USR.NO, USR.ORGNZT_ID
+				  FROM TBL_USERINFO USR
+				  LEFT JOIN TBL_ATTEND_CHECK ATT
+				    ON USR.NO = ATT.USER_NO
+				 WHERE USR.GHOST = '0'	<!-- # ADMIN 제외 -->
+				   AND USR.COMPIN_DT IS NOT NULL	<!-- # 입사일 -->
+				   AND USR.ORGNZT_ID != 'ORGAN_RET_ORGAN_CODE'	<!-- # 퇴직자그룹 제외 -->
+				   AND USR.NO NOT IN ('2') <!-- # 사장님 제외 -->
+				   AND (ATT.ATTEND_CD = 'LT'
+				    OR ATT.ATTEND_CD IS NULL)
+				   AND ATT.ATTEND_DT = #today#
+				) AS B
+				ON INSTR(A.ORGLIST, B.ORGNZT_ID) > 0
+			GROUP BY A.NO, A.USER_ID
+			
+			UNION ALL
+			
+			<!-- # 1레벨 부문장 권한 사용자(현재 남영철 상무님), 팀장속성 임직원만 체크-->
+			SELECT A.NO AS HEADER_NO
+				, A.USER_ID AS HEADER_ID
+				, GROUP_CONCAT(B.NO) AS LATE_ARRIVAL_LIST
+			  FROM (
+			  	<!-- # A : 팀장 리스트 -->
+				SELECT USR.NO
+					, USR.USER_ID
+					, FN_ORGAN_LOW_TREE(USR.ORGNZT_ID) AS ORGLIST
+				  FROM TBL_USERINFO AS USR
+				  INNER JOIN V_PRJ_TREE AS TREE
+				    ON USR.ORGNZT_ID = TREE.ID
+				 WHERE TREE.LV = 1
+				   AND USR.POSITION IN ('H', 'S')
+				UNION
+				SELECT USR.NO
+					, USR.USER_ID
+					, FN_ORGAN_LOW_TREE(USR.ORGNZT_ID_SEC) AS ORGLIST
+				  FROM TBL_USERINFO AS USR
+				  INNER JOIN V_PRJ_TREE AS TREE
+				    ON USR.ORGNZT_ID_SEC = TREE.ID
+				 WHERE TREE.LV = 1
+				   AND USR.POSITION IN ('H', 'S')
+				   <![CDATA[
+				   AND IFNULL(USR.ORGNZT_ID_SEC,'') <> ''
+				   ]]>
+				) AS A
+				LEFT JOIN
+				<!-- # B : 예하 지각자 명단 -->
+				(
+				SELECT DISTINCT USR.NO, USR.ORGNZT_ID
+				  FROM TBL_USERINFO USR
+				  LEFT JOIN TBL_ATTEND_CHECK ATT
+				    ON USR.NO = ATT.USER_NO
+				 WHERE USR.GHOST = '0' <!-- # ADMIN 제외 -->
+				   AND USR.COMPIN_DT IS NOT NULL <!-- # 입사일 -->
+				   AND USR.ORGNZT_ID != 'ORGAN_RET_ORGAN_CODE' <!-- # 퇴직자그룹 제외 -->
+				   AND USR.NO NOT IN ( '2') <!-- # 사장님 제외 -->
+				   AND (ATT.ATTEND_CD = 'LT'
+				    OR ATT.ATTEND_CD IS NULL)
+				   AND USR.POSITION = 'H'	<!-- # 팀장 속성 -->
+				   AND ATT.ATTEND_DT = #today#
+				) AS B
+				ON INSTR(A.ORGLIST, B.ORGNZT_ID) > 0
+			GROUP BY A.NO, A.USER_ID
+			) A
+		 WHERE LATE_ARRIVAL_LIST IS NOT NULL
+		ORDER BY HEADER_NO
+	</select>
+	
+	
+	<select id="MemberDAO.selectSimpleMember" resultClass="egovMap" parameterClass="memberVO">
+		SELECT
+			a.NO, a.USER_ID, a.USER_NM, 
+			a.ORGNZT_ID, b.ORGNZT_NM AS ORGNZT_NM
+		FROM
+			TBL_USERINFO a
+			LEFT JOIN TBL_ORGNZT b ON a.ORGNZT_ID = b.ORGNZT_ID
+		WHERE
+			a.NO = #no#
+	</select>
+	
+	<update id="MemberDAO.updateSecondOrg">
+		UPDATE
+			TBL_USERINFO
+		SET
+			ORGNZT_ID_SEC = #orgId#
+		WHERE
+			NO = #userNo#
+	</update>
+	
+	<select id="MemberDAO.convertToUserNoFromUserId" resultClass="egovMap" >
+		SELECT
+			NO
+		FROM
+			TBL_USERINFO
+		WHERE
+			<iterate prepend="USER_ID IN" property="userIdList" open="(" close=")" conjunction=",">
+				#userIdList[]#
+			</iterate>
+	</select>
+	
+	<select id="MemberDAO.selectTeamList" resultClass="egovMap">
+		SELECT usr.USER_NM, usr.USER_ID
+		  FROM TBL_USERINFO usr 
+		  LEFT JOIN TBL_orgNZT org 
+		    ON usr.orgNZT_ID = org.orgNZT_ID 
+		 WHERE  usr.GHOST = '0' 
+			AND usr.COMPIN_DT IS NOT NULL 
+			AND usr.orgNZT_ID != 'ORGAN_RET_ORGAN_CODE' 
+			AND usr.orgNZT_ID = #orgnztId# 
+		   AND usr.USER_ID != #userId#
+		<isEqual property="position" compareValue="H">
+			OR (org.org_UP = #orgnztId# 
+			AND usr.POSITION = 'H'
+			AND usr.USER_ID != #userId#)
+		</isEqual>
+		ORDER  BY usr.USER_NM
+	</select>
+	
+	<select id="MemberDAO.selectHeaderList" resultClass="egovMap">
+		<![CDATA[
+		SELECT head.NO, head.USER_ID, head.USER_NM, head.MOBLPHON_NO
+		  FROM TBL_USERINFO usr
+		  LEFT JOIN TBL_ORGNZT org
+		  ON usr.ORGNZT_ID = org.ORGNZT_ID
+		  INNER JOIN TBL_USERINFO head
+		  ON org.ORG_TREE LIKE CONCAT('%', head.ORGNZT_ID , '%')
+		  AND head.POSITION IN ('H', 'S')
+		  AND head.NO <> #userNo#
+		  LEFT JOIN TBL_ORGNZT headOrg
+		  ON head.ORGNZT_ID = headOrg.ORGNZT_ID
+		 WHERE usr.NO = #userNo#
+		ORDER BY LENGTH(headOrg.ORG_TREE) DESC
+		]]>
+	</select>
+
+	<!--  TENY_170403 		새롭게 만들어봄   -->
+	<select id="MemberDAO.selectUserList" 		resultMap="mapUserVO">
+	SELECT 
+		u.NO					AS		NO,
+		u.USER_ID			AS		USER_ID,
+		u.USER_NM			AS		USER_NM,
+		o.ORGNZT_ID		AS		ORGNZT_ID,
+		o.ORGNZT_NM		AS		ORGNZT_NM
+	FROM tbl_userinfo u
+	JOIN tbl_orgnzt o
+		ON u.ORGNZT_ID = o.ORGNZT_ID
+	WHERE 
+		u.WORK_ST = 'W'
+	<isNotEmpty prepend="AND" property="orgId">
+		o.ORGNZT_ID = #orgId# 
+	</isNotEmpty>
+	<isNotEmpty prepend="AND" property="topOrgId">
+		o.ORG_TREE LIKE CONCAT('%', #topOrgId#, '%') 
+	</isNotEmpty>
+	<isNotEmpty prepend="OR" property="orgnztIdSec">
+		o.ORG_TREE LIKE CONCAT('%', #orgnztIdSec#, '%') 
+	</isNotEmpty>
+	ORDER BY u.USER_NM ASC
+	</select>
+	
+</sqlMap>

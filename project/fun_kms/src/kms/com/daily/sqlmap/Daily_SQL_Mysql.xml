@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsDailyDAO">
+
+	<typeAlias alias="egovMap"				type="egovframework.rte.psl.dataaccess.util.EgovMap" />
+	<typeAlias alias="DailyPlanVO" 			type="kms.com.daily.vo.DailyPlanVO" 				/>
+	<typeAlias alias="DailyResultVO" 			type="kms.com.daily.vo.DailyResultVO" 				/>
+
+	<!-- TENY_170407 업무계획 내용관련 resultMap -->
+	<resultMap id="mapDailyPlanVO" 	class="DailyPlanVO"			 >
+		<result property="no" 						column="NO" 				/>
+		<result property="writerNo" 				column="WRITER_NO" 		/>
+		<result property="writerName" 			column="WRITER_NAME" 		/>
+		<result property="writeDate" 				column="WRITE_DATE" 		/>
+		<result property="regDatetime" 			column="REG_DATETIME" 	/>
+		<result property="contents" 				column="CONTENTS" 			/>
+		<result property="fileId" 					column="FILE_ID" 				/>
+	</resultMap>
+
+	<resultMap id="mapDailyTaskVO" 	class="DailyPlanVO"			 >
+		<result property="projectId" 				column="PRJ_ID" 				/>
+		<result property="projectName" 			column="PRJ_NM" 				/>
+		<result property="taskSubject" 			column="TASK_SJ" 				/>
+		<result property="taskContents" 			column="TASK_CN" 			/>
+	</resultMap>
+	
+	<!-- TENY_170407 업무계획 관련프로젝트 및 프로젝트별 투입시간 resultMap들 -->
+	<resultMap id="mapDailyResultVO" 	class="DailyResultVO"		 >
+		<result property="writerNo" 				column="WRITER_NO" 		/>
+		<result property="writeDate" 				column="WRITE_DATE" 		/>
+		<result property="no"						column="NO" 				/>
+		<result property="prjId" 					column="PRJ_ID" 			/>
+		<result property="prjCd" 					column="PRJ_CD" 			/>
+		<result property="prjName" 				column="PRJ_NM" 			/>
+		<result property="regDatetime" 			column="REG_DATETIME" 	/>
+		<result property="workHour" 			column="WORK_HOUR" 	/>
+		<result property="contents" 				column="CONTENTS" 		/>
+		<result property="fileId" 					column="FILE_ID" 			/>
+		<result property="reqNo" 					column="REQ_NO" 			/>
+	</resultMap>
+
+<!-- 	TENY_170606 프로젝트 조회시 프로젝트 수행내영을 나의업무에서 가져오기 위한 조회문에 사용할 resultMap
+ -->	
+	<resultMap id="mapDailyResultVO2" 		class="DailyResultVO"		 >
+		<result property="writerNo" 				column="WRITER_NO" 	/>
+		<result property="writerName" 			column="WRITER_NAME" 	/>
+		<result property="writeDate" 				column="WRITE_DATE" 	/>
+		<result property="workHour" 			column="WORK_HOUR" 	/>
+		<result property="contents" 				column="CONTENTS" 		/>
+		<result property="fileId" 					column="FILE_ID" 			/>
+	</resultMap>
+
+	<!-- SELECT 문들 -->
+	<!-- TENY_170405 업무계획을 주단위로 조회하기위한 SQL구분들 (조건 : 작성자, 기간)-->
+	<select id="KmsDailyDAO.selectDailyPlanList" 	resultMap="mapDailyPlanVO">
+		SELECT
+			dp.WRITER_NO						AS WRITER_NO, 
+			''										AS WRITER_NAME, 
+			dp.NO									AS NO,
+			dp.WRITE_DATE						AS WRITE_DATE,
+			IFNULL(dp.REG_DATETIME, '')		AS REG_DATETIME,
+			IFNULL(dp.CONTENTS, '')			AS CONTENTS,
+			IFNULL(dp.FILE_ID, '')				AS FILE_ID
+		FROM	hm_daily_plan dp
+		WHERE
+			TRUE
+		<isNotEmpty prepend="AND" property="writerNo">
+			dp.WRITER_NO = #writerNo#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="fromDate">
+<![CDATA[
+			dp.WRITE_DATE >= #fromDate#
+]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="toDate">
+<![CDATA[
+			dp.WRITE_DATE <= #toDate#
+]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="atDate">
+<![CDATA[
+			dp.WRITE_DATE = #atDate#
+]]>
+		</isNotEmpty>
+		ORDER BY  dp.WRITE_DATE ASC
+	</select>
+
+	<!-- TENY_170426 기존에 작성되었던 작업을 업무계획으로 이관하는데 사용 -->
+	<select id="KmsDailyDAO.selectDailyTaskList" 	resultMap="mapDailyTaskVO">
+		SELECT
+			t.PRJ_ID, 
+			p.PRJ_NM, 
+			t.TASK_SJ, 
+			t.TASK_CN
+		FROM tbl_task t
+			JOIN tbl_prj p
+				ON t.PRJ_ID = p.PRJ_ID
+		WHERE t.USER_NO = #userNo#
+<![CDATA[
+			AND t.TASK_STARTDATE <= #atDate#
+			AND t.TASK_DUEDATE >= #atDate#
+]]>
+	</select>
+
+
+	<!-- TENY_170419 업무계획을  조회하기위한 SQL구분들 (조건 : 작성일, 부서) -->
+	<!-- TENY_170419 이때 작성하지 않은 사람은 이름만이라도 나온다.  -->
+	<select id="KmsDailyDAO.selectDailyPlanListOrg" 	resultMap="mapDailyPlanVO">
+	SELECT 
+		u.NO									AS WRITER_NO, 
+		u.USER_NM							AS WRITER_NAME, 
+		IFNULL(dp.NO, 0)					AS NO,
+		IFNULL(dp.WRITE_DATE, '')			AS WRITE_DATE,
+		IFNULL(dp.REG_DATETIME, '')		AS REG_DATETIME,
+		IFNULL(dp.CONTENTS, '')			AS CONTENTS,
+		IFNULL(dp.FILE_ID, '')				AS FILE_ID
+	FROM tbl_userinfo u
+	JOIN tbl_orgnzt o
+	ON u.ORGNZT_ID = o.ORGNZT_ID AND o.USE_YN = 'Y'
+	LEFT OUTER JOIN (
+		SELECT 
+			r.NO 					AS NO, 
+			r.WRITER_NO 		AS WRITER_NO, 
+			r.WRITE_DATE 		AS WRITE_DATE,
+			r.REG_DATETIME	AS REG_DATETIME, 
+			r.CONTENTS			AS CONTENTS,
+			r.FILE_ID				AS FILE_ID
+		FROM  hm_daily_plan r
+	WHERE 
+		TRUE
+		<isNotEmpty prepend="AND" property="atDate">
+<![CDATA[
+			r.WRITE_DATE = #atDate#
+]]>
+		</isNotEmpty>
+	) dp
+		ON u.NO = dp.WRITER_NO 
+	WHERE
+		u.WORK_ST = 'W' 
+	<isNotEmpty prepend="AND" property="orgnztId">
+		o.ORG_TREE LIKE CONCAT('%', #orgnztId#, '%')
+	</isNotEmpty>
+	ORDER BY WRITER_NAME ASC
+	</select>
+
+	<!-- TENY_170405 등록된 업무계획을 한개 조회하기위한 SQL문 -->
+	<select id="KmsDailyDAO.getDailyPlan" 	resultMap="mapDailyPlanVO">
+		SELECT
+			d.NO
+			, d.WRITER_NO
+			, ''   						AS WRITER_NAME
+			, d.WRITE_DATE
+			, DATE_FORMAT(d.REG_DATETIME, '%y.%m.%d') AS REG_DATETIME
+			, d.CONTENTS
+			, d.FILE_ID
+		FROM	hm_daily_plan d
+		WHERE
+			d.WRITER_NO = #writerNo#
+			AND d.WRITE_DATE = #writeDate#
+	</select>
+
+	<!-- TENY_170405 업무실적들을 조회하기위한 SQL문 (조건 : 작성자 NO, 작성기준일의 기간 -->
+	<select id="KmsDailyDAO.selectDailyResultList" 	resultMap="mapDailyResultVO">
+		SELECT
+			dr.NO,
+			dr.WRITER_NO,
+			dr.WRITE_DATE,
+			dr.REG_DATETIME,
+			IFNULL(dr.WORK_HOUR,0) AS WORK_HOUR,
+			dr.CONTENTS,
+			dr.FILE_ID,
+			dr.PRJ_ID,
+			p.PRJ_CD,
+			p.PRJ_NM,
+			IFNULL(dr.REQ_NO,0) AS REQ_NO
+		FROM	hm_daily_result dr
+		JOIN tbl_prj p
+			ON dr.PRJ_ID = p.PRJ_ID
+		WHERE
+			TRUE
+		<isNotEmpty prepend="AND" property="writerNo">
+			dr.WRITER_NO = #writerNo#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="fromDate">
+<![CDATA[
+			dr.WRITE_DATE >= #fromDate#
+]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="toDate">
+<![CDATA[
+			dr.WRITE_DATE <= #toDate#
+]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="atDate">
+<![CDATA[
+			dr.WRITE_DATE = #atDate#
+]]>
+		</isNotEmpty>
+		ORDER BY  dr.WRITE_DATE ASC, dr.NO ASC
+	</select>
+
+	<!-- TENY_170405 업무실적들을 조회하기위한 SQL문 (조건 : 부서 id, 작성기준일) -->
+	<select id="KmsDailyDAO.selectDailyResultListOrg" 	resultMap="mapDailyResultVO">
+		SELECT
+			dr.NO,
+			dr.WRITER_NO,
+			dr.WRITE_DATE,
+			dr.REG_DATETIME,
+			dr.WORK_HOUR,
+			dr.CONTENTS,
+			dr.FILE_ID,
+			dr.PRJ_ID,
+			p.PRJ_CD,
+			p.PRJ_NM,
+			IFNULL(dr.REQ_NO,0) AS REQ_NO
+		FROM	hm_daily_result dr
+		JOIN tbl_prj p
+			ON dr.PRJ_ID = p.PRJ_ID
+		JOIN tbl_userinfo u
+			ON dr.WRITER_NO = u.NO and u.WORK_ST = 'W' 
+		JOIN tbl_orgnzt o
+			ON u.ORGNZT_ID = o.ORGNZT_ID AND o.USE_YN = 'Y'
+		WHERE
+			dr.WRITE_DATE = #atDate#
+	<isNotEmpty prepend="AND" property="orgnztId">
+			o.ORG_TREE LIKE CONCAT('%', #orgnztId#, '%')
+	</isNotEmpty>
+		ORDER BY dr.WRITER_NO ASC
+	</select>
+
+	<!-- INSERT 문들 -->
+	<!-- TENY_170405 업무계획을 등록하기위한 SQL문 -->
+	<insert id="KmsDailyDAO.insertDailyPlan" 		parameterClass="DailyPlanVO">
+		INSERT INTO hm_daily_plan (
+			WRITER_NO
+			, WRITE_DATE
+			, REG_DATETIME
+			, CONTENTS
+			, FILE_ID
+		)
+		VALUES (
+			#writerNo#
+			, #writeDate#
+			, SYSDATE()
+			, #contents#
+			, #fileId#
+		)
+	</insert>
+
+	<!-- TENY_170405 한건의 일일업무보고 내용을 수정때 사용하기 위한 SQL문 -->
+	<update id="KmsDailyDAO.updateDailyPlan" >
+		UPDATE hm_daily_plan
+		SET
+			NO = #no#
+			,CONTENTS 				= #contents#
+		WHERE
+			NO = #no#
+	</update>
+
+	<!-- TENY_170405 업무실적 등록하루업무중 해당프로젝트를 얼마나 수행하였는지를 등록하기위한 SQL문 -->
+	<insert id="KmsDailyDAO.insertDailyResult" 	>
+		INSERT INTO hm_daily_result (
+			WRITER_NO
+			, WRITE_DATE
+			, PRJ_ID
+			, WORK_HOUR
+			, CONTENTS
+			, REG_DATETIME
+			, REQ_NO
+		)
+		VALUES (
+			#writerNo#
+			, #writeDate#
+			, #prjId#
+			, #workHour#
+			, #contents#
+			, SYSDATE()
+			, #reqNo#
+		)
+	</insert>
+
+	<!-- TENY_170410 업무실적등록은 업무계획에 연결된것을 한꺼번에 다 지우고 다시 입력하는것으로 한다 -->
+	<delete id="KmsDailyDAO.deleteDailyResult" 	>
+		DELETE FROM hm_daily_result
+		WHERE
+			WRITER_NO = #writerNo#
+			AND  WRITE_DATE = #writeDate#
+	</delete>
+
+<!-- 	TENY_170606 프로젝트 조회시 업무내용 조회를 위하여 hm_daily_result를 반영
+ -->
+	<select id="KmsDailyDAO.selectResultListByPrjId" 					resultMap="mapDailyResultVO2">
+		SELECT
+			dr.WRITER_NO,
+  			wu.USER_NM 					AS WRITER_NAME,
+			dr.WRITE_DATE,
+			dr.WORK_HOUR,
+			dr.CONTENTS,
+			dr.FILE_ID
+		FROM	hm_daily_result dr
+		JOIN tbl_userinfo wu
+			ON dr.WRITER_NO = wu.NO
+		WHERE
+			TRUE
+		<isNotEmpty prepend="AND" property="prjId">
+			dr.PRJ_ID = #prjId#
+		</isNotEmpty>
+		ORDER BY  dr.WRITE_DATE DESC, dr.WRITER_NO ASC
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+<!-- 	TENY_170606 hm_daily_result를 반영
+ -->
+	<select id="KmsDailyDAO.selectResultListByPrjIdTotCnt" 			resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM	hm_daily_result dr
+		WHERE
+			TRUE
+		<isNotEmpty prepend="AND" property="prjId">
+			dr.PRJ_ID = #prjId#
+		</isNotEmpty>
+<!-- 		<isNotEmpty prepend="AND" property="searchYear">
+			SUBSTR(dr.WRITE_DATE, 1, 4) =  #searchYear#
+		</isNotEmpty>
+ -->	</select>
+
+
+</sqlMap>

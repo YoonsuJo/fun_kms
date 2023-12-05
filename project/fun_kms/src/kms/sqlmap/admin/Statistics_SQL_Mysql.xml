@@ -1,0 +1,1427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="AdminStatistics">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="HolidayWorkStatisticDetail" type="kms.com.member.service.HolidayWorkStatisticDetail"/>
+	
+	<resultMap id="selectHolidayWorkExcel1" class="kms.com.member.service.HolidayWorkStatisticDetail">
+		<result property="stDt"				column="ST_DT"				columnIndex="1"/>
+		<result property="edDt"				column="ED_DT"				columnIndex="2"/>
+		<result property="stTm"				column="ST_TM"				columnIndex="3"/>
+		<result property="edTm"				column="ED_TM"				columnIndex="4"/>
+		<result property="period"			column="PERIOD"				columnIndex="5"/>
+		<result property="costConfirmed"	column="COST_CONFIRMED"		columnIndex="6"/>
+		<result property="costExpected"		column="COST_EXPECTED"		columnIndex="7"/>
+		<result property="costAll"			column="COST_ALL"			columnIndex="8"/>
+		<result property="confirmYn"		column="CONFIRM_YN"			columnIndex="9"/>
+		<result property="userNo"			column="USER_NO"			columnIndex="10"/>
+		<result property="userNm"			column="USER_NM"			columnIndex="11"/>
+		<result property="userId"			column="USER_ID"			columnIndex="12"/>
+		<result property="orgId"			column="ORG_ID"				columnIndex="13"/>
+		<result property="orgNm"			column="ORG_NM"				columnIndex="14"/>
+		<result property="compId"			column="COMP_ID"			columnIndex="15"/>
+		<result property="compNm"			column="COMP_NM"			columnIndex="16"/>
+		<result property="prjId"			column="PRJ_ID"				columnIndex="17"/>
+		<result property="prjCd"			column="PRJ_CD"				columnIndex="18"/>
+		<result property="prjNm"			column="PRJ_NM"				columnIndex="19"/>
+		<result property="docId"			column="DOC_ID"				columnIndex="20"/>
+		<result property="docSn"			column="DOC_SN"				columnIndex="21"/>
+		<result property="docCn"			column="DOC_CN"				columnIndex="22"/>
+		<result property="rowCode"			column="ROW_CODE"			columnIndex="23"/>
+		<result property="rowType"			column="ROW_TYPE"			columnIndex="24"/>
+		<result property="handleDt"			column="HANDLE_DT"			columnIndex="25"/>
+		<result property="handleStat"		column="HANDLE_STAT"		columnIndex="26"/>
+	</resultMap>
+	
+	<resultMap id="selectComplexProjectReportExcel1" class="kms.com.member.service.ComplexProjectStatistic">
+		<result property="userOrgNm"		column="USER_ORG_NM"			columnIndex="1"/>
+		<result property="userNm"			column="USER_NM"				columnIndex="2"/>
+		<result property="prjCd"			column="PRJ_CD"					columnIndex="3"/>
+		<result property="prjNm"			column="PRJ_NM"					columnIndex="4"/>
+		<result property="prjOrgNm"			column="PRJ_ORG_NM"				columnIndex="5"/>
+		<result property="orgRatio"			column="ORG_RATIO"				columnIndex="6"/>
+		<result property="repeatCount"		column="REPEAT_COUNT"			columnIndex="7"/>
+		<result property="realRatio"		column="REAL_RATIO"				columnIndex="8"/>
+		<result property="salesOut"			column="SALES_OUT"				columnIndex="9"/>
+		<result property="salesIn"			column="SALES_IN"				columnIndex="10"/>
+		<result property="purchaseOut"		column="PURCHASE_OUT"			columnIndex="11"/>
+		<result property="purchaseInNormal"	column="PURCHASE_IN_NORMAL"		columnIndex="12"/>
+		<result property="salesProfit"		column="SALES_PROFIT"			columnIndex="13"/>
+		<result property="labor"			column="LABOR"					columnIndex="14"/>
+		<result property="exp"				column="EXP"					columnIndex="15"/>
+		<result property="purchaseInCommon"	column="PURCHASE_IN_COMMON"		columnIndex="16"/>
+		<result property="totalProfit"		column="TOTAL_PROFIT"			columnIndex="17"/>
+		<result property="prjSalesInLabor"	column="PRJ_SALES_IN_LABOR"		columnIndex="18"/>
+		
+		<result property="p1PrjCd"				column="P1_PRJ_CD"				columnIndex="19"/>
+		<result property="p1PrjNm"				column="P1_PRJ_NM"				columnIndex="20"/>
+		<result property="p1OrgNm"				column="P1_ORG_NM"				columnIndex="21"/>
+		<result property="p1SalesOut"			column="P1_SALES_OUT"			columnIndex="22"/>
+		<result property="p1SalesIn"			column="P1_SALES_IN"			columnIndex="23"/>
+		<result property="p1PurchaseOut"		column="P1_PURCHASE_OUT"		columnIndex="24"/>
+		<result property="p1PurchaseInNoraml"	column="P1_PURCHASE_IN_NORMAL"	columnIndex="25"/>
+		<result property="p1SalesProfit"		column="P1_SALES_PROFIT"		columnIndex="26"/>
+		<result property="p1Labor"				column="P1_LABOR"				columnIndex="27"/>
+		<result property="p1Exp"				column="P1_EXP"					columnIndex="28"/>
+		<result property="p1PurchaseInCommon"	column="P1_PURCHASE_IN_COMMON"	columnIndex="29"/>
+		<result property="p1TotalProfit"		column="P1_TOTAL_PROFIT"		columnIndex="30"/>
+		<result property="p1PrjSalesInLabor"	column="P1_PRJ_SALES_IN_LABOR"	columnIndex="31"/>
+		
+		<result property="p2PrjCd"				column="P2_PRJ_CD"				columnIndex="32"/>
+		<result property="p2PrjNm"				column="P2_PRJ_NM"				columnIndex="33"/>
+		<result property="p2OrgNm"				column="P2_ORG_NM"				columnIndex="34"/>
+		<result property="p2SalesOut"			column="P2_SALES_OUT"			columnIndex="35"/>
+		<result property="p2SalesIn"			column="P2_SALES_IN"			columnIndex="36"/>
+		<result property="p2PurchaseOut"		column="P2_PURCHASE_OUT"		columnIndex="37"/>
+		<result property="p2PurchaseInNoraml"	column="P2_PURCHASE_IN_NORMAL"	columnIndex="38"/>
+		<result property="p2SalesProfit"		column="P2_SALES_PROFIT"		columnIndex="39"/>
+		<result property="p2Labor"				column="P2_LABOR"				columnIndex="40"/>
+		<result property="p2Exp"				column="P2_EXP"					columnIndex="41"/>
+		<result property="p2PurchaseInCommon"	column="P2_PURCHASE_IN_COMMON"	columnIndex="42"/>
+		<result property="p2TotalProfit"		column="P2_TOTAL_PROFIT"		columnIndex="43"/>
+		<result property="p2PrjSalesInLabor"	column="P2_PRJ_SALES_IN_LABOR"	columnIndex="44"/>
+		
+		<result property="p3PrjCd"				column="P3_PRJ_CD"				columnIndex="45"/>
+		<result property="p3PrjNm"				column="P3_PRJ_NM"				columnIndex="46"/>
+		<result property="p3OrgNm"				column="P3_ORG_NM"				columnIndex="47"/>
+		<result property="p3SalesOut"			column="P3_SALES_OUT"			columnIndex="48"/>
+		<result property="p3SalesIn"			column="P3_SALES_IN"			columnIndex="49"/>
+		<result property="p3PurchaseOut"		column="P3_PURCHASE_OUT"		columnIndex="50"/>
+		<result property="p3PurchaseInNoraml"	column="P3_PURCHASE_IN_NORMAL"	columnIndex="51"/>
+		<result property="p3SalesProfit"		column="P3_SALES_PROFIT"		columnIndex="52"/>
+		<result property="p3Labor"				column="P3_LABOR"				columnIndex="53"/>
+		<result property="p3Exp"				column="P3_EXP"					columnIndex="54"/>
+		<result property="p3PurchaseInCommon"	column="P3_PURCHASE_IN_COMMON"	columnIndex="55"/>
+		<result property="p3TotalProfit"		column="P3_TOTAL_PROFIT"		columnIndex="56"/>
+		<result property="p3PrjSalesInLabor"	column="P3_PRJ_SALES_IN_LABOR"	columnIndex="57"/>
+		
+		<result property="p4PrjCd"				column="P4_PRJ_CD"				columnIndex="58"/>
+		<result property="p4PrjNm"				column="P4_PRJ_NM"				columnIndex="59"/>
+		<result property="p4OrgNm"				column="P4_ORG_NM"				columnIndex="60"/>
+		<result property="p4SalesOut"			column="P4_SALES_OUT"			columnIndex="61"/>
+		<result property="p4SalesIn"			column="P4_SALES_IN"			columnIndex="62"/>
+		<result property="p4PurchaseOut"		column="P4_PURCHASE_OUT"		columnIndex="63"/>
+		<result property="p4PurchaseInNoraml"	column="P4_PURCHASE_IN_NORMAL"	columnIndex="64"/>
+		<result property="p4SalesProfit"		column="P4_SALES_PROFIT"		columnIndex="65"/>
+		<result property="p4Labor"				column="P4_LABOR"				columnIndex="66"/>
+		<result property="p4Exp"				column="P4_EXP"					columnIndex="67"/>
+		<result property="p4PurchaseInCommon"	column="P4_PURCHASE_IN_COMMON"	columnIndex="68"/>
+		<result property="p4TotalProfit"		column="P4_TOTAL_PROFIT"		columnIndex="69"/>
+	</resultMap>
+
+	<select id="AdminStatisticsDAO.selectDayReportExcel1" resultClass="egovMap">
+		SELECT
+			detail.USER_NO AS USER_NO,
+			detail.USER_NM AS USER_NM,
+			detail.USER_ID AS USER_ID,
+			org.ORGNZT_ID AS ORG_ID,
+			org.ORGNZT_NM AS ORG_NM,
+			COUNT(detail.DATE) AS TOTAL_WORK_DAY,
+			SUM(IF(detail.ATTEND_DT IS NULL, 0, 1)) AS USER_WORK_DAY,
+			SUM(IF(detail.ATTEND_CD = 'VC', 1, 0)) AS VAC,
+			SUM(IF(detail.ATTEND_DT IS NULL, 0, 1)) - SUM(IF(detail.ATTEND_CD = 'VC', 1, 0)) AS DUTY,
+<!--			SUM(IF(detail.ATTEND_DT IS NOT NULL AND detail.ATTEND_CD != 'VC' AND detail.DR_TIME > 0, 1, 0)) AS GOOD,-->
+			SUM(IF(detail.ATTEND_DT IS NOT NULL AND (detail.ATTEND_CD != 'VC' OR detail.ATTEND_CD IS NULL) AND detail.DR_TIME > 0, 1, 0)) AS GOOD,
+			SUM(IF(detail.ATTEND_DT IS NOT NULL AND detail.ATTEND_CD != 'VC' AND detail.DR_TIME = 0 AND detail.DR_COUNT > 0, 1, 0)) AS ZERO_TIME,
+			SUM(IF(detail.ATTEND_DT IS NOT NULL AND detail.ATTEND_CD != 'VC' AND detail.DR_COUNT = 0, 1, 0)) AS NO_INPUT
+		FROM
+			(
+				SELECT
+					cal.CAL_DATE AS DATE,
+					allUser.NO AS USER_NO,
+					allUser.USER_NM AS USER_NM,
+					allUser.USER_ID AS USER_ID,
+					allUser.ORGNZT_ID AS ORGNZT_ID,
+					IF(SUM(dr.DAY_REPORT_TM) IS NULL, 0, COUNT(*)) AS DR_COUNT,
+					IFNULL(SUM(IFNULL(dr.DAY_REPORT_TM, 0)), 0) AS DR_TIME,
+					chk.ATTEND_DT AS ATTEND_DT,
+					CASE
+						WHEN chk.ATTEND_CD = 'LD' AND eapp.doc_id IS NOT NULL THEN 'VC'
+						ELSE chk.ATTEND_CD
+					END AS ATTEND_CD
+				FROM
+					(
+						TBL_CALENDAR_DATA cal,
+						TBL_USERINFO allUser
+					)
+					LEFT JOIN TBL_SCHEDULE sch
+						ON cal.CAL_DATE = sch.SCHE_DATE_ALL
+						AND sch.DELETE_YN = 'N'
+						AND sch.SCHE_TYP IN ('H', 'I', 'J')
+					LEFT JOIN TBL_DAY_REPORT dr
+						ON allUser.NO = dr.USER_NO
+						AND cal.CAL_DATE = dr.DAY_REPORT_DT
+					LEFT JOIN TBL_ATTEND_CHECK chk
+						ON allUser.NO = chk.USER_NO
+						AND cal.CAL_DATE = chk.ATTEND_DT
+					LEFT JOIN
+						(
+						SELECT
+							doc.*
+							, vac.ED_DT
+							, vac.ST_DT
+						FROM
+							TBL_EAPP_DOC doc
+							INNER JOIN TBL_EAPP_VAC vac
+							ON doc.doc_id = vac.doc_id
+							AND (DATEDIFF(#endDt#, vac.ED_DT) >= 0
+							OR DATEDIFF(vac.ST_DT, #startDt#) >= 0)
+							AND doc.doc_stat IN ('APP004', 'APP005')
+							AND doc.new_at = 1
+						) eapp
+						ON eapp.writer_no = allUser.no
+						AND DATEDIFF(eapp.ED_DT, cal.CAL_DATE) >= 0
+						AND DATEDIFF(cal.CAL_DATE, eapp.ST_DT) >= 0
+				WHERE
+					DAYOFWEEK(cal.CAL_DATE) IN ('2', '3', '4', '5', '6')
+					AND DATEDIFF(#endDt#, cal.CAL_DATE) >= 0
+					AND DATEDIFF(cal.CAL_DATE, #startDt#) >= 0
+					AND sch.SCHE_TYP IS NULL
+				GROUP BY
+					cal.CAL_DATE,
+					allUser.NO
+			) detail
+			INNER JOIN TBL_ORGNZT org
+				ON detail.ORGNZT_ID = org.ORGNZT_ID
+		GROUP BY detail.USER_NO
+		HAVING USER_WORK_DAY > 0
+	</select>
+		
+	<select id="AdminStatisticsDAO.selectExpenseExcel1" resultClass="egovMap">
+		SELECT
+			CONCAT(SUBSTRING(expense.EXP_DT, 1, 4), '-', SUBSTRING(expense.EXP_DT, 5, 2), '-', SUBSTRING(expense.EXP_DT, 7, 2)) AS EXP_DT,
+			DATE(expense.DOC_DT) AS DOC_DT,
+			expense.WRITER_NO AS WRITER_NO,
+			usr.USER_NM AS WRITER_NM,
+			usr.USER_ID AS WRITER_ID,
+			expense.ACC_ID AS ACC_ID,
+			account.PRNT_ACC_NM AS PRNT_ACC_NM,
+			account.ACC_NM AS ACC_NM,
+			expense.EXP_SPEND AS EXP_SPEND,
+			expense.EXP_SPEND_TYPE AS EXP_SPEND_TYPE,
+			IFNULL(expense.CARD_SPEND_NO, '') AS CARD_SPEND_NO,
+			IFNULL(cardSpend.CARD_ID, '') AS CARD_ID,
+			IFNULL(cardSpend.APPROVAL_NO, '') AS CARD_APP_NO,
+			IFNULL(cardSpend.STORE_BUSINESS_NM, '') AS CARD_STORE_NM,
+			IFNULL(cardSpend.STORE_BUSINESS_TYP, '') AS CARD_STORE_TYP,
+			IFNULL(CONCAT(SUBSTRING(expense.PAYING_DUE_DATE, 1, 4), '-', SUBSTRING(expense.PAYING_DUE_DATE, 5, 2), '-', SUBSTRING(expense.PAYING_DUE_DATE, 7, 2)), '') AS PAYING_DUE_DATE,
+			IFNULL(expense.EXP_CT, '') AS EXP_CT,
+			expense.PRJ_ID AS PRJ_ID,
+			prj.PRJ_CD AS PRJ_CD,
+			prj.PRJ_NM AS PRJ_NM,
+			expense.DOC_STAT AS DOC_STAT,
+			IFNULL(DATE(expense.HANDLE_DT), '') AS HANDLE_DT,
+			expense.COMPANY_CD AS COMPANY_CD,
+			compCode.CODE_NM AS COMPANY_NM
+		FROM
+			(
+				SELECT
+					a.EXP_DT AS EXP_DT,
+					b.DOC_DT AS DOC_DT,
+					b.WRITER_NO AS WRITER_NO,
+					a.ACC_ID AS ACC_ID,
+					a.EXP_SPEND AS EXP_SPEND,
+					a.EXP_SPEND_TYP AS EXP_SPEND_TYPE,
+					a.CARD_SPEND_NO AS CARD_SPEND_NO,
+					a.PAYING_DUE_DATE AS PAYING_DUE_DATE,
+					a.EXP_CT AS EXP_CT,
+					a.PRJ_ID AS PRJ_ID,
+					b.DOC_STAT AS DOC_STAT,
+					b.HANDLE_DT AS HANDLE_DT,
+					a.COMPANY_CD AS COMPANY_CD
+				FROM
+					TBL_EAPP_EXP a
+					INNER JOIN TBL_EAPP_DOC b
+						ON a.DOC_ID = b.DOC_ID
+						AND (
+							b.DOC_STAT IN ('APP001', 'APP002', 'APP003')
+							OR (b.DOC_STAT IN ('APP004', 'APP005') AND b.NEW_AT = '1')
+						)
+				WHERE
+					DATEDIFF(#endDt#, a.EXP_DT) >= 0
+					AND DATEDIFF(a.EXP_DT, #startDt#) >= 0
+				<isNotEmpty property="cardOnly"><isEqual property="cardOnly" compareValue="true">
+					AND a.EXP_SPEND_TYP = 'CC' 
+				</isEqual></isNotEmpty>
+			) expense
+			LEFT JOIN COMTCCMMNDETAILCODE compCode
+				ON compCode.CODE_ID = 'KMS007'
+				AND expense.COMPANY_CD = compCode.CODE
+			LEFT JOIN TBL_PRJ prj
+				ON expense.PRJ_ID = prj.PRJ_ID
+			LEFT JOIN TBL_CARD_SPEND cardSpend
+				ON expense.CARD_SPEND_NO = cardSpend.CARD_SPEND_NO
+			LEFT JOIN (
+				SELECT 
+					a.ACC_ID AS ACC_ID,
+					b.ACC_NM AS PRNT_ACC_NM,
+					a.ACC_NM AS ACC_NM
+				FROM	
+					TBL_ACCOUNT a
+					INNER JOIN TBL_ACCOUNT b
+						ON a.PRNT_ACC_ID = b.ACC_ID
+			) account
+				ON expense.ACC_ID = account.ACC_ID
+			LEFT JOIN TBL_USERINFO usr
+				ON expense.WRITER_NO = usr.NO
+		ORDER BY EXP_DT, DOC_DT, WRITER_NM
+		</select>
+		
+		<select id="AdminStatisticsDAO.selectHolidayWorkExcel1" resultMap="selectHolidayWorkExcel1">
+		SELECT
+			CONCAT(SUBSTRING(hol.ST_DT, 1, 4), '-', SUBSTRING(hol.ST_DT, 5, 2), '-', SUBSTRING(hol.ST_DT, 7, 2)) AS ST_DT,
+			CONCAT(SUBSTRING(hol.ED_DT, 1, 4), '-', SUBSTRING(hol.ED_DT, 5, 2), '-', SUBSTRING(hol.ED_DT, 7, 2)) AS ED_DT,
+			hol.ST_TM AS ST_TM,
+			hol.ED_TM AS ED_TM,
+			hol.PERIOD AS PERIOD,
+			IF((hol.CONFIRM_YN = 'Y'), hol.COST, 0) AS COST_CONFIRMED,
+			IF((hol.CONFIRM_YN = 'Y'), 0, hol.COST) AS COST_EXPECTED,
+			hol.COST AS COST_ALL,
+			hol.CONFIRM_YN AS CONFIRM_YN,
+			hol.USER_NO AS USER_NO,
+			usr.USER_NM AS USER_NM,
+			usr.USER_ID AS USER_ID,
+			FN_GET_ORGID_HISTORY(hol.USER_NO, hol.ST_DT) AS ORG_ID,
+			FN_GET_ORGNM_HISTORY(hol.USER_NO, hol.ST_DT) AS ORG_NM,
+			FN_GET_COMPID_HISTORY(hol.USER_NO, hol.ST_DT) AS COMP_ID,
+			FN_GET_COMPNM_HISTORY(hol.USER_NO, hol.ST_DT) AS COMP_NM,
+			hol.PRJ_ID AS PRJ_ID,
+			prj.PRJ_CD AS PRJ_CD,
+			prj.PRJ_NM AS PRJ_NM,
+			hol.DOC_ID AS DOC_ID,
+			hol.DOC_SN AS DOC_SN,
+			hol.DOC_CN AS DOC_CN,
+			CONCAT(usr.USER_NM, '-', hol.ST_DT, '-', hol.ST_TM) AS ROW_CODE,
+			'item' AS ROW_TYPE,
+			hol.HANDLE_DT AS HANDLE_DT,
+			hol.HANDLE_STAT AS HANDLE_STAT
+		FROM
+			(
+				SELECT
+					a.ST_DT AS ST_DT,
+					a.ED_DT AS ED_DT,
+					a.ST_TM AS ST_TM,
+					a.ED_TM AS ED_TM,
+					a.PERIOD AS PERIOD,
+					a.COST AS COST,
+					b.DOC_ID AS DOC_ID,
+					b.SUBJECT AS DOC_SN,
+					b.CONTENT AS DOC_CN,
+					a.PRJ_ID AS PRJ_ID,
+					b.WRITER_NO AS USER_NO,
+					IF((b.DOC_STAT IN ('APP004', 'APP005') AND b.NEW_AT = '1'), 'Y', 'N') AS CONFIRM_YN,
+					b.HANDLE_DT AS HANDLE_DT,
+					b.HANDLE_STAT AS HANDLE_STAT
+				FROM
+					TBL_EAPP_HOL a
+					INNER JOIN TBL_EAPP_DOC b
+						ON a.DOC_ID = b.DOC_ID
+						AND (
+							(b.DOC_STAT IN ('APP004', 'APP005') AND b.NEW_AT = '1')
+							<isNotEmpty property="includeResult"><isEqual prepend="OR" property="includeResult" compareValue="Y">
+								b.DOC_STAT IN ('APP001', 'APP002', 'APP003')
+							</isEqual></isNotEmpty>
+						)
+				WHERE
+					DATEDIFF(#endDt#, a.ST_DT) >= 0
+					AND DATEDIFF(a.ST_DT, #startDt#) >= 0
+					<isNotEmpty prepend="AND" property="compId">
+						FN_GET_COMPID_HISTORY(b.WRITER_NO, a.ST_DT) = #compId# 
+					</isNotEmpty>
+			) hol
+			LEFT JOIN TBL_USERINFO usr
+				ON hol.USER_NO = usr.NO
+			LEFT JOIN TBL_PRJ prj
+				ON hol.PRJ_ID = prj.PRJ_ID
+		
+		UNION ALL
+		
+		SELECT
+			'' AS ST_DT,
+			'' AS ED_DT,
+			'' AS ST_TM,
+			'' AS ED_TM,
+			SUM(hol.PERIOD) AS PERIOD,
+			SUM(IF((hol.CONFIRM_YN = 'Y'), hol.COST, 0)) AS COST_CONFIRMED,
+			SUM(IF((hol.CONFIRM_YN = 'Y'), 0, hol.COST)) AS COST_EXPECTED,
+			SUM(hol.COST) AS COST_ALL,
+			'' AS CONFIRM_YN,
+			hol.USER_NO AS USER_NO,
+			usr.USER_NM AS USER_NM,
+			usr.USER_ID AS USER_ID,
+			usr.ORGNZT_ID AS ORG_ID,
+			FN_CREATE_ORGAN_FNM(usr.ORGNZT_ID) AS ORG_NM,
+			usr.COMPNY_ID AS COMP_ID,
+			compCode.CODE_NM AS COMP_NM,
+			'' AS PRJ_ID,
+			'' AS PRJ_CD,
+			'' AS PRJ_NM,
+			'' AS DOC_ID,
+			'' AS DOC_SN,
+			'' AS DOC_CN,
+			CONCAT(usr.USER_NM, '-', 'SUBTOTAL') AS ROW_CODE,
+			'subtotal' AS ROW_TYPE,
+			hol.HANDLE_DT AS HANDLE_DT,
+			hol.HANDLE_STAT AS HANDLE_STAT
+		FROM
+			(
+				SELECT
+					a.ST_DT AS ST_DT,
+					a.ED_DT AS ED_DT,
+					a.ST_TM AS ST_TM,
+					a.ED_TM AS ED_TM,
+					a.PERIOD AS PERIOD,
+					a.COST AS COST,
+					b.DOC_ID AS DOC_ID,
+					b.SUBJECT AS DOC_SN,
+					b.CONTENT AS DOC_CN,
+					a.PRJ_ID AS PRJ_ID,
+					b.WRITER_NO AS USER_NO,
+					IF((b.DOC_STAT IN ('APP004', 'APP005') AND b.NEW_AT = '1'), 'Y', 'N') AS CONFIRM_YN,
+					b.HANDLE_DT AS HANDLE_DT,
+					b.HANDLE_STAT AS HANDLE_STAT
+				FROM
+					TBL_EAPP_HOL a
+					INNER JOIN TBL_EAPP_DOC b
+						ON a.DOC_ID = b.DOC_ID
+						AND (
+							(b.DOC_STAT IN ('APP004', 'APP005') AND b.NEW_AT = '1')
+							<isNotEmpty property="includeResult"><isEqual prepend="OR" property="includeResult" compareValue="Y">
+								b.DOC_STAT IN ('APP001', 'APP002', 'APP003')
+							</isEqual></isNotEmpty>
+						)
+				WHERE
+					DATEDIFF(#endDt#, a.ST_DT) >= 0
+					AND DATEDIFF(a.ST_DT, #startDt#) >= 0
+					<isNotEmpty prepend="AND" property="compId">
+						FN_GET_COMPID_HISTORY(b.WRITER_NO, a.ST_DT) = #compId# 
+					</isNotEmpty>
+			) hol
+			LEFT JOIN TBL_USERINFO usr
+				ON hol.USER_NO = usr.NO
+			LEFT JOIN COMTCCMMNDETAILCODE compCode
+				ON compCode.CODE_ID = 'KMS007'
+				AND usr.COMPNY_ID = compCode.CODE
+		GROUP BY hol.USER_NO
+		
+		UNION ALL
+		
+		SELECT
+			'' AS ST_DT,
+			'' AS ED_DT,
+			'' AS ST_TM,
+			'' AS ED_TM,
+			SUM(hol.PERIOD) AS PERIOD,
+			SUM(IF((hol.CONFIRM_YN = 'Y'), hol.COST, 0)) AS COST_CONFIRMED,
+			SUM(IF((hol.CONFIRM_YN = 'Y'), 0, hol.COST)) AS COST_EXPECTED,
+			SUM(hol.COST) AS COST_ALL,
+			'' AS CONFIRM_YN,
+			'' AS USER_NO,
+			'' AS USER_NM,
+			'' AS USER_ID,
+			'' AS ORG_ID,
+			'' AS ORG_NM,
+			'' AS COMP_ID,
+			'' AS COMP_NM,
+			'' AS PRJ_ID,
+			'' AS PRJ_CD,
+			'' AS PRJ_NM,
+			'' AS DOC_ID,
+			'' AS DOC_SN,
+			'' AS DOC_CN,
+			'TOTAL' AS ROW_CODE,
+			'total' AS ROW_TYPE,
+			hol.HANDLE_DT AS HANDLE_DT,
+			hol.HANDLE_STAT AS HANDLE_STAT
+		FROM
+			(
+				SELECT
+					a.ST_DT AS ST_DT,
+					a.ED_DT AS ED_DT,
+					a.ST_TM AS ST_TM,
+					a.ED_TM AS ED_TM,
+					a.PERIOD AS PERIOD,
+					a.COST AS COST,
+					b.DOC_ID AS DOC_ID,
+					b.SUBJECT AS DOC_SN,
+					b.CONTENT AS DOC_CN,
+					a.PRJ_ID AS PRJ_ID,
+					b.WRITER_NO AS USER_NO,
+					IF((b.DOC_STAT IN ('APP004', 'APP005') AND b.NEW_AT = '1'), 'Y', 'N') AS CONFIRM_YN,
+					b.HANDLE_DT AS HANDLE_DT,
+					b.HANDLE_STAT AS HANDLE_STAT
+				FROM
+					TBL_EAPP_HOL a
+					INNER JOIN TBL_EAPP_DOC b
+						ON a.DOC_ID = b.DOC_ID
+						AND (
+							(b.DOC_STAT IN ('APP004', 'APP005') AND b.NEW_AT = '1')
+							<isNotEmpty property="includeResult"><isEqual prepend="OR" property="includeResult" compareValue="Y">
+								b.DOC_STAT IN ('APP001', 'APP002', 'APP003')
+							</isEqual></isNotEmpty>
+						)
+				WHERE
+					DATEDIFF(#endDt#, a.ST_DT) >= 0
+					AND DATEDIFF(a.ST_DT, #startDt#) >= 0
+					<isNotEmpty prepend="AND" property="compId">
+						FN_GET_COMPID_HISTORY(b.WRITER_NO, a.ST_DT) = #compId# 
+					</isNotEmpty>
+			) hol
+			LEFT JOIN TBL_USERINFO usr
+				ON hol.USER_NO = usr.NO
+				
+		ORDER BY
+			IF(ROW_TYPE = 'total', 2, 1),
+			ROW_CODE
+		</select>
+
+	<select id="AdminStatisticsDAO.selectCarReservationExcel1" resultClass="egovMap">
+		SELECT
+			a.CAR_ID AS CAR_ID
+			, c.CAR_TYP AS CAR_TYP
+			, CONCAT(SUBSTRING(a.ST_DT, 1, 4), '-', SUBSTRING(a.ST_DT, 5, 2), '-', SUBSTRING(a.ST_DT, 7, 2)) AS ST_DT
+			, CONCAT(LPAD(a.ST_TM, 2, '0'), ':00') AS ST_TM
+			, CONCAT(SUBSTRING(a.ED_DT, 1, 4), '-', SUBSTRING(a.ED_DT, 5, 2), '-', SUBSTRING(a.ED_DT, 7, 2)) AS ED_DT
+			, CONCAT(LPAD(a.ED_TM, 2, '0'), ':00') AS ED_TM
+			, a.PURPOSE AS PURPOSE
+			, a.DESTINATION AS DESTINATION
+			, a.RSV_NOTE AS RSV_NOTE
+			, b.NO AS USER_NO
+			, b.USER_ID AS USER_ID
+			, b.USER_NM AS USER_NM
+		FROM
+			TBL_CAR_RESERVATION a
+			INNER JOIN TBL_USERINFO b
+				ON a.USER_NO = b.NO
+			INNER JOIN TBL_CAR c
+				ON a.CAR_ID = c.CAR_ID
+		WHERE
+			DATEDIFF(#endDt#, a.ST_DT) >= 0
+			AND DATEDIFF(a.ST_DT, #startDt#) >= 0
+		<isNotEmpty property="persUseOnly"><isEqual property="persUseOnly" compareValue="true">
+			AND a.PURPOSE = 'P' 
+		</isEqual></isNotEmpty>
+		ORDER BY
+			ST_DT
+			, ST_TM
+			, ED_DT
+			, ED_TM
+	</select>
+	
+	<select id="AdminStatisticsDAO.selectComplexProjectReportExcel1" resultMap="selectComplexProjectReportExcel1">
+		<![CDATA[
+		SELECT
+			orgnzt.ORGNZT_NM AS USER_ORG_NM
+			, userYearlyProjectRatio.USER_NM AS USER_NM		
+			, userYearlyProjectRatio.PRJ_CD AS PRJ_CD
+			, userYearlyProjectRatio.PRJ_NM AS PRJ_NM
+			, userYearlyProjectRatio.PRJ_ORG_NM AS PRJ_ORG_NM
+			, userYearlyProjectRatio.RATIO AS ORG_RATIO
+			, IFNULL(projectChain.REPEAT_COUNT, 1) AS REPEAT_COUNT
+			, (userYearlyProjectRatio.RATIO / IFNULL(projectChain.REPEAT_COUNT, 1)) AS REAL_RATIO
+			, prjResult.SALES_OUT AS SALES_OUT
+			, prjResult.SALES_IN AS SALES_IN
+			, prjResult.PURCHASE_OUT AS PURCHASE_OUT
+			, prjResult.PURCHASE_IN_NORMAL AS PURCHASE_IN_NORMAL
+			, prjResult.SALES_OUT + prjResult.SALES_IN
+				- prjResult.PURCHASE_OUT - prjResult.PURCHASE_IN_NORMAL AS SALES_PROFIT
+			, prjResult.labor AS LABOR
+			, prjResult.exp AS EXP
+			, prjResult.PURCHASE_IN_COMMON AS PURCHASE_IN_COMMON
+			, prjResult.SALES_OUT + prjResult.SALES_IN
+				- prjResult.PURCHASE_OUT - prjResult.PURCHASE_IN_NORMAL
+				- prjResult.LABOR - prjResult.EXP - prjResult.PURCHASE_IN_COMMON AS TOTAL_PROFIT
+			, IFNULL(projectChain.PRJ_SALES_IN_LABOR, 0) AS PRJ_SALES_IN_LABOR
+			
+			, projectChain.P1_PRJ_CD AS P1_PRJ_CD
+			, projectChain.P1_PRJ_NM AS P1_PRJ_NM
+			, projectChain.P1_ORG_NM AS P1_ORG_NM
+			, projectChain.P1_SALES_OUT AS P1_SALES_OUT
+			, projectChain.P1_SALES_IN AS P1_SALES_IN
+			, projectChain.P1_PURCHASE_OUT AS P1_PURCHASE_OUT
+			, projectChain.P1_PURCHASE_IN_NORMAL AS P1_PURCHASE_IN_NORMAL
+			, projectChain.P1_SALES_PROFIT AS P1_SALES_PROFIT
+			, projectChain.P1_LABOR AS P1_LABOR
+			, projectChain.P1_EXP AS P1_EXP
+			, projectChain.P1_PURCHASE_IN_COMMON AS P1_PURCHASE_IN_COMMON
+			, projectChain.P1_TOTAL_PROFIT AS P1_TOTAL_PROFIT
+			, projectChain.P1_PRJ_SALES_IN_LABOR AS P1_PRJ_SALES_IN_LABOR
+			
+			, projectChain.P2_PRJ_CD AS P2_PRJ_CD
+			, projectChain.P2_PRJ_NM AS P2_PRJ_NM
+			, projectChain.P2_ORG_NM AS P2_ORG_NM
+			, projectChain.P2_SALES_OUT AS P2_SALES_OUT
+			, projectChain.P2_SALES_IN AS P2_SALES_IN
+			, projectChain.P2_PURCHASE_OUT AS P2_PURCHASE_OUT
+			, projectChain.P2_PURCHASE_IN_NORMAL AS P2_PURCHASE_IN_NORMAL
+			, projectChain.P2_SALES_PROFIT AS P2_SALES_PROFIT
+			, projectChain.P2_LABOR AS P2_LABOR
+			, projectChain.P2_EXP AS P2_EXP
+			, projectChain.P2_PURCHASE_IN_COMMON AS P2_PURCHASE_IN_COMMON
+			, projectChain.P2_TOTAL_PROFIT AS P2_TOTAL_PROFIT
+			, projectChain.P2_PRJ_SALES_IN_LABOR AS P2_PRJ_SALES_IN_LABOR
+			
+			, projectChain.P3_PRJ_CD AS P3_PRJ_CD
+			, projectChain.P3_PRJ_NM AS P3_PRJ_NM
+			, projectChain.P3_ORG_NM AS P3_ORG_NM
+			, projectChain.P3_SALES_OUT AS P3_SALES_OUT
+			, projectChain.P3_SALES_IN AS P3_SALES_IN
+			, projectChain.P3_PURCHASE_OUT AS P3_PURCHASE_OUT
+			, projectChain.P3_PURCHASE_IN_NORMAL AS P3_PURCHASE_IN_NORMAL
+			, projectChain.P3_SALES_PROFIT AS P3_SALES_PROFIT
+			, projectChain.P3_LABOR AS P3_LABOR
+			, projectChain.P3_EXP AS P3_EXP
+			, projectChain.P3_PURCHASE_IN_COMMON AS P3_PURCHASE_IN_COMMON
+			, projectChain.P3_TOTAL_PROFIT AS P3_TOTAL_PROFIT
+			, projectChain.P3_PRJ_SALES_IN_LABOR AS P3_PRJ_SALES_IN_LABOR
+			
+			, projectChain.P4_PRJ_CD AS P4_PRJ_CD
+			, projectChain.P4_PRJ_NM AS P4_PRJ_NM
+			, projectChain.P4_ORG_NM AS P4_ORG_NM
+			, projectChain.P4_SALES_OUT AS P4_SALES_OUT
+			, projectChain.P4_SALES_IN AS P4_SALES_IN
+			, projectChain.P4_PURCHASE_OUT AS P4_PURCHASE_OUT
+			, projectChain.P4_PURCHASE_IN_NORMAL AS P4_PURCHASE_IN_NORMAL
+			, projectChain.P4_SALES_PROFIT AS P4_SALES_PROFIT
+			, projectChain.P4_LABOR AS P4_LABOR
+			, projectChain.P4_EXP AS P4_EXP
+			, projectChain.P4_PURCHASE_IN_COMMON AS P4_PURCHASE_IN_COMMON
+			, projectChain.P4_TOTAL_PROFIT AS P4_TOTAL_PROFIT
+			
+			
+		FROM
+			(
+				SELECT
+					userMonthlyProjectRatio.USER_NO AS USER_NO
+					, userMonthlyProjectRatio.USER_NM AS USER_NM
+					, userMonthlyProjectRatio.USER_ID AS USER_ID
+					, userMonthlyProjectRatio.ORGNZT_ID AS ORGNZT_ID
+					, userMonthlyProjectRatio.PRJ_ID AS PRJ_ID
+					, userMonthlyProjectRatio.PRJ_CD AS PRJ_CD
+					, userMonthlyProjectRatio.PRJ_NM AS PRJ_NM
+					, userMonthlyProjectRatio.PRJ_ORG_ID AS PRJ_ORG_ID
+					, userMonthlyProjectRatio.PRJ_ORG_NM AS PRJ_ORG_NM
+					, SUM(userMonthlyProjectRatio.RATIO) AS RATIO
+				FROM
+					(		
+						SELECT
+							prjTm.USER_NO AS USER_NO
+							, prjTm.USER_NM AS USER_NM
+							, prjTm.USER_ID AS USER_ID
+							, prjTm.ORGNZT_ID AS ORGNZT_ID
+							, prjTm.MNTH AS MNTH
+							, prjTm.PRJ_ID AS PRJ_ID
+							, prjTm.PRJ_CD AS PRJ_CD
+							, prjTm.PRJ_NM AS PRJ_NM
+							, prjTm.PRJ_ORG_ID AS PRJ_ORG_ID
+							, prjTm.PRJ_ORG_NM AS PRJ_ORG_NM
+							, prjTm.DAY_REPORT_TM AS PRJ_TM
+							, totTm.DAY_REPORT_TM AS TOT_TM
+							, userWorkDay.DT_CNT AS ATTEND_DT_CNT
+							, totalWorkDay.ALL_DT_CNT AS TOTAL_DT_CNT
+							, (prjTm.DAY_REPORT_TM / totTm.DAY_REPORT_TM) * (userWorkDay.DT_CNT / totalWorkDay.ALL_DT_CNT) * 100 AS RATIO
+						FROM
+							(
+								SELECT
+									usr.NO AS USER_NO,
+									usr.USER_NM AS USER_NM,
+									usr.USER_ID AS USER_ID,
+									usr.ORGNZT_ID AS ORGNZT_ID,
+									SUBSTRING(a.DAY_REPORT_DT, 5, 2) AS MNTH,
+									c.PRJ_ID AS PRJ_ID,
+									d.PRJ_CD AS PRJ_CD,
+									d.PRJ_NM AS PRJ_NM,
+									d.ORGNZT_ID AS PRJ_ORG_ID,
+									e.ORGNZT_NM AS PRJ_ORG_NM,
+									IFNULL(SUM(a.DAY_REPORT_TM),0) AS DAY_REPORT_TM
+								FROM
+									TBL_USERINFO usr
+									INNER JOIN TBL_DAY_REPORT a
+										ON usr.NO = a.USER_NO
+										AND SUBSTRING(a.DAY_REPORT_DT,1,6) BETWEEN #startDt# AND #endDt#
+										AND a.DAY_REPORT_TM > 0
+									INNER JOIN TBL_ATTEND_CHECK chk
+										ON usr.NO = chk.USER_NO
+										AND a.DAY_REPORT_DT = chk.ATTEND_DT
+									INNER JOIN TBL_TASK c ON a.TASK_ID = c.TASK_ID
+									INNER JOIN TBL_PRJ d ON c.PRJ_ID = d.PRJ_ID
+									INNER JOIN TBL_ORGNZT e ON d.ORGNZT_ID = e.ORGNZT_ID
+								GROUP BY USER_NO, MNTH, PRJ_ID
+							) prjTm
+							INNER JOIN (
+									SELECT
+										usr.NO AS USER_NO,
+										SUBSTRING(a.DAY_REPORT_DT, 5, 2) AS MNTH,
+										IFNULL(SUM(a.DAY_REPORT_TM),0) AS DAY_REPORT_TM
+									FROM
+										TBL_USERINFO usr
+										INNER JOIN TBL_DAY_REPORT a
+											ON usr.NO = a.USER_NO
+											AND SUBSTRING(a.DAY_REPORT_DT,1,6) BETWEEN #startDt# AND #endDt#
+											AND a.DAY_REPORT_TM > 0
+										INNER JOIN TBL_ATTEND_CHECK chk
+											ON usr.NO = chk.USER_NO
+											AND a.DAY_REPORT_DT = chk.ATTEND_DT
+										INNER JOIN TBL_TASK c ON a.TASK_ID = c.TASK_ID
+										INNER JOIN TBL_PRJ d ON c.PRJ_ID = d.PRJ_ID
+									GROUP BY USER_NO, MNTH
+								) totTm
+								ON prjTm.USER_NO = totTm.USER_NO
+								AND prjTm.MNTH = totTm.MNTH
+							INNER JOIN (
+									SELECT
+										A.USER_NO AS USER_NO,
+										A.MONTH AS MONTH,
+										A.ATTEND_CNT - IFNULL(B.HOL_ATTEND_CNT, 0) AS DT_CNT
+									FROM
+										(
+											SELECT
+												usr.NO AS USER_NO,
+												SUBSTRING(chk.ATTEND_DT, 5, 2) AS MONTH,
+												COUNT(DISTINCT chk.NO) AS ATTEND_CNT
+											FROM
+												TBL_USERINFO usr
+												INNER JOIN TBL_ATTEND_CHECK chk 
+													ON usr.NO = chk.USER_NO 
+													AND DAYOFWEEK(chk.ATTEND_DT) IN (2, 3, 4, 5, 6) 
+													AND SUBSTRING(chk.ATTEND_DT, 1, 6) BETWEEN #startDt# AND #endDt#
+											GROUP BY USER_NO, MONTH
+										) A
+										LEFT JOIN (
+											SELECT
+												usr.NO AS USER_NO,
+												SUBSTRING(chk.ATTEND_DT, 5, 2) AS MONTH,
+												COUNT(DISTINCT chk.NO) AS HOL_ATTEND_CNT
+											FROM
+												TBL_USERINFO usr
+												INNER JOIN TBL_ATTEND_CHECK chk 
+													ON usr.NO = chk.USER_NO 
+													AND DAYOFWEEK(chk.ATTEND_DT) IN (2, 3, 4, 5, 6) 
+													AND SUBSTRING(chk.ATTEND_DT, 1, 6) BETWEEN #startDt# AND #endDt#
+												INNER JOIN TBL_SCHEDULE sch 
+													ON sch.SCHE_TYP IN ('H', 'I', 'J') 
+													AND sch.DELETE_YN = 'N'
+													AND chk.ATTEND_DT = sch.SCHE_DATE_ALL
+											GROUP BY USER_NO, MONTH
+										) B ON A.USER_NO = B.USER_NO AND A.MONTH = B.MONTH
+								) userWorkDay
+								ON prjTm.USER_NO = userWorkDay.USER_NO
+								AND prjTm.MNTH = userWorkDay.MONTH
+							INNER JOIN (
+									SELECT
+										SUBSTRING(chk.ATTEND_DT, 5, 2) AS MONTH,
+										COUNT(DISTINCT chk.ATTEND_DT) AS ALL_DT_CNT
+									FROM
+										(
+											SELECT
+												ATTEND_DT
+											FROM
+												TBL_ATTEND_CHECK
+											WHERE
+												DAYOFWEEK(ATTEND_DT) IN (2, 3, 4, 5, 6)
+												AND SUBSTRING(ATTEND_DT, 1, 6) BETWEEN #startDt# AND #endDt#
+											GROUP BY
+												ATTEND_DT
+										) chk
+										LEFT JOIN TBL_SCHEDULE sch
+											ON sch.SCHE_TYP IN ('H', 'I', 'J') 
+											AND sch.DELETE_YN = 'N'
+											AND chk.ATTEND_DT = sch.SCHE_DATE_ALL
+									WHERE
+										sch.SCHE_ID IS NULL
+									GROUP BY MONTH
+								) totalWorkDay
+								ON prjTm.MNTH = totalWorkDay.MONTH
+					) userMonthlyProjectRatio
+				GROUP BY
+					USER_NO, PRJ_ID
+				ORDER BY
+					USER_NO, PRJ_ID
+			) userYearlyProjectRatio
+			LEFT JOIN (
+				SELECT
+					prjList1.PURCHASE_PRJ_ID AS PRJ_ID
+					, prjList2.REPEAT_COUNT AS REPEAT_COUNT
+					, prjList1.PURCHASE_PRJ_CD AS PRJ_CD
+					, prjList1.PURCHASE_PRJ_NM AS PRJ_NM
+					, prjList1.PURCHASE_ORG_NM AS ORG_NM
+					, prjList1.PURCHASE_YEARLY_PRJ_SUM AS PRJ_SALES_IN_LABOR
+					
+					, prjList1.SALES_PRJ_ID_1 AS P1_PRJ_ID
+					, prjList1.SALES_PRJ_CD_1 AS P1_PRJ_CD
+					, prjList1.SALES_PRJ_NM_1 AS P1_PRJ_NM
+					, prjList1.SALES_ORG_NM_1 AS P1_ORG_NM
+					, salesPrjResult1.SALES_OUT AS P1_SALES_OUT
+					, salesPrjResult1.SALES_IN AS P1_SALES_IN
+					, salesPrjResult1.PURCHASE_OUT AS P1_PURCHASE_OUT
+					, salesPrjResult1.PURCHASE_IN_NORMAL AS P1_PURCHASE_IN_NORMAL
+					, salesPrjResult1.SALES_OUT + salesPrjResult1.SALES_IN
+						- salesPrjResult1.PURCHASE_OUT - salesPrjResult1.PURCHASE_IN_NORMAL AS P1_SALES_PROFIT
+					, salesPrjResult1.labor AS P1_LABOR
+					, salesPrjResult1.exp AS P1_EXP
+					, salesPrjResult1.PURCHASE_IN_COMMON AS P1_PURCHASE_IN_COMMON
+					, salesPrjResult1.SALES_OUT + salesPrjResult1.SALES_IN
+						- salesPrjResult1.PURCHASE_OUT - salesPrjResult1.PURCHASE_IN_NORMAL
+						- salesPrjResult1.LABOR - salesPrjResult1.EXP - salesPrjResult1.PURCHASE_IN_COMMON AS P1_TOTAL_PROFIT
+					, prjList1.SALES_YEARLY_PRJ_SUM_1 AS P1_PRJ_SALES_IN_LABOR
+					
+					, prjList1.SALES_PRJ_ID_2 AS P2_PRJ_ID
+					, prjList1.SALES_PRJ_CD_2 AS P2_PRJ_CD
+					, prjList1.SALES_PRJ_NM_2 AS P2_PRJ_NM
+					, prjList1.SALES_ORG_NM_2 AS P2_ORG_NM
+					, salesPrjResult2.SALES_OUT AS P2_SALES_OUT
+					, salesPrjResult2.SALES_IN AS P2_SALES_IN
+					, salesPrjResult2.PURCHASE_OUT AS P2_PURCHASE_OUT
+					, salesPrjResult2.PURCHASE_IN_NORMAL AS P2_PURCHASE_IN_NORMAL
+					, salesPrjResult2.SALES_OUT + salesPrjResult2.SALES_IN
+						- salesPrjResult2.PURCHASE_OUT - salesPrjResult2.PURCHASE_IN_NORMAL AS P2_SALES_PROFIT
+					, salesPrjResult2.labor AS P2_LABOR
+					, salesPrjResult2.exp AS P2_EXP
+					, salesPrjResult2.PURCHASE_IN_COMMON AS P2_PURCHASE_IN_COMMON
+					, salesPrjResult2.SALES_OUT + salesPrjResult2.SALES_IN
+						- salesPrjResult2.PURCHASE_OUT - salesPrjResult2.PURCHASE_IN_NORMAL
+						- salesPrjResult2.LABOR - salesPrjResult2.EXP - salesPrjResult2.PURCHASE_IN_COMMON AS P2_TOTAL_PROFIT
+					, prjList1.SALES_YEARLY_PRJ_SUM_2 AS P2_PRJ_SALES_IN_LABOR
+		
+					, prjList1.SALES_PRJ_ID_3 AS P3_PRJ_ID
+					, prjList1.SALES_PRJ_CD_3 AS P3_PRJ_CD
+					, prjList1.SALES_PRJ_NM_3 AS P3_PRJ_NM
+					, prjList1.SALES_ORG_NM_3 AS P3_ORG_NM
+					, salesPrjResult3.SALES_OUT AS P3_SALES_OUT
+					, salesPrjResult3.SALES_IN AS P3_SALES_IN
+					, salesPrjResult3.PURCHASE_OUT AS P3_PURCHASE_OUT
+					, salesPrjResult3.PURCHASE_IN_NORMAL AS P3_PURCHASE_IN_NORMAL
+					, salesPrjResult3.SALES_OUT + salesPrjResult3.SALES_IN
+						- salesPrjResult3.PURCHASE_OUT - salesPrjResult3.PURCHASE_IN_NORMAL AS P3_SALES_PROFIT
+					, salesPrjResult3.labor AS P3_LABOR
+					, salesPrjResult3.exp AS P3_EXP
+					, salesPrjResult3.PURCHASE_IN_COMMON AS P3_PURCHASE_IN_COMMON
+					, salesPrjResult3.SALES_OUT + salesPrjResult3.SALES_IN
+						- salesPrjResult3.PURCHASE_OUT - salesPrjResult3.PURCHASE_IN_NORMAL
+						- salesPrjResult3.LABOR - salesPrjResult3.EXP - salesPrjResult3.PURCHASE_IN_COMMON AS P3_TOTAL_PROFIT
+					, prjList1.SALES_YEARLY_PRJ_SUM_3 AS P3_PRJ_SALES_IN_LABOR
+		
+					, prjList1.SALES_PRJ_ID_4 AS P4_PRJ_ID
+					, prjList1.SALES_PRJ_CD_4 AS P4_PRJ_CD
+					, prjList1.SALES_PRJ_NM_4 AS P4_PRJ_NM
+					, prjList1.SALES_ORG_NM_4 AS P4_ORG_NM
+					, salesPrjResult4.SALES_OUT AS P4_SALES_OUT
+					, salesPrjResult4.SALES_IN AS P4_SALES_IN
+					, salesPrjResult4.PURCHASE_OUT AS P4_PURCHASE_OUT
+					, salesPrjResult4.PURCHASE_IN_NORMAL AS P4_PURCHASE_IN_NORMAL
+					, salesPrjResult4.SALES_OUT + salesPrjResult4.SALES_IN
+						- salesPrjResult4.PURCHASE_OUT - salesPrjResult4.PURCHASE_IN_NORMAL AS P4_SALES_PROFIT
+					, salesPrjResult4.labor AS P4_LABOR
+					, salesPrjResult4.exp AS P4_EXP
+					, salesPrjResult4.PURCHASE_IN_COMMON AS P4_PURCHASE_IN_COMMON
+					, salesPrjResult4.SALES_OUT + salesPrjResult4.SALES_IN
+						- salesPrjResult4.PURCHASE_OUT - salesPrjResult4.PURCHASE_IN_NORMAL
+						- salesPrjResult4.LABOR - salesPrjResult4.EXP - salesPrjResult4.PURCHASE_IN_COMMON AS P4_TOTAL_PROFIT
+		
+				FROM
+					(
+						SELECT
+							aaaa.PURCHASE_PRJ_ID AS PURCHASE_PRJ_ID
+							, aaaa.PURCHASE_PRJ_CD AS PURCHASE_PRJ_CD
+							, aaaa.PURCHASE_PRJ_NM AS PURCHASE_PRJ_NM
+							, aaaa.PURCHASE_ORG_ID AS PURCHASE_ORG_ID
+							, aaaa.PURCHASE_ORG_NM AS PURCHASE_ORG_NM
+							, IFNULL(aaaa.PURCHASE_YEARLY_PRJ_SUM, 0) AS PURCHASE_YEARLY_PRJ_SUM
+							
+							, aaaa.SALES_PRJ_ID_1 AS SALES_PRJ_ID_1
+							, aaaa.SALES_PRJ_CD_1 AS SALES_PRJ_CD_1
+							, aaaa.SALES_PRJ_NM_1 AS SALES_PRJ_NM_1
+							, aaaa.SALES_ORG_ID_1 AS SALES_ORG_ID_1
+							, aaaa.SALES_ORG_NM_1 AS SALES_ORG_NM_1
+							, IFNULL(aaaa.SALES_YEARLY_PRJ_SUM_1, 0) AS SALES_YEARLY_PRJ_SUM_1
+							
+							, aaaa.SALES_PRJ_ID_2 AS SALES_PRJ_ID_2
+							, aaaa.SALES_PRJ_CD_2 AS SALES_PRJ_CD_2
+							, aaaa.SALES_PRJ_NM_2 AS SALES_PRJ_NM_2
+							, aaaa.SALES_ORG_ID_2 AS SALES_ORG_ID_2
+							, aaaa.SALES_ORG_NM_2 AS SALES_ORG_NM_2
+							, IFNULL(aaaa.SALES_YEARLY_PRJ_SUM_2, 0) AS SALES_YEARLY_PRJ_SUM_2
+		
+							, aaaa.SALES_PRJ_ID_3 AS SALES_PRJ_ID_3
+							, aaaa.SALES_PRJ_CD_3 AS SALES_PRJ_CD_3
+							, aaaa.SALES_PRJ_NM_3 AS SALES_PRJ_NM_3
+							, aaaa.SALES_ORG_ID_3 AS SALES_ORG_ID_3
+							, aaaa.SALES_ORG_NM_3 AS SALES_ORG_NM_3
+							, IFNULL(bbbb.PURCHASE_YEARLY_PRJ_SUM_4, 0) AS SALES_YEARLY_PRJ_SUM_3
+		
+							, bbbb.SALES_PRJ_ID_4 AS SALES_PRJ_ID_4
+							, bbbb.SALES_PRJ_CD_4 AS SALES_PRJ_CD_4
+							, bbbb.SALES_PRJ_NM_4 AS SALES_PRJ_NM_4
+							, bbbb.SALES_ORG_ID_4 AS SALES_ORG_ID_4
+							, bbbb.SALES_ORG_NM_4 AS SALES_ORG_NM_4
+						FROM
+							(
+								SELECT
+									aaa.PURCHASE_PRJ_ID AS PURCHASE_PRJ_ID
+									, aaa.PURCHASE_PRJ_CD AS PURCHASE_PRJ_CD
+									, aaa.PURCHASE_PRJ_NM AS PURCHASE_PRJ_NM
+									, aaa.PURCHASE_ORG_ID AS PURCHASE_ORG_ID
+									, aaa.PURCHASE_ORG_NM AS PURCHASE_ORG_NM
+									, aaa.PURCHASE_PRJ_ORG_TREE AS PURCHASE_PRJ_ORG_TREE
+									, IFNULL(aaa.PURCHASE_YEARLY_PRJ_SUM, 0) AS PURCHASE_YEARLY_PRJ_SUM
+		
+									, aaa.SALES_PRJ_ID_1 AS SALES_PRJ_ID_1
+									, aaa.SALES_PRJ_CD_1 AS SALES_PRJ_CD_1
+									, aaa.SALES_PRJ_NM_1 AS SALES_PRJ_NM_1
+									, aaa.SALES_ORG_ID_1 AS SALES_ORG_ID_1
+									, aaa.SALES_ORG_NM_1 AS SALES_ORG_NM_1
+									, aaa.SALES_PRJ_ORG_TREE_1 AS SALES_PRJ_ORG_TREE_1
+									, IFNULL(aaa.SALES_YEARLY_PRJ_SUM_1, 0) AS SALES_YEARLY_PRJ_SUM_1
+		
+									, aaa.SALES_PRJ_ID_2 AS SALES_PRJ_ID_2
+									, aaa.SALES_PRJ_CD_2 AS SALES_PRJ_CD_2
+									, aaa.SALES_PRJ_NM_2 AS SALES_PRJ_NM_2
+									, aaa.SALES_ORG_ID_2 AS SALES_ORG_ID_2
+									, aaa.SALES_ORG_NM_2 AS SALES_ORG_NM_2
+									, aaa.SALES_PRJ_ORG_TREE_2 AS SALES_PRJ_ORG_TREE_2
+									, IFNULL(bbb.PURCHASE_YEARLY_PRJ_SUM_3, 0) AS SALES_YEARLY_PRJ_SUM_2
+		
+									, bbb.SALES_PRJ_ID_3 AS SALES_PRJ_ID_3
+									, bbb.SALES_PRJ_CD_3 AS SALES_PRJ_CD_3
+									, bbb.SALES_PRJ_NM_3 AS SALES_PRJ_NM_3
+									, bbb.SALES_ORG_ID_3 AS SALES_ORG_ID_3
+									, bbb.SALES_ORG_NM_3 AS SALES_ORG_NM_3
+									, bbb.SALES_PRJ_ORG_TREE_3 AS SALES_PRJ_ORG_TREE_3
+								FROM
+									(
+										SELECT
+											aa.PURCHASE_PRJ_ID AS PURCHASE_PRJ_ID
+											, aa.PURCHASE_PRJ_CD AS PURCHASE_PRJ_CD
+											, aa.PURCHASE_PRJ_NM AS PURCHASE_PRJ_NM
+											, aa.PURCHASE_ORG_ID AS PURCHASE_ORG_ID
+											, aa.PURCHASE_ORG_NM AS PURCHASE_ORG_NM
+											, aa.PURCHASE_PRJ_ORG_TREE AS PURCHASE_PRJ_ORG_TREE
+											, IFNULL(aa.PURCHASE_YEARLY_PRJ_SUM, 0) AS PURCHASE_YEARLY_PRJ_SUM
+		
+											, aa.SALES_PRJ_ID_1 AS SALES_PRJ_ID_1
+											, aa.SALES_PRJ_CD_1 AS SALES_PRJ_CD_1
+											, aa.SALES_PRJ_NM_1 AS SALES_PRJ_NM_1
+											, aa.SALES_ORG_ID_1 AS SALES_ORG_ID_1
+											, aa.SALES_ORG_NM_1 AS SALES_ORG_NM_1
+											, aa.SALES_PRJ_ORG_TREE_1 AS SALES_PRJ_ORG_TREE_1
+											, IFNULL(bb.PURCHASE_YEARLY_PRJ_SUM_2, 0) AS SALES_YEARLY_PRJ_SUM_1
+		
+											, bb.SALES_PRJ_ID_2 AS SALES_PRJ_ID_2
+											, bb.SALES_PRJ_CD_2 AS SALES_PRJ_CD_2
+											, bb.SALES_PRJ_NM_2 AS SALES_PRJ_NM_2
+											, bb.SALES_ORG_ID_2 AS SALES_ORG_ID_2
+											, bb.SALES_ORG_NM_2 AS SALES_ORG_NM_2
+											, bb.SALES_PRJ_ORG_TREE_2 AS SALES_PRJ_ORG_TREE_2
+										FROM
+											(
+												SELECT
+													a.purchase_prj_id AS PURCHASE_PRJ_ID
+													, c.prj_cd AS PURCHASE_PRJ_CD
+													, c.prj_nm AS PURCHASE_PRJ_NM
+													, e.orgnzt_id AS PURCHASE_ORG_ID
+													, e.orgnzt_nm AS PURCHASE_ORG_NM
+													, c.org_prj_tree AS PURCHASE_PRJ_ORG_TREE
+													, IFNULL(SUM(a.cost), 0) AS PURCHASE_YEARLY_PRJ_SUM
+													
+													, a.sales_prj_id AS SALES_PRJ_ID_1
+													, d.prj_cd AS SALES_PRJ_CD_1
+													, d.prj_nm AS SALES_PRJ_NM_1
+													, f.orgnzt_id AS SALES_ORG_ID_1
+													, f.orgnzt_nm AS SALES_ORG_NM_1
+													, d.org_prj_tree AS SALES_PRJ_ORG_TREE_1
+												FROM
+													tbl_purchase_in_labor a
+													INNER JOIN tbl_eapp_doc b
+														ON a.doc_id = b.doc_id
+														AND b.new_at = '1'
+													INNER JOIN tbl_prj c
+														ON a.purchase_prj_id = c.prj_id
+													INNER JOIN tbl_prj d
+														ON a.sales_prj_id = d.prj_id
+													INNER JOIN tbl_orgnzt e
+														ON c.orgnzt_id = e.orgnzt_id
+													INNER JOIN tbl_orgnzt f
+														ON d.orgnzt_id = f.orgnzt_id
+												WHERE
+													a.cost > 0
+													AND SUBSTRING(a.purchase_in_dt, 1, 6) BETWEEN #startDt# AND #endDt#
+													AND a.purchase_prj_id != a.sales_prj_id
+												GROUP BY
+													a.purchase_prj_id
+													, a.sales_prj_id
+											) aa
+											LEFT JOIN (
+													SELECT
+														a.purchase_prj_id AS PURCHASE_PRJ_ID_2
+														, c.prj_cd AS PURCHASE_PRJ_CD_2
+														, c.prj_nm AS PURCHASE_PRJ_NM_2
+														, e.orgnzt_id AS PURCHASE_ORG_ID_2
+														, e.orgnzt_nm AS PURCHASE_ORG_NM_2
+														, c.org_prj_tree AS PURCHASE_PRJ_ORG_TREE_2
+														, IFNULL(SUM(a.cost), 0) AS PURCHASE_YEARLY_PRJ_SUM_2
+		
+														, a.sales_prj_id AS SALES_PRJ_ID_2
+														, d.prj_cd AS SALES_PRJ_CD_2
+														, d.prj_nm AS SALES_PRJ_NM_2
+														, f.orgnzt_id AS SALES_ORG_ID_2
+														, f.orgnzt_nm AS SALES_ORG_NM_2
+														, d.org_prj_tree AS SALES_PRJ_ORG_TREE_2
+													FROM
+														tbl_purchase_in_labor a
+														INNER JOIN tbl_eapp_doc b
+															ON a.doc_id = b.doc_id
+															AND b.new_at = '1'
+														INNER JOIN tbl_prj c
+															ON a.purchase_prj_id = c.prj_id
+														INNER JOIN tbl_prj d
+															ON a.sales_prj_id = d.prj_id
+														INNER JOIN tbl_orgnzt e
+															ON c.orgnzt_id = e.orgnzt_id
+														INNER JOIN tbl_orgnzt f
+															ON d.orgnzt_id = f.orgnzt_id
+													WHERE
+														a.cost > 0
+														AND SUBSTRING(a.purchase_in_dt, 1, 6) BETWEEN #startDt# AND #endDt#
+														AND a.purchase_prj_id != a.sales_prj_id
+													GROUP BY
+														a.purchase_prj_id
+														, a.sales_prj_id
+												) bb
+												ON aa.SALES_PRJ_ID_1 = bb.PURCHASE_PRJ_ID_2
+												AND aa.PURCHASE_PRJ_ID != bb.SALES_PRJ_ID_2
+										GROUP BY
+											aa.PURCHASE_PRJ_ID
+											, aa.SALES_PRJ_ID_1
+											, bb.SALES_PRJ_ID_2
+									) aaa
+									LEFT JOIN (
+											SELECT
+												a.purchase_prj_id AS PURCHASE_PRJ_ID_3
+												, c.prj_cd AS PURCHASE_PRJ_CD_3
+												, c.prj_nm AS PURCHASE_PRJ_NM_3
+												, e.orgnzt_id AS PURCHASE_ORG_ID_3
+												, e.orgnzt_nm AS PURCHASE_ORG_NM_3
+												, c.org_prj_tree AS PURCHASE_PRJ_ORG_TREE_3
+												, IFNULL(SUM(a.cost), 0) AS PURCHASE_YEARLY_PRJ_SUM_3
+		
+												, a.sales_prj_id AS SALES_PRJ_ID_3
+												, d.prj_cd AS SALES_PRJ_CD_3
+												, d.prj_nm AS SALES_PRJ_NM_3
+												, f.orgnzt_id AS SALES_ORG_ID_3
+												, f.orgnzt_nm AS SALES_ORG_NM_3
+												, d.org_prj_tree AS SALES_PRJ_ORG_TREE_3
+											FROM
+												tbl_purchase_in_labor a
+												INNER JOIN tbl_eapp_doc b
+													ON a.doc_id = b.doc_id
+													AND b.new_at = '1'
+												INNER JOIN tbl_prj c
+													ON a.purchase_prj_id = c.prj_id
+												INNER JOIN tbl_prj d
+													ON a.sales_prj_id = d.prj_id
+												INNER JOIN tbl_orgnzt e
+													ON c.orgnzt_id = e.orgnzt_id
+												INNER JOIN tbl_orgnzt f
+													ON d.orgnzt_id = f.orgnzt_id
+											WHERE
+												a.cost > 0
+												AND SUBSTRING(a.purchase_in_dt, 1, 6) BETWEEN #startDt# AND #endDt#
+												AND a.purchase_prj_id != a.sales_prj_id
+											GROUP BY
+												a.purchase_prj_id
+												, a.sales_prj_id
+										) bbb
+										ON aaa.SALES_PRJ_ID_2 = bbb.PURCHASE_PRJ_ID_3
+										AND aaa.PURCHASE_PRJ_ID != bbb.SALES_PRJ_ID_3
+										AND aaa.SALES_PRJ_ID_1 != bbb.SALES_PRJ_ID_3
+								GROUP BY
+									aaa.PURCHASE_PRJ_ID
+									, aaa.SALES_PRJ_ID_1
+									, aaa.SALES_PRJ_ID_2
+									, bbb.SALES_PRJ_ID_3
+							) aaaa
+							LEFT JOIN (
+									SELECT
+										a.purchase_prj_id AS PURCHASE_PRJ_ID_4
+										, c.prj_cd AS PURCHASE_PRJ_CD_4
+										, c.prj_nm AS PURCHASE_PRJ_NM_4
+										, e.orgnzt_id AS PURCHASE_ORG_ID_4
+										, e.orgnzt_nm AS PURCHASE_ORG_NM_4
+										, c.org_prj_tree AS PURCHASE_PRJ_ORG_TREE_4
+										, IFNULL(SUM(a.cost), 0) AS PURCHASE_YEARLY_PRJ_SUM_4
+		
+										, a.sales_prj_id AS SALES_PRJ_ID_4
+										, d.prj_cd AS SALES_PRJ_CD_4
+										, d.prj_nm AS SALES_PRJ_NM_4
+										, f.orgnzt_id AS SALES_ORG_ID_4
+										, f.orgnzt_nm AS SALES_ORG_NM_4
+										, d.org_prj_tree AS SALES_PRJ_ORG_TREE_4
+									FROM
+										tbl_purchase_in_labor a
+										INNER JOIN tbl_eapp_doc b
+											ON a.doc_id = b.doc_id
+											AND b.new_at = '1'
+										INNER JOIN tbl_prj c
+											ON a.purchase_prj_id = c.prj_id
+										INNER JOIN tbl_prj d
+											ON a.sales_prj_id = d.prj_id
+										INNER JOIN tbl_orgnzt e
+											ON c.orgnzt_id = e.orgnzt_id
+										INNER JOIN tbl_orgnzt f
+											ON d.orgnzt_id = f.orgnzt_id
+									WHERE
+										a.cost > 0
+										AND SUBSTRING(a.purchase_in_dt, 1, 6) BETWEEN #startDt# AND #endDt#
+										AND a.purchase_prj_id != a.sales_prj_id
+									GROUP BY
+										a.purchase_prj_id
+										, a.sales_prj_id
+								) bbbb
+								ON aaaa.SALES_PRJ_ID_3 = bbbb.PURCHASE_PRJ_ID_4
+								AND aaaa.PURCHASE_PRJ_ID != bbbb.SALES_PRJ_ID_4
+								AND aaaa.SALES_PRJ_ID_1 != bbbb.SALES_PRJ_ID_4
+								AND aaaa.SALES_PRJ_ID_2 != bbbb.SALES_PRJ_ID_4							
+						GROUP BY
+							aaaa.PURCHASE_PRJ_ID
+							, aaaa.SALES_PRJ_ID_1
+							, aaaa.SALES_PRJ_ID_2
+							, aaaa.SALES_PRJ_ID_3
+							, bbbb.SALES_PRJ_ID_4
+		
+						ORDER BY
+							aaaa.PURCHASE_PRJ_ID
+							, aaaa.SALES_PRJ_ID_1
+							, aaaa.SALES_PRJ_ID_2
+							, aaaa.SALES_PRJ_ID_3
+							, bbbb.SALES_PRJ_ID_4
+					) prjList1
+					LEFT JOIN (
+							SELECT
+								aaaa.PURCHASE_PRJ_ID AS PURCHASE_PRJ_ID
+								, COUNT(*) AS REPEAT_COUNT
+							FROM
+								(
+									SELECT
+										aaa.PURCHASE_PRJ_ID AS PURCHASE_PRJ_ID
+										, aaa.PURCHASE_PRJ_NM AS PURCHASE_PRJ_NM
+										, aaa.PURCHASE_ORG_ID AS PURCHASE_ORG_ID
+										, aaa.PURCHASE_ORG_NM AS PURCHASE_ORG_NM
+										, aaa.PURCHASE_PRJ_ORG_TREE AS PURCHASE_PRJ_ORG_TREE
+										, IFNULL(aaa.PURCHASE_YEARLY_PRJ_SUM, 0) AS PURCHASE_YEARLY_PRJ_SUM
+		
+										, aaa.SALES_PRJ_ID_1 AS SALES_PRJ_ID_1
+										, aaa.SALES_PRJ_NM_1 AS SALES_PRJ_NM_1
+										, aaa.SALES_ORG_ID_1 AS SALES_ORG_ID_1
+										, aaa.SALES_ORG_NM_1 AS SALES_ORG_NM_1
+										, aaa.SALES_PRJ_ORG_TREE_1 AS SALES_PRJ_ORG_TREE_1
+										, IFNULL(aaa.SALES_YEARLY_PRJ_SUM_1, 0) AS SALES_YEARLY_PRJ_SUM_1
+		
+										, aaa.SALES_PRJ_ID_2 AS SALES_PRJ_ID_2
+										, aaa.SALES_PRJ_NM_2 AS SALES_PRJ_NM_2
+										, aaa.SALES_ORG_ID_2 AS SALES_ORG_ID_2
+										, aaa.SALES_ORG_NM_2 AS SALES_ORG_NM_2
+										, aaa.SALES_PRJ_ORG_TREE_2 AS SALES_PRJ_ORG_TREE_2
+										, IFNULL(bbb.PURCHASE_YEARLY_PRJ_SUM_3, 0) AS SALES_YEARLY_PRJ_SUM_2
+		
+										, bbb.SALES_PRJ_ID_3 AS SALES_PRJ_ID_3
+										, bbb.SALES_PRJ_NM_3 AS SALES_PRJ_NM_3
+										, bbb.SALES_ORG_ID_3 AS SALES_ORG_ID_3
+										, bbb.SALES_ORG_NM_3 AS SALES_ORG_NM_3
+										, bbb.SALES_PRJ_ORG_TREE_3 AS SALES_PRJ_ORG_TREE_3
+									FROM
+										(
+											SELECT
+												aa.PURCHASE_PRJ_ID AS PURCHASE_PRJ_ID
+												, aa.PURCHASE_PRJ_NM AS PURCHASE_PRJ_NM
+												, aa.PURCHASE_ORG_ID AS PURCHASE_ORG_ID
+												, aa.PURCHASE_ORG_NM AS PURCHASE_ORG_NM
+												, aa.PURCHASE_PRJ_ORG_TREE AS PURCHASE_PRJ_ORG_TREE
+												, IFNULL(aa.PURCHASE_YEARLY_PRJ_SUM, 0) AS PURCHASE_YEARLY_PRJ_SUM
+		
+												, aa.SALES_PRJ_ID_1 AS SALES_PRJ_ID_1
+												, aa.SALES_PRJ_NM_1 AS SALES_PRJ_NM_1
+												, aa.SALES_ORG_ID_1 AS SALES_ORG_ID_1
+												, aa.SALES_ORG_NM_1 AS SALES_ORG_NM_1
+												, aa.SALES_PRJ_ORG_TREE_1 AS SALES_PRJ_ORG_TREE_1
+												, IFNULL(bb.PURCHASE_YEARLY_PRJ_SUM_2, 0) AS SALES_YEARLY_PRJ_SUM_1
+		
+												, bb.SALES_PRJ_ID_2 AS SALES_PRJ_ID_2
+												, bb.SALES_PRJ_NM_2 AS SALES_PRJ_NM_2
+												, bb.SALES_ORG_ID_2 AS SALES_ORG_ID_2
+												, bb.SALES_ORG_NM_2 AS SALES_ORG_NM_2
+												, bb.SALES_PRJ_ORG_TREE_2 AS SALES_PRJ_ORG_TREE_2
+											FROM
+												(
+													SELECT
+														a.purchase_prj_id AS PURCHASE_PRJ_ID
+														, c.prj_nm AS PURCHASE_PRJ_NM
+														, e.orgnzt_id AS PURCHASE_ORG_ID
+														, e.orgnzt_nm AS PURCHASE_ORG_NM
+														, c.org_prj_tree AS PURCHASE_PRJ_ORG_TREE
+														, IFNULL(SUM(a.cost), 0) AS PURCHASE_YEARLY_PRJ_SUM
+														
+														, a.sales_prj_id AS SALES_PRJ_ID_1
+														, d.prj_nm AS SALES_PRJ_NM_1
+														, f.orgnzt_id AS SALES_ORG_ID_1
+														, f.orgnzt_nm AS SALES_ORG_NM_1
+														, d.org_prj_tree AS SALES_PRJ_ORG_TREE_1
+													FROM
+														tbl_purchase_in_labor a
+														INNER JOIN tbl_eapp_doc b
+															ON a.doc_id = b.doc_id
+															AND b.new_at = '1'
+														INNER JOIN tbl_prj c
+															ON a.purchase_prj_id = c.prj_id
+														INNER JOIN tbl_prj d
+															ON a.sales_prj_id = d.prj_id
+														INNER JOIN tbl_orgnzt e
+															ON c.orgnzt_id = e.orgnzt_id
+														INNER JOIN tbl_orgnzt f
+															ON d.orgnzt_id = f.orgnzt_id
+													WHERE
+														a.cost > 0
+														AND SUBSTRING(a.purchase_in_dt, 1, 6) BETWEEN #startDt# AND #endDt#
+														AND a.purchase_prj_id != a.sales_prj_id
+													GROUP BY
+														a.purchase_prj_id
+														, a.sales_prj_id
+												) aa
+												LEFT JOIN (
+														SELECT
+															a.purchase_prj_id AS PURCHASE_PRJ_ID_2
+															, c.prj_nm AS PURCHASE_PRJ_NM_2
+															, e.orgnzt_id AS PURCHASE_ORG_ID_2
+															, e.orgnzt_nm AS PURCHASE_ORG_NM_2
+															, c.org_prj_tree AS PURCHASE_PRJ_ORG_TREE_2
+															, IFNULL(SUM(a.cost), 0) AS PURCHASE_YEARLY_PRJ_SUM_2
+		
+															, a.sales_prj_id AS SALES_PRJ_ID_2
+															, d.prj_nm AS SALES_PRJ_NM_2
+															, f.orgnzt_id AS SALES_ORG_ID_2
+															, f.orgnzt_nm AS SALES_ORG_NM_2
+															, d.org_prj_tree AS SALES_PRJ_ORG_TREE_2
+														FROM
+															tbl_purchase_in_labor a
+															INNER JOIN tbl_eapp_doc b
+																ON a.doc_id = b.doc_id
+																AND b.new_at = '1'
+															INNER JOIN tbl_prj c
+																ON a.purchase_prj_id = c.prj_id
+															INNER JOIN tbl_prj d
+																ON a.sales_prj_id = d.prj_id
+															INNER JOIN tbl_orgnzt e
+																ON c.orgnzt_id = e.orgnzt_id
+															INNER JOIN tbl_orgnzt f
+																ON d.orgnzt_id = f.orgnzt_id
+														WHERE
+															a.cost > 0
+															AND SUBSTRING(a.purchase_in_dt, 1, 6) BETWEEN #startDt# AND #endDt#
+															AND a.purchase_prj_id != a.sales_prj_id
+														GROUP BY
+															a.purchase_prj_id
+															, a.sales_prj_id
+													) bb
+													ON aa.SALES_PRJ_ID_1 = bb.PURCHASE_PRJ_ID_2
+													AND aa.PURCHASE_PRJ_ID != bb.SALES_PRJ_ID_2
+											GROUP BY
+												aa.PURCHASE_PRJ_ID
+												, aa.SALES_PRJ_ID_1
+												, bb.SALES_PRJ_ID_2
+										) aaa
+										LEFT JOIN (
+												SELECT
+													a.purchase_prj_id AS PURCHASE_PRJ_ID_3
+													, c.prj_nm AS PURCHASE_PRJ_NM_3
+													, e.orgnzt_id AS PURCHASE_ORG_ID_3
+													, e.orgnzt_nm AS PURCHASE_ORG_NM_3
+													, c.org_prj_tree AS PURCHASE_PRJ_ORG_TREE_3
+													, IFNULL(SUM(a.cost), 0) AS PURCHASE_YEARLY_PRJ_SUM_3
+		
+													, a.sales_prj_id AS SALES_PRJ_ID_3
+													, d.prj_nm AS SALES_PRJ_NM_3
+													, f.orgnzt_id AS SALES_ORG_ID_3
+													, f.orgnzt_nm AS SALES_ORG_NM_3
+													, d.org_prj_tree AS SALES_PRJ_ORG_TREE_3
+												FROM
+													tbl_purchase_in_labor a
+													INNER JOIN tbl_eapp_doc b
+														ON a.doc_id = b.doc_id
+														AND b.new_at = '1'
+													INNER JOIN tbl_prj c
+														ON a.purchase_prj_id = c.prj_id
+													INNER JOIN tbl_prj d
+														ON a.sales_prj_id = d.prj_id
+													INNER JOIN tbl_orgnzt e
+														ON c.orgnzt_id = e.orgnzt_id
+													INNER JOIN tbl_orgnzt f
+														ON d.orgnzt_id = f.orgnzt_id
+												WHERE
+													a.cost > 0
+													AND SUBSTRING(a.purchase_in_dt, 1, 6) BETWEEN #startDt# AND #endDt#
+													AND a.purchase_prj_id != a.sales_prj_id
+												GROUP BY
+													a.purchase_prj_id
+													, a.sales_prj_id
+											) bbb
+											ON aaa.SALES_PRJ_ID_2 = bbb.PURCHASE_PRJ_ID_3
+											AND aaa.PURCHASE_PRJ_ID != bbb.SALES_PRJ_ID_3
+											AND aaa.SALES_PRJ_ID_1 != bbb.SALES_PRJ_ID_3
+									GROUP BY
+										aaa.PURCHASE_PRJ_ID
+										, aaa.SALES_PRJ_ID_1
+										, aaa.SALES_PRJ_ID_2
+										, bbb.SALES_PRJ_ID_3
+								) aaaa
+								LEFT JOIN (
+										SELECT
+											a.purchase_prj_id AS PURCHASE_PRJ_ID_4
+											, c.prj_nm AS PURCHASE_PRJ_NM_4
+											, e.orgnzt_id AS PURCHASE_ORG_ID_4
+											, e.orgnzt_nm AS PURCHASE_ORG_NM_4
+											, c.org_prj_tree AS PURCHASE_PRJ_ORG_TREE_4
+											, IFNULL(SUM(a.cost), 0) AS PURCHASE_YEARLY_PRJ_SUM_4
+		
+											, a.sales_prj_id AS SALES_PRJ_ID_4
+											, d.prj_nm AS SALES_PRJ_NM_4
+											, f.orgnzt_id AS SALES_ORG_ID_4
+											, f.orgnzt_nm AS SALES_ORG_NM_4
+											, d.org_prj_tree AS SALES_PRJ_ORG_TREE_4
+										FROM
+											tbl_purchase_in_labor a
+											INNER JOIN tbl_eapp_doc b
+												ON a.doc_id = b.doc_id
+												AND b.new_at = '1'
+											INNER JOIN tbl_prj c
+												ON a.purchase_prj_id = c.prj_id
+											INNER JOIN tbl_prj d
+												ON a.sales_prj_id = d.prj_id
+											INNER JOIN tbl_orgnzt e
+												ON c.orgnzt_id = e.orgnzt_id
+											INNER JOIN tbl_orgnzt f
+												ON d.orgnzt_id = f.orgnzt_id
+										WHERE
+											a.cost > 0
+											AND SUBSTRING(a.purchase_in_dt, 1, 6) BETWEEN #startDt# AND #endDt#
+											AND a.purchase_prj_id != a.sales_prj_id
+										GROUP BY
+											a.purchase_prj_id
+											, a.sales_prj_id
+									) bbbb
+									ON aaaa.SALES_PRJ_ID_3 = bbbb.PURCHASE_PRJ_ID_4
+									AND aaaa.PURCHASE_PRJ_ID != bbbb.SALES_PRJ_ID_4
+									AND aaaa.SALES_PRJ_ID_1 != bbbb.SALES_PRJ_ID_4
+									AND aaaa.SALES_PRJ_ID_2 != bbbb.SALES_PRJ_ID_4								
+							GROUP BY
+								aaaa.PURCHASE_PRJ_ID
+		
+							ORDER BY
+								aaaa.PURCHASE_PRJ_ID
+						) prjList2
+						ON prjList1.PURCHASE_PRJ_ID = prjList2.PURCHASE_PRJ_ID
+					LEFT JOIN (
+							SELECT
+								a.prj_id AS PRJ_ID
+								, IFNULL(SUM(a.sales_out), 0) AS SALES_OUT
+								, IFNULL(SUM(a.sales_in), 0) AS SALES_IN
+								, IFNULL(SUM(a.purchase_out), 0) AS PURCHASE_OUT
+								, IFNULL(SUM(a.purchase_in_normal), 0) AS PURCHASE_IN_NORMAL
+								, IFNULL(SUM(a.purchase_in_common), 0) AS PURCHASE_IN_COMMON
+								, IFNULL(SUM(a.labor), 0) AS LABOR
+								, IFNULL(SUM(a.exp), 0) AS EXP
+							FROM
+								tbl_prj_result_total a
+							WHERE
+								CONCAT(a.year, LPAD(a.month, 2, '0')) BETWEEN #startDt# AND #endDt#
+							GROUP BY
+								a.prj_id
+						) salesPrjResult1
+						ON prjList1.SALES_PRJ_ID_1 = salesPrjResult1.PRJ_ID
+					LEFT JOIN (
+							SELECT
+								a.prj_id AS PRJ_ID
+								, IFNULL(SUM(a.sales_out), 0) AS SALES_OUT
+								, IFNULL(SUM(a.sales_in), 0) AS SALES_IN
+								, IFNULL(SUM(a.purchase_out), 0) AS PURCHASE_OUT
+								, IFNULL(SUM(a.purchase_in_normal), 0) AS PURCHASE_IN_NORMAL
+								, IFNULL(SUM(a.purchase_in_common), 0) AS PURCHASE_IN_COMMON
+								, IFNULL(SUM(a.labor), 0) AS LABOR
+								, IFNULL(SUM(a.exp), 0) AS EXP
+							FROM
+								tbl_prj_result_total a
+							WHERE
+								CONCAT(a.year, LPAD(a.month, 2, '0')) BETWEEN #startDt# AND #endDt#
+							GROUP BY
+								a.prj_id
+						) salesPrjResult2
+						ON prjList1.SALES_PRJ_ID_2 = salesPrjResult2.PRJ_ID
+					LEFT JOIN (
+							SELECT
+								a.prj_id AS PRJ_ID
+								, IFNULL(SUM(a.sales_out), 0) AS SALES_OUT
+								, IFNULL(SUM(a.sales_in), 0) AS SALES_IN
+								, IFNULL(SUM(a.purchase_out), 0) AS PURCHASE_OUT
+								, IFNULL(SUM(a.purchase_in_normal), 0) AS PURCHASE_IN_NORMAL
+								, IFNULL(SUM(a.purchase_in_common), 0) AS PURCHASE_IN_COMMON
+								, IFNULL(SUM(a.labor), 0) AS LABOR
+								, IFNULL(SUM(a.exp), 0) AS EXP
+							FROM
+								tbl_prj_result_total a
+							WHERE
+								CONCAT(a.year, LPAD(a.month, 2, '0')) BETWEEN #startDt# AND #endDt#
+							GROUP BY
+								a.prj_id
+						) salesPrjResult3
+						ON prjList1.SALES_PRJ_ID_3 = salesPrjResult3.PRJ_ID
+					LEFT JOIN (
+							SELECT
+								a.prj_id AS PRJ_ID
+								, IFNULL(SUM(a.sales_out), 0) AS SALES_OUT
+								, IFNULL(SUM(a.sales_in), 0) AS SALES_IN
+								, IFNULL(SUM(a.purchase_out), 0) AS PURCHASE_OUT
+								, IFNULL(SUM(a.purchase_in_normal), 0) AS PURCHASE_IN_NORMAL
+								, IFNULL(SUM(a.purchase_in_common), 0) AS PURCHASE_IN_COMMON
+								, IFNULL(SUM(a.labor), 0) AS LABOR
+								, IFNULL(SUM(a.exp), 0) AS EXP
+							FROM
+								tbl_prj_result_total a
+							WHERE
+								CONCAT(a.year, LPAD(a.month, 2, '0')) BETWEEN #startDt# AND #endDt#
+							GROUP BY
+								a.prj_id
+						) salesPrjResult4
+						ON prjList1.SALES_PRJ_ID_4 = salesPrjResult4.PRJ_ID
+				) projectChain
+				ON userYearlyProjectRatio.PRJ_ID = projectChain.PRJ_ID
+			LEFT JOIN (
+					SELECT
+						a.prj_id AS PRJ_ID
+						, IFNULL(SUM(a.sales_out), 0) AS SALES_OUT
+						, IFNULL(SUM(a.sales_in), 0) AS SALES_IN
+						, IFNULL(SUM(a.purchase_out), 0) AS PURCHASE_OUT
+						, IFNULL(SUM(a.purchase_in_normal), 0) AS PURCHASE_IN_NORMAL
+						, IFNULL(SUM(a.purchase_in_common), 0) AS PURCHASE_IN_COMMON
+						, IFNULL(SUM(a.labor), 0) AS LABOR
+						, IFNULL(SUM(a.exp), 0) AS EXP
+					FROM
+						tbl_prj_result_total a
+					WHERE
+						CONCAT(a.year, LPAD(a.month, 2, '0')) BETWEEN #startDt# AND #endDt#
+					GROUP BY
+						a.prj_id
+				) prjResult
+				ON userYearlyProjectRatio.PRJ_ID = prjResult.PRJ_ID
+			INNER JOIN tbl_orgnzt orgnzt
+				ON userYearlyProjectRatio.ORGNZT_ID = orgnzt.ORGNZT_ID		
+		ORDER BY
+			userYearlyProjectRatio.USER_NO
+			, userYearlyProjectRatio.PRJ_ID
+			, projectChain.P1_PRJ_CD
+			, projectChain.P2_PRJ_CD
+			, projectChain.P3_PRJ_CD
+			, projectChain.P4_PRJ_CD
+		]]>
+	</select>
+
+</sqlMap>

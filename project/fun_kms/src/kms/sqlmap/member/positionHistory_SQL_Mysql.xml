@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="MemberDAO">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="positionHistoryVO" type="kms.com.member.service.PositionHistoryVO"/>
+
+
+	<resultMap id="positionHistory" class="kms.com.member.service.PositionHistoryVO">
+		<result	property="no"				column="NO"					columnIndex="1"/>
+		<result	property="chngCode"			column="CHNG_CODE"			columnIndex="2"/>
+		<result	property="bfrRankId"		column="BFR_RANK_ID"		columnIndex="3"/>
+		<result	property="bfrOrgnztId"		column="BFR_ORGNZT_ID"		columnIndex="4"/>
+		<result	property="bfrPosition"		column="BFR_POSITION"		columnIndex="5"/>
+		<result	property="aftRankId"		column="AFT_RANK_ID"		columnIndex="6"/>
+		<result	property="aftOrgnztId"		column="AFT_ORGNZT_ID"		columnIndex="7"/>
+		<result	property="aftPosition"		column="AFT_POSITION"		columnIndex="8"/>
+		<result	property="chngDt"			column="CHNG_DT"			columnIndex="9"/>
+		<result	property="note"				column="NOTE"				columnIndex="10"/>
+		<result	property="adminNo"			column="ADMIN_NO"			columnIndex="11"/>
+		<result property="lastYn"			column="LAST_YN"			columnIndex="12"/>
+		<result	property="adminNm"			column="ADMIN_NM"			columnIndex="13"/>
+		<result	property="aftRankNm"		column="AFT_RANK_NM"		columnIndex="14"/>
+		<result	property="aftOrgnztNm"		column="AFT_ORGNZT_NM"		columnIndex="15"/>
+		<result	property="headNm"			column="HEAD_NM"			columnIndex="16"/>
+		<result	property="subheadNm"		column="SUBHEAD_NM"			columnIndex="17"/>
+		<result	property="aftPositionNm"	column="AFT_POSITION_NM"	columnIndex="18"/>
+		<result	property="userNo"			column="USER_NO"			columnIndex="19"/>
+		<result	property="bfrCompId"		column="BFR_COMP_ID"		columnIndex="20"/>
+		<result	property="aftCompId"		column="AFT_COMP_ID"		columnIndex="21"/>
+		<result	property="aftCompNm"		column="AFT_COMP_NM"		columnIndex="22"/>
+	</resultMap>
+
+	<resultMap id="positionHistorySearch" class="kms.com.member.service.PositionHistoryVO">
+		<result	property="userNo"			column="USER_NO"			columnIndex="1"/>
+		<result	property="userNm"			column="USER_NM"			columnIndex="2"/>
+		<result	property="userId"			column="USER_ID"			columnIndex="3"/>
+		<result	property="chngCode"			column="CHNG_CODE"			columnIndex="4"/>
+		<result	property="bfrRankId"		column="BFR_RANK_ID"		columnIndex="5"/>
+		<result	property="bfrOrgnztId"		column="BFR_ORGNZT_ID"		columnIndex="6"/>
+		<result	property="bfrPosition"		column="BFR_POSITION"		columnIndex="7"/>
+		<result	property="aftRankId"		column="AFT_RANK_ID"		columnIndex="8"/>
+		<result	property="aftOrgnztId"		column="AFT_ORGNZT_ID"		columnIndex="9"/>
+		<result	property="aftPosition"		column="AFT_POSITION"		columnIndex="10"/>
+		<result	property="chngDt"			column="CHNG_DT"			columnIndex="11"/>
+		<result	property="note"				column="NOTE"				columnIndex="12"/>
+		<result	property="aftRankNm"		column="AFT_RANK_NM"		columnIndex="13"/>
+		<result	property="aftOrgnztNm"		column="AFT_ORGNZT_NM"		columnIndex="14"/>
+		<result	property="headNm"			column="HEAD_NM"			columnIndex="15"/>
+		<result	property="subheadNm"		column="SUBHEAD_NM"			columnIndex="16"/>
+		<result	property="aftPositionNm"	column="AFT_POSITION_NM"	columnIndex="17"/>
+		<result	property="bfrCompId"		column="BFR_COMP_ID"		columnIndex="18"/>
+		<result	property="aftCompId"		column="AFT_COMP_ID"		columnIndex="19"/>
+		<result	property="aftCompNm"		column="AFT_COMP_NM"		columnIndex="20"/>
+	</resultMap>
+	
+
+	
+	
+	
+	
+	<select id="MemberDAO.selectPositionHistoryList" resultMap="positionHistory">
+		SELECT
+			a.NO, a.USER_NO, a.CHNG_CODE,
+			a.BFR_RANK_ID, a.BFR_COMP_ID, a.BFR_ORGNZT_ID, a.BFR_POSITION,
+			a.AFT_RANK_ID, a.AFT_COMP_ID, a.AFT_ORGNZT_ID, a.AFT_POSITION,
+			a.CHNG_DT, a.NOTE, a.ADMIN_NO, b.USER_NM AS ADMIN_NM,
+			c.CODE_NM AS AFT_RANK_NM, e.CODE_NM AS AFT_COMP_NM, a.AFT_ORGNZT_NM,
+			d.POSTCP_NM AS HEAD_NM, d.POSTCP_RNM AS SUBHEAD_NM,
+			a.AFT_POSITION_NM, IF(1 = (@rowNum := @rowNum + 1), 'Y', 'N') AS LAST_YN
+		FROM 
+			TBL_POSITION_HISTORY a
+			LEFT JOIN TBL_USERINFO b ON a.ADMIN_NO = b.NO
+			LEFT JOIN COMTCCMMNDETAILCODE c ON a.AFT_RANK_ID = c.CODE and c.CODE_ID ='KMS003'
+			LEFT JOIN TBL_ORGNZT d ON a.AFT_ORGNZT_ID = d.ORGNZT_ID
+			LEFT JOIN COMTCCMMNDETAILCODE e ON a.AFT_COMP_ID = e.CODE and e.CODE_ID ='KMS007'
+			, (SELECT @rowNum := 0) R
+		WHERE
+			USER_NO = #no#
+		ORDER BY a.CHNG_DT DESC, a.NO DESC
+	</select>
+	
+	<select id="MemberDAO.selectPositionHistory" resultMap="positionHistory">
+		SELECT
+			a.NO, a.USER_NO, a.CHNG_CODE,
+			a.BFR_RANK_ID, a.BFR_COMP_ID, a.BFR_ORGNZT_ID, a.BFR_POSITION,
+			a.AFT_RANK_ID, a.AFT_COMP_ID, a.AFT_ORGNZT_ID, a.AFT_POSITION,
+			a.CHNG_DT, a.NOTE, a.ADMIN_NO, b.USER_NM AS ADMIN_NM,
+			c.CODE_NM AS AFT_RANK_NM, e.CODE_NM AS AFT_COMP_NM, a.AFT_ORGNZT_NM,
+			d.POSTCP_NM AS HEAD_NM, d.POSTCP_RNM AS SUBHEAD_NM,
+			a.AFT_POSITION_NM, 'Y' AS LAST_YN
+		FROM 
+			TBL_POSITION_HISTORY a
+			LEFT JOIN TBL_USERINFO b ON a.ADMIN_NO = b.NO
+			LEFT JOIN COMTCCMMNDETAILCODE c ON a.AFT_RANK_ID = c.CODE and c.CODE_ID ='KMS003'
+			LEFT JOIN TBL_ORGNZT d ON a.AFT_ORGNZT_ID = d.ORGNZT_ID
+			LEFT JOIN COMTCCMMNDETAILCODE e ON a.AFT_COMP_ID = e.CODE and e.CODE_ID ='KMS007'
+		WHERE
+			USER_NO = #no#
+		ORDER BY a.CHNG_DT DESC, a.NO DESC
+		LIMIT 1 OFFSET 0
+	</select>
+	
+	<select id="MemberDAO.selectPositionHistoryByCode" resultMap="positionHistory">
+		SELECT
+			a.NO, a.USER_NO, a.CHNG_CODE,
+			a.BFR_RANK_ID, a.BFR_COMP_ID, a.BFR_ORGNZT_ID, a.BFR_POSITION,
+			a.AFT_RANK_ID, a.AFT_COMP_ID, a.AFT_ORGNZT_ID, a.AFT_POSITION,
+			a.CHNG_DT, a.NOTE, a.ADMIN_NO, b.USER_NM AS ADMIN_NM,
+			c.CODE_NM AS AFT_RANK_NM, e.CODE_NM AS AFT_COMP_NM, a.AFT_ORGNZT_NM,
+			d.POSTCP_NM AS HEAD_NM, d.POSTCP_RNM AS SUBHEAD_NM,
+			a.AFT_POSITION_NM, 'Y' AS LAST_YN
+		FROM 
+			TBL_POSITION_HISTORY a
+			LEFT JOIN TBL_USERINFO b ON a.ADMIN_NO = b.NO
+			LEFT JOIN COMTCCMMNDETAILCODE c ON a.AFT_RANK_ID = c.CODE and c.CODE_ID ='KMS003'
+			LEFT JOIN TBL_ORGNZT d ON a.AFT_ORGNZT_ID = d.ORGNZT_ID
+			LEFT JOIN COMTCCMMNDETAILCODE e ON a.AFT_COMP_ID = e.CODE and e.CODE_ID ='KMS007'
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="userNo">
+				a.USER_NO = #userNo#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="chngCode">
+				a.CHNG_CODE = #chngCode#
+			</isNotEmpty>
+		</dynamic>
+		ORDER BY a.CHNG_DT DESC, a.NO DESC
+		LIMIT 1 OFFSET 0
+	</select>
+
+	<insert id="MemberDAO.insertPositionHistory" parameterClass="positionHistoryVO">
+		INSERT INTO TBL_POSITION_HISTORY
+		(
+			USER_NO, CHNG_CODE, BFR_RANK_ID, BFR_ORGNZT_ID, BFR_POSITION,
+			AFT_RANK_ID, AFT_ORGNZT_ID, AFT_POSITION, CHNG_DT, NOTE, ADMIN_NO,
+			AFT_ORGNZT_NM, AFT_POSITION_NM, BFR_COMP_ID, AFT_COMP_ID
+		) (
+			SELECT
+				#userNo#, #chngCode#, #bfrRankId#, #bfrOrgnztId#, #bfrPosition#,
+				#aftRankId#, #aftOrgnztId#, #aftPosition#, #chngDt#, #note#, #adminNo#,
+				FN_CREATE_ORGAN_FNM(#aftOrgnztId#)
+				,CASE #aftPosition#
+					WHEN 'H' THEN POSTCP_NM
+					WHEN 'S' THEN POSTCP_RNM
+					WHEN 'D' THEN '대표'
+					ELSE ''
+				END
+				, #bfrCompId#, #aftCompId#
+			FROM
+				TBL_ORGNZT
+			WHERE
+				ORGNZT_ID = #aftOrgnztId# 
+		)
+	</insert>
+	
+	<insert id="MemberDAO.insertPositionHistoryOrgUpdate">
+		INSERT INTO TBL_POSITION_HISTORY
+		(
+			USER_NO, CHNG_CODE, BFR_RANK_ID, BFR_ORGNZT_ID, BFR_POSITION,
+			AFT_RANK_ID, AFT_ORGNZT_ID, AFT_POSITION, CHNG_DT, NOTE, ADMIN_NO,
+			AFT_ORGNZT_NM, AFT_POSITION_NM, BFR_COMP_ID, AFT_COMP_ID
+		) (
+			SELECT
+				usr.NO, 'CH', usr.RANK_ID, usr.ORGNZT_ID, usr.POSITION,
+				usr.RANK_ID, usr.ORGNZT_ID, usr.POSITION, DATE_FORMAT(SYSDATE() ,'%Y%m%d'), '', #userNo#,
+				FN_CREATE_ORGAN_FNM(usr.ORGNZT_ID) AS AFT_ORGNZT_NM
+				,CASE usr.POSITION
+					WHEN 'H' THEN org.POSTCP_NM
+					WHEN 'S' THEN org.POSTCP_RNM
+					WHEN 'D' THEN '대표'
+					ELSE ''
+				END AS AFT_POSITION_NM
+				, #bfrCompId#, #aftCompId#
+			FROM
+				TBL_USERINFO usr
+				LEFT JOIN TBL_ORGNZT org ON usr.ORGNZT_ID = org.ORGNZT_ID
+			WHERE
+				usr.ORGNZT_ID = #orgnztId#
+		)
+	</insert>
+	
+	<delete id="MemberDAO.deletePositionHistory" parameterClass="positionHistoryVO">
+		DELETE FROM TBL_POSITION_HISTORY
+		WHERE
+			NO = #no# 
+	</delete>
+	
+	<select id="MemberDAO.selectPositionHistorySearch" resultMap="positionHistorySearch">
+		SELECT
+			a.NO AS USER_NO, a.USER_NM, a.USER_ID, b.CHNG_CODE,
+			b.BFR_RANK_ID, b.BFR_COMP_ID, b.BFR_ORGNZT_ID, b.BFR_POSITION,
+			b.AFT_RANK_ID, b.AFT_COMP_ID, b.AFT_ORGNZT_ID, b.AFT_POSITION,
+			b.CHNG_DT, b.NOTE,
+			d.CODE_NM AS AFT_RANK_NM, e.CODE_NM AS AFT_COMP_NM, b.AFT_ORGNZT_NM,
+			c.POSTCP_NM AS HEAD_NM, c.POSTCP_RNM AS SUBHEAD_NM,
+			b.AFT_POSITION_NM
+		FROM
+			TBL_USERINFO a
+			LEFT JOIN (
+				SELECT
+					O.NO, O.USER_NO, O.CHNG_CODE,
+					O.BFR_RANK_ID, O.BFR_COMP_ID, O.BFR_ORGNZT_ID, O.BFR_POSITION,
+					O.AFT_RANK_ID, O.AFT_COMP_ID, O.AFT_ORGNZT_ID, O.AFT_POSITION,
+					O.CHNG_DT, O.NOTE, O.ADMIN_NO,
+					O.AFT_ORGNZT_NM, O.AFT_POSITION_NM
+				FROM
+					TBL_POSITION_HISTORY O
+					INNER JOIN (
+						SELECT
+							MAX(NO) AS MAX_NO, USER_NO
+						FROM TBL_POSITION_HISTORY
+						GROUP BY USER_NO
+					) I ON O.USER_NO = I.USER_NO AND O.NO = I.MAX_NO
+			) b ON a.NO = b.USER_NO
+			LEFT JOIN TBL_ORGNZT c ON b.AFT_ORGNZT_ID = c.ORGNZT_ID
+			LEFT JOIN COMTCCMMNDETAILCODE d ON b.AFT_RANK_ID = d.CODE and d.CODE_ID ='KMS003'
+			LEFT JOIN COMTCCMMNDETAILCODE e ON b.AFT_COMP_ID = e.CODE and e.CODE_ID ='KMS007'
+		WHERE
+			a.GHOST = '0'
+			AND a.COMPIN_DT IS NOT NULL
+			<isNotEmpty prepend="AND" property="workStList">
+				<iterate prepend="a.WORK_ST IN" property="workStList" open="(" close=")" conjunction=",">
+					#workStList[]#
+				</iterate>
+			</isNotEmpty>
+			<isEmpty prepend="AND" property="workStList">
+				a.WORK_ST IN ('W', 'L')
+			</isEmpty>
+			<isEqual property="searchCondition" compareValue="0">
+				<isNotEmpty prepend="AND" property="rankId">
+					a.RANK_ID = #rankId#
+				</isNotEmpty>
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				CONCAT(a.USER_NM, '(', a.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+			</isEqual>
+			<isEqual property="searchCondition" compareValue="2">
+				<isNotEmpty prepend="AND" property="searchOrgIdList">
+					<iterate prepend="a.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+						#searchOrgIdList[]#
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+		ORDER BY a.NO ASC
+	</select>
+	
+	
+</sqlMap>

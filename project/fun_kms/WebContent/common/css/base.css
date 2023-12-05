@@ -1,0 +1,38 @@
+
+/* Reset */
+@charset "utf-8";
+html, body { height:100%; margin:0; padding:0}
+* { margin:0; padding:0}
+* html { overflow:scroll; overflow-x:auto}
+html{overflow-y:scroll}
+body{ *word-break:break-all;-ms-word-break:break-all;word-break:break-all;font-family:'na';font-size:13px;color:#444}
+html, body, div, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, address, dl, dt, dd, ol, ul, li,img, fieldset, form, legend, table, caption, thead, tfoot, tbody, th, 
+tr, td, input,select { margin:0; padding:0}
+h1, h2, h3, h4, h5, h6 { margin:0; padding:0; font-weight:normal}
+h1 img, h2 img, h3 img, h4 img, h5 img, h6 img { margin:0}
+img,fieldset,iframe { border:0 none}
+ul,ol,dl { list-style:none}
+i,em,address{font-style:normal}
+img { border:0}
+input,select,button{vertical-align:middle}
+label,button { cursor:pointer}
+hr { display:none}
+legend { *width:0}
+table{/* border-collapse:collapse;table-layout:fixed; */border-collapse:collapse;border-spacing:0; }
+caption, th, td { text-align:left;font-weight:normal}
+caption { display:none}
+/* Common */
+.blind,legend{display:block;overflow:hidden;position:absolute;top:-1000em;left:0}
+:root legend{margin-top:-1px;font-size:0;line-height:0}
+.ir{display:block;overflow:hidden;position:relative;z-index:-1;height:11px;font-size:11px}
+.input_check,.input_radio{width:13px;height:13px;margin:0;padding:0}
+
+.clfix:after    {content: "."; display: block; height: 0px; clear: both; visibility: hidden}
+.clfix    {display: inline-block}
+.clfix    {display: block}
+* html .clfix    {height: 1%} /* Hides from IE-mac */
+.clfix    {zoom:1} /*for IE 5.5-7*/
+
+/* font - nanum gothic */
+@font-face{font-family:'na';src:url('./fonts/nanum.gothic.eot');src:local('��), url('./fonts/nanum.gothic.woff') format('woff'), url('./fonts/nanum.gothic.ttf') format('truetype');font-style:normal;font-weight:normal;}
+@font-face{font-family:'naBold';src:url('./fonts/nanum.gothic.bold.eot');src:local('��), url('./fonts/nanum.gothic.bold.woff') format('woff'), url('./fonts/nanum.gothic.bold.ttf') format('truetype');font-style:normal;font-weight:normal;}

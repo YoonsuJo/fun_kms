@@ -1,0 +1,492 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+ <style>
+ .numeric{
+ ime-mode:disabled;
+ }
+ </style>  
+ <script>
+ 
+
+
+ $(document).ready(function(){
+	$('#salesDocWriteT input[name=salesDoc\\.stDt], #salesDocWriteT input[name=salesDoc\\.edDt]').change(function (){
+		if($('#salesDocWriteT input[name=salesDoc\\.stDt]').val().length==8 
+				&& $('#salesDocWriteT input[name=salesDoc\\.edDt]').val().length==8)
+		{
+			var stDt =  $('#salesDocWriteT input[name=salesDoc\\.stDt]').val().substr(0,6);
+			var edDt = $('#salesDocWriteT input[name=salesDoc\\.edDt]').val().substr(0,6);
+			$('#sPrjLaborD').salary({stDt : stDt,
+								edDt :  edDt
+				});
+			$('#pPrjLaborD').salary({stDt : stDt,
+				edDt :  edDt
+			});
+
+			$('#sPrjExpenseD').expense({stDt : stDt,
+				edDt :  edDt,
+				summingUpD : $('#summingUpD')
+				
+			});
+			$('#pPrjExpenseD').expense({stDt : stDt,
+				edDt :  edDt,
+				summingUpD : $('#summingUpD')
+			});
+
+			$('#summingUpD').summingUp({
+					stDt : stDt,
+					edDt :  edDt,
+					sPrjLaborD : $('#sPrjLaborD') ,
+					pPrjLaborD : $('#pPrjLaborD'),
+					sPrjExpenseD : $('sPrjExpenseD'),
+					pPrjExpenseD : $('#pPrjExpenseD'),
+					purchaseOutD : $('#purchaseOutD'),
+					purchaseInGeneralD : $('#purchaseInGeneralD'),
+					purchaseInPreD : $('#purchaseInPreD'),
+					purchaseInAfterD : $('#purchaseInAfterD')
+			});
+					
+		}
+
+	});
+
+	
+	$('#testB').click(function(){
+		console.log(JSON.stringify($('#sPrjLaborD').toObject({mode: 'first'})));
+		
+	});
+
+	$('#purchaseOutD').purchaseOut({summingUpD : $('#summingUpD')});
+	$('#purchaseInGeneralD').purchaseInGeneral();
+	$('#purchaseInPreD').purchaseInPre();
+	$('#purchaseInAfterD').purchaseInAfter();
+	
+ });
+ </script>
+<!-- 매출  -->
+<input type="button" id="testB" value="testtest" />
+<p class="th_stitle2 mT10">매출</p>
+<div class="boardWrite02 mB20">
+	<table id="salesDocWriteT" cellpadding="0" cellspacing="0" summary="각 게시물의 상세 내용을 볼 수 있습니다.">
+                <caption>공지사항 보기</caption>
+                <colgroup><col class="col120" /><col width="px" /><col class="col120" /><col width="px" /></colgroup>
+                <tbody>
+                	<tr>
+                 	<td class="title">매출건명</td>
+                 	<td class="pL10" colspan="3">
+                 		<input type="text" name="salesDoc.salesSj" class="span_12" />
+                		</td>
+                	</tr>
+                	<tr>
+                 	<td class="title">프로젝트</td>
+                 	<td class="pL10" colspan="3">
+                 		<input type="text" name="salesDoc.prjNm" class="span_12" />
+                 		<input type="hidden" name="salesDoc.prjId"/>
+                 		<img src="${imagePath}/btn/btn_tree.gif">
+                		</td>
+                	</tr>
+                	<tr>
+                 	<td class="title">계약금</td>
+                 	<td class="pL10">
+                 		<input type="text" name="salesDoc.cost" class="span_9" /> 원
+                		</td>
+                		<td class="title">계약기간</td>
+                 	<td class="pL10">
+                 		<input type="text" name="salesDoc.stDt" class="span_5 calGen" /> ~
+                 		<input type="text" name="salesDoc.edDt" class="span_5 calGen" />
+                		</td>
+                	</tr>
+                </tbody>
+                </table>
+</div>
+
+<!-- 사외매입  -->
+<div class="boardWrite02 mB20" id="purchaseOutD">
+<p class="th_stitle2 mT10">사외매입 <img src="${imagePath}/btn/btn_OutPurchase.gif" id="purchaseOutAddB" class="cursorPointer"></p>
+	<br/>
+	<table cellpadding="0" cellspacing="0" summary="각 게시물의 상세 내용을 볼 수 있습니다." id="purchseOutT">
+		<caption>공지사항 보기</caption>
+		<colgroup><col class="col70" /><col class="col150" /><col class="col50" /><col width="px" /><col class="col50" /><col class="col120" /><col class="col50" /></colgroup>
+		<tbody>
+		</tbody>
+  </table>
+</div>
+
+<!-- 사내매입  -->
+<div class="boardWrite02 mB20" id="purchaseInGeneralD">
+<p class="th_stitle2 mT10">
+	사내매입 <img src="${imagePath}/btn/btn_InPurchase.gif" id="purchaseInGeneralAddB" class="cursorPointer" />
+	<img src="${imagePath}/btn/btn_license.gif" class="cursorPointer" id="purchaseInGeneralAddLicenseB" />
+</p>
+<br />
+	<table cellpadding="0" cellspacing="0" summary="각 게시물의 상세 내용을 볼 수 있습니다.">
+                <caption>공지사항 보기</caption>
+                <colgroup><col class="col70" /><col class="col150" /><col class="col50" /><col width="px" /><col class="col50" /><col class="col70" /><col class="col50" /></colgroup>
+                <tbody>
+                	
+                </tbody>
+                </table>
+</div>
+
+<!-- 선투입비용  -->
+<div class="boardWrite02 mB20" id="purchaseInPreD">
+<p class="th_stitle2 mT10">
+	선투입비용 <img src="${imagePath}/btn/btn_preInject.gif" class="cursorPointer" id="purchaseInPreAddB">
+</p>
+<br />
+	<table cellpadding="0" cellspacing="0" summary="각 게시물의 상세 내용을 볼 수 있습니다.">
+                <caption>공지사항 보기</caption>
+                <colgroup><col class="col70" /><col width="px" /><col class="col50" /><col class="col70" /><col class="col50" /></colgroup>
+                <tbody>
+                </tbody>
+   </table>
+</div>
+
+<!-- 향후투입비용  -->
+<div class="boardWrite02 mB20" id="purchaseInAfterD">
+<p class="th_stitle2 mT10">
+	향후투입비용 <img src="${imagePath}/btn/btn_afterInject.gif" class="cursorPointer" id="purchaseInAfterAddB" />
+	<img src="${imagePath}/btn/btn_maintenance.gif" class="cursorPointer" id="purchaseInAfterAddMaintainB" />
+</p>
+<br />
+	<table cellpadding="0" cellspacing="0" summary="각 게시물의 상세 내용을 볼 수 있습니다.">
+                <caption>공지사항 보기</caption>
+                <colgroup><col class="col70" /><col class="col150" /><col class="col50" /><col width="px" /><col class="col50" /><col class="col70" /><col class="col50" /></colgroup>
+                <tbody>
+                	
+                </tbody>
+                </table>
+</div>
+
+<!-- 사업관리 인건비/판관비 예산  -->
+<p class="th_stitle2">
+	사업관리 인건비/판관비 예산
+</p>
+	
+<div class="boardList02 mB20" id="sPrjLaborD">
+<p class="th_plus02 mB5">투입인력<span class="pL7"></span>
+	<input type="text" class="salaryUserNm" />
+	<img src="${imagePath}/btn/btn_tree.gif" class="cursorPointer salaryUserTreeB"/>
+	<img src="/images/btn/btn_add03.gif" class="cursorPointer salaryUserAddB">
+</p>
+</div>
+
+<div class="boardList02 mB20" id="sPrjExpenseD">
+<p class="th_plus02">단위 : 천원</p>
+
+</div>
+
+<!-- 수행 인건비/판관비 예산  -->
+<p class="th_stitle2">수행 인건비/판관비 예산</p>
+<div class="boardWrite02 mB20">
+	<table cellpadding="0" cellspacing="0" summary="각 게시물의 상세 내용을 볼 수 있습니다.">
+                <caption>공지사항 보기</caption>
+                <colgroup><col class="col120" /><col width="px" /></colgroup>
+                <tbody>
+                	<tr>
+                 	<td class="title">프로젝트</td>
+                 	<td class="pL10" >
+                 		<input type="text" name="title" class="span_12" />
+                 		<img src="${imagePath}/btn/btn_tree.gif">
+                		</td>
+                	</tr>
+                </tbody>
+                </table>
+</div>
+
+<div class="boardList02 mB20" id="pPrjLaborD">
+<p class="th_plus02 mB5">투입인력<span class="pL7"></span>
+	<input type="text" class="salaryUserNm" />
+	<img src="${imagePath}/btn/btn_tree.gif" class="cursorPointer salaryUserTreeB"/>
+	<img src="/images/btn/btn_add03.gif" class="cursorPointer salaryUserAddB">
+</p>
+</div>
+
+
+<div class="boardList02 mB20" id="pPrjExpenseD">
+<p class="th_plus02">단위 : 천원</p>
+	
+</div>
+	
+	<!-- 요약  -->
+<div class="boardList02 mB20" id="summingUpD">
+<p class="th_stitle2">요약 <span class="th_plus02">단위 : 천원</span></p>
+
+	<table cellpadding="0" cellspacing="0" summary="각 게시물의 상세 내용을 볼 수 있습니다.">
+                <caption>공지사항 보기</caption>
+                <colgroup>
+                 	<col class="col10" />
+                	<col class="col10" />
+                	<col class="col10" />
+                	<col class="col10" />
+                	<col class="col10" />
+                	<col class="col10" />
+                	<col class="col10" />
+               	</colgroup>
+                <thead>
+                	<tr class="height_th">
+                		<th>매출액</th>
+                		<th>사외매입</th>
+                		<th>사내매입</th>
+                		<th>매출이익 <br/><span class="T11">(이익률)</span></th>
+                		<th>인건비</th>
+                		<th>판관비 </th>
+                		<th class="td_last">영업이익 <br/><span class="T11">(이익률)</span></th>
+                	</tr>
+                </thead>
+                <tbody>
+                	<tr>
+                 	<td class="txt_center salesSum">200,000</td>
+                 	<td class="txt_center purchaseOutSum">80,000</td>
+                 	<td class="txt_center purchaseInSum">80,000</td>
+                 	<td class="txt_center bG profitOnSales">80,000</td>
+                 	<td class="txt_center laborCostSum">80,000</td>
+                 	<td class="txt_center expenseSum">80,000</td>
+                 	<td class="td_last txt_center bG operatingProfit">31,200<br/>(16.3%)</td>
+                	</tr>                 			                    			                    	
+                </tbody>
+        </table>
+</div>
+	
+	
+	<!-- 종합  -->
+<p class="th_stitle2">종합 <span class="th_plus02">단위 : 천원</span></p>
+<div class="boardList02 mB20">
+	<table cellpadding="0" cellspacing="0" summary="각 게시물의 상세 내용을 볼 수 있습니다.">
+                <caption>공지사항 보기</caption>
+                <colgroup>
+                	<col width="px" />
+                	<col class="col40" />
+                	<col class="col40" />
+                	<col class="col40" />
+                	<col class="col40" />
+               	<col class="col40" />
+                	<col class="col40" />
+                	<col class="col40" />
+                	<col class="col40" />
+               	<col class="col40" />
+                	<col class="col40" />
+                	<col class="col40" />
+                	<col class="col40" />
+                	<col class="col50" />
+               	</colgroup>
+                <thead>
+                	<tr>
+                		<th>&nbsp;</th>
+                		<th class="td_last" colspan="13">2011년도</th>
+                	</tr>
+                	<tr>
+                		<th>&nbsp;</th>
+                		<th>1월</th>
+                		<th>2월</th>
+                		<th>3월</th>
+                		<th>4월</th>
+                		<th>5월</th>
+                		<th>6월</th>
+                		<th>7월</th>
+                		<th>8월</th>
+                		<th>9월</th>
+                		<th>10월</th>
+                		<th>11월</th>
+                		<th>12월</th>
+                		<th class="td_last">합계</th>
+                	</tr>
+                </thead>
+                <tbody>
+                	<tr>
+                 	<td class="txt_center">매출</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">112,855</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="td_last txt_center">192,000</td>
+                	</tr>
+                	<tr>
+                 	<td class="txt_center">사외매입</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="td_last txt_center">4</td>
+                	</tr>
+                	<tr>
+                 	<td class="txt_center">사내매입(직접매입)</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="td_last txt_center">4</td>
+                	</tr>
+                	<tr>
+                 	<td class="txt_center">사내매입(선투입비용)</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="td_last txt_center">4</td>
+                	</tr>
+                 	<tr>
+                  	<td class="txt_center">인권비(수행)</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="td_last txt_center">4</td>
+                	</tr> 
+                	<tr>
+                 	<td class="txt_center">판관비(수행)</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="td_last txt_center">4</td>
+                	</tr> 
+                	<tr>
+                 	<td class="txt_center bG">매출이익</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="td_last txt_center bG">4</td>
+                	</tr> 
+                	<tr>
+                 	<td class="txt_center bG">매출이익률</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="td_last txt_center bG">4</td>
+                	</tr> 
+                	<tr>
+                 	<td class="txt_center">인건비(사업관리)</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="td_last txt_center">4</td>
+                	</tr>
+                	<tr>
+                 	<td class="txt_center">판관비(사업관리)</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="txt_center">-</td>
+                 	<td class="td_last txt_center">4</td>
+                	</tr> 
+                	<tr>
+                 	<td class="txt_center bG">영업이익</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="td_last txt_center bG">31,200</td>
+                	</tr> 
+                	<tr>
+                 	<td class="txt_center bG">영업이익률</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="txt_center bG">-</td>
+                 	<td class="td_last txt_center bG">16.3%</td>
+                	</tr>                     			                    			                    	
+                </tbody>
+                </table>
+</div>

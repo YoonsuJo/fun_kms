@@ -1,0 +1,669 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsWeekReportDAO">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="businessContact" type="kms.com.cooperation.service.BusinessContact"/>
+	<typeAlias  alias="businessContactVO" type="kms.com.cooperation.service.BusinessContactVO"/>
+	<typeAlias  alias="businessContactComment" type="kms.com.cooperation.service.BusinessContactComment"/>
+	<typeAlias  alias="businessContactRecieve" type="kms.com.cooperation.service.BusinessContactRecieve"/>
+	
+	<resultMap id="businessContactList" class="kms.com.cooperation.service.BusinessContactVO">
+		<result property="bcId"			column="BC_ID"			columnIndex="1"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="2"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="3"/>
+		<result property="userId"		column="USER_ID"		columnIndex="4"/>
+		<result property="prjId"		column="PRJ_ID"			columnIndex="5"/>
+		<result property="prjNm"		column="PRJ_NM"			columnIndex="6"/>
+		<result property="prjCd"		column="PRJ_CD"			columnIndex="7"/>
+		<result property="bcSj"			column="BC_SJ"			columnIndex="8"/>
+		<result property="regDt"		column="REG_DT"			columnIndex="9"/>
+		<result property="interestYn"	column="INTEREST_YN"	columnIndex="10"/>
+		<result property="modDt"		column="MOD_DT"			columnIndex="11"/>
+		<result property="commentCnt"	column="COMMENT_CNT"	columnIndex="12"/>
+		<result property="readStat"		column="READ_STAT"		columnIndex="13"/>
+		<result property="readYn"		column="READ_YN"		columnIndex="14"/>
+		<result property="attachFileId"	column="ATTACH_FILE_ID"	columnIndex="15"/>
+		<!-- 2013.08.13 업무연락 알람 ON/OFF -->
+		<result property="alarmYn"		column="ALARM_YN"		columnIndex="16"/>
+				
+	</resultMap>
+	<resultMap id="businessContactInfo" class="kms.com.cooperation.service.BusinessContactVO">
+		<result property="bcId"			column="BC_ID"			columnIndex="1"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="2"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="3"/>
+		<result property="userId"		column="USER_ID"		columnIndex="4"/>
+		<result property="prjId"		column="PRJ_ID"			columnIndex="5"/>
+		<result property="prjNm"		column="PRJ_NM"			columnIndex="6"/>
+		<result property="prjCd"		column="PRJ_CD"			columnIndex="7"/>
+		<result property="bcSj"			column="BC_SJ"			columnIndex="8"/>
+		<result property="bcCn"			column="BC_CN"			columnIndex="9"/>
+		<result property="regDt"		column="REG_DT"			columnIndex="10"/>
+		<result property="modDt"		column="MOD_DT"			columnIndex="11"/>
+		<result property="smsYn"		column="SMS_YN"			columnIndex="12"/>
+		<result property="interestYn"	column="INTEREST_YN"	columnIndex="13"/>
+		<result property="attachFileId"	column="ATTACH_FILE_ID"	columnIndex="14"/>
+		<result property="useAt"		column="USE_AT"			columnIndex="15"/>
+		<result property="leaderNo"		column="LEADER_NO"		columnIndex="16"/>
+		<result property="commentYn"	column="COMMENT_YN"		columnIndex="17"/>
+		<!-- 2013.08.13 업무연락 알람 ON/OFF -->
+		<result property="alarmYn"		column="ALARM_YN"		columnIndex="18"/>
+		<!-- //2013.08.20 김대현 PUSH 적용 -->
+		<result property="pushYn"		column="PUSH_YN"		columnIndex="19"/>
+				
+
+	</resultMap>
+	<resultMap id="businessContactRecieveList" class="kms.com.cooperation.service.BusinessContactRecieve">
+		<result property="no"			column="NO"				columnIndex="1"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="2"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="3"/>
+		<result property="userId"		column="USER_ID"		columnIndex="4"/>
+		<result property="bcId"			column="BC_ID"			columnIndex="5"/>
+		<result property="recieveTyp"	column="RECIEVE_TYP"	columnIndex="6"/>
+		<result property="readtime"		column="READTIME"		columnIndex="7"/>
+		<!-- 2013.08.13 업무연락 알람 ON/OFF -->
+		<result property="alarmYn"		column="ALARM_YN"		columnIndex="8"/>
+	</resultMap>
+	
+	
+	<resultMap id="businessContactCommentList" class="kms.com.cooperation.service.BusinessContactComment">
+		<result property="no"			column="NO"				columnIndex="1"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="2"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="3"/>
+		<result property="userId"		column="USER_ID"		columnIndex="4"/>
+		<result property="bcId"			column="BC_ID"			columnIndex="5"/>
+		<result property="bcCommentCn"	column="BC_COMMENT_CN"	columnIndex="6"/>
+		<result property="attachFileId"	column="ATTACH_FILE_ID"	columnIndex="7"/>
+		<result property="regDt"		column="REG_DT"			columnIndex="8"/>
+		<result property="udtDt"		column="UDT_DT"			columnIndex="9"/>
+	</resultMap>
+	
+	
+	<sql id="SQL_selectBusinessContactList">
+		FROM
+			(
+				SELECT
+					doc.BC_ID AS BC_ID
+					, doc.PRJ_ID AS PRJ_ID
+					, prj.PRJ_NM AS PRJ_NM
+					, prj.PRJ_CD AS PRJ_CD
+					, doc.BC_SJ AS BC_SJ
+					, doc.ATTACH_FILE_ID AS ATTACH_FILE_ID
+					, DATE_FORMAT(doc.REG_DT, '%Y.%m.%d %H:%i') AS REG_DT
+					<!-- , DATE_FORMAT(IF(MAX(cmtCnt.REG_DT) > doc.MOD_DT, MAX(cmtCnt.REG_DT), doc.MOD_DT), '%Y.%m.%d %H:%i') AS MOD_DT -->
+					, (select DATE_FORMAT(IF(MAX(cmtCnt.REG_DT) > doc.MOD_DT, MAX(cmtCnt.REG_DT), doc.MOD_DT), '%Y.%m.%d %H:%i') from tbl_business_contact_comment cmtCnt where cmtCnt.BC_ID=doc.BC_ID and cmtCnt.USE_AT = 'Y')  AS MOD_DT
+					, writer.USER_NO AS WRITER_NO
+					, writerInfo.USER_NM AS WRITER_NM
+					, writerInfo.USER_ID AS WRITER_ID
+					, me.INTEREST_YN AS INTEREST_YN
+					<!-- 2013.08.13 업무연락 알람 ON/OFF -->
+					, me.ALARM_YN AS ALARM_YN
+					, me.READTIME AS READTIME
+					, IF(me.READTIME IS NULL, 'N', 'Y') AS READ_YN
+					<!-- , COUNT(DISTINCT cmtCnt.NO) AS COMMENT_CNT -->
+					, (select COUNT(DISTINCT cmtCnt.NO) from tbl_business_contact_comment cmtCnt where cmtCnt.BC_ID=doc.BC_ID and cmtCnt.USE_AT = 'Y') AS COMMENT_CNT
+					, IF(me.READTIME IS NULL, IF(me.ALARM_YN = 'Y', '0', '2'), IF(me.INTEREST_YN = 'Y', '1', '3')) AS SORT				
+				FROM
+					TBL_BUSINESS_CONTACT doc
+					INNER JOIN TBL_BUSINESS_CONTACT_RECIEVE writer
+						ON doc.BC_ID = writer.BC_ID
+						AND writer.RECIEVE_TYP = 'WR'
+					INNER JOIN TBL_USERINFO writerInfo
+						ON writer.USER_NO = writerInfo.NO
+				<isEqual property="ajax" compareValue="Y">
+					LEFT OUTER JOIN 
+				</isEqual>
+				<isNotEqual property="ajax" compareValue="Y">
+					INNER JOIN
+				</isNotEqual>				
+							  TBL_BUSINESS_CONTACT_RECIEVE me
+						ON doc.BC_ID = me.BC_ID
+						AND me.USER_NO = #userNo#
+					<isNotEmpty prepend="AND" property="receiveTyp">
+						<iterate prepend="ME.RECIEVE_TYP IN" property="receiveTyp" open="(" close=")" conjunction=",">
+							#receiveTyp[]#
+						</iterate>
+					</isNotEmpty>
+				<!-- searchArrCmmtCn,searchCmmtUserNm 둘중 한 검색조건이라도 있을 때, 조인  -->
+				<isNotEmpty property="searchArrCmmtCn">
+					LEFT JOIN TBL_BUSINESS_CONTACT_COMMENT cmt
+						ON doc.BC_ID = cmt.BC_ID
+						AND cmt.USE_AT = 'Y'
+					LEFT JOIN TBL_USERINFO commenterInfo
+						ON commenterInfo.NO = cmt.USER_NO
+				</isNotEmpty>
+				<isEmpty property="searchArrCmmtCn">
+					<isNotEmpty property="searchCmmtUserNm">
+					LEFT JOIN TBL_BUSINESS_CONTACT_COMMENT cmt
+						ON doc.BC_ID = cmt.BC_ID
+						AND cmt.USE_AT = 'Y'
+					LEFT JOIN TBL_USERINFO commenterInfo
+						ON commenterInfo.NO = cmt.USER_NO
+				</isNotEmpty>
+				</isEmpty>
+					LEFT JOIN TBL_PRJ prj
+						ON doc.PRJ_ID = prj.PRJ_ID
+					<!-- LEFT JOIN TBL_BUSINESS_CONTACT_COMMENT cmtCnt
+						ON doc.BC_ID = cmtCnt.BC_ID
+						AND cmtCnt.USE_AT = 'Y' -->
+				WHERE
+					doc.USE_AT = 'Y'
+					<!--  
+					<isNotEmpty prepend="AND" property="searchPrjId">
+						(
+							doc.PRJ_ID = #searchPrjId#
+							<isEqual prepend="OR" property="includeUnderProject" compareValue="Y">
+								prj.PRJ_TREE LIKE CONCAT ('%', #searchPrjId#, '%')
+							</isEqual>
+						)
+					</isNotEmpty>
+					-->
+					<isNotEmpty prepend="AND" property="searchArrPrjId">
+						<iterate prepend="doc.PRJ_ID IN" property="searchArrPrjId" open="(" close=")" conjunction=",">
+							#searchArrPrjId[]#
+						</iterate>
+					</isNotEmpty>
+					<isNotEmpty prepend="AND" property="searchArrKeyword">
+						(
+						<iterate property="searchArrKeyword" conjunction="OR">
+							   doc.BC_SJ LIKE CONCAT('%', #searchArrKeyword[]#, '%')
+							OR doc.BC_CN LIKE CONCAT('%', #searchArrKeyword[]#, '%') 
+						</iterate>
+						)
+					</isNotEmpty>
+					<isNotEmpty prepend="AND" property="searchArrUserNm">
+						(
+						<iterate property="searchArrUserNm" conjunction="OR">
+							   writerInfo.USER_NM LIKE CONCAT('%', #searchArrUserNm[]#, '%')
+							OR writerInfo.USER_ID LIKE CONCAT('%', #searchArrUserNm[]#, '%')
+						</iterate>
+						)
+					</isNotEmpty>
+					<isNotEmpty prepend="AND" property="searchArrOnlyPrjNm">
+						(
+						<iterate property="searchArrOnlyPrjNm" conjunction="OR">
+							  prj.PRJ_NM LIKE CONCAT('%', #searchArrOnlyPrjNm[]#, '%')
+						</iterate>
+						)
+					</isNotEmpty>
+					<isNotEmpty prepend="AND" property="searchArrCmmtCn">
+						(
+						<iterate property="searchArrCmmtCn" conjunction="OR">
+							cmt.BC_COMMENT_CN LIKE CONCAT('%', #searchArrCmmtCn[]#, '%')
+						</iterate>
+						)
+					</isNotEmpty>
+					<isNotEmpty prepend="AND" property="searchArrCmmtUserNm">
+						(
+						<iterate property="searchArrCmmtUserNm" conjunction="OR">
+							   commenterInfo.USER_NM LIKE CONCAT('%', #searchArrCmmtUserNm[]#, '%')
+							OR commenterInfo.USER_ID LIKE CONCAT('%', #searchArrCmmtUserNm[]#, '%')
+						</iterate>
+						)
+					</isNotEmpty>
+					<isNotEmpty prepend="AND" property="searchYear">
+						doc.REG_DT LIKE CONCAT('%', #searchYear#, '%')
+					</isNotEmpty>
+					<isNotEmpty prepend="AND" property="searchRegDtS">
+						<![CDATA[
+						DATE_FORMAT(doc.REG_DT, '%Y%m%d') >= #searchRegDtS#
+						]]>
+					</isNotEmpty>
+					<isNotEmpty prepend="AND" property="searchRegDtE">
+						<![CDATA[
+						DATE_FORMAT(doc.REG_DT, '%Y%m%d') <= #searchRegDtE#
+						]]>
+					</isNotEmpty>
+				GROUP BY
+					doc.BC_ID
+				ORDER BY
+				<!-- 	CASE READ_YN
+						WHEN 'N' THEN 0
+						WHEN 'Y' THEN 1
+					END ASC
+					, CASE me.INTEREST_YN
+						WHEN 'Y' THEN 0
+						WHEN 'N' THEN 1
+					END ASC
+				 -->	
+				 SORT ASC
+					, MOD_DT DESC
+			) curDoc
+			INNER JOIN TBL_BUSINESS_CONTACT_RECIEVE allReceiver 
+				ON curDoc.BC_ID = allReceiver.BC_ID
+			WHERE 1=1
+			<isNotEmpty prepend="AND" property="readYn">
+				curDoc.read_yn = #readYn#
+			</isNotEmpty>
+	</sql>
+	
+	<select id="BusinessContactDAO.selectBusinessContactList" resultMap="businessContactList">
+		SELECT
+			curDoc.BC_ID AS BC_ID
+			, curDoc.WRITER_NO AS USER_NO
+			, curDoc.WRITER_NM AS USER_NM
+			, curDoc.WRITER_ID AS USER_ID
+			, curDoc.PRJ_ID AS PRJ_ID
+			, IFNULL(curDoc.PRJ_NM, '') AS PRJ_NM
+			, IFNULL(curDoc.PRJ_CD, '') AS PRJ_CD
+			, curDoc.BC_SJ AS BC_SJ
+			, curDoc.REG_DT AS REG_DT
+			, curDoc.INTEREST_YN
+			<!-- 2013.08.13 업무연락 알람 ON/OFF -->
+			, curDoc.ALARM_YN
+			, curDoc.MOD_DT AS MOD_DT
+			, curDoc.COMMENT_CNT AS COMMENT_CNT
+			, IF(COUNT(DISTINCT allReceiver.NO) = COUNT(DISTINCT CONCAT(allReceiver.NO, allReceiver.READTIME)), 'C', 'P') AS READ_STAT
+			, curDoc.READ_YN AS READ_YN
+			, curDoc.ATTACH_FILE_ID AS ATTACH_FILE_ID
+			, IF(curDoc.READ_YN = 'N', IF(curDoc.ALARM_YN = 'Y', '0', '2'), IF(curDoc.INTEREST_YN = 'Y', '1', '3')) AS SORT
+		<include refid="SQL_selectBusinessContactList"/>
+		GROUP BY
+			curDoc.BC_ID
+		ORDER BY
+			<!-- 
+			CASE curDoc.READ_YN
+				WHEN 'N' THEN 0
+				WHEN 'Y' THEN 1
+			END ASC
+			, CASE curDoc.INTEREST_YN
+				WHEN 'Y' THEN 0
+				WHEN 'N' THEN 1
+			END ASC
+			 -->
+			 SORT ASC
+			, curDoc.MOD_DT DESC
+		LIMIT 
+			#recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<select id="BusinessContactDAO.selectBusinessContactListTotCnt" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(DISTINCT curDoc.BC_ID)
+		<include refid="SQL_selectBusinessContactList"/>
+	</select>
+	
+	<select id="BusinessContactDAO.selectBusinessContact" resultMap="businessContactInfo">
+		SELECT
+			a.BC_ID, b.USER_NO, c.USER_NM, c.USER_ID,
+			a.PRJ_ID, d.PRJ_NM, d.PRJ_CD, a.BC_SJ, a.BC_CN, DATE_FORMAT(a.REG_DT, '%Y.%m.%d %H:%i') AS REG_DT,
+			DATE_FORMAT(IF(MAX(e.REG_DT) > a.MOD_DT, MAX(e.REG_DT),a.MOD_DT), '%Y.%m.%d %H:%i') AS MOD_DT,
+			a.SMS_YN, f.INTEREST_YN, 
+			<!-- 2013.08.13 업무연락 알람 ON/OFF -->
+			f.ALARM_YN, 
+			<!-- //2013.09.20 김대현 PUSH 적용  -->
+			a.PUSH_YN, 
+			a.ATTACH_FILE_ID, a.USE_AT
+			, D.LEADER_NO
+			, A.COMMENT_YN
+		FROM
+			TBL_BUSINESS_CONTACT a
+			LEFT JOIN TBL_BUSINESS_CONTACT_RECIEVE b ON a.BC_ID = b.BC_ID AND b.RECIEVE_TYP = 'WR'
+			LEFT JOIN TBL_USERINFO c ON b.USER_NO = c.NO
+			LEFT JOIN TBL_PRJ d ON a.PRJ_ID = d.PRJ_ID
+			LEFT JOIN TBL_BUSINESS_CONTACT_COMMENT e ON a.BC_ID = e.BC_ID AND e.USE_AT = 'Y'
+			LEFT JOIN TBL_BUSINESS_CONTACT_RECIEVE f ON a.BC_ID = f.BC_ID AND f.USER_NO = #userNo#
+		WHERE
+			a.USE_AT = 'Y'
+			AND a.BC_ID = #bcId#
+	</select>
+	
+	<select id="BusinessContactDAO.selectBusinessContactRecieve" resultMap="businessContactRecieveList">
+		SELECT
+			a.NO, a.USER_NO, b.USER_NM, b.USER_ID, a.BC_ID, a.RECIEVE_TYP, 
+			<!-- 2013.08.13 업무연락 알람 ON/OFF -->
+			a.ALARM_YN,
+			DATE_FORMAT(a.READTIME, '%Y.%m.%d %H:%i') AS READTIME
+		FROM
+			TBL_BUSINESS_CONTACT_RECIEVE a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+		WHERE
+			a.BC_ID = #bcId#
+		AND b.USER_NM IS NOT NULL <!-- 퇴사자 목록은 제외(퇴사처리가 아닌 DB에서 삭제한 인원이 포함되었을 경우 에러 방지) 2016.10.24 -->
+	</select>
+	
+	<insert id="BusinessContactDAO.insertBusinessContact">
+		INSERT INTO TBL_BUSINESS_CONTACT
+		(
+			BC_ID
+			,PRJ_ID
+			,BC_SJ
+			,BC_CN
+			,ATTACH_FILE_ID
+			,REG_DT
+			,MOD_DT
+			,SMS_YN
+			,COMMENT_YN
+			,USE_AT
+			,PUSH_YN
+		) VALUES (
+			#bcId#
+			,#prjId#
+			,#bcSj#
+			,#bcCn#
+			,#attachFileId#
+			,SYSDATE()
+			,SYSDATE()
+			,IFNULL(#smsYn#, 'N')
+			,IFNULL(#commentYn#, 'N')
+			,'Y'
+			<!-- //2013.08.20 김대현 PUSH 적용 -->
+			,IFNULL(#pushYn#, 'N')
+		)
+	</insert>
+	
+	<update id="BusinessContactDAO.updateBusinessContact">
+		UPDATE TBL_BUSINESS_CONTACT
+		SET
+			MOD_DT = SYSDATE()
+		<isNotEmpty prepend="," property="prjId">
+			PRJ_ID = #prjId#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="bcSj">
+			BC_SJ = #bcSj#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="bcCn">
+			BC_CN = #bcCn#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="useAt">
+			USE_AT = #useAt#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="attachFileId">
+			ATTACH_FILE_ID = #attachFileId#
+		</isNotEmpty>
+		<!-- //2013.08.20 김대현 PUSH 적용 -->
+		<isNotEmpty prepend="," property="smsYn">
+			SMS_YN = #smsYn#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="commentYn">
+			COMMENT_YN = #commentYn#
+		</isNotEmpty>
+		
+		<isNotEmpty prepend="," property="pushYn">
+			PUSH_YN = #pushYn#
+		</isNotEmpty>
+		WHERE
+			BC_ID = #bcId#
+	</update>
+	
+	<insert id="BusinessContactDAO.insertBusinessContactRecieve">
+		INSERT INTO TBL_BUSINESS_CONTACT_RECIEVE
+		(
+			USER_NO
+			,BC_ID
+			,RECIEVE_TYP
+			,INTEREST_YN
+			<!-- 2013.08.13 업무연락 알람 ON/OFF  -->
+			,ALARM_YN
+		) (
+			SELECT
+				USER_NO
+				,BC_ID
+				,RECIEVE_TYP
+				,'N'
+				<!-- 2013.08.13 업무연락 알람 ON/OFF  -->
+				,'Y'
+			FROM (
+				SELECT
+					#userNo# AS USER_NO, #bcId# AS BC_ID, 'WR' AS RECIEVE_TYP
+				UNION
+				SELECT
+					NO AS USER_NO, #bcId# AS BC_ID, 'RE' AS RECIEVE_TYP
+				FROM TBL_USERINFO
+				<iterate prepend="WHERE USER_ID IN " open="(" conjunction="," close=")" property="recUserIdList">
+					#recUserIdList[]#
+				</iterate>
+			<isNotEmpty property="refUserIdList" prepend=" UNION ">
+				SELECT
+					NO AS USER_NO, #bcId# AS BC_ID, 'RF' AS RECIEVE_TYP
+				FROM TBL_USERINFO
+				<iterate prepend="WHERE USER_ID IN " open="(" conjunction="," close=")" property="refUserIdList">
+					#refUserIdList[]#
+				</iterate>
+			</isNotEmpty>
+			) K
+		)
+	</insert>
+
+	<update id="BusinessContactDAO.updateBusinessContactRecieve">
+		UPDATE TBL_BUSINESS_CONTACT_RECIEVE
+		SET
+			INTEREST_YN = #interestYn#
+		WHERE
+			BC_ID = #bcId#
+			AND USER_NO = #userNo#
+	</update>
+	
+	<delete id="BusinessContactDAO.deleteBusinessContactRecieve">
+		DELETE FROM TBL_BUSINESS_CONTACT_RECIEVE
+		WHERE
+			BC_ID = #bcId#
+	</delete>
+
+	<!-- 2013.08.13 업무연락 알람 ON/OFF -->
+	<update id="BusinessContactDAO.updateBusinessContactAlarm">
+		UPDATE TBL_BUSINESS_CONTACT_RECIEVE
+		SET
+			ALARM_YN = #alarmYn#
+		WHERE
+			BC_ID = #bcId#
+			AND USER_NO = #userNo#
+	</update>
+	
+
+
+	<update id="BusinessContactDAO.setReadtime">
+		UPDATE TBL_BUSINESS_CONTACT_RECIEVE
+		SET
+			READTIME = SYSDATE()
+		WHERE
+			BC_ID = #bcId#
+			AND USER_NO = #userNo#
+	</update>
+	
+	<update id="BusinessContactDAO.deleteReadtime">
+		UPDATE TBL_BUSINESS_CONTACT_RECIEVE
+		SET
+			READTIME = NULL
+		WHERE
+			BC_ID = #bcId#
+	</update>
+
+
+	
+	<select id="BusinessContactDAO.selectBusinessContactCommentList" resultMap="businessContactCommentList">
+		SELECT
+			a.NO, a.USER_NO, b.USER_NM, b.USER_ID, a.BC_ID, a.BC_COMMENT_CN,
+			a.ATTACH_FILE_ID, DATE_FORMAT(a.REG_DT, '%Y.%m.%d %H:%i:%s') AS REG_DT
+			, DATE_FORMAT(a.UDT_DT, '%Y.%m.%d %H:%i:%s') AS UDT_DT
+		FROM
+			TBL_BUSINESS_CONTACT_COMMENT a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+		WHERE
+			a.USE_AT = 'Y'
+			AND a.BC_ID = #bcId#
+		<isNotEmpty prepend="AND" property="no">
+			a.NO = #no#
+		</isNotEmpty>
+		<!-- 2013.08.13 덧긋 정렬 순서 -->
+		ORDER BY IFNULL(a.UDT_DT,a.REG_DT) DESC
+		<isNotEmpty property="limit">
+			<isNotEmpty property="offset">
+				LIMIT #limit# OFFSET #offset#
+			</isNotEmpty>
+		</isNotEmpty>
+	</select>
+	
+	<select id="BusinessContactDAO.selectBusinessContactCommentListCnt" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(a.NO)
+		FROM
+			TBL_BUSINESS_CONTACT_COMMENT a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+		WHERE
+			a.USE_AT = 'Y'
+			AND a.BC_ID = #bcId#
+		<isNotEmpty prepend="AND" property="no">
+			a.NO = #no#
+		</isNotEmpty>
+	</select>
+	
+	<insert id="BusinessContactDAO.insertBusinessContactComment">
+		INSERT INTO TBL_BUSINESS_CONTACT_COMMENT
+		(
+			USER_NO, BC_ID, BC_COMMENT_CN, ATTACH_FILE_ID, REG_DT, USE_AT
+		) VALUES (
+			#userNo#, #bcId#, #bcCommentCn#, #attachFileId#, SYSDATE(), 'Y'
+		)
+	</insert>
+	
+	<update id="BusinessContactDAO.updateBusinessContactComment">
+		UPDATE TBL_BUSINESS_CONTACT_COMMENT
+		<dynamic prepend="SET">
+			<isNotEmpty prepend="," property="attachFileId">
+				ATTACH_FILE_ID = #attachFileId#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="bcCommentCn">
+				BC_COMMENT_CN = #bcCommentCn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="useAt">
+				USE_AT = #useAt#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="no">
+				UDT_DT = SYSDATE()
+			</isNotEmpty>
+		</dynamic>
+		WHERE
+			NO = #no#
+	</update>
+	
+	<select id="BusinessContactDAO.selectBusinessContactListHeadSearch" resultMap="businessContactList">
+		SELECT
+			a.BC_ID
+			,b.USER_NO, c.USER_NM, c.USER_ID
+			,a.PRJ_ID, d.PRJ_NM, d.PRJ_CD
+			,a.BC_SJ
+			,DATE_FORMAT(a.REG_DT, '%Y.%m.%d %H:%i') AS REG_DT
+			,g.INTEREST_YN
+			<!-- 2013.08.13 업무연락 알람 ON/OFF -->
+			,g.ALARM_YN AS ALARM_YN
+			,DATE_FORMAT(IF(MAX(e.REG_DT) > a.MOD_DT, MAX(e.REG_DT),a.MOD_DT), '%Y.%m.%d %H:%i') AS MOD_DT
+			,COUNT(DISTINCT e.NO) AS COMMENT_CNT
+			,IF(COUNT(DISTINCT f.NO) = COUNT(DISTINCT CONCAT(f.NO, f.READTIME)),'C','P') AS READ_STAT
+			,IF(g.READTIME IS NOT NULL,'Y','N') AS READ_YN,a.ATTACH_FILE_ID
+		FROM
+			TBL_BUSINESS_CONTACT a
+			LEFT JOIN TBL_BUSINESS_CONTACT_RECIEVE b ON a.BC_ID = b.BC_ID AND b.RECIEVE_TYP = 'WR'
+			LEFT JOIN TBL_USERINFO c ON b.USER_NO = c.NO
+			LEFT JOIN TBL_PRJ d ON a.PRJ_ID = d.PRJ_ID
+			LEFT JOIN TBL_BUSINESS_CONTACT_COMMENT e ON a.BC_ID = e.BC_ID AND e.USE_AT = 'Y'
+			LEFT JOIN TBL_BUSINESS_CONTACT_RECIEVE f ON a.BC_ID = f.BC_ID
+			LEFT JOIN TBL_BUSINESS_CONTACT_RECIEVE g ON a.BC_ID = g.BC_ID AND g.USER_NO = #userNo#
+		WHERE
+			a.USE_AT = 'Y'
+			AND (
+				a.BC_SJ LIKE CONCAT('%', #searchKeyword#, '%')
+				OR a.BC_CN LIKE CONCAT('%', #searchKeyword#, '%')
+				OR c.USER_NM LIKE CONCAT('%',#searchKeyword#,'%')
+				OR c.USER_ID LIKE CONCAT('%',#searchKeyword#,'%')
+				OR CONCAT(c.USER_NM, '(', c.USER_ID, ')') LIKE CONCAT('%', #searchKeyword#, '%')
+			)
+		GROUP BY a.BC_ID
+		ORDER BY MOD_DT DESC
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<select id="BusinessContactDAO.selectBusinessContactListTotCntHeadSearch" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(DISTINCT a.BC_ID)
+		FROM
+			TBL_BUSINESS_CONTACT a
+			LEFT JOIN TBL_BUSINESS_CONTACT_RECIEVE b ON a.BC_ID = b.BC_ID AND b.RECIEVE_TYP = 'WR'
+			LEFT JOIN TBL_USERINFO c ON b.USER_NO = c.NO
+			LEFT JOIN TBL_PRJ d ON a.PRJ_ID = d.PRJ_ID
+			LEFT JOIN TBL_BUSINESS_CONTACT_COMMENT e ON a.BC_ID = e.BC_ID AND e.USE_AT = 'Y'
+			LEFT JOIN TBL_BUSINESS_CONTACT_RECIEVE f ON a.BC_ID = f.BC_ID
+			LEFT JOIN TBL_BUSINESS_CONTACT_RECIEVE g ON a.BC_ID = g.BC_ID AND g.USER_NO = #userNo#
+		WHERE
+			a.USE_AT = 'Y'
+			AND (
+				a.BC_SJ LIKE CONCAT('%', #searchKeyword#, '%')
+				OR a.BC_CN LIKE CONCAT('%', #searchKeyword#, '%')
+				OR c.USER_NM LIKE CONCAT('%',#searchKeyword#,'%')
+				OR c.USER_ID LIKE CONCAT('%',#searchKeyword#,'%')
+				OR CONCAT(c.USER_NM, '(', c.USER_ID, ')') LIKE CONCAT('%', #searchKeyword#, '%')
+			)
+	</select>
+	
+	
+	
+	<select id="BusinessContactDAO.selectInterestUserNoList" resultClass="java.lang.Integer">
+		SELECT DISTINCT
+			USER_NO 
+		FROM
+			TBL_BUSINESS_CONTACT_RECIEVE
+		WHERE
+			BC_ID = #bcId#
+			AND INTEREST_YN = 'Y'
+	</select>
+	
+	<update id="BusinessContactDAO.setInterestBc">
+		<isNotEmpty property="userList">
+		UPDATE TBL_BUSINESS_CONTACT_RECIEVE
+		SET
+			INTEREST_YN = 'Y'
+		WHERE
+			BC_ID = #bcId#
+		<iterate prepend="AND USER_NO IN " open="(" conjunction="," close=")" property="userList">
+			#userList[]#
+		</iterate>
+		</isNotEmpty>
+		<isEmpty property="userList">
+		UPDATE TBL_BUSINESS_CONTACT_RECIEVE
+		SET
+			INTEREST_YN = INTEREST_YN
+		WHERE
+			BC_ID = #bcId#
+		</isEmpty>
+	</update>
+	
+	
+	
+	<!-- 2013.08.13 업무연락 알람 ON/OFF -->
+	<select id="BusinessContactDAO.selectAlarmUserNoList" resultClass="java.lang.Integer">
+		SELECT DISTINCT
+			USER_NO
+		FROM
+			TBL_BUSINESS_CONTACT_RECIEVE
+		WHERE
+			BC_ID = #bcId#
+			AND ALARM_YN = 'N'
+	</select>
+	
+	<!-- 2013.08.13 업무연락 알람 ON/OFF -->
+	<update id="BusinessContactDAO.setAlarmBc">
+		<isNotEmpty property="alarmUserList">
+		UPDATE TBL_BUSINESS_CONTACT_RECIEVE
+		SET
+			ALARM_YN = 'N'
+		WHERE
+			BC_ID = #bcId#
+		<iterate prepend="AND USER_NO IN " open="(" conjunction="," close=")" property="alarmUserList">
+			#alarmUserList[]#
+		</iterate>
+		</isNotEmpty>
+		<isEmpty property="alarmUserList">
+		UPDATE TBL_BUSINESS_CONTACT_RECIEVE
+		SET
+			ALARM_YN = 'Y'
+		WHERE
+			BC_ID = #bcId#
+		</isEmpty>
+	</update>
+	
+	
+	
+	
+	
+</sqlMap>

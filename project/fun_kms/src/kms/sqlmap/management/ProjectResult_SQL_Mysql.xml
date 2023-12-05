@@ -1,0 +1,628 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="BusiResultDAO">
+	
+	<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	<resultMap id="projectResultList" class="kms.com.management.service.ProjectResultVO">
+		<result property="prjId"			column="PRJ_ID"				columnIndex="1"/>
+		<result property="prjNm"			column="PRJ_NM"				columnIndex="2"/>
+		<result property="prjCd"			column="PRJ_CD"				columnIndex="3"/>
+		<result property="prjSn"			column="PRJ_SN"				columnIndex="4"/>
+		<result property="havingLeaf"		column="HAVING_LEAF"		columnIndex="5"/>
+		<result property="salesOut"			column="SALES_OUT"			columnIndex="6"/>
+		<result property="salesIn"			column="SALES_IN"			columnIndex="7"/>
+		<result property="purchaseOut"		column="PURCHASE_OUT"		columnIndex="8"/>
+		<result property="purchaseIn"		column="PURCHASE_IN"		columnIndex="9"/>
+		<result property="salary"			column="SALARY"				columnIndex="10"/>
+		<result property="expense"			column="EXPENSE"			columnIndex="11"/>
+		<result property="salesOutAcc"		column="SALES_OUT_ACC"		columnIndex="12"/>
+		<result property="salesInAcc"		column="SALES_IN_ACC"		columnIndex="13"/>
+		<result property="purchaseOutAcc"	column="PURCHASE_OUT_ACC"	columnIndex="14"/>
+		<result property="purchaseInAcc"	column="PURCHASE_IN_ACC"	columnIndex="15"/>
+		<result property="salaryAcc"		column="SALARY_ACC"			columnIndex="16"/>
+		<result property="expenseAcc"		column="EXPENSE_ACC"		columnIndex="17"/>
+		<result property="stat"				column="STAT"				columnIndex="18"/>
+	</resultMap>
+	
+	<resultMap id="statisticResultList" class="kms.com.management.service.ProjectResultVO">
+		<result property="sectorNm"			column="NM"					columnIndex="1"/>
+		<result property="colorTyp"			column="COLOR_TYP"			columnIndex="2"/>
+		<result property="salesOut"			column="SALES_OUT"			columnIndex="3"/>
+		<result property="salesIn"			column="SALES_IN"			columnIndex="4"/>
+		<result property="purchaseOut"		column="PURCHASE_OUT"		columnIndex="5"/>
+		<result property="purchaseIn"		column="PURCHASE_IN"		columnIndex="6"/>
+		<result property="salary"			column="SALARY"				columnIndex="7"/>
+		<result property="commonExpense"	column="COMMON"				columnIndex="7"/>
+		<result property="expense"			column="EXPENSE"			columnIndex="8"/>
+		<result property="planSalesOut"			column="PLAN_SALES_OUT"			columnIndex="9"/>
+		<result property="planSalesIn"			column="PLAN_SALES_IN"			columnIndex="10"/>
+		<result property="planPurchaseOut"		column="PLAN_PURCHASE_OUT"		columnIndex="11"/>
+		<result property="planPurchaseIn"		column="PLAN_PURCHASE_IN"		columnIndex="12"/>
+		<result property="planCommonExpense"	column="PLAN_COMMON"			columnIndex="13"/>
+		<result property="planLaborExpense"			column="PLAN_LABOR"			columnIndex="14"/>
+		<result property="planExpense"			column="PLAN_EXPENSE"			columnIndex="15"/>
+		<result property="sectorNo"			column="SECTOR_NO"					columnIndex="16"/>
+	</resultMap>
+	
+	<resultMap id="statisticResultList2" class="kms.com.management.service.ProjectResultVO">
+		<result property="sectorNm"			column="NM"					columnIndex="1"/>
+		<result property="colorTyp"			column="COLOR_TYP"			columnIndex="2"/>
+		<result property="salesOut"			column="SALES_OUT"			columnIndex="3"/>
+		<result property="salesIn"			column="SALES_IN"			columnIndex="4"/>
+		<result property="purchaseOut"		column="PURCHASE_OUT"		columnIndex="5"/>
+		<result property="purchaseIn"		column="PURCHASE_IN"		columnIndex="6"/>
+		<result property="salary"			column="SALARY"				columnIndex="7"/>
+		<result property="expense"			column="EXPENSE"			columnIndex="8"/>
+		<result property="sectorNo"			column="SECTOR_NO"			columnIndex="15"/>
+		<result property="allBusiProfitAcc"		column="ALL_BUSIPROFIT_ACC"		columnIndex="16"/>
+	</resultMap>
+	
+	<resultMap id="statisticResult" class="kms.com.management.service.ProjectResultVO">
+		<result property="sectorNm"			column="NM"			columnIndex="1"/>
+		<result property="salary"			column="SALARY"		columnIndex="2"/>
+		<result property="sectorNo"			column="NO"			columnIndex="3"/>
+	</resultMap>
+	
+	<select id="BusiResultDAO.selectProjectResultStatistic" resultMap="projectResultList">
+		
+		(
+			SELECT
+				prj.PRJ_ID AS PRJ_ID
+				, prj.PRJ_NM
+				, prj.PRJ_CD
+				, prj.ORG_PRJ_TREE_ORD AS PRJ_SN
+				, FALSE AS HAVING_LEAF
+				, prj.STAT
+	
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IF(#includeResult# = 'Y', IFNULL(total.SALES_OUT_EST, 0), IFNULL(total.SALES_OUT, 0)), 0)), 0) AS SALES_OUT
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IF(#includeResult# = 'Y', IFNULL(total.SALES_IN_EST, 0), IFNULL(total.SALES_IN, 0)), 0)), 0) AS SALES_IN
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IF(#includeResult# = 'Y', IFNULL(total.PURCHASE_OUT_EST, 0), IFNULL(total.PURCHASE_OUT, 0)), 0)), 0) AS PURCHASE_OUT
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IF(#includeResult# = 'Y', IFNULL(total.PURCHASE_IN_NORMAL_EST, 0), IFNULL(total.PURCHASE_IN_NORMAL, 0)), 0)), 0) 
+					+ IFNULL(SUM(IF(total.MONTH = #searchMonth#, IFNULL(total.PURCHASE_IN_COMMON, 0), 0)), 0) AS PURCHASE_IN
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IFNULL(total.LABOR, 0), 0)), 0) AS SALARY
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IF(#includeResult# = 'Y', IFNULL(total.EXP_EST, 0), IFNULL(total.EXP, 0)), 0)), 0) AS EXPENSE
+	
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IF(#includeResult# = 'Y', IFNULL(total.SALES_OUT_EST, 0), IFNULL(total.SALES_OUT, 0)), 0)), 0) AS SALES_OUT_ACC
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IF(#includeResult# = 'Y', IFNULL(total.SALES_IN_EST, 0), IFNULL(total.SALES_IN, 0)), 0)), 0) AS SALES_IN_ACC
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IF(#includeResult# = 'Y', IFNULL(total.PURCHASE_OUT_EST, 0), IFNULL(total.PURCHASE_OUT, 0)), 0)), 0) AS PURCHASE_OUT_ACC
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IF(#includeResult# = 'Y', IFNULL(total.PURCHASE_IN_NORMAL_EST, 0), IFNULL(total.PURCHASE_IN_NORMAL, 0)), 0)), 0) 
+					+ IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IFNULL(total.PURCHASE_IN_COMMON, 0), 0)), 0) AS PURCHASE_IN_ACC
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IFNULL(total.LABOR, 0), 0)), 0) AS SALARY_ACC
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IF(#includeResult# = 'Y', IFNULL(total.EXP_EST, 0), IFNULL(total.EXP, 0)), 0)), 0) AS EXPENSE_ACC
+			FROM
+				TBL_PRJ prj
+				LEFT JOIN TBL_PRJ_RESULT_TOTAL total
+					ON prj.PRJ_ID = total.PRJ_ID
+					AND total.YEAR = #searchYear#
+			WHERE 
+				<iterate prepend="prj.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+					#searchOrgIdList[]#
+				</iterate>
+				<isEqual property="includeAllDate" compareValue="N">
+					<![CDATA[
+					AND prj.ST_DT <= #startDate#
+					AND prj.COMP_DUE_DT >= #endDate#
+					]]>
+				</isEqual>		
+			GROUP BY
+				PRJ_ID
+		)
+			
+		UNION ALL
+		
+		(
+			SELECT
+				topPrj.PRJ_ID AS PRJ_ID
+				, topPrj.PRJ_NM
+				, topPrj.PRJ_CD
+				, CONCAT(topPrj.ORG_PRJ_TREE_ORD, '_SUM') AS PRJ_SN
+				, TRUE AS HAVING_LEAF
+				, topPrj.STAT
+				
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IF(#includeResult# = 'Y', IFNULL(total.SALES_OUT_EST, 0), IFNULL(total.SALES_OUT, 0)), 0)), 0) AS SALES_OUT
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IF(#includeResult# = 'Y', IFNULL(total.SALES_IN_EST, 0), IFNULL(total.SALES_IN, 0)), 0)), 0) AS SALES_IN
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IF(#includeResult# = 'Y', IFNULL(total.PURCHASE_OUT_EST, 0), IFNULL(total.PURCHASE_OUT, 0)), 0)), 0) AS PURCHASE_OUT
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IF(#includeResult# = 'Y', IFNULL(total.PURCHASE_IN_NORMAL_EST, 0), IFNULL(total.PURCHASE_IN_NORMAL, 0)), 0)), 0) 
+					+ IFNULL(SUM(IF(total.MONTH = #searchMonth#, IFNULL(total.PURCHASE_IN_COMMON, 0), 0)), 0) AS PURCHASE_IN
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IFNULL(total.LABOR, 0), 0)), 0) AS SALARY
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IF(#includeResult# = 'Y', IFNULL(total.EXP_EST, 0), IFNULL(total.EXP, 0)), 0)), 0) AS EXPENSE
+	
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IF(#includeResult# = 'Y', IFNULL(total.SALES_OUT_EST, 0), IFNULL(total.SALES_OUT, 0)), 0)), 0) AS SALES_OUT_ACC
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IF(#includeResult# = 'Y', IFNULL(total.SALES_IN_EST, 0), IFNULL(total.SALES_IN, 0)), 0)), 0) AS SALES_IN_ACC
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IF(#includeResult# = 'Y', IFNULL(total.PURCHASE_OUT_EST, 0), IFNULL(total.PURCHASE_OUT, 0)), 0)), 0) AS PURCHASE_OUT_ACC
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IF(#includeResult# = 'Y', IFNULL(total.PURCHASE_IN_NORMAL_EST, 0), IFNULL(total.PURCHASE_IN_NORMAL, 0)), 0)), 0) 
+					+ IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IFNULL(total.PURCHASE_IN_COMMON, 0), 0)), 0) AS PURCHASE_IN_ACC
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IFNULL(total.LABOR, 0), 0)), 0) AS SALARY_ACC
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IF(#includeResult# = 'Y', IFNULL(total.EXP_EST, 0), IFNULL(total.EXP, 0)), 0)), 0) AS EXPENSE_ACC
+			FROM
+				TBL_PRJ topPrj
+				INNER JOIN TBL_PRJ subPrj
+					ON subPrj.ORG_PRJ_TREE LIKE CONCAT('%',topPrj.PRJ_ID,'%')
+				LEFT JOIN TBL_PRJ_RESULT_TOTAL total
+					ON subPrj.PRJ_ID = total.PRJ_ID
+					AND total.YEAR = #searchYear#
+			WHERE
+				<iterate prepend="topPrj.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+					#searchOrgIdList[]#
+				</iterate>
+				AND topPrj.PRJ_ID = topPrj.PRNT_PRJ_ID
+				<isEqual property="includeAllDate" compareValue="N">
+					<![CDATA[
+					AND topPrj.ST_DT <= #startDate#
+					AND topPrj.COMP_DUE_DT >= #endDate#
+					]]>
+				</isEqual>	
+			GROUP BY
+				PRJ_ID
+		)			
+		ORDER BY
+			PRJ_SN
+	</select>
+
+
+	<select id="BusiResultDAO.selectProjectResultStatisticPreview_reCalc" resultMap="projectResultList">
+		<![CDATA[
+		(
+		SELECT
+			prj.PRJ_ID AS PRJ_ID
+			,prj.PRJ_NM
+			,prj.PRJ_CD
+			,prj.ORG_PRJ_TREE_ORD AS PRJ_SN
+			,FALSE AS HAVING_LEAF
+			,prj.STAT
+			,FN_GET_SALES_OUT(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N') AS SALES_OUT
+			,FN_GET_SALES_IN(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'A','N','N') AS SALES_IN
+			,FN_GET_PURCHASE_OUT(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N') AS PURCHASE_OUT
+			,FN_GET_PURCHASE_IN(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'A','N','N') AS PURCHASE_IN
+			,0 AS SALARY
+			,FN_GET_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N') AS EXPENSE
+			,FN_GET_SALES_OUT(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','Y') AS SALES_OUT_ACC
+			,FN_GET_SALES_IN(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'A','N','Y') AS SALES_IN_ACC
+			,FN_GET_PURCHASE_OUT(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','Y') AS PURCHASE_OUT_ACC
+			,FN_GET_PURCHASE_IN(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'A','N','Y') AS PURCHASE_IN_ACC
+			,0 AS SALARY_ACC
+			,FN_GET_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','Y') AS EXPENSE_ACC
+		FROM
+			TBL_PRJ prj
+		WHERE
+		]]>
+			<iterate prepend="ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+				#searchOrgIdList[]#
+			</iterate>
+			<isEqual property="includeAllDate" compareValue="N">
+				<![CDATA[
+				AND prj.ST_DT <= #startDate#
+				AND prj.COMP_DUE_DT >= #endDate#
+				]]>
+			</isEqual>
+		<![CDATA[
+		)
+		UNION ALL
+		(
+		SELECT
+			prj.PRJ_ID AS PRJ_ID
+			,prj.PRJ_NM
+			,prj.PRJ_CD
+			,CONCAT(prj.ORG_PRJ_TREE_ORD, '_SUM') AS PRJ_SN
+			,TRUE AS HAVING_LEAF
+			,prj.STAT
+			,FN_GET_SALES_OUT(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N') AS SALES_OUT
+			,FN_GET_SALES_IN(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'A','N','N') AS SALES_IN
+			,FN_GET_PURCHASE_OUT(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N') AS PURCHASE_OUT
+			,FN_GET_PURCHASE_IN(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'A','N','N') AS PURCHASE_IN
+			,0 AS SALARY
+			,FN_GET_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N') AS EXPENSE
+			,FN_GET_SALES_OUT(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','Y') AS SALES_OUT_ACC
+			,FN_GET_SALES_IN(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'A','N','Y') AS SALES_IN_ACC
+			,FN_GET_PURCHASE_OUT(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','Y') AS PURCHASE_OUT_ACC
+			,FN_GET_PURCHASE_IN(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'A','N','Y') AS PURCHASE_IN_ACC
+			,0 AS SALARY_ACC
+			,FN_GET_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','Y') AS EXPENSE_ACC
+		FROM
+			TBL_PRJ prj
+		WHERE
+		]]>
+			<iterate prepend="ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+				#searchOrgIdList[]#
+			</iterate>
+			AND prj.PRJ_ID = prj.PRNT_PRJ_ID
+			<isEqual property="includeAllDate" compareValue="N">
+				<![CDATA[
+				AND topPrj.ST_DT <= #startDate#
+				AND topPrj.COMP_DUE_DT >= #endDate#
+				]]>
+			</isEqual>
+		)
+		ORDER BY PRJ_SN
+	</select>
+	
+	
+	<select id="BusiResultDAO.selectProjectResultStatisticRow_reCalc" resultMap="projectResultList">
+		SELECT
+			prj.PRJ_ID AS PRJ_ID
+			,prj.PRJ_NM
+			,prj.PRJ_CD
+			,prj.ORG_PRJ_TREE_ORD AS PRJ_SN
+			,#havingLeaf# AS HAVING_LEAF
+			,prj.STAT
+		<isEqual property="havingLeaf" compareValue="false">
+			,FN_GET_SALES_OUT(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N') AS SALES_OUT
+			,FN_GET_SALES_IN(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'A','N','N') AS SALES_IN
+			,FN_GET_PURCHASE_OUT(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N') AS PURCHASE_OUT
+			,FN_GET_PURCHASE_IN(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'A','N','N') AS PURCHASE_IN
+			,FN_GET_LABOR(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N') AS SALARY
+			,FN_GET_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N') AS EXPENSE
+			,FN_GET_SALES_OUT(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','Y') AS SALES_OUT_ACC
+			,FN_GET_SALES_IN(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'A','N','Y') AS SALES_IN_ACC
+			,FN_GET_PURCHASE_OUT(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','Y') AS PURCHASE_OUT_ACC
+			,FN_GET_PURCHASE_IN(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'A','N','Y') AS PURCHASE_IN_ACC
+			,FN_GET_LABOR(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','Y') AS SALARY_ACC
+			,FN_GET_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','Y') AS EXPENSE_ACC
+		</isEqual>
+		<isEqual property="havingLeaf" compareValue="true">
+			,FN_GET_SALES_OUT(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','Y','N') AS SALES_OUT
+			,FN_GET_SALES_IN(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'A','Y','N') AS SALES_IN
+			,FN_GET_PURCHASE_OUT(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','Y','N') AS PURCHASE_OUT
+			,FN_GET_PURCHASE_IN(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'A','Y','N') AS PURCHASE_IN
+			,FN_GET_LABOR(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','Y','N') AS SALARY
+			,FN_GET_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','Y','N') AS EXPENSE
+			,FN_GET_SALES_OUT(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','Y','Y') AS SALES_OUT_ACC
+			,FN_GET_SALES_IN(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'A','Y','Y') AS SALES_IN_ACC
+			,FN_GET_PURCHASE_OUT(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','Y','Y') AS PURCHASE_OUT_ACC
+			,FN_GET_PURCHASE_IN(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'A','Y','Y') AS PURCHASE_IN_ACC
+			,FN_GET_LABOR(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','Y','Y') AS SALARY_ACC
+			,FN_GET_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','Y','Y') AS EXPENSE_ACC
+		</isEqual>
+		FROM
+			TBL_PRJ prj
+		WHERE
+			PRJ_ID = #prjId#
+	</select>
+	
+	<select id="BusiResultDAO.selectProjectResultOrgSumStatistic_reCalc" resultMap="projectResultList">
+		<![CDATA[
+		SELECT
+			NULL AS PRJ_ID
+			,NULL AS PRJ_NM
+			,NULL AS PRJ_CD
+			,NULL AS PRJ_SN
+			,TRUE AS HAVING_LEAF
+			,NULL AS STAT
+			,IFNULL(SUM(IFNULL(FN_GET_SALES_OUT(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N'),0)),0) AS SALES_OUT
+			,IFNULL(SUM(IFNULL(FN_GET_SALES_IN(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'A','N','N'),0)),0) AS SALES_IN
+			,IFNULL(SUM(IFNULL(FN_GET_PURCHASE_OUT(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N'),0)),0) AS PURCHASE_OUT
+			,IFNULL(SUM(IFNULL(FN_GET_PURCHASE_IN(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'A','N','N'),0)),0) AS PURCHASE_IN
+			,IFNULL(SUM(IFNULL(FN_GET_LABOR(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N'),0)),0) AS SALARY
+			,IFNULL(SUM(IFNULL(FN_GET_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N'),0)),0) AS EXPENSE
+			,IFNULL(SUM(IFNULL(FN_GET_SALES_OUT(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','Y'),0)),0) AS SALES_OUT_ACC
+			,IFNULL(SUM(IFNULL(FN_GET_SALES_IN(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'A','N','Y'),0)),0) AS SALES_IN_ACC
+			,IFNULL(SUM(IFNULL(FN_GET_PURCHASE_OUT(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','Y'),0)),0) AS PURCHASE_OUT_ACC
+			,IFNULL(SUM(IFNULL(FN_GET_PURCHASE_IN(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'A','N','Y'),0)),0) AS PURCHASE_IN_ACC
+			,IFNULL(SUM(IFNULL(FN_GET_LABOR(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','Y'),0)),0) AS SALARY_ACC
+			,IFNULL(SUM(IFNULL(FN_GET_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','Y'),0)),0) AS EXPENSE_ACC
+		FROM
+			TBL_PRJ prj
+		WHERE
+		]]>
+		<iterate prepend="ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+			#searchOrgIdList[]#
+		</iterate>
+	</select>
+	
+	<select id="BusiResultDAO.selectSaleResultStatistic" resultMap="statisticResultList">
+		SELECT
+			sector.NO AS SECTOR_NO
+			, sector.STATISTIC_SECTOR_NM AS NM
+			, sector.COLOR_TYP AS COLOR_TYP
+			, IFNULL(plan.PLAN_SALES_OUT, 0) AS PLAN_SALES_OUT
+			, IFNULL(plan.PLAN_SALES_IN, 0) AS PLAN_SALES_IN
+			, IFNULL(plan.PLAN_PURCHASE_OUT, 0) AS PLAN_PURCHASE_OUT
+			, IFNULL(plan.PLAN_PURCHASE_IN, 0) AS PLAN_PURCHASE_IN
+			, IFNULL(plan.PLAN_LABOR, 0) AS PLAN_LABOR
+			, IFNULL(plan.PLAN_EXPENSE, 0) AS PLAN_EXPENSE
+			, IFNULL(result.COMMON, 0) AS PLAN_COMMON
+			, IFNULL(result.SALES_OUT, 0) AS SALES_OUT
+			, IFNULL(result.SALES_IN, 0) AS SALES_IN
+			, IFNULL(result.PURCHASE_OUT, 0) AS PURCHASE_OUT
+			, IFNULL(result.PURCHASE_IN, 0) AS PURCHASE_IN
+			, IFNULL(result.SALARY, 0) AS SALARY
+			, IFNULL(result.EXPENSE, 0) AS EXPENSE
+			, IFNULL(result.COMMON, 0) AS COMMON
+		FROM
+			TBL_STATISTIC_SECTOR sector
+			LEFT JOIN (
+				SELECT
+					sector.NO AS SECTOR_NO
+		
+					, IFNULL(SUM(IFNULL(plan.SALES_OUT, 0)), 0) AS PLAN_SALES_OUT
+					, IFNULL(SUM(IFNULL(plan.SALES_IN, 0)), 0) AS PLAN_SALES_IN
+					, IFNULL(SUM(IFNULL(plan.PURCHASE_OUT, 0)), 0) AS PLAN_PURCHASE_OUT
+					, IFNULL(SUM(IFNULL(plan.PURCHASE_IN, 0)), 0) AS PLAN_PURCHASE_IN
+					, IFNULL(SUM(IFNULL(plan.LABOR, 0)), 0) AS PLAN_LABOR
+					, IFNULL(SUM(IFNULL(plan.EXPENSE, 0)), 0) AS PLAN_EXPENSE
+				FROM
+					TBL_STATISTIC_SECTOR sector
+					INNER JOIN TBL_EAPP_BUSINESS_PLAN plan
+						ON sector.STATISTIC_SECTOR_VAL LIKE CONCAT('%', plan.ORGNZT_ID, '%')
+						AND plan.PLAN_YM = CONCAT(#searchYear#, LPAD(#searchMonth#, 2, '0'))
+					INNER JOIN TBL_EAPP_DOC doc 
+						ON plan.DOC_ID = doc.DOC_ID
+						AND doc.NEW_AT = '1'
+				WHERE
+					sector.SECTOR_TYP = '1'
+					AND sector.YEAR = #searchYear#
+				GROUP BY
+					SECTOR_NO
+			) plan
+				ON sector.NO = plan.SECTOR_NO
+			LEFT JOIN (
+				SELECT
+					sector.NO AS SECTOR_NO
+					
+					, IFNULL(SUM(IFNULL(total.SALES_OUT, 0)), 0) AS SALES_OUT
+					, IFNULL(SUM(IFNULL(total.SALES_IN, 0)), 0) AS SALES_IN
+					, IFNULL(SUM(IFNULL(total.PURCHASE_OUT, 0)), 0) AS PURCHASE_OUT
+					, IFNULL(SUM(IFNULL(total.PURCHASE_IN_NORMAL, 0)), 0) AS PURCHASE_IN
+					, IFNULL(SUM(IFNULL(total.LABOR, 0)), 0) AS SALARY
+					, IFNULL(SUM(IFNULL(total.EXP, 0)), 0) AS EXPENSE
+					, IFNULL(SUM(IFNULL(total.PURCHASE_IN_COMMON, 0)), 0) AS COMMON
+				FROM
+					TBL_STATISTIC_SECTOR sector
+					LEFT JOIN TBL_PRJ prj
+						ON sector.STATISTIC_SECTOR_VAL LIKE CONCAT('%', prj.ORGNZT_ID, '%')
+					LEFT JOIN TBL_PRJ_RESULT_TOTAL total
+						ON prj.PRJ_ID = total.PRJ_ID
+						AND total.YEAR = #searchYear#
+						AND total.MONTH = #searchMonth#
+				WHERE
+					sector.SECTOR_TYP = '1'
+					AND sector.YEAR = #searchYear#
+				GROUP BY
+					SECTOR_NO
+			) result
+				ON sector.NO = result.SECTOR_NO
+		WHERE
+			sector.SECTOR_TYP = '1'
+			AND sector.YEAR = #searchYear#
+		ORDER BY
+			sector.STATISTIC_SECTOR_ORD
+	</select>
+
+	<select id="BusiResultDAO.selectSaleResultStatistic_reCalc" resultMap="statisticResultList">
+		SELECT
+			plan.STATISTIC_SECTOR_NM AS NM
+			, plan.NO AS SECTOR_NO
+			, plan.PLAN_SALES_OUT
+			, plan.PLAN_SALES_IN
+			, plan.PLAN_PURCHASE_OUT
+			, plan.PLAN_PURCHASE_IN
+			, plan.PLAN_LABOR
+			, plan.PLAN_EXPENSE
+			, plan.PLAN_COMMON
+			, result.SALES_OUT
+			, result.SALES_IN
+			, result.PURCHASE_OUT
+			, result.PURCHASE_IN
+			, result.SALARY
+			, result.EXPENSE
+			, result.COMMON
+			, result.COLOR_TYP
+		FROM
+		(SELECT a.NO
+			, a.STATISTIC_SECTOR_NM
+			, IFNULL(SUM(c.SALES_OUT),0) PLAN_SALES_OUT
+			, IFNULL(SUM(c.SALES_IN),0) PLAN_SALES_IN
+			, IFNULL(SUM(PURCHASE_OUT),0) PLAN_PURCHASE_OUT
+			, IFNULL(SUM(PURCHASE_IN),0) PLAN_PURCHASE_IN
+			, IFNULL(SUM(LABOR),0) PLAN_LABOR
+			, IFNULL(SUM(EXPENSE),0) PLAN_EXPENSE
+			, IFNULL(SUM(d.COST),0) PLAN_COMMON 
+		FROM TBL_STATISTIC_SECTOR a 
+			LEFT JOIN TBL_EAPP_DOC b 
+			ON b.TEMPLT_ID = 22
+			AND b.NEW_AT = 1            
+		LEFT JOIN TBL_EAPP_BUSINESS_PLAN c 
+			ON b.DOC_ID = c.DOC_ID                
+			AND a.STATISTIC_SECTOR_VAL LIKE CONCAT('%',c.ORGNZT_ID,'%') 
+			AND c.PLAN_YM = CONCAT(#searchYear#,LPAD(#searchMonth#,2,"0")) 
+		LEFT JOIN TBL_PURCHASE_IN d 
+			ON c.DOC_ID = d.DOC_ID 
+			AND d.PURCHASE_IN_DT LIKE CONCAT(#searchYear#,LPAD(#searchMonth#,2,"0"),'%') 
+			AND d.TYP = 'C'
+		WHERE
+			a.SECTOR_TYP = 1
+			AND a.YEAR = #searchYear#
+		GROUP BY a.NO
+		) plan
+		INNER JOIN	
+		(SELECT NO
+		       ,STATISTIC_SECTOR_NM AS NM
+		       ,STATISTIC_SECTOR_ORD
+		       ,COLOR_TYP
+		       ,FN_GET_SALES_OUT_ARR(STATISTIC_SECTOR_VAL,#searchYear#,#searchMonth#,'N','N','N','N') SALES_OUT
+		       ,FN_GET_SALES_IN_ARR(STATISTIC_SECTOR_VAL,#searchYear#,#searchMonth#,'N','N','N','N') SALES_IN
+		       ,FN_GET_PURCHASE_OUT_ARR(STATISTIC_SECTOR_VAL,#searchYear#,#searchMonth#,'N','N','N','N') PURCHASE_OUT
+		       ,FN_GET_PURCHASE_IN_ARR(STATISTIC_SECTOR_VAL,#searchYear#,#searchMonth#,'N','N','N','N') PURCHASE_IN
+		       ,0 AS SALARY
+		       ,FN_GET_EXP_ARR(STATISTIC_SECTOR_VAL,#searchYear#,#searchMonth#,'N','N','N','N') EXPENSE
+		       ,FN_GET_PURCHASE_IN_ARR(STATISTIC_SECTOR_VAL,#searchYear#,#searchMonth#,'N','Y','N','N') COMMON
+		  FROM 
+			TBL_STATISTIC_SECTOR a 
+		 WHERE
+			SECTOR_TYP = 1
+			AND a.YEAR = #searchYear#
+		) result
+		ON plan.NO = result.NO
+		ORDER BY 
+			result.STATISTIC_SECTOR_ORD
+	</select>
+	
+	<select id="BusiResultDAO.selectPerfResultStatistic" resultMap="statisticResultList2">
+		SELECT
+			sector.STATISTIC_SECTOR_NM AS NM
+			, sector.COLOR_TYP AS COLOR_TYP
+			, IFNULL(SUM(IFNULL(total.SALES_OUT, 0)), 0) AS SALES_OUT
+			, IFNULL(SUM(IFNULL(total.SALES_IN, 0)), 0) AS SALES_IN
+			, IFNULL(SUM(IFNULL(total.PURCHASE_OUT, 0)), 0) AS PURCHASE_OUT
+			, IFNULL(SUM(IFNULL(total.PURCHASE_IN_NORMAL, 0)), 0) + IFNULL(SUM(IFNULL(total.PURCHASE_IN_COMMON, 0)), 0) AS PURCHASE_IN
+			, IFNULL(SUM(IFNULL(total.LABOR, 0)), 0) AS SALARY
+			, IFNULL(SUM(IFNULL(total.EXP, 0)), 0) AS EXPENSE	
+			, sector.NO AS SECTOR_NO
+			, ( SELECT
+					 IFNULL(SUM(IFNULL(total.SALES_OUT, 0)), 0)
+				       + IFNULL(SUM(IFNULL(total.SALES_IN, 0)), 0)
+				       - IFNULL(SUM(IFNULL(total.PURCHASE_OUT, 0)), 0)
+				       - IFNULL(SUM(IFNULL(total.PURCHASE_IN_NORMAL, 0)), 0) + IFNULL(SUM(IFNULL(total.PURCHASE_IN_COMMON, 0)), 0) 
+				       - IFNULL(SUM(IFNULL(total.LABOR, 0)), 0)
+				       - IFNULL(SUM(IFNULL(total.EXP, 0)), 0)	
+				FROM
+					TBL_STATISTIC_SECTOR sector_acc
+					LEFT JOIN TBL_PRJ prj
+						ON sector_acc.STATISTIC_SECTOR_VAL LIKE CONCAT('%', prj.ORGNZT_ID, '%')
+					LEFT JOIN TBL_PRJ_RESULT_TOTAL total
+						ON prj.PRJ_ID = total.PRJ_ID
+						AND total.YEAR = #searchYear#
+						AND total.MONTH <![CDATA[<=]]> #searchMonth#
+				WHERE
+					sector_acc.SECTOR_TYP = '2'
+					AND sector_acc.YEAR = #searchYear#
+					AND sector_acc.NO = sector.NO
+					) AS ALL_BUSIPROFIT_ACC
+		FROM
+			TBL_STATISTIC_SECTOR sector
+			LEFT JOIN TBL_PRJ prj
+				ON sector.STATISTIC_SECTOR_VAL LIKE CONCAT('%', prj.ORGNZT_ID, '%')
+			LEFT JOIN TBL_PRJ_RESULT_TOTAL total
+				ON prj.PRJ_ID = total.PRJ_ID
+				AND total.YEAR = #searchYear#
+				AND total.MONTH = #searchMonth#
+		WHERE
+			sector.SECTOR_TYP = '2'
+			AND sector.YEAR = #searchYear#
+		GROUP BY
+			SECTOR_NO
+		ORDER BY
+			sector.STATISTIC_SECTOR_ORD
+	</select>
+
+	<select id="BusiResultDAO.selectPerfResultStatistic_reCalc" resultMap="statisticResultList2">
+	SELECT
+		STATISTIC_SECTOR_NM AS NM
+       ,COLOR_TYP
+       ,FN_GET_SALES_OUT_ARR(STATISTIC_SECTOR_VAL,#searchYear#,#searchMonth#,'N','N','N','N') SALES_OUT
+       ,FN_GET_SALES_IN_ARR(STATISTIC_SECTOR_VAL,#searchYear#,#searchMonth#,'N','N','N','N') SALES_IN
+       ,FN_GET_PURCHASE_OUT_ARR(STATISTIC_SECTOR_VAL,#searchYear#,#searchMonth#,'N','N','N','N') PURCHASE_OUT
+       ,FN_GET_PURCHASE_IN_ARR(STATISTIC_SECTOR_VAL,#searchYear#,#searchMonth#,'N','N','N','N') PURCHASE_IN
+       ,0 AS SALARY
+       ,FN_GET_EXP_ARR(STATISTIC_SECTOR_VAL,#searchYear#,#searchMonth#,'N','N','N','N') EXPENSE
+       ,a.NO AS SECTOR_NO
+       , '' AS ALL_BUSIPROFIT_ACC
+	FROM 
+		TBL_STATISTIC_SECTOR a 
+	WHERE
+		SECTOR_TYP = 2
+		AND a.YEAR = #searchYear#
+	ORDER BY 
+		a.STATISTIC_SECTOR_ORD
+	</select>
+	
+	<select id="BusiResultDAO.selectCommResultStatistic" resultMap="statisticResultList2">
+		SELECT
+			sector.STATISTIC_SECTOR_NM AS NM
+			, sector.COLOR_TYP AS COLOR_TYP 
+			, IFNULL(SUM(IFNULL(total.SALES_OUT, 0)), 0) AS SALES_OUT
+			, IFNULL(SUM(IFNULL(total.SALES_IN, 0)), 0) AS SALES_IN
+			, IFNULL(SUM(IFNULL(total.PURCHASE_OUT, 0)), 0) AS PURCHASE_OUT
+			, IFNULL(SUM(IFNULL(total.PURCHASE_IN_NORMAL, 0)), 0) + IFNULL(SUM(IFNULL(total.PURCHASE_IN_COMMON, 0)), 0) AS PURCHASE_IN
+			, IFNULL(SUM(IFNULL(total.LABOR, 0)), 0) AS SALARY
+			, IFNULL(SUM(IFNULL(total.EXP, 0)), 0) AS EXPENSE	
+			, sector.NO AS SECTOR_NO
+			, (	SELECT
+					 IFNULL(SUM(IFNULL(total.SALES_OUT, 0)), 0)
+				       + IFNULL(SUM(IFNULL(total.SALES_IN, 0)), 0)
+				       - IFNULL(SUM(IFNULL(total.PURCHASE_OUT, 0)), 0)
+				       - IFNULL(SUM(IFNULL(total.PURCHASE_IN_NORMAL, 0)), 0) + IFNULL(SUM(IFNULL(total.PURCHASE_IN_COMMON, 0)), 0) 
+				       - IFNULL(SUM(IFNULL(total.LABOR, 0)), 0)
+				       - IFNULL(SUM(IFNULL(total.EXP, 0)), 0)
+				FROM
+					TBL_STATISTIC_SECTOR sector_acc
+					LEFT JOIN TBL_PRJ topPrj
+						ON sector_acc.STATISTIC_SECTOR_VAL LIKE CONCAT('%', topPrj.PRJ_ID, '%')
+					LEFT JOIN TBL_PRJ subPrj
+						ON subPrj.ORG_PRJ_TREE LIKE CONCAT('%', topPrj.PRJ_ID, '%')
+					LEFT JOIN TBL_PRJ_RESULT_TOTAL total
+						ON subPrj.PRJ_ID = total.PRJ_ID
+						AND total.YEAR = #searchYear#
+						AND total.MONTH <![CDATA[<=]]> #searchMonth#
+				WHERE
+					sector_acc.SECTOR_TYP = '3'
+					AND sector_acc.YEAR = #searchYear#
+					AND sector_acc.NO = sector.NO
+			) AS ALL_BUSIPROFIT_ACC
+		FROM
+			TBL_STATISTIC_SECTOR sector
+			LEFT JOIN TBL_PRJ topPrj
+				ON sector.STATISTIC_SECTOR_VAL LIKE CONCAT('%', topPrj.PRJ_ID, '%')
+			LEFT JOIN TBL_PRJ subPrj
+				ON subPrj.ORG_PRJ_TREE LIKE CONCAT('%', topPrj.PRJ_ID, '%')
+			LEFT JOIN TBL_PRJ_RESULT_TOTAL total
+				ON subPrj.PRJ_ID = total.PRJ_ID
+				AND total.YEAR = #searchYear#
+				AND total.MONTH = #searchMonth#
+		WHERE
+			sector.SECTOR_TYP = '3'
+			AND sector.YEAR = #searchYear#
+		GROUP BY
+			SECTOR_NO
+		ORDER BY 
+			sector.STATISTIC_SECTOR_ORD
+	</select>
+
+	<select id="BusiResultDAO.selectCommResultStatistic_reCalc" resultMap="statisticResultList2">
+	SELECT
+		STATISTIC_SECTOR_NM AS NM
+       ,COLOR_TYP
+       ,FN_GET_SALES_OUT_ARR(STATISTIC_SECTOR_VAL,#searchYear#,#searchMonth#,'N','A','Y','N') SALES_OUT
+       ,FN_GET_SALES_IN_ARR(STATISTIC_SECTOR_VAL,#searchYear#,#searchMonth#,'N','A','Y','N') SALES_IN
+       ,FN_GET_PURCHASE_OUT_ARR(STATISTIC_SECTOR_VAL,#searchYear#,#searchMonth#,'N','A','Y','N') PURCHASE_OUT
+       ,FN_GET_PURCHASE_IN_ARR(STATISTIC_SECTOR_VAL,#searchYear#,#searchMonth#,'N','A','Y','N') PURCHASE_IN
+       ,0 AS SALARY
+       ,FN_GET_EXP_ARR(STATISTIC_SECTOR_VAL,#searchYear#,#searchMonth#,'N','A','Y','N') EXPENSE
+       ,a.NO AS SECTOR_NO
+       , '' AS ALL_BUSIPROFIT_ACC
+	FROM 
+		TBL_STATISTIC_SECTOR a 
+		AND a.YEAR = #searchYear#
+	WHERE
+		SECTOR_TYP = 3
+	ORDER BY 
+		a.STATISTIC_SECTOR_ORD
+	</select>
+	
+	
+	<select id="BusiResultDAO.selectLaborResultStatistic_reCalc" resultMap="statisticResult">
+	SELECT NO
+       ,STATISTIC_SECTOR_NM AS NM
+       ,FN_GET_LABOR_ARR(STATISTIC_SECTOR_VAL,#searchYear#,#searchMonth#,'Y','N','N','N') AS SALARY
+	  FROM 
+		TBL_STATISTIC_SECTOR
+	 WHERE
+		NO = #sectorNo#
+
+	</select>
+	
+	
+	<select id="BusiResultDAO.selectCommLaborResultStatistic_reCalc" resultMap="statisticResult">
+	SELECT NO
+       ,STATISTIC_SECTOR_NM AS NM
+       ,FN_GET_LABOR_ARR(STATISTIC_SECTOR_VAL,#searchYear#,#searchMonth#,'Y','A','Y','N') AS SALARY
+	  FROM 
+		TBL_STATISTIC_SECTOR
+	 WHERE
+		NO = #sectorNo#
+
+	</select>
+	
+</sqlMap>

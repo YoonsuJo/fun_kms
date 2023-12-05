@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+    "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+
+<sqlMap resource="egovframework/sqlmap/com/sym/mpm/EgovMenuManage_SQL_Oracle.xml"/>	
+	<sqlMap resource="egovframework/sqlmap/com/sym/mpm/EgovMenuCreat_SQL_Oracle.xml"/>
+	<sqlMap resource="egovframework/sqlmap/com/sym/mpm/EgovMainMenu_SQL_Oracle.xml"/>
+	<sqlMap resource="egovframework/sqlmap/com/sym/mpm/EgovMenuSiteMap_SQL_Oracle.xml"/>
+	<sqlMap resource="egovframework/sqlmap/com/sym/mpm/EgovProgrmManage_SQL_Oracle.xml"/>
+	<sqlMap resource="egovframework/sqlmap/com/sym/mpm/EgovProgrmManageDtl_SQL_Oracle.xml"/>
+	<sqlMap resource="egovframework/sqlmap/com/sym/mpm/EgovBkmkMenuManage_SQL_Oracle.xml"/>
+</sqlMapConfig>

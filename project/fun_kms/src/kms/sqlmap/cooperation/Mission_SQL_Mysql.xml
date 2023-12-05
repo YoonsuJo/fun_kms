@@ -1,0 +1,739 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsMissionDAO">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="Mission" type="kms.com.cooperation.service.Mission"/>
+	<typeAlias  alias="MissionVO" type="kms.com.cooperation.service.MissionVO"/>
+	<typeAlias  alias="MissionHistoryVO" type="kms.com.cooperation.service.MissionHistoryVO"/>
+
+
+		
+	<resultMap id="missionList" class="kms.com.cooperation.service.MissionVO">
+		<result property="missionId"			column="MISSION_ID"			columnIndex="1"/>
+		<result property="prjId"				column="PRJ_ID"				columnIndex="2"/>
+		<result property="prjNm"				column="PRJ_NM"				columnIndex="3"/>
+		<result property="prjCd"				column="PRJ_CD"				columnIndex="4"/>
+		<result property="missionNm"			column="MISSION_NM"			columnIndex="5"/>
+		<result property="missionCn"			column="MISSION_CN"			columnIndex="6"/>
+		<result property="prntMissionId"		column="PRNT_MISSION_ID"	columnIndex="7"/>
+		<result property="prntMissionNm"		column="PRNT_MISSION_NM"	columnIndex="8"/>
+		<result property="missionLv"			column="MISSION_LV"			columnIndex="9"/>
+		<result property="missionTree"			column="MISSION_TREE"		columnIndex="10"/>
+		<result property="leaderNo"				column="Leader_NO"			columnIndex="11"/>
+		<result property="leaderNm"				column="LEADER_NM"			columnIndex="12"/>
+		<result property="leaderId"				column="LEADER_ID"			columnIndex="13"/>
+		<result property="regDt"				column="REG_DT"				columnIndex="14"/>
+		<result property="modDt"				column="MOD_DT"				columnIndex="15"/>
+		<result property="dueDt"				column="DUE_DT"				columnIndex="16"/>
+		<result property="endDt"				column="END_DT"				columnIndex="17"/>
+		<result property="attachFileId"			column="ATTACH_FILE_ID"		columnIndex="18"/>
+		<result property="writerNo"				column="WRITER_NO"			columnIndex="19"/>
+		<result property="writerNm"				column="WRITER_NM"			columnIndex="20"/>
+		<result property="writerId"				column="WRITER_ID"			columnIndex="21"/>
+		<result property="missionStat"			column="MISSION_STAT"   	columnIndex="22"/>
+		<result property="prntDueDt"			column="PRNT_DUE_DT" 		columnIndex="23"/>
+		<result property="typeTree"				column="TYPE_TREE" 			columnIndex="24"/>
+		<result property="statCnt"				column="STAT_CNT"   		columnIndex="25"/>
+		<result property="chdMissionDt"         column="CHD_MISSION_DT"     columnIndex="26"/>
+	</resultMap>
+
+	<resultMap id="missionInfo" class="kms.com.cooperation.service.MissionVO">
+		<result property="missionId"			column="MISSION_ID"			columnIndex="1"/>
+		<result property="prjId"				column="PRJ_ID"				columnIndex="2"/>
+		<result property="prjNm"				column="PRJ_NM"				columnIndex="3"/>
+		<result property="prjCd"				column="PRJ_CD"				columnIndex="4"/>
+		<result property="missionNm"			column="MISSION_NM"			columnIndex="5"/>
+		<result property="missionCn"			column="MISSION_CN"			columnIndex="6"/>
+		<result property="prntMissionId"		column="PRNT_MISSION_ID"	columnIndex="7"/>
+		<result property="prntMissionNm"		column="PRNT_MISSION_NM"	columnIndex="8"/>
+		<result property="missionLv"			column="MISSION_LV"			columnIndex="9"/>
+		<result property="missionTree"			column="MISSION_TREE"		columnIndex="10"/>
+		<result property="leaderNo"				column="Leader_NO"			columnIndex="11"/>
+		<result property="leaderNm"				column="LEADER_NM"			columnIndex="12"/>
+		<result property="leaderId"				column="LEADER_ID"			columnIndex="13"/>
+		<result property="regDt"				column="REG_DT"				columnIndex="14"/>
+		<result property="modDt"				column="MOD_DT"				columnIndex="15"/>
+		<result property="dueDt"				column="DUE_DT"				columnIndex="16"/>
+		<result property="endDt"				column="END_DT"				columnIndex="17"/>
+		<result property="attachFileId"			column="ATTACH_FILE_ID"		columnIndex="18"/>
+		<result property="writerNo"				column="WRITER_NO"			columnIndex="19"/>
+		<result property="writerNm"				column="WRITER_NM"			columnIndex="20"/>
+		<result property="writerId"				column="WRITER_ID"			columnIndex="21"/>
+		<result property="missionStat"			column="MISSION_STAT"  		 columnIndex="22"/>
+		<result property="prntDueDt"			column="PRNT_DUE_DT"   		columnIndex="23"/>
+		<result property="subUseAt"				column="SUB_USE_AT"   		columnIndex="24"/>
+		<result property="statCnt"				column="STAT_CNT"   		columnIndex="25"/>
+		<result property="topUseAt"				column="TOP_USE_AT"   		columnIndex="26"/>
+		<result property="chdMissionDt"         column="CHD_MISSION_DT"     columnIndex="27"/>
+	</resultMap>
+	
+	
+	<resultMap id="missionHistoryList" 		class="kms.com.cooperation.service.MissionHistoryVO">
+		<result property="historyNo"		column="HISTORY_NO"			columnIndex="1"/>
+		<result property="missionId"		column="MISSION_ID"				columnIndex="2"/>
+		<result property="writerNo"			column="WRITER_NO"				columnIndex="3"/>
+		<result property="writerNm"			column="WRITER_NM"				columnIndex="4"/>
+		<result property="writerId"			column="WRITER_ID"			columnIndex="5"/>
+		<result property="regDt"			column="REG_DT"			columnIndex="6"/>
+		<result property="historyStat"		column="HISTORY_STAT"	columnIndex="7"/>
+		<result property="historyCn"		column="HISTORY_CN"	columnIndex="8"/>
+	</resultMap>
+	
+
+			
+	<insert id="MissionDAO.insertMission">
+		INSERT INTO TBL_MISSION
+		(
+			MISSION_ID
+			,PRJ_ID
+			,MISSION_NM
+			,MISSION_CN
+			,PRNT_MISSION_ID
+			,MISSION_LV
+			,MISSION_TREE
+			,LEADER_NO
+			,REG_DT
+			,DUE_DT
+			,ATTACH_FILE_ID
+			,WRITER_NO
+			,USE_AT
+		) VALUES (
+			#missionId#
+			,#prjId#
+			,#missionNm#
+			,#missionCn#
+			,#prntMissionId#
+			,#missionLv#
+			,#missionTree#
+			,#leaderNo#
+			,SYSDATE()
+			,#dueDt#
+			,#attachFileId#
+			,#writerNo#
+			,'Y'
+		)
+	</insert>
+	
+	<update id="MissionDAO.updateMissionTree">
+	UPDATE TBL_MISSION
+		SET MISSION_TREE = FN_MISSION_TREE(MISSION_ID)
+	WHERE 
+		FN_MISSION_TREE(MISSION_ID) LIKE CONCAT('%',#missionId#,'%')
+	</update>
+	
+	
+	<update id="MissionDAO.updateMission">
+		UPDATE TBL_MISSION
+		SET
+			MOD_DT = SYSDATE()
+		<isNotEmpty prepend="," property="prjId">
+			PRJ_ID = #prjId#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="missionNm">
+			MISSION_NM = #missionNm#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="missionCn">
+			MISSION_CN = #missionCn#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="prntMissionId">
+			PRNT_MISSION_ID = #prntMissionId#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="missionLv">
+			MISSION_LV = #missionLv#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="missionTree">
+			MISSION_TREE = #missionTree#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="leaderNo">
+			LEADER_NO = #leaderNo#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="regDt">
+			REG_DT = #regDt#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="dueDt">
+			DUE_DT = #dueDt#
+		</isNotEmpty>
+		<isEqual prepend="," property="missionStat" compareValue="C">
+			END_DT = SYSDATE()
+		</isEqual>
+		<isNotEqual prepend="," property="missionStat" compareValue="C">
+			END_DT = null
+		</isNotEqual>
+		<isNotEmpty prepend="," property="attachFileId">
+			ATTACH_FILE_ID = #attachFileId#
+		</isNotEmpty>	
+		<isNotEmpty prepend="," property="writerNo">
+			WRITER_NO = #writerNo#
+		</isNotEmpty>	
+		<isNotEmpty prepend="," property="useAt">
+			USE_AT = #useAt#
+		</isNotEmpty>
+		WHERE
+			MISSION_ID = #missionId#
+	</update>
+	
+	<update id="MissionDAO.updateMissionPrj">
+		UPDATE TBL_MISSION
+		SET
+			PRJ_ID = #prjId#
+		WHERE
+			MISSION_TREE LIKE CONCAT('%',#missionId#,'%')
+	</update>
+	
+	<update id="MissionDAO.updateMissionTop"> <!-- 하위 미션 수정(처리상태, 완료예정일)시 상위 미션 날짜까지 같이 변경되 DUE_DT 주석 처리함 -->
+		UPDATE TBL_MISSION
+		SET
+			MOD_DT = SYSDATE()
+		  <!-- , DUE_DT = #dueDt# -->
+		  , END_DT = null
+		WHERE
+			MISSION_ID IN (SELECT * FROM
+							  (SELECT B.MISSION_ID
+	                             FROM TBL_MISSION A
+	                             LEFT JOIN TBL_MISSION B ON A.MISSION_TREE LIKE CONCAT('%',LEFT(B.MISSION_ID,23),'%') 
+	                      		WHERE A.MISSION_ID = #missionId#
+	                        	  AND A.USE_AT = 'Y'
+	                              AND B.USE_AT = 'Y'
+                               ) AS C
+                           )
+	</update>
+	
+	
+	
+	
+	<select id="MissionDAO.selectMission" resultMap="missionInfo">
+		SELECT DISTINCT
+			a.MISSION_ID
+			,a.PRJ_ID
+			,c.PRJ_NM
+			,c.PRJ_CD
+			,a.MISSION_NM
+			,a.MISSION_CN
+			,a.PRNT_MISSION_ID
+			,e.MISSION_NM AS 'PRNT_MISSION_NM'
+			,DATE_FORMAT(e.DUE_DT, '%Y%m%d') AS 'PRNT_DUE_DT'
+			,IF((SELECT COUNT(MISSION_ID) FROM TBL_MISSION WHERE USE_AT = 'Y' AND PRNT_MISSION_ID = a.MISSION_ID) = 0,'N','Y') AS 'SUB_USE_AT'
+			,IF((SELECT COUNT(MISSION_ID) FROM TBL_MISSION WHERE USE_AT = 'Y' AND PRNT_MISSION_ID = a.MISSION_ID AND a.MISSION_LV = 0) = 1,'N','Y') AS 'TOP_USE_AT'
+			,a.MISSION_LV
+			,a.MISSION_TREE
+			,IF(IFNULL(a.END_DT,"") = "", IF(DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[<]]> DATE_FORMAT(SYSDATE(), '%Y%m%d'), "D","IC"), "C") AS 'MISSION_STAT' 	<!--완료-C 미완료-IC 지연-D  -->							
+			,a.LEADER_NO
+			,d.USER_NM as 'LEADER_NM'
+			,d.USER_ID as 'LEADER_ID'
+			,DATE_FORMAT(a.REG_DT, '%Y%m%d') AS REG_DT
+			,DATE_FORMAT(a.MOD_DT, '%Y%m%d') AS MOD_DT
+			,DATE_FORMAT(a.DUE_DT, '%Y%m%d') AS DUE_DT
+			,DATE_FORMAT(a.END_DT, '%Y%m%d') AS END_DT
+			,a.ATTACH_FILE_ID
+			,a.WRITER_NO
+			,b.USER_NM as 'WRITER_NM'
+			,b.USER_ID as 'WRITER_ID'
+			,(SELECT COUNT(MISSION_ID) 
+	          				FROM TBL_MISSION 
+	          			   WHERE PRNT_MISSION_ID = a.MISSION_ID
+	           				 AND IF(IFNULL(END_DT,"") = "", IF(DATE_FORMAT(DUE_DT, '%Y%m%d') <![CDATA[<]]> DATE_FORMAT(SYSDATE(), '%Y%m%d'), "D","IC"), "C") != "C"
+	                         AND USE_AT = 'Y'
+	                         AND MISSION_ID != PRNT_MISSION_ID
+	         ) AS 'STAT_CNT'
+	         ,(SELECT MAX(DATE_FORMAT(DUE_DT, '%Y%m%d'))
+                 FROM TBL_MISSION
+                WHERE PRNT_MISSION_ID = a.MISSION_ID
+                  AND USE_AT = 'Y' 
+                  AND MISSION_ID != PRNT_MISSION_ID
+              ) AS 'CHD_MISSION_DT'
+		FROM
+			TBL_MISSION a
+			LEFT JOIN TBL_USERINFO b ON a.WRITER_NO = b.NO
+			LEFT JOIN TBL_PRJ c ON a.PRJ_ID = c.PRJ_ID
+			LEFT JOIN TBL_USERINFO d ON a.LEADER_NO = d.NO
+			LEFT JOIN TBL_MISSION e ON a.PRNT_MISSION_ID = e.MISSION_ID
+		WHERE 1=1
+			AND a.MISSION_ID = #missionId#
+	</select>
+	
+	<select id="MissionDAO.selectMissionHistoryList" resultMap="missionHistoryList">
+		SELECT DISTINCT
+			a.HISTORY_NO
+			,a.MISSION_ID
+			,a.WRITER_NO
+			,b.USER_NM as 'WRITER_NM'
+			,b.USER_ID as 'WRITER_ID'
+			,a.REG_DT
+			,a.HISTORY_STAT
+			,a.HISTORY_CN
+		FROM
+			TBL_MISSION_HISTORY a
+			LEFT JOIN TBL_USERINFO b ON a.WRITER_NO = b.NO
+		WHERE 1=1
+			AND a.MISSION_ID = #missionId#
+		ORDER BY a.REG_DT DESC
+	</select>
+	
+	
+	<select id="MissionDAO.selectMissionList" resultMap="missionList">
+		SELECT 
+			curDoc.TYPE_TREE
+			,curDoc.MISSION_ID
+			,curDoc.PRJ_ID
+			,curDoc.PRJ_NM
+			,curDoc.PRJ_CD
+			,curDoc.MISSION_NM
+			,curDoc.MISSION_CN
+			,curDoc.PRNT_MISSION_ID
+			,curDoc.PRNT_MISSION_NM
+			,DATE_FORMAT(curDoc.PRNT_DUE_DT, '%Y%m%d') AS 'PRNT_DUE_DT'
+			,curDoc.MISSION_LV
+			,curDoc.MISSION_TREE
+			,curDoc.MISSION_STAT
+			,curDoc.LEADER_NO
+			,curDoc.LEADER_NM
+			,curDoc.LEADER_ID
+			,DATE_FORMAT(curDoc.REG_DT, '%Y%m%d') AS REG_DT
+			,DATE_FORMAT(curDoc.MOD_DT, '%Y%m%d') AS MOD_DT
+			,DATE_FORMAT(curDoc.DUE_DT, '%Y%m%d') AS DUE_DT
+			,DATE_FORMAT(curDoc.END_DT, '%Y%m%d') AS END_DT	
+			,curDoc.ATTACH_FILE_ID
+			,curDoc.WRITER_NO
+			,curDoc.WRITER_NM
+			,curDoc.WRITER_ID
+			,STAT_CNT
+			,CHD_MISSION_DT
+				FROM
+					(
+						SELECT
+								DISTINCT 
+								IF(a.MISSION_LV = '0', 'M', 'S') as 'TYPE_TREE'
+								,a.MISSION_ID
+								,a.PRJ_ID
+								,c.PRJ_NM
+								,c.PRJ_CD
+								,a.MISSION_NM
+								,a.MISSION_CN
+								,a.PRNT_MISSION_ID
+								,e.MISSION_NM as 'PRNT_MISSION_NM'
+								,e.DUE_DT AS 'PRNT_DUE_DT'
+								,a.MISSION_LV
+								,a.MISSION_TREE
+								,IF(IFNULL(a.END_DT,"") = "", IF(DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[<]]> DATE_FORMAT(SYSDATE(), '%Y%m%d'), "D","IC"), "C") AS 'MISSION_STAT' 	<!--완료-C 미완료-IC 지연-D  -->							
+								,a.LEADER_NO
+								,d.USER_NM as 'LEADER_NM'
+								,d.USER_ID as 'LEADER_ID'
+								,a.REG_DT
+								,a.MOD_DT
+								,a.DUE_DT
+								,a.END_DT
+								,a.ATTACH_FILE_ID
+								,a.WRITER_NO
+								,b.USER_NM as 'WRITER_NM'
+								,b.USER_ID as 'WRITER_ID'
+								,(SELECT COUNT(MISSION_ID) 
+			          				FROM TBL_MISSION 
+			          			   WHERE PRNT_MISSION_ID = a.MISSION_ID
+			           				 AND IF(IFNULL(END_DT,"") = "", IF(DATE_FORMAT(DUE_DT, '%Y%m%d') <![CDATA[<]]> DATE_FORMAT(SYSDATE(), '%Y%m%d'), "D","IC"), "C") != "C"
+			                         AND USE_AT = 'Y'
+			                         AND MISSION_ID != PRNT_MISSION_ID
+						         ) AS 'STAT_CNT'
+						         ,(SELECT MAX(DATE_FORMAT(DUE_DT, '%Y%m%d'))
+                                     FROM TBL_MISSION
+                                    WHERE PRNT_MISSION_ID = a.MISSION_ID
+                                      AND USE_AT = 'Y' 
+                                      AND MISSION_ID != PRNT_MISSION_ID
+                                  ) AS 'CHD_MISSION_DT'
+							FROM
+								TBL_MISSION a
+								LEFT JOIN TBL_USERINFO b ON a.WRITER_NO = b.NO
+								LEFT JOIN TBL_PRJ c ON a.PRJ_ID = c.PRJ_ID
+								LEFT JOIN TBL_USERINFO d ON a.LEADER_NO = d.NO
+								LEFT JOIN TBL_MISSION e ON a.PRNT_MISSION_ID = e.MISSION_ID
+							WHERE 1=1
+							    AND a.USE_AT = 'Y'
+							    <isEqual property="includeEndMission" compareValue="N">
+							    AND IF(IFNULL(a.END_DT,"") = "", IF(DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[<]]> DATE_FORMAT(SYSDATE(), '%Y%m%d'), "D","IC"), "C") != "C"
+							    </isEqual>
+							<isEqual property="type" compareValue="stat">
+								AND a.END_DT IS NULL 
+								AND DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[<=]]> DATE_FORMAT(#searchDate#, '%Y%m%d')
+								<isNotEmpty property="userList"> 
+									<iterate prepend="AND CONCAT(d.USER_NM, '(', d.USER_ID, ')') IN " open="(" close=")" conjunction="," property="userList">
+										#userList[]#
+									</iterate>
+								</isNotEmpty>
+							</isEqual>
+							<isEqual property="type" compareValue="prj">
+						        <isNotEmpty property="searchPrjId">
+								AND a.PRJ_ID = #searchPrjId#
+						        </isNotEmpty>
+						        <isEqual property="includeEndMission" compareValue="N">
+							    AND IF(IFNULL(a.END_DT,"") = "", IF(DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[<]]> DATE_FORMAT(SYSDATE(), '%Y%m%d'), "D","IC"), "C") != "C"
+							    </isEqual>
+							</isEqual>
+							<isEqual property="type" compareValue="search">
+								<isEqual property="includeICMission" compareValue="N" >
+								AND a.END_DT IS NOT NULL
+								</isEqual>
+								<isEqual property="includeCMission" compareValue="N" >
+								AND a.END_DT IS NULL
+								</isEqual>	
+								<isNotEmpty property="searchKeyword">
+								AND a.MISSION_NM like CONCAT('%',#searchKeyword#,'%')
+						        </isNotEmpty>			
+								<isNotEmpty property="searchWriterNm">
+								AND CONCAT(b.USER_NM, '(', b.USER_ID, ')') = #searchWriterNm#
+						        </isNotEmpty>
+								<!-- <isNotEmpty property="searchLeaderMixes">
+								AND CONCAT(d.USER_NM, '(', d.USER_ID, ')') = #searchLeaderMixes#
+						        </isNotEmpty> -->
+						        <isNotEmpty property="userList"> 
+									<iterate prepend="AND CONCAT(d.USER_NM, '(', d.USER_ID, ')') IN " open="(" close=")" conjunction="," property="userList">
+										#userList[]#
+									</iterate>
+								</isNotEmpty>
+						        <isNotEmpty property="searchPrjId">
+								AND a.PRJ_ID = #searchPrjId#
+						        </isNotEmpty>
+						        <isNotEmpty property="searchDateS">
+								AND DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[>=]]> DATE_FORMAT(#searchDateS#, '%Y%m%d')
+						        </isNotEmpty>
+						        <isNotEmpty property="searchDateE">
+								AND DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[<=]]> DATE_FORMAT(#searchDateE#, '%Y%m%d')
+						        </isNotEmpty>						        
+							</isEqual>
+							<isEqual property="type" compareValue="today">
+								AND a.LEADER_NO = #userNo#         
+								AND (DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[<=]]> DATE_FORMAT(SYSDATE(), '%Y%m%d')         
+								<!-- OR DATE_FORMAT(a.END_DT, '%Y%m%d') = DATE_FORMAT(SYSDATE(), '%Y%m%d') 수정 -->
+								AND a.LEADER_NO = #userNo#
+								AND a.USE_AT = 'Y'
+								AND DATE_FORMAT(a.END_DT, '%Y%m%d') <![CDATA[=]]> DATE_FORMAT(SYSDATE(), '%Y%m%d')
+								<isEqual property="includeEndMission" compareValue="N">
+							    AND IF(IFNULL(a.END_DT,"") = "", IF(DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[<]]> DATE_FORMAT(SYSDATE(), '%Y%m%d'), "D","IC"), "C") != "C"
+							    </isEqual>)         
+								OR (DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[<=]]> DATE_FORMAT(SYSDATE(), '%Y%m%d')         
+								AND a.END_DT IS NULL
+								AND a.LEADER_NO = #userNo#
+								AND a.USE_AT = 'Y'
+								<isEqual property="includeEndMission" compareValue="N">
+							    AND IF(IFNULL(a.END_DT,"") = "", IF(DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[<]]> DATE_FORMAT(SYSDATE(), '%Y%m%d'), "D","IC"), "C") != "C"
+							    </isEqual>) 
+								<isEqual property="includeEndMission" compareValue="N" >
+								AND a.END_DT IS NULL
+								</isEqual>
+							</isEqual>							
+							<isEqual property="type" compareValue="seven">
+								AND a.LEADER_NO = #userNo#
+								AND DATE_FORMAT(a.DUE_DT, '%Y%m%d') BETWEEN DATE_FORMAT(DATE_ADD(SYSDATE(), interval +1 day), '%Y%m%d') AND  DATE_FORMAT(DATE_ADD(SYSDATE(), interval +8 day), '%Y%m%d')			
+								<isEqual property="includeEndMission" compareValue="N" >
+								AND a.END_DT IS NULL
+								</isEqual>
+							</isEqual>	
+							<isEqual property="type" compareValue="thirty">
+								AND a.LEADER_NO = #userNo#
+								AND DATE_FORMAT(a.DUE_DT, '%Y%m%d') BETWEEN DATE_FORMAT(DATE_ADD(SYSDATE(), interval +8 day), '%Y%m%d') AND  DATE_FORMAT(DATE_ADD(SYSDATE(), interval +29 day), '%Y%m%d')				
+								<isEqual property="includeEndMission" compareValue="N" >
+								AND a.END_DT IS NULL
+								</isEqual>
+							</isEqual>	
+							<isEqual property="type" compareValue="next">			
+								AND a.LEADER_NO = #userNo#
+								AND DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[>]]> DATE_FORMAT(DATE_ADD(SYSDATE(), interval +29 day), '%Y%m%d')				
+								<isEqual property="includeEndMission" compareValue="N" >
+								AND a.END_DT IS NULL
+								</isEqual>
+							</isEqual>								
+					) curDoc			
+		<isEqual property="type" compareValue="prj">
+		ORDER BY curDoc.MISSION_TREE
+		</isEqual>
+				
+		<isNotEqual property="type" compareValue="prj">
+		ORDER BY
+			CASE curDoc.MISSION_STAT
+			WHEN "C" THEN 0
+			END ASC
+			,curDoc.DUE_DT ASC
+		</isNotEqual>
+
+		<isEqual property="type" compareValue="search">
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+		</isEqual>
+
+	</select>
+	
+	<select id="MissionDAO.selectMissionListTotCnt" resultClass="java.lang.Integer">
+			SELECT
+				COUNT(DISTINCT a.MISSION_ID)
+			FROM
+				TBL_MISSION a
+				LEFT JOIN TBL_USERINFO b ON a.WRITER_NO = b.NO
+				LEFT JOIN TBL_PRJ c ON a.PRJ_ID = c.PRJ_ID
+				LEFT JOIN TBL_USERINFO d ON a.LEADER_NO = d.NO
+				LEFT JOIN TBL_MISSION e ON a.PRNT_MISSION_ID = e.MISSION_ID
+			WHERE 1=1
+				AND a.USE_AT = 'Y'
+				<isEqual property="includeEndMission" compareValue="N">
+			    AND IF(IFNULL(a.END_DT,"") = "", IF(DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[<]]> DATE_FORMAT(SYSDATE(), '%Y%m%d'), "D","IC"), "C") != "C"
+			    </isEqual>
+				<isEqual property="type" compareValue="stat">
+				AND a.END_DT IS NULL 
+				AND DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[<=]]> DATE_FORMAT(#searchDate#, '%Y%m%d')
+					<isNotEmpty property="userList"> 
+						<iterate prepend="AND CONCAT(d.USER_NM, '(', d.USER_ID, ')') IN " open="(" close=")" conjunction="," property="userList">
+							#userList[]#
+						</iterate>
+					</isNotEmpty>
+				</isEqual>
+				<isEqual property="type" compareValue="prj">
+			        <isNotEmpty property="searchPrjId">
+					AND a.PRJ_ID = #searchPrjId#
+			        </isNotEmpty>
+				</isEqual>
+				<isEqual property="type" compareValue="search">
+					<isEqual property="includeICMission" compareValue="N" >
+					AND a.END_DT IS NOT NULL
+					</isEqual>
+					<isEqual property="includeCMission" compareValue="N" >
+					AND a.END_DT IS NULL
+					</isEqual>	
+					<isNotEmpty property="searchKeyword">
+					AND a.MISSION_NM like CONCAT('%',#searchKeyword#,'%')
+			        </isNotEmpty>			
+					<isNotEmpty property="searchWriterNm">
+					AND CONCAT(b.USER_NM, '(', b.USER_ID, ')') = #searchWriterNm#
+			        </isNotEmpty>
+			        <!-- <isNotEmpty property="searchLeaderMixes">
+					AND CONCAT(d.USER_NM, '(', d.USER_ID, ')') = #searchLeaderMixes#
+				    </isNotEmpty> -->
+				    <isNotEmpty property="userList"> 
+						<iterate prepend="AND CONCAT(d.USER_NM, '(', d.USER_ID, ')') IN " open="(" close=")" conjunction="," property="userList">
+							#userList[]#
+						</iterate>
+					</isNotEmpty>
+			        <isNotEmpty property="searchPrjId">
+					AND a.PRJ_ID = #searchPrjId#
+			        </isNotEmpty>
+			        <isNotEmpty property="searchDateS">
+					AND DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[>=]]> DATE_FORMAT(#searchDateS#, '%Y%m%d')
+			        </isNotEmpty>
+			        <isNotEmpty property="searchDateE">
+					AND DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[<=]]> DATE_FORMAT(#searchDateE#, '%Y%m%d')
+			        </isNotEmpty>						        
+				</isEqual>
+				<isEqual property="type" compareValue="today">
+					AND a.LEADER_NO = #userNo#         
+					AND (DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[<=]]> DATE_FORMAT(SYSDATE(), '%Y%m%d')         
+					<!-- OR DATE_FORMAT(a.END_DT, '%Y%m%d') = DATE_FORMAT(SYSDATE(), '%Y%m%d') 수정 -->
+					AND a.LEADER_NO = #userNo#
+					AND a.USE_AT = 'Y'
+					AND DATE_FORMAT(a.END_DT, '%Y%m%d') <![CDATA[=]]> DATE_FORMAT(SYSDATE(), '%Y%m%d')
+					<isEqual property="includeEndMission" compareValue="N">
+				    AND IF(IFNULL(a.END_DT,"") = "", IF(DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[<]]> DATE_FORMAT(SYSDATE(), '%Y%m%d'), "D","IC"), "C") != "C"
+				    </isEqual>)         
+					OR (DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[<=]]> DATE_FORMAT(SYSDATE(), '%Y%m%d')         
+					AND a.END_DT IS NULL
+					AND a.LEADER_NO = #userNo#
+					AND a.USE_AT = 'Y'
+					<isEqual property="includeEndMission" compareValue="N">
+				    AND IF(IFNULL(a.END_DT,"") = "", IF(DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[<]]> DATE_FORMAT(SYSDATE(), '%Y%m%d'), "D","IC"), "C") != "C"
+				    </isEqual>) 
+					<isEqual property="includeEndMission" compareValue="N" >
+					AND a.END_DT IS NULL
+					</isEqual>
+				</isEqual>							
+				<isEqual property="type" compareValue="seven">
+					AND a.LEADER_NO = #userNo#
+					AND DATE_FORMAT(a.DUE_DT, '%Y%m%d') BETWEEN DATE_FORMAT(DATE_ADD(SYSDATE(), interval +1 day), '%Y%m%d') AND  DATE_FORMAT(DATE_ADD(SYSDATE(), interval +8 day), '%Y%m%d')			
+					<isEqual property="includeEndMission" compareValue="N" >
+					AND a.END_DT IS NULL
+					</isEqual>
+				</isEqual>	
+				<isEqual property="type" compareValue="thirty">
+					AND a.LEADER_NO = #userNo#
+					AND DATE_FORMAT(a.DUE_DT, '%Y%m%d') BETWEEN DATE_FORMAT(DATE_ADD(SYSDATE(), interval +8 day), '%Y%m%d') AND  DATE_FORMAT(DATE_ADD(SYSDATE(), interval +29 day), '%Y%m%d')				
+					<isEqual property="includeEndMission" compareValue="N" >
+					AND a.END_DT IS NULL
+					</isEqual>
+				</isEqual>	
+				<isEqual property="type" compareValue="next">			
+					AND a.LEADER_NO = #userNo#
+					AND DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[>]]> DATE_FORMAT(DATE_ADD(SYSDATE(), interval +29 day), '%Y%m%d')				
+					<isEqual property="includeEndMission" compareValue="N" >
+					AND a.END_DT IS NULL
+					</isEqual>
+				</isEqual>								
+	</select>
+	
+	
+	<select id="MissionDAO.selectMissionInCompleteTotCnt" resultClass="java.lang.Integer">
+			SELECT
+				COUNT(DISTINCT a.MISSION_ID)
+			FROM
+				TBL_MISSION a
+				LEFT JOIN TBL_USERINFO b ON a.WRITER_NO = b.NO
+				LEFT JOIN TBL_PRJ c ON a.PRJ_ID = c.PRJ_ID
+				LEFT JOIN TBL_USERINFO d ON a.LEADER_NO = d.NO
+				LEFT JOIN TBL_MISSION e ON a.PRNT_MISSION_ID = e.MISSION_ID
+			WHERE 1=1
+			AND a.USE_AT = 'Y'
+			AND a.LEADER_NO = #userNo#
+			<isEqual property="type" compareValue="today">
+				AND DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[<=]]> DATE_FORMAT(SYSDATE(), '%Y%m%d')
+				AND a.END_DT IS NULL				
+			</isEqual>						
+			<isEqual property="type" compareValue="seven">
+				AND DATE_FORMAT(a.DUE_DT, '%Y%m%d') BETWEEN DATE_FORMAT(DATE_ADD(SYSDATE(), interval +1 day), '%Y%m%d') AND  DATE_FORMAT(DATE_ADD(SYSDATE(), interval +8 day), '%Y%m%d')			
+				AND a.END_DT IS NULL				
+			</isEqual>						
+			<isEqual property="type" compareValue="thirty">
+				AND DATE_FORMAT(a.DUE_DT, '%Y%m%d') BETWEEN DATE_FORMAT(DATE_ADD(SYSDATE(), interval +8 day), '%Y%m%d') AND  DATE_FORMAT(DATE_ADD(SYSDATE(), interval +29 day), '%Y%m%d')			
+				AND a.END_DT IS NULL
+			</isEqual>						
+			<isEqual property="type" compareValue="next">				
+				AND DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[>]]> DATE_FORMAT(DATE_ADD(SYSDATE(), interval +29 day), '%Y%m%d')
+				AND a.END_DT IS NULL
+			</isEqual>	
+	</select>
+	
+
+
+
+	
+	<!-- MISSION 트리 -->		
+	<select id="MissionDAO.missionTree" parameterClass="missionVO" resultClass="egovMap">
+		SELECT DISTINCT
+			IF(a.MISSION_LV = '0', 'M', 'S') as 'TYPE_TREE'
+			,a.PRJ_ID 
+			,d.PRJ_NM 
+			,a.MISSION_ID 
+			,a.MISSION_NM
+			,a.WRITER_NO
+			,a.PRNT_MISSION_ID
+			,DATE_FORMAT(e.DUE_DT, '%Y%m%d') AS 'PRNT_DUE_DT'
+			,a.MISSION_TREE
+			,a.MISSION_LV
+			,b.USER_NM as 'LEADER_NM'
+			,b.USER_ID as 'LEADER_ID'
+			,c.USER_NM as 'WRITER_NM'
+			,c.USER_ID as 'WRITER_ID'
+			,CHAR_LENGTH(REPLACE(a.MISSION_TREE,'/','')) AS 'LV'
+			,DATE_FORMAT(a.DUE_DT,'%Y%m%d') AS 'DUE_DT'
+			,DATE_FORMAT(a.END_DT,'%Y%m%d') AS 'END_DT'
+			,IF(IFNULL(a.END_DT,"") = "", IF(DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[<]]> DATE_FORMAT(SYSDATE(), '%Y%m%d'), "D","IC"), "C") AS 'MISSION_STAT' 	<!--완료-C 미완료-IC 지연-D  -->
+			,(SELECT COUNT(MISSION_ID) 
+	          				FROM TBL_MISSION 
+	          			   WHERE PRNT_MISSION_ID = a.MISSION_ID
+	           				 AND IF(IFNULL(END_DT,"") = "", IF(DATE_FORMAT(DUE_DT, '%Y%m%d') <![CDATA[<]]> DATE_FORMAT(SYSDATE(), '%Y%m%d'), "D","IC"), "C") != "C"
+	                         AND USE_AT = 'Y'
+	                         AND MISSION_ID != PRNT_MISSION_ID
+	         ) AS 'STAT_CNT'
+	         ,(SELECT MAX(DATE_FORMAT(DUE_DT, '%Y%m%d'))
+                   FROM TBL_MISSION
+                  WHERE PRNT_MISSION_ID = a.MISSION_ID
+                    AND USE_AT = 'Y' 
+                    AND MISSION_ID != PRNT_MISSION_ID
+              ) AS 'CHD_MISSION_DT'
+		FROM TBL_MISSION a
+		LEFT JOIN TBL_USERINFO b ON a.LEADER_NO = b.NO
+		LEFT JOIN TBL_USERINFO c ON a.WRITER_NO = c.NO
+		LEFT JOIN TBL_PRJ d ON a.PRJ_ID = d.PRJ_ID
+		LEFT JOIN TBL_MISSION e ON a.PRNT_MISSION_ID = e.MISSION_ID
+		WHERE 1=1		
+			AND a.USE_AT = 'Y'
+			<isEqual prepend="AND" property="type" compareValue="L">
+			a.LEADER_NO = #userNo#
+			</isEqual>
+			<isEqual prepend="AND" property="type" compareValue="W">
+			a.WRITER_NO = #userNo#
+			</isEqual>
+			<isEqual prepend="AND" property="includeEndMission" compareValue="N" >
+			a.END_DT IS NULL
+			</isEqual>
+			<isNotEmpty prepend="AND" property="searchKeyword">
+			a.MISSION_NM like CONCAT('%',#searchKeyword#,'%')
+	        </isNotEmpty>			
+			<isNotEmpty prepend="AND" property="searchPrjId">
+			a.PRJ_ID = #searchPrjId#
+	        </isNotEmpty>
+			<isNotEmpty prepend="AND" property="missionTree">
+			a.MISSION_TREE LIKE CONCAT('%',LEFT(#missionTree#,23),'%')
+	        </isNotEmpty>
+		ORDER BY a.MISSION_TREE	
+	</select>
+	
+	<!-- 프로젝트 MISSION 트리  -->		
+	<select id="MissionDAO.missionTreeP" parameterClass="missionVO" resultClass="egovMap">
+		SELECT DISTINCT
+			IF(a.MISSION_LV = '0', 'M', 'S') as 'TYPE_TREE'
+			,a.PRJ_ID 
+			,d.PRJ_NM 
+			,a.MISSION_ID 
+			,a.MISSION_NM
+			,a.WRITER_NO
+			,a.PRNT_MISSION_ID
+			,DATE_FORMAT(e.DUE_DT, '%Y%m%d') AS 'PRNT_DUE_DT'
+			,a.MISSION_TREE
+			,a.MISSION_LV
+			,b.USER_NM as 'LEADER_NM'
+			,b.USER_ID as 'LEADER_ID'
+			,c.USER_NM as 'WRITER_NM'
+			,c.USER_ID as 'WRITER_ID'
+			,CHAR_LENGTH(REPLACE(a.MISSION_TREE,'/','')) AS 'LV'
+			,DATE_FORMAT(a.DUE_DT,'%Y%m%d') AS 'DUE_DT'
+			,DATE_FORMAT(a.END_DT,'%Y%m%d') AS 'END_DT'
+			,IF(IFNULL(a.END_DT,"") = "", IF(DATE_FORMAT(a.DUE_DT, '%Y%m%d') <![CDATA[<]]> DATE_FORMAT(SYSDATE(), '%Y%m%d'), "D","IC"), "C") AS 'MISSION_STAT' 	<!--완료-C 미완료-IC 지연-D  -->
+			,(SELECT COUNT(MISSION_ID) 
+	          				FROM TBL_MISSION 
+	          			   WHERE PRNT_MISSION_ID = a.MISSION_ID
+	           				 AND IF(IFNULL(END_DT,"") = "", IF(DATE_FORMAT(DUE_DT, '%Y%m%d') <![CDATA[<]]> DATE_FORMAT(SYSDATE(), '%Y%m%d'), "D","IC"), "C") != "C"
+	                         AND USE_AT = 'Y'
+	                         AND MISSION_ID != PRNT_MISSION_ID
+	         ) AS 'STAT_CNT'
+		FROM TBL_MISSION a
+		LEFT JOIN TBL_USERINFO b ON a.LEADER_NO = b.NO
+		LEFT JOIN TBL_USERINFO c ON a.WRITER_NO = c.NO
+		LEFT JOIN TBL_PRJ d ON a.PRJ_ID = d.PRJ_ID
+		LEFT JOIN TBL_MISSION e ON a.PRNT_MISSION_ID = e.MISSION_ID
+		WHERE 1=1		
+			AND a.USE_AT = 'Y'
+			<isEqual prepend="AND" property="type" compareValue="L">
+			a.LEADER_NO = #userNo#
+			</isEqual>
+			<isEqual prepend="AND" property="includeEndMission" compareValue="N" >
+			a.END_DT IS NULL
+			</isEqual>
+			<isNotEmpty prepend="AND" property="searchKeyword">
+			a.MISSION_NM like CONCAT('%',#searchKeyword#,'%')
+	        </isNotEmpty>			
+			<isNotEmpty prepend="AND" property="searchPrjId">
+			a.PRJ_ID = #searchPrjId#
+	        </isNotEmpty>
+			<isNotEmpty prepend="AND" property="missionTree">
+			a.MISSION_TREE LIKE CONCAT('%',LEFT(#missionTree#,23),'%')
+	        </isNotEmpty>
+	        <isNotEmpty prepend="AND" property="prjId">
+	        d.PRJ_ID = #prjId#
+	        </isNotEmpty>
+		ORDER BY a.MISSION_TREE	
+	</select>
+
+
+
+		<insert id="MissionDAO.insertMissionHistory">
+		INSERT INTO TBL_MISSION_HISTORY
+		(
+			MISSION_ID
+			,WRITER_NO
+			,REG_DT
+			,HISTORY_STAT
+			,HISTORY_CN
+		) VALUES (
+			#missionId#
+			,#writerNo#
+			,SYSDATE()
+			,#historyStat#
+			,#historyCn#
+		)
+	</insert>
+
+</sqlMap>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsDining">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="DiningVO" type="kms.com.common.service.DiningVO"/>
+
+	<resultMap id="diningList" class="kms.com.common.service.DiningVO">
+		<result property="no"			column="NO"			columnIndex="1"/>
+		<result property="dinYear"		column="YEAR"		columnIndex="2"/>
+		<result property="dinMoney"		column="MONEY"		columnIndex="3"/>
+		<result property="dinDate"		column="DATE"		columnIndex="4"/>
+	</resultMap>
+	<resultMap id="dining" class="kms.com.common.service.DiningVO">
+		<result property="no"			column="NO"			columnIndex="1"/>
+		<result property="dinYear"		column="YEAR"		columnIndex="2"/>
+		<result property="dinMoney"		column="MONEY"		columnIndex="3"/>
+		<result property="dinDate"		column="DATE"		columnIndex="4"/>
+	</resultMap>
+	
+	<select id="DiningDAO.selectAllDiningList" resultMap="diningList">
+		SELECT
+			NO, YEAR, MONEY, DATE
+		FROM
+			TBL_DINING
+		ORDER BY
+			NO
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<select id="DiningDAO.selectAllDiningListTotCnt" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			TBL_DINING
+	</select>
+	
+	<select id="DiningDAO.selectDining" resultMap="dining">
+		SELECT
+			NO, YEAR, MONEY, DATE
+		FROM
+			TBL_DINING
+		WHERE
+			NO = #no#
+	</select>
+	
+	<insert id="DiningDAO.insertDining">
+		INSERT INTO TBL_DINING
+		(
+			YEAR, MONEY, DATE
+		) VALUES (
+			#dinYear#, #dinMoney#, #dinDate#
+		)
+	</insert>
+	
+	<update id="DiningDAO.updateDining">
+		UPDATE TBL_DINING
+		SET
+		    YEAR = #dinYear#,
+		    MONEY = #dinMoney#,
+		    DATE = #dinDate#
+		WHERE
+		    NO = #no#
+	</update>
+	
+	
+</sqlMap>

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsEappDoctyp">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="kmsApprovalTypVO" type="kms.com.admin.approval.service.KmsApprovalTypVO"/>
+	
+	<resultMap id="kmsEappDoctyp" class="kms.com.admin.approval.service.KmsApprovalTypVO">
+		<result property="templtId" column="TEMPLT_ID" columnIndex="1"/>
+		<result property="docOrd" column="DOC_ORD" columnIndex="2"/>
+		<result property="docSj" column="DOC_SJ" columnIndex="3"/>
+		<result property="decideLineDesc" column="DECIDE_LINE_DESC" columnIndex="4"/>
+		<result property="docCt" column="DOC_CT" columnIndex="5"/>
+		<result property="docIcon" column="DOC_ICON" columnIndex="6"/>
+		<result property="readerAutoCmt" column="READER_AUTO_CMT" columnIndex="7"/>
+		<result property="coopMixs" column="COOP_MIXS" columnIndex="8"/>
+		<result property="referMixs" column="REFER_MIXS" columnIndex="9"/>
+		<result property="handlerMixs" column="HANDLER_MIXS" columnIndex="10"/>
+		<result property="deciderMix" column="DECIDER_MIX" columnIndex="11"/>
+		<result property="deciderRule1" column="DECIDER_RULE1" columnIndex="12"/>
+		<result property="deciderRule2" column="DECIDER_RULE2" columnIndex="13"/>
+		<result property="deciderRule3" column="DECIDER_RULE3" columnIndex="14"/>
+		<result property="deciderRule4" column="DECIDER_RULE4" columnIndex="15"/>
+		<result property="deciderRule5" column="DECIDER_RULE5" columnIndex="16"/>
+		<result property="useYn" column="USE_YN" columnIndex="17"/>
+	</resultMap>
+	
+	<resultMap id="kmsCompanytyp" class="kms.com.admin.approval.service.KmsApprovalTypVO">
+		<result property="companyId" column="COMPANY_ID" columnIndex="1"/>
+		<result property="companyNm" column="COMPANY_NM" columnIndex="2"/>
+	</resultMap>
+
+
+		
+			
+	
+	
+	
+	<insert id="kmsEappDoctypDAO.insertKmsEappDoctyp_S">
+		<selectKey  resultClass="java.lang.Integer" keyProperty="docOrd" >
+			SELECT IFNULL(MAX(DOC_ORD),-1)+1 DOC_ORD
+			FROM TBL_EAPP_DOCTYP
+		</selectKey>
+		<![CDATA[
+			INSERT INTO TBL_EAPP_DOCTYP 
+				(  DOC_ORD
+				  , DOC_SJ
+				  , DECIDE_LINE_DESC
+				  , DOC_CT
+				  , DOC_ICON
+				  , READER_AUTO_CMT
+				  , COOP_MIXS
+				  , REFER_MIXS
+				  , HANDLER_MIXS
+				  , DECIDER_MIX
+				  , DECIDER_RULE1
+				  , DECIDER_RULE2
+				  , DECIDER_RULE3
+				  , DECIDER_RULE4 
+				  , DECIDER_RULE5 )
+			VALUES ( #docOrd#
+				  , #docSj#
+				  , #decideLineDesc#
+				  , #docCt#
+				  , #docIcon#
+				  , #readerAutoCmt#
+				  , #coopMixs#
+				  , #referMixs#
+				  , #handlerMixs#
+				  , #deciderMix#
+				  , #deciderRule1#
+				  , #deciderRule2#
+				  , #deciderRule3#
+				  , #deciderRule4# 
+				  , #deciderRule5# )
+		]]>
+	</insert>
+	
+	<update id="kmsEappDoctypDAO.updateKmsEappDoctyp_S">
+		<![CDATA[
+			UPDATE TBL_EAPP_DOCTYP
+			SET  
+				DOC_SJ=#docSj#
+				, DECIDE_LINE_DESC=#decideLineDesc#
+				, DOC_CT=#docCt#
+				, DOC_ICON=#docIcon#
+				, READER_AUTO_CMT=#readerAutoCmt#
+				, COOP_MIXS=#coopMixs#
+				, REFER_MIXS=#referMixs#
+				, HANDLER_MIXS=#handlerMixs#
+				, DECIDER_MIX=#deciderMix#
+				, DECIDER_RULE1=#deciderRule1#
+				, DECIDER_RULE2=#deciderRule2#
+				, DECIDER_RULE3=#deciderRule3#
+				, DECIDER_RULE4=#deciderRule4#
+				, DECIDER_RULE5=#deciderRule5#
+				, USE_YN = #useYn#
+			WHERE TEMPLT_ID= #templtId#
+		]]>
+	</update>
+	
+	<delete id="kmsEappDoctypDAO.deleteKmsEappDoctyp_S">
+		<![CDATA[
+			DELETE FROM TBL_EAPP_DOCTYP 
+			
+			WHERE TEMPLT_ID= #templtId#
+		]]>
+	</delete>
+	
+	<select id="kmsEappDoctypDAO.selectKmsEappDoctyp_S" resultMap="kmsEappDoctyp">
+		<![CDATA[
+			SELECT
+				TEMPLT_ID
+				, DOC_ORD
+				, DOC_SJ
+				, DECIDE_LINE_DESC
+				, DOC_CT
+				, DOC_ICON
+				, READER_AUTO_CMT
+				, COOP_MIXS
+				, REFER_MIXS
+				, HANDLER_MIXS
+				, DECIDER_MIX
+				, DECIDER_RULE1
+				, DECIDER_RULE2
+				, DECIDER_RULE3
+				, DECIDER_RULE4
+				, DECIDER_RULE5
+				, USE_YN
+			FROM TBL_EAPP_DOCTYP
+		]]>
+			WHERE TEMPLT_ID = #templtId#
+	</select>
+	
+	<select id="kmsEappDoctypDAO.selectKmsEappDoctypList_D" parameterClass="kmsApprovalTypVO" resultMap="kmsEappDoctyp">
+			SELECT
+				TEMPLT_ID
+				, DOC_ORD
+				, DOC_SJ
+				, DECIDE_LINE_DESC
+				, DOC_CT
+				, DOC_ICON
+				, READER_AUTO_CMT
+				, COOP_MIXS
+				, REFER_MIXS
+				, HANDLER_MIXS
+				, DECIDER_MIX
+				, DECIDER_RULE1
+				, DECIDER_RULE2
+				, DECIDER_RULE3
+				, DECIDER_RULE4
+				, DECIDER_RULE5
+				, USE_YN
+			FROM 
+				TBL_EAPP_DOCTYP
+			WHERE 1=1
+			<isNotEqual prepend="AND" property="useYn" compareValue="0">
+				USE_YN = #useYn#
+			</isNotEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				TEMPLT_ID = #searchKeyword#
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				DOC_ORD LIKE CONCAT('%',#searchKeyword#,'%')
+			</isEqual>
+				ORDER BY DOC_ORD ASC
+					limit #firstIndex#, #recordCountPerPage#	
+	</select>	
+	<select id="kmsEappDoctypDAO.selectKmsEappDoctypListTotCnt_S" parameterClass="kmsApprovalTypVO" resultClass="int">
+			SELECT COUNT(*) totcnt
+			FROM TBL_EAPP_DOCTYP
+			WHERE 1=1
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				TEMPLT_ID = #searchKeyword#
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				DOC_ORD LIKE CONCAT('%',#searchKeyword#,'%')
+			</isEqual>
+	</select>
+	
+
+<update id="kmsEappDoctypDAO.updateKmsEappDoctypOrd">
+		<![CDATA[
+			UPDATE TBL_EAPP_DOCTYP
+			SET  DOC_ORD=#docOrd#
+			WHERE TEMPLT_ID= #templtId#
+		]]>
+	</update>
+	
+	
+	
+	<select id="kmsEappDoctypDAO.selectKmsCompanyList" parameterClass="kmsApprovalTypVO" resultMap="kmsCompanytyp">
+		<![CDATA[
+			SELECT
+				CODE AS COMPANY_ID	
+				,CODE_NM AS COMPANY_NM
+			FROM COMTCCMMNDETAILCODE
+			WHERE CODE_ID = 'KMS007'
+			AND USE_AT = 'Y';
+		]]>
+	</select>	
+	
+</sqlMap>

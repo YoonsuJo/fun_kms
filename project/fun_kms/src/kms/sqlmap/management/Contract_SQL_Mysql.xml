@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsContractDAO">
+
+	<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap" />
+	
+	<select id="KmsContractDAO.selectContractList" resultClass="egovMap">
+	<![CDATA[
+	SELECT
+		cont.no AS contract_no
+		, cont.sj
+		, cont.nm
+		, cont.contract_date
+		, cont.contract_start_date
+		, cont.contract_end_date
+		, org.orgnzt_id
+		, org.orgnzt_nm
+		, prj.prj_id
+		, prj.prj_nm
+		, prj.prj_cd
+		, cont.result_register
+	FROM
+		tbl_contract cont
+		LEFT OUTER JOIN tbl_orgnzt org
+		ON cont.orgnzt_id = org.orgnzt_id
+		LEFT OUTER JOIN tbl_prj prj
+		ON cont.prj_id = prj.prj_id
+	WHERE
+		cont.use_at = 'Y'
+	]]>
+		<isNotEmpty prepend="AND" property="searchTyp">
+			cont.typ = #searchTyp#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchSj">
+			cont.sj LIKE CONCAT('%', #searchSj#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchCn">
+			cont.cn LIKE CONCAT('%', #searchCn#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchNm">
+			cont.nm LIKE CONCAT('%', #searchNm#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchOrgnztNm">
+			org.orgnzt_nm LIKE CONCAT('%', #searchOrgnztNm#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchPrjNm">
+			prj.prj_nm LIKE CONCAT('%', #searchPrjNm#, '%')
+		</isNotEmpty>
+	ORDER BY
+		cont.no DESC
+	LIMIT
+		#recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<select id="KmsContractDAO.selectContractListCnt" resultClass="java.lang.Integer">
+	<![CDATA[
+	SELECT
+		COUNT(cont.no)
+	FROM
+		tbl_contract cont
+		LEFT OUTER JOIN  tbl_orgnzt org
+		ON cont.orgnzt_id = org.orgnzt_id
+		LEFT OUTER JOIN  tbl_prj prj
+		ON cont.prj_id = prj.prj_id
+	WHERE
+		cont.use_at = 'Y'
+	]]>
+		<isNotEmpty prepend="AND" property="searchTyp">
+			cont.typ = #searchTyp#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchSj">
+			cont.sj LIKE CONCAT('%', #searchSj#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchCn">
+			cont.cn LIKE CONCAT('%', #searchCn#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchNm">
+			cont.nm LIKE CONCAT('%', #searchNm#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchOrgnztNm">
+			org.orgnzt_nm LIKE CONCAT('%', #searchOrgnztNm#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchPrjNm">
+			prj.prj_nm LIKE CONCAT('%', #searchPrjNm#, '%')
+		</isNotEmpty>
+	</select>
+	
+	<select id="KmsContractDAO.selectContract" resultClass="egovMap">
+	<![CDATA[
+	SELECT
+		cont.no AS contract_no
+		, cont.sj
+		, cont.typ
+		, DATE_FORMAT(cont.write_date, '%Y.%m.%d %H:%i') AS write_date
+		, DATE_FORMAT(cont.last_update_date, '%Y.%m.%d %H:%i') AS last_update_date
+		, cont.contract_date
+		, cont.contract_start_date
+		, cont.contract_end_date
+		, cont.nm
+		, cont.busi_no
+		, cont.rep_nm
+		, cont.phone
+		, cont.adres
+		, cont.expense
+		, cont.contain_vat
+		, cont.cn
+		, org.orgnzt_id
+		, org.orgnzt_nm
+		, prj.prj_id
+		, prj.prj_nm
+		, prj.prj_cd
+		, cont.atch_file_id
+		, usr.no AS user_no
+		, usr.user_id
+		, usr.user_nm
+		, cod.code_nm AS company_nm
+		, cont.company_cd
+		, cont.result_register
+	FROM
+		tbl_contract cont
+		LEFT OUTER JOIN tbl_orgnzt org
+		ON cont.orgnzt_id = org.orgnzt_id
+		LEFT OUTER JOIN tbl_prj prj
+		ON cont.prj_id = prj.prj_id
+		LEFT OUTER JOIN tbl_userinfo usr
+		ON cont.writer_no = usr.no
+		LEFT OUTER JOIN comtccmmndetailcode cod
+		ON cont.company_cd = cod.code
+	WHERE
+		TRUE
+		AND cont.no = #contractNo#
+	ORDER BY
+		cont.no DESC
+	]]>
+	</select>
+	
+	<insert id="KmsContractDAO.insertContract" >
+	<![CDATA[
+	INSERT INTO
+		tbl_contract
+		(
+			writer_no
+			, write_date
+			, last_update_date
+			, typ
+			, sj
+			, cn
+			, company_cd
+			, contract_date
+			, contract_start_date
+			, contract_end_date
+			, nm
+			, busi_no
+			, rep_nm
+			, adres
+			, phone
+			, expense
+			, contain_vat
+			, atch_file_id
+			, orgnzt_id
+			, prj_id
+			, result_register
+		)
+		VALUES
+		(
+			#writerNo#
+			, SYSDATE()
+			, SYSDATE()
+			, #insertTyp#
+			, #sj#
+			, #cn#
+			, #companyCd#
+			, #contractDate#
+			, #contractStartDate#
+			, #contractEndDate#
+			, #nm#
+			, #busiNo#
+			, #repNm#
+			, #adres#
+			, #phone#
+			, #expense#
+			, #containVat#
+			, #atchFileId#
+			, #orgnztId#
+			, #prjId#
+			, #resultRegister#
+		)
+	]]>
+	</insert>
+	
+	<update id="KmsContractDAO.deleteContract" >
+	<![CDATA[
+	UPDATE
+		tbl_contract
+	SET
+		last_update_date = SYSDATE()
+		, use_at = 'N'
+	WHERE
+		no = #contractNo#
+	]]>
+	</update>
+	
+	<update id="KmsContractDAO.updateContract" >
+	<![CDATA[
+	UPDATE
+		tbl_contract
+	SET
+		last_update_date = SYSDATE()
+		, typ = #insertTyp#
+		, sj = #sj#
+		, cn = #cn#
+		, company_cd = #companyCd# 
+		, contract_date = #contractDate#
+		, contract_start_date = #contractStartDate#
+		, contract_end_date = #contractEndDate#
+		, nm = #nm#
+		, busi_no = #busiNo#
+		, rep_nm = #repNm#
+		, adres = #adres#
+		, phone = #phone#
+		, expense = #expense#
+		, contain_vat = CASE WHEN #containVat# = 'Y' THEN 'Y' ELSE NULL END
+		, atch_file_id = #atchFileId#
+		, orgnzt_id = #orgnztId#
+		, prj_id = #prjId#
+	WHERE
+		no = #contractNo#
+	]]>
+	</update>
+	
+	<update id="KmsContractDAO.updateContractResultRegister" >
+	<![CDATA[
+	UPDATE
+		tbl_contract
+	SET
+		result_register = #resultRegister#
+	WHERE
+		no = #contractNo#
+	]]>
+	</update>
+	
+	<select id="KmsContractDAO.selectAuthList" resultClass="egovMap">
+	<![CDATA[
+	SELECT
+		auth.no
+		, auth.user_no
+		, usr.user_nm
+		, usr.user_id
+	FROM
+		tbl_contract_auth auth
+		INNER JOIN tbl_userinfo usr
+		ON auth.user_no = usr.no
+	WHERE
+		contract_no = #contractNo#
+	]]>
+	</select>
+	
+	<insert id="KmsContractDAO.insertAuthList" >
+	INSERT INTO
+		tbl_contract_auth
+		(
+			contract_no
+			, user_no
+		)(
+			SELECT
+				#contractNo# AS contract_no
+				, user_no
+			FROM (
+				SELECT
+					no AS user_no
+				FROM
+					tbl_userinfo
+				<iterate prepend="WHERE user_id IN " open="(" conjunction="," close=")" property="authList">
+					#authList[]#
+				</iterate>
+			) K
+		)
+	</insert>
+	
+	<delete id="KmsContractDAO.deleteAuthList">
+	DELETE FROM
+		tbl_contract_auth
+	WHERE
+		contract_no = #contractNo#
+	</delete>
+
+</sqlMap>

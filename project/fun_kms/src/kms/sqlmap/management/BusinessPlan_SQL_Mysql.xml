@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsBusinessPlanDAO">
+
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="planCostVO" type="kms.com.management.service.PlanCostVO"/>
+	<resultMap  id="planCostList" class="kms.com.management.service.PlanCostVO">
+		<result property="prjId"		column="PRJ_ID"			columnIndex="1"/>
+		<result property="prjNm"		column="PRJ_NM"			columnIndex="2"/>
+		<result property="prjCd"		column="PRJ_CD"			columnIndex="3"/>
+		<result property="orgnztId"		column="ORGNZT_ID"		columnIndex="4"/>
+		<result property="orgnztNm"		column="ORGNZT_NM"		columnIndex="5"/>
+		<result property="planExp"		column="PLAN_EXP"		columnIndex="6"/>
+		<result property="planLabor"	column="PLAN_LABOR"		columnIndex="7"/>
+		<result property="stat"			column="STAT"			columnIndex="8"/>
+	</resultMap>
+	<resultMap  id="businessPlanList" 		class="kms.com.management.service.PlanCostVO">
+		<result property="salesOut"			column="SALES_OUT"			/>
+		<result property="salesIn"				column="SALES_IN"				/>
+		<result property="purchaseOut"		column="PURCHASE_OUT"		/>
+		<result property="purchaseIn"		column="PURCHASE_IN"		/>
+		<result property="planLabor"			column="LABOR"				/>
+		<result property="planExp"			column="EXPENSE"				/>
+		<result property="common"			column="COMMON"			/>
+	</resultMap>
+	
+	<select id="BusinessPlanDAO.prjPlanCostList" parameterClass="planCostVO" resultMap="planCostList">
+	
+	SELECT a.PRJ_ID
+		,a.PRJ_NM
+		,a.PRJ_CD 
+		,d.ORGNZT_ID
+		,d.ORGNZT_NM
+		, IFNULL(b.COST,0) PLAN_EXP
+		, IFNULL(c.COST,0) PLAN_LABOR
+		,a.STAT
+	FROM TBL_PRJ a
+	LEFT OUTER JOIN 
+	(
+		SELECT a.PRJ_ID, SUM(COST) COST
+		FROM TBL_PLAN_EXP a
+		INNER JOIN TBL_PRJ b
+		ON a.PRJ_ID = b.PRJ_ID
+		INNER JOIN TBL_EAPP_DOC c
+		ON a.DOC_ID = c.DOC_ID
+		WHERE 1=1
+		<isNotEmpty prepend="AND" property="searchOrgIdList">
+			<iterate prepend="b.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+				#searchOrgIdList[]#
+			</iterate>
+		</isNotEmpty>
+			AND a.DECIDE_YN IN ('Y'<isEqual property="includeResult" compareValue="Y">,'N'</isEqual>)
+			<isNotEqual prepend="AND" property="includeAcc" compareValue="Y">
+				LEFT(a.EXP_DT,6) = CONCAT(#searchYear#,LPAD(#searchMonth#,2,"0"))
+			</isNotEqual>
+			<isEqual prepend="AND" property="includeAcc" compareValue="Y">
+				a.EXP_DT BETWEEN CONCAT(#searchYear#, '0101') AND CONCAT(#searchYear#, LPAD(#searchMonth#,2,"0"), '31')
+			</isEqual>
+			AND c.NEW_AT = 1
+		GROUP BY a.PRJ_ID	
+	) b
+		ON a.PRJ_ID = b.PRJ_ID
+	LEFT OUTER JOIN 
+	(
+		SELECT a.PRJ_ID, SUM(a.COST) COST
+		FROM TBL_PLAN_LABOR a
+		INNER JOIN TBL_PRJ b
+		ON a.PRJ_ID = b.PRJ_ID
+		INNER JOIN TBL_EAPP_DOC c
+		ON a.DOC_ID = c.DOC_ID
+		WHERE 1=1
+		<isNotEmpty prepend="AND" property="searchOrgIdList">
+			<iterate prepend="b.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+				#searchOrgIdList[]#
+			</iterate>
+		</isNotEmpty>
+			AND a.DECIDE_YN IN ('Y'<isEqual property="includeResult" compareValue="Y">,'N'</isEqual>)
+			<isNotEqual prepend="AND" property="includeAcc" compareValue="Y">
+				LEFT(a.LABOR_DT,6) = CONCAT(#searchYear#,LPAD(#searchMonth#,2,"0"))
+			</isNotEqual>
+			<isEqual prepend="AND" property="includeAcc" compareValue="Y">
+				a.LABOR_DT BETWEEN CONCAT(#searchYear#, '0101') AND CONCAT(#searchYear#, LPAD(#searchMonth#,2,"0"), '31')
+			</isEqual>
+			AND c.NEW_AT = 1
+		GROUP BY a.PRJ_ID	
+	) c
+		ON a.PRJ_ID = c.PRJ_ID
+	INNER JOIN TBL_ORGNZT d
+		ON a.ORGNZT_ID = d.ORGNZT_ID
+	
+	WHERE  1=1 
+	<isNotEmpty prepend="AND" property="searchOrgIdList">
+		<iterate prepend="a.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+			#searchOrgIdList[]#
+		</iterate>
+	</isNotEmpty>
+	<isEqual property="includeAllDate" compareValue="N">
+		<![CDATA[
+		AND a.ST_DT <= #startDate#
+		AND a.COMP_DUE_DT >= #endDate#
+		]]>
+	</isEqual>
+	ORDER BY a.ORG_PRJ_TREE_ORD
+	</select>
+	
+	<select id="BusinessPlanDAO.prjPlanCostSum" parameterClass="planCostVO" resultMap="planCostList">
+	
+	SELECT a.PRJ_ID
+		,a.PRJ_NM
+		,a.PRJ_CD 
+		,d.ORGNZT_ID
+		,d.ORGNZT_NM
+		,IFNULL(SUM(b.COST),0) PLAN_EXP
+		,IFNULL(SUM(c.COST),0) PLAN_LABOR
+		,a.STAT
+	FROM TBL_PRJ a
+	LEFT OUTER JOIN 
+	(
+		SELECT a.PRJ_ID, SUM(COST) COST
+		FROM TBL_PLAN_EXP a
+		INNER JOIN TBL_PRJ b
+		ON a.PRJ_ID = b.PRJ_ID
+		INNER JOIN TBL_EAPP_DOC c
+		ON a.DOC_ID = c.DOC_ID
+		WHERE 1=1
+		<isNotEmpty prepend="AND" property="searchOrgIdList">
+			<iterate prepend="b.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+				#searchOrgIdList[]#
+			</iterate>
+		</isNotEmpty>
+			AND a.DECIDE_YN IN ('Y'<isEqual property="includeResult" compareValue="Y">,'N'</isEqual>)
+			<isNotEqual prepend="AND" property="includeAcc" compareValue="Y">
+				LEFT(a.EXP_DT,6) = CONCAT(#searchYear#,LPAD(#searchMonth#,2,"0"))
+			</isNotEqual>
+			<isEqual prepend="AND" property="includeAcc" compareValue="Y">
+				a.EXP_DT BETWEEN CONCAT(#searchYear#, '0101') AND CONCAT(#searchYear#, LPAD(#searchMonth#,2,"0"), '31')
+			</isEqual>
+			AND c.NEW_AT = 1
+		GROUP BY a.PRJ_ID	
+	) b
+		ON a.PRJ_ID = b.PRJ_ID
+	LEFT OUTER JOIN 
+	(
+		SELECT a.PRJ_ID, SUM(a.COST) COST
+		FROM TBL_PLAN_LABOR a
+		INNER JOIN TBL_PRJ b
+		ON a.PRJ_ID = b.PRJ_ID
+		INNER JOIN TBL_EAPP_DOC c
+		ON a.DOC_ID = c.DOC_ID
+		WHERE 1=1
+		<isNotEmpty prepend="AND" property="searchOrgIdList">
+			<iterate prepend="b.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+				#searchOrgIdList[]#
+			</iterate>
+		</isNotEmpty>
+			AND a.DECIDE_YN IN ('Y'<isEqual property="includeResult" compareValue="Y">,'N'</isEqual>)
+			<isNotEqual prepend="AND" property="includeAcc" compareValue="Y">
+				LEFT(a.LABOR_DT,6) = CONCAT(#searchYear#,LPAD(#searchMonth#,2,"0"))
+			</isNotEqual>
+			<isEqual prepend="AND" property="includeAcc" compareValue="Y">
+				a.LABOR_DT BETWEEN CONCAT(#searchYear#, '0101') AND CONCAT(#searchYear#, LPAD(#searchMonth#,2,"0"), '31')
+			</isEqual>
+			AND c.NEW_AT = 1
+		GROUP BY a.PRJ_ID	
+	) c
+		ON a.PRJ_ID = c.PRJ_ID
+	INNER JOIN TBL_ORGNZT d
+		ON a.ORGNZT_ID = d.ORGNZT_ID
+	
+	WHERE 1=1
+	<isNotEmpty prepend="AND" property="searchOrgIdList">
+		<iterate prepend="a.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+			#searchOrgIdList[]#
+		</iterate>
+	</isNotEmpty>
+	<isEqual property="includeAllDate" compareValue="N">
+		<![CDATA[
+		AND a.ST_DT <= #startDate#
+		AND a.COMP_DUE_DT >= #endDate#
+		]]>
+	</isEqual>
+	ORDER BY a.ORGNZT_ID
+	</select>
+	
+	
+	<select id="BusinessPlanDAO.prjPlanCostDetailList" parameterClass="planCostVO" resultClass="egovMap">
+	SELECT 
+		*
+	FROM
+	(
+		SELECT 
+			a.DOC_ID
+			,a.SUBJECT
+			,a.DOC_DT
+			,d.PRJ_ID
+			,d.PRJ_NM
+			,d.PRJ_CD
+			,e.DOC_SJ TEMPLT_SJ
+			,f.NO WRITER_NO
+			,f.USER_ID WRITER_ID
+			,f.USER_NM WRITER_NM
+			,b.COST PLAN_EXP
+			,c.COST PLAN_LABOR
+			,g.ORGNZT_NM
+			,g.ORGNZT_ID
+		FROM
+			TBL_EAPP_DOC a
+		LEFT OUTER JOIN
+			(
+			SELECT a.DOC_ID
+				,SUM(a.COST) COST
+			FROM
+				TBL_PLAN_EXP a
+			WHERE 
+				a.PRJ_ID = #searchPrjId#
+				AND a.DECIDE_YN IN ('Y'<isEqual property="includeResult" compareValue="Y">,'N'</isEqual>)
+				AND LEFT(EXP_DT,6) = CONCAT(#searchYear#, LPAD(#searchMonth#, 2, '0'))
+				GROUP BY a.DOC_ID
+			) b
+			ON a.DOC_ID = b.DOC_ID
+		LEFT OUTER JOIN
+			(
+			SELECT a.DOC_ID
+				,SUM(a.COST) COST
+			FROM
+				TBL_PLAN_LABOR a
+			WHERE 
+				a.PRJ_ID = #searchPrjId#
+				AND a.DECIDE_YN IN ('Y'<isEqual property="includeResult" compareValue="Y">,'N'</isEqual>)
+				AND LEFT(LABOR_DT,6) = CONCAT(#searchYear#, LPAD(#searchMonth#, 2, '0'))
+				GROUP BY a.DOC_ID
+			) c
+			ON a.DOC_ID = c.DOC_ID
+		INNER JOIN TBL_PRJ d
+		INNER JOIN TBL_EAPP_DOCTYP e
+			ON a.TEMPLT_ID = e.TEMPLT_ID
+		INNER JOIN TBL_USERINFO f
+			ON a.WRITER_NO = f.NO
+		INNER JOIN TBL_ORGNZT g
+			ON d.ORGNZT_ID = g.ORGNZT_ID
+	
+		
+		WHERE
+			d.PRJ_ID = #searchPrjId#
+			AND a.NEW_AT = 1
+			
+	) a
+	WHERE
+		(PLAN_EXP IS NOT NULL OR PLAN_LABOR IS NOT NULL)
+	
+	</select>
+	
+	<select id="BusinessPlanDAO.annualBusinessPlan" resultMap="businessPlanList">
+	<![CDATA[
+	SELECT 
+		IFNULL(SUM(IFNULL(a.SALES_OUT, 0)), 0) SALES_OUT
+		,IFNULL(SUM(IFNULL(a.SALES_IN, 0)), 0) SALES_IN
+		,IFNULL(SUM(IFNULL(a.PURCHASE_OUT, 0)), 0) PURCHASE_OUT
+		,IFNULL(SUM(IFNULL(a.PURCHASE_IN, 0)), 0) PURCHASE_IN
+		,IFNULL(SUM(IFNULL(a.LABOR, 0)), 0) LABOR
+		,IFNULL(SUM(IFNULL(a.EXPENSE, 0)), 0) EXPENSE
+		,IFNULL(SUM(IFNULL(d.COST, 0)), 0) COMMON
+		
+	FROM
+		TBL_EAPP_BUSINESS_PLAN a
+		INNER JOIN TBL_EAPP_DOC b
+			ON a.DOC_ID = b.DOC_ID
+			AND b.NEW_AT = 1
+		INNER JOIN TBL_BUSINESS_SECTOR c
+			ON c.NO = #searchSectorNo#
+			AND c.BUSI_SECTOR_VAL LIKE CONCAT('%', a.ORGNZT_ID, '%')
+		INNER JOIN V_PURCHASE_IN d
+			ON a.DOC_ID = d.DOC_ID
+			AND SUBSTR(a.PLAN_YM,5,2) = SUBSTR(d.PURCHASE_IN_DT,5,2)
+	WHERE
+		LEFT(a.PLAN_YM,4) = #searchYear#
+	
+	GROUP BY SUBSTR(a.PLAN_YM,5,2)
+	ORDER BY 
+		SUBSTR(a.PLAN_YM,5,2)
+	]]> 
+	</select>
+	
+	<select id="BusinessPlanDAO.annualBusinessPlanSum" resultMap="businessPlanList">
+	<![CDATA[
+	SELECT 
+		IFNULL(SUM(IFNULL(a.SALES_OUT, 0)), 0) SALES_OUT
+		,IFNULL(SUM(IFNULL(a.SALES_IN, 0)), 0) SALES_IN
+		,IFNULL(SUM(IFNULL(a.PURCHASE_OUT, 0)), 0) PURCHASE_OUT
+		,IFNULL(SUM(IFNULL(a.PURCHASE_IN, 0)), 0) PURCHASE_IN
+		,IFNULL(SUM(IFNULL(a.LABOR, 0)), 0) LABOR
+		,IFNULL(SUM(IFNULL(a.EXPENSE, 0)), 0) EXPENSE
+		,IFNULL(SUM(IFNULL(d.COST, 0)), 0) COMMON
+		
+	FROM
+		TBL_EAPP_BUSINESS_PLAN a
+		INNER JOIN TBL_EAPP_DOC b
+			ON a.DOC_ID = b.DOC_ID
+			AND b.NEW_AT = 1
+		INNER JOIN TBL_BUSINESS_SECTOR c
+			ON c.NO = #searchSectorNo#
+			AND c.BUSI_SECTOR_VAL LIKE CONCAT('%', a.ORGNZT_ID, '%')
+		INNER JOIN V_PURCHASE_IN d
+			ON a.DOC_ID = d.DOC_ID
+			AND SUBSTR(a.PLAN_YM,5,2) = SUBSTR(d.PURCHASE_IN_DT,5,2)
+	WHERE
+		LEFT(a.PLAN_YM,4) = #searchYear#
+	]]>
+	</select>
+	
+	<select id="BusinessPlanDAO.selectBusinessPlanApp" resultClass="egovMap">
+	SELECT 
+		a.SUBJECT
+		,a.DOC_ID
+		, d.NO WRITER_NO
+		, d.USER_ID WRITER_ID
+		, d.USER_NM WRITER_NM
+		, a.DOC_DT
+		, c.ORGNZT_ID
+		, c.ORGNZT_NM
+		, FN_CREATE_ORGAN_FNM(c.ORGNZT_ID) ORGNZT_FNM
+	FROM TBL_EAPP_DOC a
+	INNER JOIN TBL_EAPP_BUSINESS_PLAN e
+		ON a.DOC_ID = e.DOC_ID 
+	INNER JOIN TBL_BUSINESS_SECTOR b
+		ON b.NO = #searchSectorNo#
+		AND b.BUSI_SECTOR_VAL LIKE CONCAT('%', e.ORGNZT_ID, '%')
+	INNER JOIN TBL_ORGNZT c
+		ON e.ORGNZT_ID = c.ORGNZT_ID
+	INNER JOIN TBL_USERINFO d
+		ON a.WRITER_NO = d.NO
+	WHERE
+		LEFT(e.PLAN_YM,4) = #searchYear#
+		AND a.NEW_AT = 1
+	GROUP BY a.DOC_ID
+	</select>
+	
+</sqlMap>

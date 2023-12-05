@@ -1,0 +1,583 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="BusiResultDAO">
+	
+	<resultMap id="monthResult" class="kms.com.management.service.MonthResultVO">
+		<result property="id"							column="ID"										columnIndex="1"/>
+		
+		<result property="salesOutBusiPlan"			column="SALES_OUT_BUSI_PLAN"			columnIndex="2"/>
+		<result property="salesInBusiPlan"			column="SALES_IN_BUSI_PLAN"				columnIndex="2"/>
+		<result property="purchaseOutBusiPlan"	column="PURCHASE_OUT_BUSI_PLAN"		columnIndex="3"/>
+		<result property="purchaseInBusiPlan"		column="PURCHASE_IN_BUSI_PLAN"			columnIndex="4"/>
+		<result property="salaryBusiPlan"			column="SALARY_BUSI_PLAN"				columnIndex="5"/>
+		<result property="expenseBusiPlan"			column="EXPENSE_BUSI_PLAN"				columnIndex="6"/>
+		
+		<result property="salesOutPlan"				column="SALES_OUT_PLAN"					columnIndex="7"/>
+		<result property="salesInPlan"				column="SALES_IN_PLAN"						columnIndex="8"/>
+		<result property="purchaseOutPlan"			column="PURCHASE_OUT_PLAN"				columnIndex="9"/>
+		<result property="purchaseInPlan"			column="PURCHASE_IN_PLAN"				columnIndex="10"/>
+		<result property="salaryPlan"					column="SALARY_PLAN"						columnIndex="11"/>
+		<result property="expensePlan"				column="EXPENSE_PLAN"						columnIndex="12"/>
+		
+		<result property="salesOut"					column="SALES_OUT"							columnIndex="13"/>
+		<result property="salesIn"						column="SALES_IN"								columnIndex="14"/>
+		<result property="purchaseOut"				column="PURCHASE_OUT"						columnIndex="15"/>
+		<result property="purchaseIn"				column="PURCHASE_IN"						columnIndex="16"/>
+		<result property="salary"						column="SALARY"								columnIndex="17"/>
+		<result property="expense"					column="EXPENSE"								columnIndex="18"/>
+		
+		<result property="common"					column="COMMON"							columnIndex="19"/>
+		
+		<result property="salesOutBusiPlanAcc"			column="SALES_OUT_BUSI_PLAN_ACC"			columnIndex="20"/>
+		<result property="salesInBusiPlanAcc"			column="SALES_IN_BUSI_PLAN_ACC"			columnIndex="21"/>
+		<result property="purchaseOutBusiPlanAcc"	column="PURCHASE_OUT_BUSI_PLAN_ACC"	columnIndex="22"/>
+		<result property="purchaseInBusiPlanAcc"		column="PURCHASE_IN_BUSI_PLAN_ACC"		columnIndex="23"/>
+		<result property="salaryBusiPlanAcc"			column="SALARY_BUSI_PLAN_ACC"				columnIndex="24"/>
+		<result property="expenseBusiPlanAcc"			column="EXPENSE_BUSI_PLAN_ACC"				columnIndex="25"/>
+		
+		<result property="salesOutPlanAcc"				column="SALES_OUT_PLAN_ACC"				columnIndex="26"/>
+		<result property="salesInPlanAcc"				column="SALES_IN_PLAN_ACC"					columnIndex="27"/>
+		<result property="purchaseOutPlanAcc"		column="PURCHASE_OUT_PLAN_ACC"			columnIndex="28"/>
+		<result property="purchaseInPlanAcc"			column="PURCHASE_IN_PLAN_ACC"				columnIndex="29"/>
+		<result property="salaryPlanAcc"					column="SALARY_PLAN_ACC"						columnIndex="30"/>
+		<result property="expensePlanAcc"				column="EXPENSE_PLAN_ACC"					columnIndex="31"/>
+		
+		<result property="salesOutAcc"					column="SALES_OUT_ACC"						columnIndex="32"/>
+		<result property="salesInAcc"						column="SALES_IN_ACC"							columnIndex="33"/>
+		<result property="purchaseOutAcc"				column="PURCHASE_OUT_ACC"					columnIndex="34"/>
+		<result property="purchaseInAcc"				column="PURCHASE_IN_ACC"						columnIndex="35"/>
+		<result property="salaryAcc"						column="SALARY_ACC"							columnIndex="36"/>
+		<result property="expenseAcc"					column="EXPENSE_ACC"							columnIndex="37"/>
+		
+		<result property="commonAcc"					column="COMMON_ACC"							columnIndex="38"/>
+	</resultMap>
+
+	<resultMap id="mapBizStatisticVO" 			class="kms.com.management.vo.BizStatisticVO" >
+		<result property="salesOut"				column="SALES_OUT"			/>
+		<result property="salesIn"					column="SALES_IN"				/>
+		<result property="purchaseOut"			column="PURCHASE_OUT"		/>
+		<result property="purchaseIn"			column="PURCHASE_IN"		/>
+		<result property="labor"					column="LABOR"				/>
+		<result property="expense"				column="EXPENSE"				/>
+		<result property="commonCost"				column="COMMONCOST"				/>
+	</resultMap>
+
+<!-- 사업계획을 조회하는 SQL 
+	조직조건 : 특정부서의 사업계획을 조회하기 위해서는 searchOrgnztId를 입력한다. 
+				 여러부서의 사업계획 합을 조회하기 위해서는 searchOrgnztIdList를 입력한다. 
+	기간조건 : 특정윌의 사업계획을 조회하기 위해서는 searchMonth(yyyymm)을 입력한다.
+				 특정월까지의 사업계획 누계를 조회하기 위해서는 searchMonthSum(yyyymm)을 입력한다 
+-->	
+	<select id="BusiResultDAO.selectBizStatisticPlan" resultMap="mapBizStatisticVO">
+	SELECT
+		IFNULL(SUM(bp.SALES_OUT), 0) 				AS SALES_OUT,
+		IFNULL(SUM(bp.SALES_IN), 0)					AS SALES_IN,
+		IFNULL(SUM(bp.PURCHASE_OUT), 0)			AS PURCHASE_OUT,
+		IFNULL(SUM(bp.PURCHASE_IN), 0)			AS PURCHASE_IN,
+		IFNULL(SUM(bp.LABOR), 0)					AS LABOR,
+		IFNULL(SUM(bp.EXPENSE), 0)					AS EXPENSE
+		<isNotEmpty property="searchOperationOrgnztId">
+		,IFNULL(		
+			(SELECT
+					IFNULL(SUM(d.COST), 0) AS COMMONCOST
+				FROM tbl_eapp_business_plan bp
+				INNER JOIN tbl_eapp_doc doc
+						ON bp.DOC_ID = doc.DOC_ID AND doc.NEW_AT = '1'
+				INNER JOIN V_PURCHASE_IN d
+						ON bp.DOC_ID = d.DOC_ID
+						AND SUBSTR(bp.PLAN_YM,5,2) = SUBSTR(d.PURCHASE_IN_DT,5,2)
+				WHERE 
+					TRUE
+			<isNotEmpty prepend="AND" property="searchOperationOrgnztId">
+				bp.ORGNZT_ID = #searchOperationOrgnztId#
+			</isNotEmpty>	
+			<isNotEmpty prepend="AND" property="searchYM">
+				bp.PLAN_YM = #searchYM#
+			</isNotEmpty>	
+			<isNotEmpty prepend="AND" property="searchYMFrom">
+				bp.PLAN_YM BETWEEN #searchYMFrom# AND #searchYMTo#  
+			</isNotEmpty>)	
+			,0) AS COMMONCOST
+		</isNotEmpty>
+		<isEmpty property="searchOperationOrgnztId">
+			,0 AS COMMONCOST
+		</isEmpty>
+	FROM tbl_eapp_business_plan bp
+		JOIN tbl_eapp_doc doc
+			ON bp.DOC_ID = doc.DOC_ID AND doc.NEW_AT = '1'
+	WHERE 
+		TRUE
+	<isNotEmpty prepend="AND" property="searchOrgnztId">
+		bp.ORGNZT_ID = #searchOrgnztId#
+	</isNotEmpty>	
+	<isNotEmpty prepend="AND" property="searchOrgnztIdList">
+		<iterate prepend="bp.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgnztIdList">
+			#searchOrgnztIdList[]#
+		</iterate>
+	</isNotEmpty>
+	<isNotEmpty prepend="AND" property="searchYM">
+		bp.PLAN_YM = #searchYM#
+	</isNotEmpty>	
+	<isNotEmpty prepend="AND" property="searchYMFrom">
+		bp.PLAN_YM BETWEEN #searchYMFrom# AND #searchYMTo#  
+	</isNotEmpty>	
+	
+	</select>
+	
+<!-- 사업실적을 조회하는 SQL 
+	조직조건 : 특정부서의 사업실적을 조회하기 위해서는 searchOrgnztId를 입력한다. 
+				 여러부서의 사업실적 합을 조회하기 위해서는 searchOrgnztIdList를 입력한다. 
+	기간조건 : 특정윌의 사업실적을 조회하기 위해서는 searchMonth(yyyymm)을 입력한다.
+				 특정월까지의 사업실적 누계를 조회하기 위해서는 searchMonthSum(yyyymm)을 입력한다 
+-->	
+	<select id="BusiResultDAO.selectBizStatisticResult" resultMap="mapBizStatisticVO">		
+	SELECT
+			IFNULL(SUM(pr.SALES_OUT), 0) 							AS SALES_OUT,
+			IFNULL(SUM(pr.SALES_IN), 0)								AS SALES_IN,
+			IFNULL(SUM(pr.PURCHASE_OUT), 0) 						AS PURCHASE_OUT,
+			IFNULL(SUM(pr.PURCHASE_IN_NORMAL), 0)			AS PURCHASE_IN,
+			IFNULL(SUM(pr.LABOR), 0)									AS LABOR,
+			IFNULL(SUM(pr.EXP), 0)										AS EXPENSE
+			<isNotEmpty property="searchOperationOrgnztId">
+			,IFNULL(		
+				(SELECT
+					IFNULL(SUM(d.COST), 0) AS COMMONCOST
+				FROM tbl_eapp_business_plan bp
+				INNER JOIN tbl_eapp_doc doc
+						ON bp.DOC_ID = doc.DOC_ID AND doc.NEW_AT = '1'
+				INNER JOIN V_PURCHASE_IN d
+						ON bp.DOC_ID = d.DOC_ID
+						AND SUBSTR(bp.PLAN_YM,5,2) = SUBSTR(d.PURCHASE_IN_DT,5,2)
+				WHERE 
+					TRUE
+				<isNotEmpty prepend="AND" property="searchOperationOrgnztId">
+					bp.ORGNZT_ID = #searchOperationOrgnztId#
+				</isNotEmpty>	
+				<isNotEmpty prepend="AND" property="searchYM">
+					bp.PLAN_YM = #searchYM#
+				</isNotEmpty>	
+				<isNotEmpty prepend="AND" property="searchYMFrom">
+					bp.PLAN_YM BETWEEN #searchYMFrom# AND #searchYMTo#  
+				</isNotEmpty>)	
+				,0) AS COMMONCOST
+			</isNotEmpty>
+			<isEmpty property="searchOperationOrgnztId">
+				,0 AS COMMONCOST
+			</isEmpty>
+	FROM tbl_prj_result_total pr
+		JOIN tbl_prj p
+		ON pr.PRJ_ID = p.PRJ_ID 
+	WHERE 
+		TRUE
+	<isNotEmpty prepend="AND" property="searchOrgnztId">
+		p.ORGNZT_ID = #searchOrgnztId#
+	</isNotEmpty>	
+	<isNotEmpty prepend="AND" property="searchOrgnztIdList">
+		<iterate prepend="p.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgnztIdList">
+			#searchOrgnztIdList[]#
+		</iterate>
+	</isNotEmpty>
+	<isNotEmpty prepend="AND" property="searchYM">
+		(pr.YEAR = SUBSTRING(#searchYM#, 1, 4))
+		AND  (pr.MONTH = SUBSTRING(#searchYM#, 5, 2))
+	</isNotEmpty>	
+	<isNotEmpty prepend="AND" property="searchYMSum">
+<![CDATA[
+		(pr.YEAR = SUBSTRING(#searchYMSum#, 1, 4)) 
+		AND  (pr.MONTH <= SUBSTRING(#searchYMSum#, 5, 2))
+]]>
+	</isNotEmpty>	
+	</select>
+
+<!-- 사업실적예상을 조회하는 SQL 
+	조직조건 : 특정부서의 사업실적예상을 조회하기 위해서는 searchOrgnztId를 입력한다. 
+				 여러부서의 사업실적 합을 조회하기 위해서는 searchOrgnztIdList를 입력한다. 
+	기간조건 : 특정윌의 사업실적예상을 조회하기 위해서는 searchMonth(yyyymm)을 입력한다.
+				 특정월까지의 사업실적 누계를 조회하기 위해서는 searchMonthSum(yyyymm)을 입력한다 
+-->	
+	<select id="BusiResultDAO.selectBizStatisticResultExp" resultMap="mapBizStatisticVO">		
+	SELECT
+			IFNULL(SUM(pr.SALES_OUT_EST), 0) 						AS SALES_OUT,
+			IFNULL(SUM(pr.SALES_IN_EST), 0)							AS SALES_IN,
+			IFNULL(SUM(pr.PURCHASE_OUT_EST), 0) 				AS PURCHASE_OUT,
+			IFNULL(SUM(pr.PURCHASE_IN_NORMAL_EST), 0)		AS PURCHASE_IN,
+			IFNULL(SUM(pr.LABOR_EST), 0)							AS LABOR,
+			IFNULL(SUM(pr.EXP_EST), 0)								AS EXPENSE
+	FROM tbl_prj_result_total pr
+		JOIN tbl_prj p
+		ON pr.PRJ_ID = p.PRJ_ID 
+	WHERE 
+		TRUE
+	<isNotEmpty prepend="AND" property="searchOrgnztId">
+		p.ORGNZT_ID = #searchOrgnztId#
+	</isNotEmpty>	
+	<isNotEmpty prepend="AND" property="searchOrgnztIdList">
+		<iterate prepend="p.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgnztIdList">
+			#searchOrgnztIdList[]#
+		</iterate>
+	</isNotEmpty>
+	<isNotEmpty prepend="AND" property="searchYM">
+		(pr.YEAR = SUBSTRING(#searchYM#, 1, 4))
+		AND  (pr.MONTH = SUBSTRING(#searchYM#, 5, 2))
+	</isNotEmpty>	
+	<isNotEmpty prepend="AND" property="searchYMSum">
+<![CDATA[
+		(pr.YEAR = SUBSTRING(#searchYMSum#, 1, 4))
+		AND  (pr.MONTH <= SUBSTRING(#searchYMSum#, 5, 2))
+]]>
+	</isNotEmpty>	
+	</select>
+
+
+<!-- ================================================================= -->
+<!-- ================================================================= -->
+<!-- ================================================================= -->
+<!-- 예전 조회문들                                                       -->	
+	<select id="BusiResultDAO.selectMonthResultStatistic" 			resultMap="monthResult" >
+		SELECT
+			'' AS ID
+		
+			, IFNULL(monthPlan.SALES_BUSI_PLAN, 0) 					AS SALES_BUSI_PLAN
+			, IFNULL(monthPlan.PURCHASE_OUT_BUSI_PLAN, 0) 		AS PURCHASE_OUT_BUSI_PLAN
+			, IFNULL(monthPlan.PURCHASE_IN_BUSI_PLAN, 0) 		AS PURCHASE_IN_BUSI_PLAN
+			, IFNULL(monthPlan.SALARY_BUSI_PLAN, 0) 				AS SALARY_BUSI_PLAN
+			, IFNULL(monthPlan.EXPENSE_BUSI_PLAN, 0) 				AS EXPENSE_BUSI_PLAN
+			
+			, monthResult.SALES_OUT_PLAN 								AS SALES_OUT_PLAN
+			, monthResult.SALES_IN_PLAN 								AS SALES_IN_PLAN
+			, monthResult.PURCHASE_OUT_PLAN 						AS PURCHASE_OUT_PLAN
+			, monthResult.PURCHASE_IN_PLAN 							AS PURCHASE_IN_PLAN
+			, monthResult.SALARY 											AS SALARY_PLAN
+			, monthResult.EXPENSE_PLAN 								AS EXPENSE_PLAN
+				
+			, monthResult.SALES_OUT 										AS SALES_OUT
+			, monthResult.SALES_IN 										AS SALES_IN
+			, monthResult.PURCHASE_OUT 								AS PURCHASE_OUT
+			, monthResult.PURCHASE_IN 									AS PURCHASE_IN
+			, monthResult.SALARY 											AS SALARY
+			, monthResult.EXPENSE 										AS EXPENSE
+			
+			, monthResult.COMMON 										AS COMMON
+			
+			, IFNULL(yearPlan.SALES_BUSI_PLAN_ACC, 0) 				AS SALES_BUSI_PLAN_ACC
+			, IFNULL(yearPlan.PURCHASE_OUT_BUSI_PLAN_ACC, 0) 	AS PURCHASE_OUT_BUSI_PLAN_ACC
+			, IFNULL(yearPlan.PURCHASE_IN_BUSI_PLAN_ACC, 0) 		AS PURCHASE_IN_BUSI_PLAN_ACC
+			, IFNULL(yearPlan.SALARY_BUSI_PLAN_ACC, 0) 				AS SALARY_BUSI_PLAN_ACC
+			, IFNULL(yearPlan.EXPENSE_BUSI_PLAN_ACC, 0) 			AS EXPENSE_BUSI_PLAN_ACC
+			
+			, yearResult.SALES_OUT_PLAN_ACC 							AS SALES_OUT_PLAN_ACC
+			, yearResult.SALES_IN_PLAN_ACC 							AS SALES_IN_PLAN_ACC
+			, yearResult.PURCHASE_OUT_PLAN_ACC 					AS PURCHASE_OUT_PLAN_ACC
+			, yearResult.PURCHASE_IN_PLAN_ACC 						AS PURCHASE_IN_PLAN_ACC
+			, yearResult.SALARY_ACC 										AS SALARY_PLAN_ACC
+			, yearResult.EXPENSE_PLAN_ACC 								AS EXPENSE_PLAN_ACC
+			
+			, yearResult.SALES_OUT_ACC 									AS SALES_OUT_ACC
+			, yearResult.SALES_IN_ACC 									AS SALES_IN_ACC
+			, yearResult.PURCHASE_OUT_ACC 							AS PURCHASE_OUT_ACC
+			, yearResult.PURCHASE_IN_ACC 								AS PURCHASE_IN_ACC
+			, yearResult.SALARY_ACC 										AS SALARY_ACC
+			, yearResult.EXPENSE_ACC 									AS EXPENSE_ACC
+			
+			, yearResult.COMMON_ACC 									AS COMMON_ACC
+		FROM
+			(
+				SELECT
+					sector.NO AS SECTOR_NO
+					
+					, IFNULL(SUM(IFNULL(total.SALES_OUT_EST, 0)), 0) 					AS SALES_OUT_PLAN
+					, IFNULL(SUM(IFNULL(total.SALES_IN_EST, 0)), 0) 						AS SALES_IN_PLAN
+					, IFNULL(SUM(IFNULL(total.PURCHASE_OUT_EST, 0)), 0) 				AS PURCHASE_OUT_PLAN
+					, IFNULL(SUM(IFNULL(total.PURCHASE_IN_NORMAL_EST, 0)), 0) 		AS PURCHASE_IN_PLAN
+					, IFNULL(SUM(IFNULL(total.PLAN_LABOR_EST, 0)), 0) 					AS SALARY_PLAN
+					, IFNULL(SUM(IFNULL(total.PLAN_EXP_EST, 0)), 0) 						AS EXPENSE_PLAN
+						
+					, IFNULL(SUM(IFNULL(total.SALES_OUT, 0)), 0) 							AS SALES_OUT
+					, IFNULL(SUM(IFNULL(total.SALES_IN, 0)), 0) 							AS SALES_IN
+					, IFNULL(SUM(IFNULL(total.PURCHASE_OUT, 0)), 0) 					AS PURCHASE_OUT
+					, IFNULL(SUM(IFNULL(total.PURCHASE_IN_NORMAL, 0)), 0) 			AS PURCHASE_IN
+					, IFNULL(SUM(IFNULL(total.LABOR, 0)), 0) 								AS SALARY
+					, IFNULL(SUM(IFNULL(total.EXP, 0)), 0) 									AS EXPENSE
+					
+					, CASE
+						WHEN #searchSectorNo# = '126' THEN 
+							( SELECT IFNULL((
+											SELECT (BPL.SALES_OUT + BPL.SALES_IN - BPL.PURCHASE_OUT - BPL.PURCHASE_IN - BPL.EXPENSE - BPL.LABOR)
+											FROM TBL_EAPP_BUSINESS_PLAN BPL 
+											WHERE CONCAT(#searchYear#, LPAD(#searchMonth#,2,'0')) = BPL.PLAN_YM
+											AND BPL.ORGNZT_ID = 'ORGAN_00000000000004'
+											AND BPL.DOC_ID IN (SELECT APD.DOC_ID FROM TBL_EAPP_DOC APD WHERE APD.TEMPLT_ID = '22' AND APD.STATUS = '2')
+										), 0) )
+						ELSE 
+							IFNULL(SUM(IFNULL(total.PURCHASE_IN_COMMON, 0)), 0)
+					  END AS COMMON
+				FROM
+					TBL_PRJ_RESULT_TOTAL total
+					INNER JOIN TBL_PRJ prj
+						ON total.PRJ_ID = prj.PRJ_ID
+					INNER JOIN TBL_BUSINESS_SECTOR sector
+						ON sector.BUSI_SECTOR_VAL LIKE CONCAT('%', prj.ORGNZT_ID, '%')
+						AND NO = #searchSectorNo#
+				WHERE
+					total.YEAR = #searchYear#
+					AND total.MONTH = #searchMonth#
+				GROUP BY
+					SECTOR_NO
+			) monthResult
+		
+			LEFT JOIN (
+				SELECT
+					sector.NO AS SECTOR_NO
+					
+					, IFNULL(SUM(IFNULL(total.SALES_OUT_EST, 0)), 0) AS SALES_OUT_PLAN_ACC
+					, IFNULL(SUM(IFNULL(total.SALES_IN_EST, 0)), 0) AS SALES_IN_PLAN_ACC
+					, IFNULL(SUM(IFNULL(total.PURCHASE_OUT_EST, 0)), 0) AS PURCHASE_OUT_PLAN_ACC
+					, IFNULL(SUM(IFNULL(total.PURCHASE_IN_NORMAL_EST, 0)), 0) AS PURCHASE_IN_PLAN_ACC
+					, IFNULL(SUM(IFNULL(total.PLAN_LABOR_EST, 0)), 0) AS SALARY_PLAN_ACC
+					, IFNULL(SUM(IFNULL(total.PLAN_EXP_EST, 0)), 0) AS EXPENSE_PLAN_ACC
+						
+					, IFNULL(SUM(IFNULL(total.SALES_OUT, 0)), 0) AS SALES_OUT_ACC
+					, IFNULL(SUM(IFNULL(total.SALES_IN, 0)), 0) AS SALES_IN_ACC
+					, IFNULL(SUM(IFNULL(total.PURCHASE_OUT, 0)), 0) AS PURCHASE_OUT_ACC
+					, IFNULL(SUM(IFNULL(total.PURCHASE_IN_NORMAL, 0)), 0) AS PURCHASE_IN_ACC
+					, IFNULL(SUM(IFNULL(total.LABOR, 0)), 0) AS SALARY_ACC
+					, IFNULL(SUM(IFNULL(total.EXP, 0)), 0) AS EXPENSE_ACC
+					
+					, CASE
+						WHEN #searchSectorNo# = '126' THEN ( 
+							SELECT IFNULL(SUM(IFNULL(BPL.SALES_OUT+BPL.SALES_IN-BPL.PURCHASE_OUT-BPL.PURCHASE_IN-BPL.EXPENSE-BPL.LABOR, 0)), 0)
+							FROM TBL_EAPP_BUSINESS_PLAN BPL 
+<![CDATA[
+							WHERE CONCAT(#searchYear#, LPAD(#searchMonth#, 2, '0')) >= BPL.PLAN_YM 
+]]>
+							AND BPL.ORGNZT_ID = 'ORGAN_00000000000004'
+							AND BPL.DOC_ID IN (SELECT APD.DOC_ID FROM TBL_EAPP_DOC APD WHERE APD.TEMPLT_ID = '22' AND APD.STATUS = '2')
+							)
+						ELSE 
+							IFNULL(SUM(IFNULL(total.PURCHASE_IN_COMMON, 0)), 0)
+					  END AS COMMON_ACC
+				FROM
+					TBL_PRJ_RESULT_TOTAL total
+					INNER JOIN TBL_PRJ prj
+						ON total.PRJ_ID = prj.PRJ_ID
+					INNER JOIN TBL_BUSINESS_SECTOR sector
+						ON sector.BUSI_SECTOR_VAL LIKE CONCAT('%', prj.ORGNZT_ID, '%')
+						AND NO = #searchSectorNo#
+				WHERE
+					total.YEAR = #searchYear#
+<![CDATA[
+					AND #searchMonth# >= total.MONTH 
+]]>
+				GROUP BY
+					SECTOR_NO
+			) yearResult
+				ON monthResult.SECTOR_NO = yearResult.SECTOR_NO
+			
+			LEFT JOIN (
+				SELECT
+					sector.NO AS SECTOR_NO
+					
+					, IFNULL(SUM(IFNULL(plan.SALES_OUT, 0)), 0) AS SALES_OUT_BUSI_PLAN
+					, IFNULL(SUM(IFNULL(plan.SALES_IN, 0)), 0) AS SALES_IN_BUSI_PLAN
+					, IFNULL(SUM(IFNULL(plan.PURCHASE_OUT, 0)), 0) AS PURCHASE_OUT_BUSI_PLAN
+					, IFNULL(SUM(IFNULL(plan.PURCHASE_IN, 0)), 0) AS PURCHASE_IN_BUSI_PLAN
+					, IFNULL(SUM(IFNULL(plan.LABOR, 0)), 0) AS SALARY_BUSI_PLAN
+					, IFNULL(SUM(IFNULL(plan.EXPENSE, 0)), 0) AS EXPENSE_BUSI_PLAN
+				FROM
+					TBL_EAPP_BUSINESS_PLAN plan
+					INNER JOIN TBL_EAPP_DOC doc
+						ON plan.DOC_ID = doc.DOC_ID
+						AND doc.NEW_AT = '1'
+					INNER JOIN TBL_BUSINESS_SECTOR sector
+						ON sector.BUSI_SECTOR_VAL LIKE CONCAT('%', plan.ORGNZT_ID, '%')
+						AND NO = #searchSectorNo#
+						AND plan.PLAN_YM = CONCAT(#searchYear#, LPAD(#searchMonth#, 2, '0'))
+				GROUP BY
+					SECTOR_NO
+			) monthPlan
+				ON monthResult.SECTOR_NO = monthPlan.SECTOR_NO
+		
+			LEFT JOIN (
+				SELECT
+					sector.NO AS SECTOR_NO
+					
+					, IFNULL(SUM(IFNULL(plan.SALES, 0)), 0) AS SALES_BUSI_PLAN_ACC
+					, IFNULL(SUM(IFNULL(plan.PURCHASE_OUT, 0)), 0) AS PURCHASE_OUT_BUSI_PLAN_ACC
+					, IFNULL(SUM(IFNULL(plan.PURCHASE_IN, 0)), 0) AS PURCHASE_IN_BUSI_PLAN_ACC
+					, IFNULL(SUM(IFNULL(plan.LABOR, 0)), 0) AS SALARY_BUSI_PLAN_ACC
+					, IFNULL(SUM(IFNULL(plan.EXPENSE, 0)), 0) AS EXPENSE_BUSI_PLAN_ACC
+				FROM
+					TBL_EAPP_BUSINESS_PLAN plan
+					INNER JOIN TBL_EAPP_DOC doc
+						ON plan.DOC_ID = doc.DOC_ID
+						AND doc.NEW_AT = '1'
+					INNER JOIN TBL_BUSINESS_SECTOR sector
+						ON sector.BUSI_SECTOR_VAL LIKE CONCAT('%', plan.ORGNZT_ID, '%')
+						AND NO = #searchSectorNo#
+<![CDATA[
+						AND plan.PLAN_YM >= CONCAT(#searchYear#, '01')
+						AND CONCAT(#searchYear#, LPAD(#searchMonth#, 2, '0')) >= plan.PLAN_YM 
+]]>
+				GROUP BY
+					SECTOR_NO
+			) yearPlan
+				ON monthResult.SECTOR_NO = yearPlan.SECTOR_NO
+	</select>
+
+
+	<select id="BusiResultDAO.selectMonthResultStatistic_reCalc" resultMap="monthResult">		
+		SELECT
+			'' AS ID
+		
+			,IFNULL(SUM(IFNULL(plan.SALES_OUT_BUSI_PLAN, 0)), 0) AS SALES_OUT_BUSI_PLAN
+			,IFNULL(SUM(IFNULL(plan.SALES_IN_BUSI_PLAN, 0)), 0) AS SALES_IN_BUSI_PLAN
+			,IFNULL(SUM(IFNULL(plan.PURCHASE_OUT_BUSI_PLAN, 0)), 0) AS PURCHASE_OUT_BUSI_PLAN
+			,IFNULL(SUM(IFNULL(plan.PURCHASE_IN_BUSI_PLAN, 0)), 0) AS PURCHASE_IN_BUSI_PLAN
+			,IFNULL(SUM(IFNULL(plan.SALARY_BUSI_PLAN, 0)), 0) AS SALARY_BUSI_PLAN
+			,IFNULL(SUM(IFNULL(plan.EXPENSE_BUSI_PLAN, 0)), 0) AS EXPENSE_BUSI_PLAN
+			
+			,IFNULL(SUM(IFNULL(result.SALES_OUT_PLAN, 0)), 0) AS SALES_OUT_PLAN
+			,IFNULL(SUM(IFNULL(result.SALES_IN_PLAN, 0)), 0) AS SALES_IN_PLAN
+			,IFNULL(SUM(IFNULL(result.PURCHASE_OUT_PLAN, 0)), 0) AS PURCHASE_OUT_PLAN
+			,IFNULL(SUM(IFNULL(result.PURCHASE_IN_PLAN, 0)), 0) AS PURCHASE_IN_PLAN
+			,IFNULL(SUM(IFNULL(result.SALARY, 0)), 0) AS SALARY_PLAN
+			,IFNULL(SUM(IFNULL(result.EXPENSE_PLAN, 0)), 0) AS EXPENSE_PLAN
+				
+			,IFNULL(SUM(IFNULL(result.SALES_OUT, 0)), 0) AS SALES_OUT
+			,IFNULL(SUM(IFNULL(result.SALES_IN, 0)), 0) AS SALES_IN
+			,IFNULL(SUM(IFNULL(result.PURCHASE_OUT, 0)), 0) AS PURCHASE_OUT
+			,IFNULL(SUM(IFNULL(result.PURCHASE_IN, 0)), 0) AS PURCHASE_IN
+			,IFNULL(SUM(IFNULL(result.SALARY, 0)), 0) AS SALARY
+			,IFNULL(SUM(IFNULL(result.EXPENSE, 0)), 0) AS EXPENSE
+			
+			,IFNULL(SUM(IFNULL(result.COMMON, 0)), 0) AS COMMON
+			
+			,IFNULL(SUM(IFNULL(plan.SALES_BUSI_PLAN_ACC, 0)), 0) AS SALES_BUSI_PLAN_ACC
+			,IFNULL(SUM(IFNULL(plan.PURCHASE_OUT_BUSI_PLAN_ACC, 0)), 0) AS PURCHASE_OUT_BUSI_PLAN_ACC
+			,IFNULL(SUM(IFNULL(plan.PURCHASE_IN_BUSI_PLAN_ACC, 0)), 0) AS PURCHASE_IN_BUSI_PLAN_ACC
+			,IFNULL(SUM(IFNULL(plan.SALARY_BUSI_PLAN_ACC, 0)), 0) AS SALARY_BUSI_PLAN_ACC
+			,IFNULL(SUM(IFNULL(plan.EXPENSE_BUSI_PLAN_ACC, 0)), 0) AS EXPENSE_BUSI_PLAN_ACC
+			
+				
+			,IFNULL(SUM(IFNULL(result.SALES_OUT_PLAN_ACC, 0)), 0) AS SALES_OUT_PLAN_ACC
+			,IFNULL(SUM(IFNULL(result.SALES_IN_PLAN_ACC, 0)), 0) AS SALES_IN_PLAN_ACC
+			,IFNULL(SUM(IFNULL(result.PURCHASE_OUT_PLAN_ACC, 0)), 0) AS PURCHASE_OUT_PLAN_ACC
+			,IFNULL(SUM(IFNULL(result.PURCHASE_IN_PLAN_ACC, 0)), 0) AS PURCHASE_IN_PLAN_ACC
+			,IFNULL(SUM(IFNULL(result.SALARY_ACC, 0)), 0) AS SALARY_PLAN_ACC
+			,IFNULL(SUM(IFNULL(result.EXPENSE_PLAN_ACC, 0)), 0) AS EXPENSE_PLAN_ACC
+			
+			,IFNULL(SUM(IFNULL(result.SALES_OUT_ACC, 0)), 0) AS SALES_OUT_ACC
+			,IFNULL(SUM(IFNULL(result.SALES_IN_ACC, 0)), 0) AS SALES_IN_ACC
+			,IFNULL(SUM(IFNULL(result.PURCHASE_OUT_ACC, 0)), 0) AS PURCHASE_OUT_ACC
+			,IFNULL(SUM(IFNULL(result.PURCHASE_IN_ACC, 0)), 0) AS PURCHASE_IN_ACC
+			,IFNULL(SUM(IFNULL(result.SALARY_ACC, 0)), 0) AS SALARY_ACC
+			,IFNULL(SUM(IFNULL(result.EXPENSE_ACC, 0)), 0) AS EXPENSE_ACC
+			
+			,IFNULL(SUM(IFNULL(result.COMMON_ACC, 0)), 0) AS COMMON_ACC
+		FROM
+			(		
+				SELECT 
+					a.NO AS SECTOR_NO
+					
+					,FN_GET_SALES_OUT_ARR(a.BUSI_SECTOR_VAL, #searchYear#,#searchMonth#,'Y','Y','N','N') AS SALES_OUT_PLAN
+					,FN_GET_SALES_IN_ARR(a.BUSI_SECTOR_VAL, #searchYear#,#searchMonth#,'Y','A','N','N') AS SALES_IN_PLAN
+					,FN_GET_PURCHASE_OUT_ARR(a.BUSI_SECTOR_VAL, #searchYear#,#searchMonth#,'Y','Y','N','N') AS PURCHASE_OUT_PLAN
+					,FN_GET_PURCHASE_IN_ARR(a.BUSI_SECTOR_VAL, #searchYear#,#searchMonth#,'Y','N','N','N') AS PURCHASE_IN_PLAN
+					,0 AS SALARY_PLAN
+					,FN_GET_PLAN_EXP_ARR(a.BUSI_SECTOR_VAL, #searchYear#,#searchMonth#,'Y','Y','N','N') AS EXPENSE_PLAN
+						
+					,FN_GET_SALES_OUT_ARR(a.BUSI_SECTOR_VAL, #searchYear#,#searchMonth#,'N','Y','N','N') AS SALES_OUT
+					,FN_GET_SALES_IN_ARR(a.BUSI_SECTOR_VAL, #searchYear#,#searchMonth#,'N','A','N','N') AS SALES_IN
+					,FN_GET_PURCHASE_OUT_ARR(a.BUSI_SECTOR_VAL, #searchYear#,#searchMonth#,'N','Y','N','N') AS PURCHASE_OUT
+					,FN_GET_PURCHASE_IN_ARR(a.BUSI_SECTOR_VAL, #searchYear#,#searchMonth#,'N','N','N','N') AS PURCHASE_IN
+					,FN_GET_LABOR_ARR(a.BUSI_SECTOR_VAL, #searchYear#,#searchMonth#,'N','Y','N','N') AS SALARY
+					,FN_GET_EXP_ARR(a.BUSI_SECTOR_VAL, #searchYear#,#searchMonth#,'N','Y','N','N') AS EXPENSE
+					
+					,FN_GET_PURCHASE_IN_ARR(a.BUSI_SECTOR_VAL, #searchYear#,#searchMonth#,'N','Y','N','N') AS COMMON
+					
+					,FN_GET_SALES_OUT_ARR(a.BUSI_SECTOR_VAL, #searchYear#,#searchMonth#,'Y','Y','N','Y') AS SALES_OUT_PLAN_ACC
+					,FN_GET_SALES_IN_ARR(a.BUSI_SECTOR_VAL, #searchYear#,#searchMonth#,'Y','A','N','Y') AS SALES_IN_PLAN_ACC
+					,FN_GET_PURCHASE_OUT_ARR(a.BUSI_SECTOR_VAL, #searchYear#,#searchMonth#,'Y','Y','N','Y') AS PURCHASE_OUT_PLAN_ACC
+					,FN_GET_PURCHASE_IN_ARR(a.BUSI_SECTOR_VAL, #searchYear#,#searchMonth#,'Y','N','N','Y') AS PURCHASE_IN_PLAN_ACC
+					,0 AS SALARY_PLAN_ACC
+					,FN_GET_PLAN_EXP_ARR(a.BUSI_SECTOR_VAL, #searchYear#,#searchMonth#,'Y','Y','N','Y') AS EXPENSE_PLAN_ACC
+					
+					,FN_GET_SALES_OUT_ARR(a.BUSI_SECTOR_VAL, #searchYear#,#searchMonth#,'N','Y','N','Y') AS SALES_OUT_ACC
+					,FN_GET_SALES_IN_ARR(a.BUSI_SECTOR_VAL, #searchYear#,#searchMonth#,'N','A','N','Y') AS SALES_IN_ACC
+					,FN_GET_PURCHASE_OUT_ARR(a.BUSI_SECTOR_VAL, #searchYear#,#searchMonth#,'N','Y','N','Y') AS PURCHASE_OUT_ACC
+					,FN_GET_PURCHASE_IN_ARR(a.BUSI_SECTOR_VAL, #searchYear#,#searchMonth#,'N','N','N','Y') AS PURCHASE_IN_ACC
+					,FN_GET_LABOR_ARR(a.BUSI_SECTOR_VAL, #searchYear#,#searchMonth#,'N','Y','N','Y') AS SALARY_ACC
+					,FN_GET_EXP_ARR(a.BUSI_SECTOR_VAL, #searchYear#,#searchMonth#,'N','Y','N','Y') AS EXPENSE_ACC
+					
+					,FN_GET_PURCHASE_IN_ARR(a.BUSI_SECTOR_VAL, #searchYear#,#searchMonth#,'N','Y','N','Y') AS COMMON_ACC
+				FROM
+					TBL_BUSINESS_SECTOR a 
+				WHERE NO = #searchSectorNo#
+				GROUP BY
+					a.NO
+			) result
+			LEFT JOIN (
+				SELECT
+<![CDATA[
+					a.NO AS SECTOR_NO
+					, IFNULL(SUM(IF(c.PLAN_YM = CONCAT(#searchYear#, LPAD(#searchMonth#, 2, '0')), c.SALES, 0)), 0) AS SALES_BUSI_PLAN
+					, IFNULL(SUM(IF(c.PLAN_YM = CONCAT(#searchYear#, LPAD(#searchMonth#, 2, '0')), c.PURCHASE_OUT, 0)), 0) AS PURCHASE_OUT_BUSI_PLAN
+					, IFNULL(SUM(IF(c.PLAN_YM = CONCAT(#searchYear#, LPAD(#searchMonth#, 2, '0')), c.PURCHASE_IN, 0)), 0) AS PURCHASE_IN_BUSI_PLAN
+					, IFNULL(SUM(IF(c.PLAN_YM = CONCAT(#searchYear#, LPAD(#searchMonth#, 2, '0')), c.LABOR, 0)), 0) AS SALARY_BUSI_PLAN
+					, IFNULL(SUM(IF(c.PLAN_YM = CONCAT(#searchYear#, LPAD(#searchMonth#, 2, '0')), c.EXPENSE, 0)), 0) AS EXPENSE_BUSI_PLAN				
+					, IFNULL(SUM(IF(CONCAT(#searchYear#, LPAD(#searchMonth#, 2, '0')) >= c.PLAN_YM, c.SALES, 0)), 0) AS SALES_BUSI_PLAN_ACC
+					, IFNULL(SUM(IF(CONCAT(#searchYear#, LPAD(#searchMonth#, 2, '0')) >= c.PLAN_YM, c.PURCHASE_OUT, 0)), 0) AS PURCHASE_OUT_BUSI_PLAN_ACC
+					, IFNULL(SUM(IF(CONCAT(#searchYear#, LPAD(#searchMonth#, 2, '0')) >= c.PLAN_YM, c.PURCHASE_IN, 0)), 0) AS PURCHASE_IN_BUSI_PLAN_ACC
+					, IFNULL(SUM(IF(CONCAT(#searchYear#, LPAD(#searchMonth#, 2, '0')) >= c.PLAN_YM, c.LABOR, 0)), 0) AS SALARY_BUSI_PLAN_ACC
+					, IFNULL(SUM(IF(CONCAT(#searchYear#, LPAD(#searchMonth#, 2, '0')) >= c.PLAN_YM, c.EXPENSE, 0)), 0) AS EXPENSE_BUSI_PLAN_ACC				
+]]>
+				FROM
+					TBL_BUSINESS_SECTOR a
+					LEFT JOIN TBL_EAPP_DOC b
+						ON b.TEMPLT_ID = '22'
+						AND b.NEW_AT = '1'
+						AND B.DOC_STAT != 'APP099'						 
+					LEFT JOIN TBL_EAPP_BUSINESS_PLAN c
+						ON b.DOC_ID = c.DOC_ID
+						AND a.BUSI_SECTOR_VAL LIKE CONCAT('%', c.ORGNZT_ID, '%')
+						AND LEFT(c.PLAN_YM, 4) = #searchYear#
+				WHERE a.NO = #searchSectorNo#
+				GROUP BY
+					a.NO
+			) plan ON result.SECTOR_NO = plan.SECTOR_NO
+	</select>
+	
+	<parameterMap id="updateStatisticParam" class="java.util.Map">
+		<parameter property="updateYear" mode="IN" jdbcType="CHAR" javaType="java.lang.String"/>
+		<parameter property="updateMonth" mode="IN" jdbcType="CHAR" javaType="java.lang.String"/>
+	</parameterMap>
+	
+	<procedure id="BusiResultDAO.updateRestotalAll" parameterMap="updateStatisticParam">
+		{call PR_Renew_Restotal_All(?, ?)}
+	</procedure>
+	
+	<procedure id="BusiResultDAO.updateRestotalAll2" parameterMap="updateStatisticParam">
+		{call PR_Renew_Restotal_All2(?, ?)}
+	</procedure>
+	
+	<procedure id="BusiResultDAO.updateStatisticDate">
+		{call PR_Renew_Restotal_StartEndDate()}
+	</procedure>
+	
+	<procedure id="BusiResultDAO.updateStatisticDate2">
+		{call PR_Renew_Restotal_StartEndDate2()}
+	</procedure>
+	
+	<parameterMap id="updateStatisticParamPrj" class="java.util.Map">
+		<parameter property="prjId" mode="IN" jdbcType="CHAR" javaType="java.lang.String"/>
+	</parameterMap>
+	
+	<procedure id="BusiResultDAO.updateStatisticDatePrj" parameterMap="updateStatisticParamPrj">
+		{call PR_Renew_Restotal_StartEndDate_Prj(?)}
+	</procedure>
+	<procedure id="BusiResultDAO.updateStatisticDatePrj2" parameterMap="updateStatisticParamPrj">
+		{call PR_Renew_Restotal_StartEndDate_Prj2(?)}
+	</procedure>
+	
+</sqlMap>

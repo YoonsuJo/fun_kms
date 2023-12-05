@@ -1,0 +1,1228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Common">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="ExpansionVO" type="kms.com.common.service.ExpansionVO"/>
+	<typeAlias  alias="businessSectorVO" type="kms.com.common.service.BusinessSectorVO"/>
+	<typeAlias  alias="statisticSectorVO" type="kms.com.common.service.StatisticSectorVO"/>
+	
+	<resultMap id="expList" class="kms.com.common.service.ExpansionVO">
+		<result property="expId"		column="EXP_ID"			columnIndex="1"/>
+		<result property="expSj"		column="EXP_SJ"			columnIndex="2"/>
+		<result property="expCn"		column="EXP_CN"			columnIndex="3"/>
+		<result property="expFileId"	column="EXP_FILE_ID"	columnIndex="4"/>
+		<result property="linkUrl"		column="LINK_URL"		columnIndex="5"/>
+		<result property="popYn"		column="POP_YN"			columnIndex="6"/>
+		<result property="useAt"		column="USE_AT"			columnIndex="7"/>
+		<result property="sort"			column="SORT"			columnIndex="8"/>
+		<result property="access"		column="ACCESS"			columnIndex="9"/>
+		<result property="accessUserNo"	column="ACCESS_USER_NO"	columnIndex="10"/>
+		<result property="popWidth"		column="POP_WIDTH"		columnIndex="11"/>
+		<result property="popHeight"	column="POP_HEIGHT"		columnIndex="12"/>
+	</resultMap>
+	
+	<resultMap id="busiSectorList" class="kms.com.common.service.BusinessSectorVO">
+		<result property="no"				column="NO"					columnIndex="1"/>
+		<result property="busiSectorNm"		column="BUSI_SECTOR_NM"		columnIndex="2"/>
+		<result property="busiSectorVal"	column="BUSI_SECTOR_VAL"	columnIndex="3"/>
+		<result property="busiSectorValNm"	column="BUSI_SECTOR_VAL_NM"	columnIndex="4"/>
+		<result property="busiSectorYear"	column="BUSI_SECTOR_YEAR"	columnIndex="5"/>
+		<result property="busiSectorOrd"	column="BUSI_SECTOR_ORD"	columnIndex="6"/>
+		<result property="useAt"			column="USE_AT"				columnIndex="7"/>
+	</resultMap>
+	
+	<resultMap id="statisticSectorList" class="kms.com.common.service.StatisticSectorVO">
+		<result property="no"					column="NO"							columnIndex="1"/>
+		<result property="statisticSectorNm"	column="STATISTIC_SECTOR_NM"		columnIndex="2"/>
+		<result property="statisticSectorVal"	column="STATISTIC_SECTOR_VAL"		columnIndex="3"/>
+		<result property="statisticSectorValNm"	column="STATISTIC_SECTOR_VAL_NM"	columnIndex="4"/>
+		<result property="statisticSectorOrg"	column="STATISTIC_SECTOR_ORD"		columnIndex="5"/>
+		<result property="colorTyp"				column="COLOR_TYP"					columnIndex="6"/>
+	</resultMap>
+
+ 	<select id="CommonDAO.getCheckList" resultClass="egovMap" >
+ 		SELECT
+ 			ID, CNT
+ 		FROM
+ 		(
+ 			(
+<!-- 				SELECT 	'REQUEST' AS ID, COUNT(*)  AS CNT
+				FROM hm_request r
+					WHERE r.STATUS != 16 AND r.STATUS != 64 
+						AND r.MANAGER_NO = #no# -->
+				SELECT
+					'REQUEST' AS ID, COUNT(DISTINCT a.req_id) AS CNT
+				FROM
+					hm_request_receive a
+					INNER JOIN hm_request b 
+						ON a.req_ID = b.req_ID 
+						AND b.STATUS != 16 AND b.STATUS != 64 
+				WHERE
+					a.USER_NO = #no#					
+			) UNION ALL (
+<!-- 				SELECT 	'REQWEEK' AS ID, COUNT(*)  AS CNT
+				FROM hm_request_task rt
+					WHERE rt.STATUS != 4 
+						AND rt.WORKER_NO = #no# -->
+						
+				SELECT
+					'REQWEEK' AS ID, COUNT(DISTINCT a.req_id) AS CNT
+				FROM
+					hm_request_receive a
+					INNER JOIN hm_request b 
+						ON a.req_ID = b.req_ID 
+						<![CDATA[
+						AND b.REQ_TYPE & 15
+						]]>
+						<![CDATA[
+						AND b.STATUS & 15
+						]]>
+						<![CDATA[
+						AND (DUE_DATE >= date_format(subdate(curdate()+0,date_format(curdate()+0,'%w')-1), '%Y%m%d')
+						AND DUE_DATE <= date_format(subdate(curdate()+0,date_format(curdate()+0,'%w')-14), '%Y%m%d')
+						OR DUE_DATE < date_format(curdate(), '%Y%m%d'))
+						]]>
+						
+				WHERE
+					a.USER_NO = #no#
+					AND (a.COMPLETE_STATUS=0 OR b.MAIN_MANAGER = a.USER_NM)	
+								
+ 			) UNION ALL (
+				SELECT
+					'REQMONTH' AS ID, COUNT(DISTINCT a.req_id) AS CNT
+				FROM
+					hm_request_receive a
+					INNER JOIN hm_request b 
+						ON a.req_ID = b.req_ID 
+						<![CDATA[
+						AND b.REQ_TYPE & 15
+						]]>
+						<![CDATA[
+						AND b.STATUS & 15
+						]]>
+						<![CDATA[
+						AND (DUE_DATE > date_format(subdate(curdate()+0,date_format(curdate()+0,'%w')-1), '%Y%m%d')
+						AND DUE_DATE <= date_format(subdate(curdate()+0,date_format(curdate()+0,'%w')-30), '%Y%m%d')
+						OR DUE_DATE < date_format(curdate(), '%Y%m%d'))
+						]]>
+				WHERE
+					a.USER_NO = #no#
+					AND (a.COMPLETE_STATUS=0 OR b.MAIN_MANAGER = a.USER_NM)	
+			) UNION ALL (
+				SELECT
+					'MAIL' AS ID, COUNT(*) AS CNT
+				FROM
+					TBL_MAILRECIEVE a
+					LEFT JOIN TBL_MAILSEND b 
+						ON a.MAIL_ID = b.MAIL_ID
+				WHERE
+					a.RECIEVE_NO = #no# 
+					AND a.READ_DT IS NULL
+					AND a.DELETE_YN = 'N'
+					AND b.IS_SEND = 'Y'
+			) UNION ALL (
+				SELECT
+					'NOTE' AS ID, COUNT(*) AS CNT
+				FROM
+					TBL_NOTERECIEVE a
+				WHERE
+					a.RECIEVE_NO = #no# 
+					AND a.READ_DT IS NULL
+					AND a.DELETE_YN = 'N'
+			) UNION ALL (
+				SELECT
+					'NOTICE' AS ID, COUNT(READ_BOOL) AS CNT
+				FROM (
+					SELECT
+						CASE
+							WHEN (SELECT COUNT(*) FROM TBL_BBSREAD c WHERE a.NTT_ID = c.NTT_ID AND a.BBS_ID = c.BBS_ID AND c.USER_NO = #no#) > 0 THEN NULL
+							WHEN d.BBS_ATTRB_CODE = 'DISCUS' AND a.EX_CHK = 'N' THEN 'N'
+							WHEN DATEDIFF(SYSDATE() ,a.FRST_REGISTER_PNTTM) >=7 THEN NULL
+							ELSE 'N'
+						END AS READ_BOOL
+					FROM
+						COMTNBBS a
+						LEFT JOIN COMTNBBSMASTER d ON a.BBS_ID = d.BBS_ID
+					WHERE
+						a.USE_AT = 'Y'
+						AND d.USE_AT = 'Y'
+						AND a.BBS_ID = 'BBSMSTR_000000000031'
+				) K
+			) UNION ALL (
+				SELECT
+					'BUSI_CNTCT' AS ID, COUNT(DISTINCT a.BC_ID) AS CNT
+				FROM
+					TBL_BUSINESS_CONTACT_RECIEVE a
+					INNER JOIN TBL_BUSINESS_CONTACT b 
+						ON a.BC_ID = b.BC_ID 
+						AND a.READTIME IS NULL
+						AND b.USE_AT = 'Y'
+						<!-- 2013.08.13 업무연락 알람 ON/OFF -->
+						AND a.ALARM_YN = 'Y' 
+				WHERE
+					a.USER_NO = #no#					
+			) UNION ALL (
+				SELECT
+					'MEET_UNRAED' AS ID, COUNT(DISTINCT a.MT_ID) AS CNT
+				FROM
+					TBL_MEETING_ROOM_RECIEVE a
+					INNER JOIN TBL_MEETING_ROOM b 
+						ON a.MT_ID = b.MT_ID 
+						AND a.READTIME IS NULL
+						AND b.USE_AT = 'Y'
+				WHERE
+					a.USER_NO = #no#					
+			) UNION ALL (
+				SELECT
+					'COMM_FREE' AS ID, COUNT(READ_BOOL) AS CNT
+				FROM (
+					SELECT
+						CASE
+							WHEN (SELECT COUNT(*) FROM TBL_BBSREAD c WHERE a.NTT_ID = c.NTT_ID AND a.BBS_ID = c.BBS_ID AND c.USER_NO = #no#) > 0 THEN NULL
+							WHEN d.BBS_ATTRB_CODE = 'DISCUS' AND a.EX_CHK = 'N' THEN 'N'
+							WHEN DATEDIFF(SYSDATE() ,a.FRST_REGISTER_PNTTM) >=7 THEN NULL
+							ELSE 'N'
+						END AS READ_BOOL
+					FROM
+						COMTNBBS a
+						LEFT JOIN COMTNBBSMASTER d ON a.BBS_ID = d.BBS_ID
+					WHERE
+						a.USE_AT = 'Y'
+						AND d.USE_AT = 'Y'
+						AND d.BBS_TY_CODE = 'COMM'
+						AND d.BBS_ID = 'BBSMSTR_000000000001'
+				) K
+			) UNION ALL (
+				SELECT
+					'SOL_BBS' AS ID, COUNT(READ_BOOL) AS CNT
+				FROM (
+					SELECT
+						CASE
+							WHEN (SELECT COUNT(*) FROM TBL_BBSREAD c WHERE a.NTT_ID = c.NTT_ID AND a.BBS_ID = c.BBS_ID AND c.USER_NO = #no#) > 0 THEN NULL
+							WHEN d.BBS_ATTRB_CODE = 'SOLBBS' AND a.EX_CHK = 'N' THEN 'N'
+							WHEN DATEDIFF(SYSDATE() ,a.FRST_REGISTER_PNTTM) >=7 THEN NULL
+							ELSE 'N'
+						END AS READ_BOOL
+					FROM
+						COMTNBBS a
+						LEFT JOIN COMTNBBSMASTER d ON a.BBS_ID = d.BBS_ID
+					WHERE
+						a.USE_AT = 'Y'
+						AND d.USE_AT = 'Y'
+						AND d.BBS_TY_CODE = 'COMM'
+						AND d.BBS_ID = 'BBSMSTR_000000000085'
+				) KK
+			) UNION ALL (
+				SELECT
+					'CONN_USER' AS ID, COUNT(*) AS CNT
+				FROM
+					TBL_CURRENT_USER cur
+					INNER JOIN TBL_USERINFO usr
+						ON cur.USER_NO = usr.NO
+				WHERE
+					cur.LAST_CONNECT_TIME > SUBDATE(NOW(), INTERVAL 1 MINUTE)
+			) UNION ALL (
+				SELECT
+					'CARD_SPEND' AS ID, COUNT(a.CARD_SPEND_NO) AS CNT
+				FROM (
+				SELECT	
+					a.CARD_SPEND_NO				
+				FROM 
+					TBL_CARD_SPEND a
+					INNER JOIN TBL_CARD_HISTORY b
+						ON a.CARD_ID = b.CARD_ID
+						AND (
+								(
+								A.APPROVAL_DTTM >= b.ST_DT
+								AND (b.ED_DT > A.APPROVAL_DTTM
+									OR B.ED_DT IS NULL
+								)								
+							) OR (				 
+								B.FIRST_REGISTER = 'Y'
+								AND A.CARD_ID = B.CARD_ID
+								AND B.ST_DT > A.APPROVAL_DTTM
+							)
+						)
+					INNER JOIN TBL_CARD d
+						ON a.CARD_ID = d.CARD_ID			
+					LEFT OUTER JOIN TBL_USERINFO c
+						ON b.USER_NO = c.NO
+				WHERE 1=1
+					AND A.STATUS = 3
+					AND C.NO = #no#
+				GROUP BY a.CARD_SPEND_NO
+				) A
+			) 
+		) R
+ 	</select>
+ 	
+ 	<select id="CommonDAO.getReferenceList" resultClass="egovMap" >
+ 		SELECT
+ 			ID, CNT
+ 		FROM
+ 		(
+ 			(
+				SELECT 
+					'ACCEPT' AS ID, COUNT(DISTINCT(APD.`DOC_ID`)) AS CNT
+				FROM
+					TBL_EAPP_DOC APD
+					INNER JOIN TBL_EAPP_READER APR 
+						ON APD.DOC_ID = APR.DOC_ID
+				WHERE
+			    	APD.DOC_STAT IN ("APP001", "APP002", "APP003")
+			    	AND APR.READER_NO = #no#
+					AND APR.STAT = 0 
+			    	AND SUBSTRING(APR.APP_TYP, 4, 3) = SUBSTRING(APD.DOC_STAT, 4, 3) 
+			)  UNION ALL (
+				SELECT 
+					'REJECT' AS ID, COUNT(DISTINCT(APD.`DOC_ID`)) AS CNT
+				FROM	
+					TBL_EAPP_DOC APD
+					INNER JOIN TBL_EAPP_READER APR 
+						ON APD.DOC_ID = APR.DOC_ID
+				WHERE 
+			    	APD.DOC_STAT = "APP099"
+			    	AND APR.APP_TYP = "APR099"
+			    	AND APR.READER_NO = #no#
+			    	AND APR.STAT = 0
+			) UNION ALL (
+				SELECT 
+					'REFERENCE' AS ID, COUNT(DISTINCT(APD.`DOC_ID`)) AS CNT
+				FROM
+					TBL_EAPP_DOC APD
+					INNER JOIN TBL_EAPP_READER APR 
+						ON APD.DOC_ID = APR.DOC_ID
+				WHERE 
+			    	APD.DOC_STAT IN ("APP004", "APP005")
+			    	AND APR.READER_NO = #no#
+			    	AND APR.APP_TYP = "APR004"
+			    	AND APR.STAT = 0
+			) UNION ALL (
+				SELECT 
+					'TODO' AS ID, COUNT(DISTINCT(APD.`DOC_ID`)) AS CNT
+				FROM
+					TBL_EAPP_DOC APD
+					INNER JOIN TBL_EAPP_READER APR 
+						ON APD.DOC_ID = APR.DOC_ID
+				WHERE
+			    	APD.DOC_STAT IN ("APP004", "APP005")
+					AND APD.HANDLE_STAT IN ('0', '2')
+			    	AND APR.READER_NO = #no#
+			    	AND APR.APP_TYP = "APR005"
+			)    
+		) R
+ 	</select>
+ 	
+ 	<select id="CommonDAO.getMemberListUnreadCnt" resultClass="egovMap" >
+ 	SELECT
+		USR.USER_NM
+		, IFNULL(ACCEPT.CNT, 0) 승인할문서
+		, IFNULL(REJECT.CNT, 0) 반려된문서
+		, IFNULL(REFERENCE.CNT, 0) 참조할문서
+		, IFNULL(TODO.CNT, 0) 처리할문서
+		, IFNULL(MAIL.CNT, 0) 사내메일
+		, IFNULL(NOTE.CNT, 0) 쪽지
+		, IFNULL(BUSI_CNTCT.CNT, 0) 업무연락
+		, IFNULL(MEETING_ROOM.CNT, 0) 회의실
+		, IFNULL(CARD_SPEND.CNT, 0) 카드미상신	
+		, IFNULL(NOTICE.CNT, 0) 공지
+		, IFNULL(COMM_FREE.CNT, 0) 자유게시판
+	FROM 
+		TBL_USERINFO USR
+		LEFT JOIN (
+			SELECT 
+				APR.READER_NO, COUNT(DISTINCT(APD.`DOC_ID`)) AS CNT
+			FROM
+				TBL_EAPP_DOC APD
+				INNER JOIN TBL_EAPP_READER APR 
+					ON APD.DOC_ID = APR.DOC_ID
+			WHERE
+				APD.DOC_STAT IN ("APP001", "APP002", "APP003")
+				AND APR.STAT = 0 
+				AND SUBSTRING(APR.APP_TYP, 4, 3) = SUBSTRING(APD.DOC_STAT, 4, 3)
+			GROUP BY
+				APR.READER_NO
+		) ACCEPT 
+			ON USR.NO = ACCEPT.READER_NO 
+		LEFT JOIN (
+			SELECT 
+				APR.READER_NO, COUNT(DISTINCT(APD.`DOC_ID`)) AS CNT
+			FROM	
+				TBL_EAPP_DOC APD
+				INNER JOIN TBL_EAPP_READER APR 
+					ON APD.DOC_ID = APR.DOC_ID
+			WHERE 
+				APD.DOC_STAT = "APP099"
+				AND APR.APP_TYP = "APR099"
+				AND APR.STAT = 0
+			GROUP BY
+				APR.READER_NO
+		) REJECT 
+			ON USR.NO = REJECT.READER_NO
+		LEFT JOIN (
+			SELECT 
+				APR.READER_NO, COUNT(DISTINCT(APD.`DOC_ID`)) AS CNT
+			FROM
+				TBL_EAPP_DOC APD
+				INNER JOIN TBL_EAPP_READER APR 
+					ON APD.DOC_ID = APR.DOC_ID
+			WHERE 
+				APD.DOC_STAT IN ("APP004", "APP005")
+				AND APR.APP_TYP = "APR004"
+				AND APR.STAT = 0
+			GROUP BY
+				APR.READER_NO
+		) REFERENCE
+			ON USR.NO = REFERENCE.READER_NO
+		LEFT JOIN (
+			SELECT 
+				APR.READER_NO, COUNT(DISTINCT(APD.`DOC_ID`)) AS CNT
+			FROM
+				TBL_EAPP_DOC APD
+				INNER JOIN TBL_EAPP_READER APR 
+					ON APD.DOC_ID = APR.DOC_ID
+					AND APD.DOC_STAT IN ("APP004", "APP005")
+					AND APD.HANDLE_STAT IN ('0', '2')
+					AND APR.APP_TYP = "APR005"
+			WHERE
+				1=1
+			GROUP BY
+				APR.READER_NO			
+		) TODO
+			ON USR.NO = TODO.READER_NO
+		LEFT JOIN (
+			SELECT
+				a.RECIEVE_NO, COUNT(*) AS CNT
+			FROM
+				TBL_MAILRECIEVE a
+				LEFT JOIN TBL_MAILSEND b 
+					ON a.MAIL_ID = b.MAIL_ID
+					AND b.IS_SEND = 'Y'
+			WHERE			
+				a.READ_DT IS NULL
+				AND a.DELETE_YN = 'N'			
+			GROUP BY
+				A.RECIEVE_NO
+		) MAIL
+			ON USR.NO =  MAIL.RECIEVE_NO
+		LEFT JOIN (
+			SELECT
+				a.RECIEVE_NO, COUNT(*) AS CNT
+			FROM
+				TBL_NOTERECIEVE a
+			WHERE
+				a.READ_DT IS NULL
+				AND a.DELETE_YN = 'N'
+			GROUP BY
+				a.RECIEVE_NO			
+		) NOTE
+			ON USR.NO = NOTE.RECIEVE_NO
+		LEFT JOIN (
+			SELECT
+				a.USER_NO, COUNT(DISTINCT a.BC_ID) AS CNT
+			FROM
+				TBL_BUSINESS_CONTACT_RECIEVE a
+				INNER JOIN TBL_BUSINESS_CONTACT b 
+					ON a.BC_ID = b.BC_ID
+					AND a.READTIME IS NULL
+					AND b.USE_AT = 'Y'
+			WHERE
+				1=1
+			GROUP BY
+				a.USER_NO
+		) BUSI_CNTCT
+			ON USR.NO = BUSI_CNTCT.USER_NO
+		LEFT JOIN (
+			SELECT
+				a.USER_NO, COUNT(DISTINCT a.MT_ID) AS CNT
+			FROM
+				TBL_MEETING_ROOM_RECIEVE a
+				INNER JOIN TBL_MEETING_ROOM b 
+					ON a.MT_ID = b.MT_ID 
+					AND b.USE_AT = 'Y'
+				INNER JOIN TBL_MEETING_ROOM_RECIEVE c 
+					ON b.MT_ID = c.MT_ID 
+					AND c.RECIEVE_TYP = 'WR'
+			WHERE
+				a.READTIME IS NULL
+			GROUP BY
+				a.USER_NO
+		) MEETING_ROOM
+			ON USR.NO = MEETING_ROOM.USER_NO
+		LEFT JOIN (
+			SELECT
+				A.NO, COUNT(a.CARD_SPEND_NO) AS CNT
+			FROM (
+				SELECT	
+					A.CARD_SPEND_NO, C.NO				
+				FROM 
+					TBL_CARD_SPEND a
+					INNER JOIN TBL_CARD_HISTORY b
+						ON a.CARD_ID = b.CARD_ID
+						AND (
+							(
+							A.APPROVAL_DTTM >= b.ST_DT
+							AND (b.ED_DT > A.APPROVAL_DTTM
+								OR B.ED_DT IS NULL )								
+							) OR (				 
+								B.FIRST_REGISTER = 'Y'
+								AND A.CARD_ID = B.CARD_ID
+								AND B.ST_DT > A.APPROVAL_DTTM
+							)
+						)			
+					LEFT OUTER JOIN TBL_USERINFO c
+						ON b.USER_NO = c.NO
+				WHERE 1=1
+					AND A.STATUS = 3				
+				GROUP BY 
+					a.CARD_SPEND_NO
+			) A
+			GROUP BY
+				A.NO
+		) CARD_SPEND
+			ON USR.NO = CARD_SPEND.NO
+		LEFT JOIN (
+			SELECT
+				USR.NO, COUNT(*) AS CNT
+							
+			FROM
+				TBL_USERINFO USR
+				LEFT JOIN COMTNBBS a
+					ON 7 > DATEDIFF(SYSDATE() ,a.FRST_REGISTER_PNTTM)
+					AND USR.GHOST = 0
+					AND USR.WORK_ST = 'W'
+				LEFT JOIN TBL_BBSREAD C
+					ON A.NTT_ID = C.NTT_ID
+					AND A.BBS_ID = C.BBS_ID
+					AND USR.NO = C.USER_NO
+				LEFT JOIN COMTNBBSMASTER D
+					ON A.BBS_ID = D.BBS_ID
+			WHERE
+				A.USE_AT = 'Y'
+				AND D.USE_AT = 'Y'
+				AND D.BBS_ID = 'BBSMSTR_000000000031'
+				AND C.NTT_ID IS NULL
+			GROUP BY 
+				USR.NO
+		) NOTICE
+			ON USR.NO = NOTICE.NO
+		LEFT JOIN (
+			SELECT
+				USR.NO, COUNT(*) AS CNT
+							
+			FROM
+				TBL_USERINFO USR
+				LEFT JOIN COMTNBBS a
+					ON 7 > DATEDIFF(SYSDATE() ,a.FRST_REGISTER_PNTTM) 
+					AND USR.GHOST = 0
+					AND USR.WORK_ST = 'W'
+				LEFT JOIN TBL_BBSREAD C
+					ON A.NTT_ID = C.NTT_ID
+					AND A.BBS_ID = C.BBS_ID
+					AND USR.NO = C.USER_NO
+				LEFT JOIN COMTNBBSMASTER D
+					ON A.BBS_ID = D.BBS_ID
+			WHERE
+				A.USE_AT = 'Y'
+				AND D.USE_AT = 'Y'
+				AND D.BBS_ID = 'BBSMSTR_000000000001'
+				AND C.NTT_ID IS NULL
+			GROUP BY 
+				USR.NO
+		) COMM_FREE
+			ON USR.NO = COMM_FREE.NO
+	WHERE
+		USR.GHOST = 0
+		AND USR.WORK_ST = 'W'
+		AND ( ACCEPT.CNT>0 OR REJECT.CNT>0 OR REFERENCE.CNT>0 OR TODO.CNT>0
+			OR MAIL.CNT>0 OR NOTE.CNT>0 OR BUSI_CNTCT.CNT>0 OR MEETING_ROOM.CNT>0
+			OR CARD_SPEND.CNT>0 OR NOTICE.CNT>0 OR COMM_FREE.CNT>0 )
+	</select>
+
+
+ 	
+ 	
+ 	<select id="CommonDAO.getCommunityUnreadCnt" resultClass="egovMap" >
+ 		SELECT
+ 			ID, CNT
+ 		FROM
+ 		(
+			(
+				SELECT
+					'NOTE_SEND' AS ID, COUNT(*) AS CNT
+				FROM
+					TBL_NOTESEND
+				WHERE
+					SENDER_NO = #no# 
+					AND DELETE_YN = 'N'
+			) UNION (
+				SELECT
+					'NOTE_RECIEVE' AS ID, COUNT(*) AS CNT
+				FROM
+					TBL_NOTERECIEVE
+				WHERE
+					RECIEVE_NO = #no# 
+					AND READ_DT IS NULL
+					AND DELETE_YN = 'N'
+			) UNION (
+				SELECT
+					'NOTE_RECIEVE_ALL' AS ID, COUNT(*) AS CNT
+				FROM
+					TBL_NOTERECIEVE
+				WHERE
+					RECIEVE_NO = #no# 
+					AND DELETE_YN = 'N'
+			) UNION (
+				SELECT
+					'MAIL_SEND' AS ID, COUNT(*) AS CNT
+				FROM
+					TBL_MAILSEND
+				WHERE
+					SENDER_NO = #no# 
+					AND DELETE_YN = 'N'
+					AND IS_SEND = 'Y'
+			) UNION (
+				SELECT
+					'MAIL_SAVE' AS ID, COUNT(*) AS CNT
+				FROM
+					TBL_MAILSEND
+				WHERE
+					SENDER_NO = #no# 
+					AND DELETE_YN = 'N'
+					AND IS_SEND = 'N'
+			) UNION (
+				SELECT
+					'MAIL_RECIEVE' AS ID, COUNT(*) AS CNT
+				FROM
+					TBL_MAILRECIEVE a
+					LEFT JOIN TBL_MAILSEND b ON a.MAIL_ID = b.MAIL_ID
+				WHERE
+					a.RECIEVE_NO = #no# 
+					AND a.READ_DT IS NULL
+					AND a.DELETE_YN = 'N'
+					AND b.IS_SEND = 'Y'
+			) UNION (
+				SELECT
+					'MAIL_RECIEVE_ALL' AS ID, COUNT(*) AS CNT
+				FROM
+					TBL_MAILRECIEVE a
+					LEFT JOIN TBL_MAILSEND b ON a.MAIL_ID = b.MAIL_ID
+				WHERE
+					a.RECIEVE_NO = #no# 
+					AND a.DELETE_YN = 'N'
+					AND b.IS_SEND = 'Y'
+			) UNION (
+				SELECT
+					BBS_ID AS ID, COUNT(READ_BOOL) AS CNT
+				FROM (
+					SELECT
+						a.BBS_ID,
+						CASE
+							WHEN (SELECT COUNT(*) FROM TBL_BBSREAD c WHERE a.NTT_ID = c.NTT_ID AND a.BBS_ID = c.BBS_ID AND c.USER_NO = #no#) > 0 THEN NULL
+							WHEN d.BBS_ATTRB_CODE = 'DISCUS' AND a.EX_CHK = 'N' THEN 'N'
+							WHEN DATEDIFF(SYSDATE() ,a.FRST_REGISTER_PNTTM) >=7 THEN NULL
+							ELSE 'N'
+						END AS READ_BOOL
+					FROM
+						COMTNBBS a
+						LEFT JOIN COMTNBBSMASTER d ON a.BBS_ID = d.BBS_ID
+					WHERE
+						a.USE_AT = 'Y'
+						AND d.USE_AT = 'Y'
+				) K
+				GROUP BY BBS_ID
+			) UNION (
+				SELECT
+					'COMM' AS ID, COUNT(READ_BOOL) AS CNT
+				FROM (
+					SELECT
+						CASE
+							WHEN (SELECT COUNT(*) FROM TBL_BBSREAD c WHERE a.NTT_ID = c.NTT_ID AND a.BBS_ID = c.BBS_ID AND c.USER_NO = #no#) > 0 THEN NULL
+							WHEN d.BBS_ATTRB_CODE = 'DISCUS' AND a.EX_CHK = 'N' THEN 'N'
+							WHEN DATEDIFF(SYSDATE() ,a.FRST_REGISTER_PNTTM) >=7 THEN NULL
+							ELSE 'N'
+						END AS READ_BOOL
+					FROM
+						COMTNBBS a
+						LEFT JOIN COMTNBBSMASTER d ON a.BBS_ID = d.BBS_ID
+					WHERE
+						a.USE_AT = 'Y'
+						AND d.USE_AT = 'Y'
+						AND d.BBS_TY_CODE IN ('COMM','SPRT')
+						AND a.BBS_ID NOT IN ('BBSMSTR_000000000082')  <!-- 아침인사는 미열람 개시글에 비노출 -->
+				) K
+			)
+		) R
+ 	</select>
+ 	
+ 	<select id="CommonDAO.getTaxCheckList" resultClass="egovMap" >
+		<![CDATA[
+		SELECT 
+			'tax_all' AS COMP_CD,
+			'' AS COMP_NM,
+			COUNT(*) AS CNT
+		FROM 
+			hm_invoice a
+		WHERE
+			a.STATUS = 2
+			AND a.USE_AT = 'Y'
+			AND a.PUBLISH_REQ_DATE <= REPLACE(CURDATE(), '-', '')
+		
+		UNION ALL
+		
+		SELECT 
+			a.PUBLISH_CO_ACRONYM AS COMP_CD,
+			b.CODE_NM AS COMP_NM,
+			COUNT(*) AS CNT
+		FROM 
+			hm_invoice a
+			INNER JOIN COMTCCMMNDETAILCODE b
+				ON b.CODE_ID = 'KMS007'
+				AND a.PUBLISH_CO_ACRONYM = b.CODE_DC
+		WHERE
+			a.STATUS = 2
+			AND a.USE_AT = 'Y'
+			AND a.PUBLISH_REQ_DATE <= REPLACE(CURDATE(), '-', '')
+		GROUP BY
+			a.PUBLISH_CO_ACRONYM
+		]]>
+	</select>
+ 	
+ 	<select id="CommonDAO.getExpansionList" resultMap="expList">
+	 	SELECT
+			b.EXP_ID
+			,b.EXP_SJ
+			,b.EXP_CN
+			,b.EXP_FILE_ID
+			,b.LINK_URL
+			,b.POP_YN
+			,b.USE_AT
+			,b.SORT
+			,b.ACCESS
+			,b.ACCESS_USER_NO
+			,b.POP_WIDTH
+			,b.POP_HEIGHT
+		FROM
+			TBL_EXPANSION_USE a
+			LEFT OUTER JOIN TBL_EXPANSION b ON a.EXP_ID = b.EXP_ID
+		WHERE
+			a.USER_NO = #no#
+			AND b.USE_AT = 'Y'
+			AND (
+				b.ACCESS = 'A'
+				OR (
+					b.ACCESS = 'L'
+					AND CONCAT(',', b.ACCESS_USER_NO, ',') LIKE CONCAT('%,', #no#, ',%')
+				)
+			)
+		ORDER BY a.EXP_ORD ASC
+ 	</select>
+ 	
+ 	<select id="CommonDAO.getUnuseExpansionList" resultMap="expList">
+	 	SELECT
+			a.EXP_ID
+			,a.EXP_SJ
+			,a.EXP_CN
+			,a.EXP_FILE_ID
+			,a.LINK_URL
+			,a.POP_YN
+			,a.USE_AT
+			,a.SORT
+			,a.ACCESS
+			,a.ACCESS_USER_NO
+			,a.POP_WIDTH
+			,a.POP_HEIGHT
+		FROM
+			TBL_EXPANSION a
+		WHERE
+			a.USE_AT = 'Y'
+			AND (
+				a.ACCESS = 'A'
+				OR (
+					a.ACCESS = 'L'
+					AND CONCAT(',', a.ACCESS_USER_NO, ',') LIKE CONCAT('%,', #no#, ',%')
+				)
+			)
+			AND a.EXP_ID NOT IN (
+				SELECT EXP_ID
+				FROM TBL_EXPANSION_USE
+				WHERE USER_NO = #no#
+			)
+		ORDER BY a.SORT
+ 	</select>
+ 	
+ 	<update id="CommonDAO.updateExpansionOrder">
+	 	UPDATE
+	 		TBL_EXPANSION_USE
+	 	SET
+	 		EXP_ORD = #expOrd#
+	 	WHERE
+	 		USER_NO = #userNo#
+	 		AND EXP_ID = #expId#
+ 	</update>
+
+	<insert id="CommonDAO.insertExpansionUse">
+		INSERT INTO TBL_EXPANSION_USE
+		(
+			USER_NO, EXP_ID, EXP_ORD
+		) (
+			SELECT
+				#userNo#, #expId#, IFNULL(MAX(EXP_ORD),0)+1 AS EXP_ORD
+			FROM TBL_EXPANSION_USE
+			WHERE USER_NO = #userNo#
+		)
+	</insert>
+	
+	<delete id="CommonDAO.deleteExpansionUse">
+		DELETE
+		FROM TBL_EXPANSION_USE
+		WHERE
+			USER_NO = #userNo#
+			AND EXP_ID = #expId#
+	</delete>
+
+
+ 	<select id="CommonDAO.getMyMenuList" resultClass="egovMap">
+	 	SELECT
+			NO, USER_NO, MENU_SJ, LINK_URL, MENU_ORD
+		FROM
+			TBL_MYMENU
+		WHERE
+			USER_NO = #no#
+			AND TYPE = 1
+		ORDER BY MENU_ORD ASC
+ 	</select>
+ 	
+ 	<select id="CommonDAO.getMyMenu" resultClass="egovMap">
+ 		SELECT
+			NO, USER_NO, MENU_SJ, LINK_URL, MENU_ORD
+		FROM
+			TBL_MYMENU
+		WHERE
+			NO = #no#
+ 	</select>
+ 	
+ 	<insert id="CommonDAO.insertMymenu">
+ 		<selectKey resultClass="java.lang.Long" keyProperty="menuOrd">
+			SELECT
+				IFNULL(MAX(MENU_ORD),0)+1 AS MENU_ORD
+			FROM TBL_MYMENU
+			WHERE USER_NO = #userNo#
+		</selectKey>
+ 		INSERT INTO TBL_MYMENU
+ 		(
+ 			USER_NO, MENU_SJ, LINK_URL, MENU_ORD
+ 		) VALUES (
+ 			#userNo#, #menuSj#, #linkUrl#, #menuOrd#
+ 		)
+ 	</insert>
+ 	
+	<update id="CommonDAO.updateMymenu">
+		UPDATE TBL_MYMENU
+		<dynamic prepend="SET">
+			<isNotEmpty prepend="," property="menuSj">
+				MENU_SJ = #menuSj#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="linkUrl">
+				LINK_URL = #linkUrl#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="menuOrd">
+				MENU_ORD = #menuOrd#
+			</isNotEmpty>
+		</dynamic>
+		WHERE
+			NO = #no#
+	</update>
+
+	<delete id="CommonDAO.deleteMymenu">
+ 		DELETE FROM TBL_MYMENU
+		WHERE
+			NO = #no#
+	</delete>
+ 	
+ 	
+ 	<select id="CommonDAO.selectBusiIdList" resultClass="egovMap">
+ 		SELECT
+			a.ORGNZT_ID AS ID, FN_CREATE_ORGAN_FNM(a.ORGNZT_ID) AS NM
+		FROM
+			TBL_EAPP_BUSINESS_PLAN a
+			INNER JOIN TBL_EAPP_DOC b ON a.DOC_ID = b.DOC_ID AND b.NEW_AT = 1 AND LEFT(a.PLAN_YM,4) = #searchYear#
+		GROUP BY a.ORGNZT_ID, LEFT(a.PLAN_YM,4)
+ 	</select>
+
+	<select id="CommonDAO.selectOrgList" resultClass="egovMap">
+		SELECT
+			ORGNZT_ID AS ID, ORGNZT_NM AS NM
+		FROM
+			TBL_ORGNZT
+		WHERE
+			ORG_TREE LIKE CONCAT((SELECT ORG_TREE FROM TBL_ORGNZT WHERE ORGNZT_ID = #searchOrgId#), '%')
+	</select>
+	
+	<select id="CommonDAO.selectUnderOrgList" resultClass="egovMap">
+		SELECT
+			ORGNZT_ID AS ID, ORGNZT_NM AS NM
+		FROM
+			TBL_ORGNZT
+		WHERE 1=2
+			<isNotEmpty property="searchBusiIdList" prepend="OR (">
+				<iterate conjunction="OR" property="searchBusiIdList">
+					ORG_TREE LIKE CONCAT((SELECT ORG_TREE FROM TBL_ORGNZT WHERE ORGNZT_ID = #searchBusiIdList[]#), '%')
+				</iterate>
+					)
+				AND USE_YN = 'Y'
+			</isNotEmpty>
+	</select>
+ 	
+ 	<select id="CommonDAO.selectBusinessSectorListSelBox" resultClass="egovMap">
+ 		SELECT
+			BUSI_SECTOR_NM AS NM
+			,BUSI_SECTOR_VAL AS ID
+		FROM
+			TBL_BUSINESS_SECTOR
+		WHERE
+			BUSI_SECTOR_YEAR = #searchYear#
+			AND USE_AT = 'Y'
+		ORDER BY BUSI_SECTOR_ORD
+ 	</select>
+ 	
+ 	<select id="CommonDAO.selectBusinessSectorList" resultMap="busiSectorList">
+ 		SELECT
+			a.NO
+			,a.BUSI_SECTOR_NM
+			,a.BUSI_SECTOR_VAL
+			,b.ORGNZT_NM AS BUSI_SECTOR_VAL_NM
+			,a.BUSI_SECTOR_YEAR
+			,a.BUSI_SECTOR_ORD
+			,a.USE_AT
+		FROM
+			TBL_BUSINESS_SECTOR a
+			LEFT JOIN TBL_ORGNZT b ON a.BUSI_SECTOR_VAL LIKE CONCAT('%', b.ORGNZT_ID, '%')
+		WHERE
+			BUSI_SECTOR_YEAR = #searchYear#
+			AND USE_AT = 'Y'
+		ORDER BY a.BUSI_SECTOR_ORD
+ 	</select>
+ 	
+ 	<insert id="CommonDAO.insertBusinessSector">
+ 		<selectKey  resultClass="java.lang.Integer" keyProperty="busiSectorOrd" >
+			SELECT IFNULL(MAX(BUSI_SECTOR_ORD),-1)+1 BUSI_SECTOR_ORD
+			FROM TBL_BUSINESS_SECTOR
+		</selectKey>
+		INSERT INTO TBL_BUSINESS_SECTOR
+		(
+			BUSI_SECTOR_NM
+			,BUSI_SECTOR_VAL
+			,BUSI_SECTOR_YEAR
+			,BUSI_SECTOR_ORD
+			,USE_AT
+		) VALUES (
+			#busiSectorNm#
+			,#busiSectorVal#
+			,#busiSectorYear#
+			,#busiSectorOrd#
+			,'Y'
+		)
+ 	</insert>
+ 	
+ 	<update id="CommonDAO.updateBusinessSector">
+ 		UPDATE
+ 			TBL_BUSINESS_SECTOR
+		SET
+			USE_AT = #useAt#
+			<isNotEmpty prepend="," property="busiSectorNm">
+			BUSI_SECTOR_NM = #busiSectorNm#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="busiSectorVal">
+			BUSI_SECTOR_VAL = #busiSectorVal#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="busiSectorYear">
+			BUSI_SECTOR_YEAR = #busiSectorYear#
+			</isNotEmpty>
+		WHERE
+			NO = #no#
+ 	</update>
+ 	
+ 	<update id="CommonDAO.updateBusinessSectorOrd">
+ 		UPDATE
+ 			TBL_BUSINESS_SECTOR
+		SET
+			BUSI_SECTOR_ORD = #busiSectorOrd#
+		WHERE
+			NO = #no#
+ 	</update>
+ 	
+ 	<select id="CommonDAO.selectCurrentUserList" resultClass="egovMap">
+ 	<![CDATA[
+	SELECT
+		cur.no
+		,cur.user_no
+		,cur.last_connect_time
+		,usr.user_id
+		,usr.user_nm
+	FROM
+		tbl_current_user cur
+		LEFT JOIN tbl_userinfo usr
+		ON cur.user_no = usr.no
+	WHERE
+		last_connect_time > SUBDATE(NOW(), INTERVAL 1 MINUTE)
+	ORDER BY
+		usr.user_nm
+	]]>
+ 	</select>
+ 	
+ 	<select id="CommonDAO.selectCurrentUserCntChek" resultClass="java.lang.Integer">
+ 	SELECT
+		COUNT(*) AS cnt
+	FROM
+		tbl_current_user
+	WHERE
+		user_no = #userNo#
+ 	</select>
+ 	
+ 	<insert id="CommonDAO.insertCurrentUser">
+ 	INSERT INTO
+		tbl_current_user
+		(user_no, last_connect_time)
+	VALUES
+		(#userNo#, NOW())
+ 	</insert>
+ 	
+ 	<update id="CommonDAO.updateCurrentUser">
+ 	UPDATE
+		tbl_current_user
+	SET
+		last_connect_time = NOW()
+	WHERE
+		user_no = #userNo#
+ 	</update>
+ 	
+ 	<select id="CommonDAO.selectCurrentUser" resultClass="egovMap">
+ 	SELECT
+		no
+		,user_no
+		,last_connect_time
+	FROM
+		tbl_current_user
+	WHERE
+		user_no = #userNo#
+ 	</select>
+ 	
+ 	
+ 	<select id="CommonDAO.getScrapList" resultClass="egovMap">
+	 	SELECT
+			scr.no
+			, scr.article_id
+			, scr.typ
+			, CASE WHEN scr.typ = 'BBS' THEN mstr.bbs_nm
+				WHEN scr.typ = 'MAIL' THEN '사내메일'
+				WHEN scr.typ = 'BUSI' THEN '업무연락'
+			END AS title
+			, CASE WHEN scr.typ = 'BBS' THEN bbs.bbs_id
+				ELSE '-'
+			END AS bbs_id
+			, CASE WHEN scr.typ = 'BBS' THEN bbs.ntt_sj
+				WHEN scr.typ = 'MAIL' THEN mail.mail_sj
+				WHEN scr.typ = 'BUSI' THEN busi.bc_sj
+			END AS sj
+			, usr.no AS user_no
+			, usr.user_id
+			, usr.user_nm
+			, CASE WHEN scr.typ = 'BBS' THEN DATE_FORMAT(bbs.frst_register_pnttm, '%Y.%m.%d %H:%i')
+				WHEN scr.typ = 'MAIL' THEN DATE_FORMAT(mail.send_dt, '%Y.%m.%d %H:%i')
+				WHEN scr.typ = 'BUSI' THEN DATE_FORMAT(busi.reg_dt, '%Y.%m.%d %H:%i')
+			END AS reg_dt
+		FROM
+			tbl_scrap scr
+			LEFT JOIN comtnbbs bbs
+			ON scr.article_id = bbs.ntt_id
+			LEFT JOIN tbl_mailsend mail
+			ON scr.article_id = mail.mail_id
+			LEFT JOIN tbl_business_contact busi
+			ON scr.article_id = busi.bc_id
+			LEFT JOIN tbl_business_contact_recieve rec
+			ON busi.bc_id = rec.bc_id
+			AND rec.recieve_typ = 'WR'
+			LEFT JOIN comtnbbsmaster mstr
+			ON bbs.bbs_id = mstr.bbs_id
+			LEFT JOIN tbl_userinfo usr
+			ON CASE WHEN scr.typ = 'BBS' THEN bbs.frst_register_id
+				WHEN scr.typ = 'MAIL' THEN mail.sender_no
+				WHEN scr.typ = 'BUSI' THEN rec.user_no
+			END = usr.no
+		WHERE
+			scr.user_no = #userNo#
+		ORDER BY
+			scr.no DESC
+		LIMIT
+			#recordCountPerPage# OFFSET #firstIndex#
+ 	</select>
+ 	
+ 	<select id="CommonDAO.getScrapListCnt" resultClass="java.lang.Integer">
+ 		SELECT
+			COUNT(*)
+		FROM
+			tbl_scrap
+		WHERE
+			user_no = #userNo#
+ 	</select>
+ 	
+ 	<insert id="CommonDAO.insertScrap">
+ 		INSERT INTO
+ 			tbl_scrap (user_no, typ, article_id)
+ 			VALUES (#userNo#, #typ#, #articleId#)
+ 	</insert>
+ 	
+ 	<delete id="CommonDAO.deleteScrap">
+ 		DELETE FROM
+ 			tbl_scrap
+ 		WHERE
+ 			no = #no#
+ 	</delete>
+ 	
+ 	
+ 	<select id="CommonDAO.getMyArticleList" resultClass="egovMap">
+	 	SELECT
+			bbs.ntt_id
+			, bbs.bbs_id
+			, mstr.bbs_nm
+			, bbs.ntt_sj
+			, DATE_FORMAT(bbs.frst_register_pnttm, '%Y.%m.%d %H:%i') as frst_register_pnttm
+			, bbs.inqire_co
+		FROM
+			comtnbbs bbs
+			LEFT JOIN comtnbbsmaster mstr
+			ON bbs.bbs_id = mstr.bbs_id
+		WHERE
+			bbs.frst_register_id = #userNo#
+			AND bbs.use_at = 'Y'
+			AND mstr.bbs_ty_code IN ('COMM', 'SPRT', 'COOP')
+		ORDER BY
+			ntt_id DESC
+			, sort_ordr DESC
+		LIMIT
+			#recordCountPerPage# OFFSET #firstIndex#
+ 	</select>
+ 	
+ 	<select id="CommonDAO.getMyArticleListCnt" resultClass="java.lang.Integer">
+ 		SELECT
+			COUNT(*)
+		FROM
+			comtnbbs bbs
+			LEFT JOIN comtnbbsmaster mstr
+			ON bbs.bbs_id = mstr.bbs_id
+		WHERE
+			bbs.frst_register_id = #userNo#
+			AND bbs.use_at = 'Y'
+			AND mstr.bbs_ty_code IN ('COMM', 'SPRT', 'COOP')
+		ORDER BY
+			ntt_id DESC
+			, sort_ordr DESC
+ 	</select>
+ 	
+ 	<select id="CommonDAO.selectComtccmmndetailcode" resultClass="egovMap">
+ 		SELECT
+			*
+		FROM
+			comtccmmndetailcode
+		WHERE
+			code_id = #codeId#
+ 	</select>
+ 	
+ 	<select id="CommonDAO.selectStatisticSectorList" resultMap="statisticSectorList">
+ 		SELECT
+			a.NO
+			,a.STATISTIC_SECTOR_NM
+			,a.STATISTIC_SECTOR_VAL
+			<isNotEqual property="sectorTyp" compareValue="3">
+				,b.ORGNZT_NM AS STATISTIC_SECTOR_VAL_NM
+			</isNotEqual>
+			<isEqual property="sectorTyp" compareValue="3">
+				,CONCAT('[', b.PRJ_CD, ']', b.PRJ_NM) AS STATISTIC_SECTOR_VAL_NM
+			</isEqual>
+			,a.STATISTIC_SECTOR_ORD
+			,a.COLOR_TYP
+		FROM
+			TBL_STATISTIC_SECTOR a
+			<isNotEqual property="sectorTyp" compareValue="3">
+				LEFT JOIN TBL_ORGNZT b ON a.STATISTIC_SECTOR_VAL LIKE CONCAT('%', b.ORGNZT_ID, '%')
+			</isNotEqual>
+			<isEqual property="sectorTyp" compareValue="3">
+				LEFT JOIN TBL_PRJ b ON a.STATISTIC_SECTOR_VAL LIKE CONCAT('%', b.PRJ_ID, '%')
+			</isEqual>
+		WHERE
+			a.YEAR = #searchYear#
+		AND
+			a.SECTOR_TYP = #sectorTyp#
+		ORDER BY a.STATISTIC_SECTOR_ORD
+ 	</select>
+ 	
+ 	<insert id="CommonDAO.insertStatisticSector">
+ 		<selectKey  resultClass="java.lang.Integer" keyProperty="statisticSectorOrd" >
+			SELECT IFNULL(MAX(STATISTIC_SECTOR_ORD),-1)+1 STATISTIC_SECTOR_ORD
+			FROM TBL_STATISTIC_SECTOR
+		</selectKey>
+		INSERT INTO TBL_STATISTIC_SECTOR
+		(
+			SECTOR_TYP
+			,STATISTIC_SECTOR_NM
+			,STATISTIC_SECTOR_VAL
+			,STATISTIC_SECTOR_ORD
+			,COLOR_TYP
+			,YEAR
+		) VALUES (
+			#sectorTyp#
+			,#statisticSectorNm#
+			,#statisticSectorVal#
+			,#statisticSectorOrg#
+			,#colorTyp#
+			,#searchYear#
+		)
+ 	</insert>
+ 	
+ 	<update id="CommonDAO.updateStatisticSector">
+ 		UPDATE
+ 			TBL_STATISTIC_SECTOR
+		SET
+			COLOR_TYP = #colorTyp#
+			<isNotEmpty prepend="," property="statisticSectorNm">
+			STATISTIC_SECTOR_NM = #statisticSectorNm#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="statisticSectorVal">
+			STATISTIC_SECTOR_VAL = #statisticSectorVal#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="statisticSectorOrg">
+			STATISTIC_SECTOR_ORD = #statisticSectorOrg#
+			</isNotEmpty>
+		WHERE
+			NO = #no#
+ 	</update>
+ 	
+ 	<delete id="CommonDAO.deleteStatisticSector">
+ 		DELETE FROM
+ 			TBL_STATISTIC_SECTOR
+		WHERE
+			NO = #no#
+ 	</delete>
+ 	
+ 	<update id="CommonDAO.updateStatisticSectorOrd">
+ 		UPDATE
+ 			TBL_STATISTIC_SECTOR
+		SET
+			STATISTIC_SECTOR_ORD = #statisticSectorOrg#
+		WHERE
+			NO = #no#
+ 	</update>
+ 	
+ 	<update id="CommonDAO.updataOuterNetLoginLog">
+		UPDATE
+			TBL_LOGIN_LOG
+		SET
+			CONFIRM_YN = 'Y'
+		WHERE 0=0
+			AND USER_NO = #no#
+			AND INNERNET_YN = 'N'
+ 	</update>
+</sqlMap>

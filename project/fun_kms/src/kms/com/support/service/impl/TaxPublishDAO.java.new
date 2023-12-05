@@ -1,0 +1,99 @@
+package kms.com.support.service.impl;
+
+import java.util.List;
+import java.util.Map;
+
+import kms.com.app.service.ApprovalVO;
+import kms.com.support.service.CarFixVO;
+import kms.com.support.service.CarReservation;
+import kms.com.support.service.CarVO;
+import kms.com.support.service.CardSpendVO;
+import kms.com.support.service.CardVO;
+import kms.com.support.service.TaxPublishVO;
+
+import org.apache.log4j.Logger;
+import org.json.simple.JSONObject;
+import org.springframework.stereotype.Repository;
+
+import egovframework.rte.psl.dataaccess.EgovAbstractDAO;
+
+@Repository("KmsTaxPublishDAO")
+
+public class TaxPublishDAO extends EgovAbstractDAO{
+	Logger logT = Logger.getLogger("TENY");
+
+	public List<TaxPublishVO> selectTaxPublishListAll(Map<String, Object> param) {
+		return (List<TaxPublishVO>) list("KmsTaxPublishDAO.selectTaxPublishListAll", param);
+	}
+	
+	public List<TaxPublishVO> selectTaxPublishList(Map<String, Object> param) {
+		logT.debug("START");
+		return (List<TaxPublishVO>) list("KmsTaxPublishDAO.selectTaxPublishList", param);
+	}
+
+	public int selectTaxPublishListTotCnt(Map<String, Object> param) {
+		logT.debug("START");
+		return (Integer) getSqlMapClientTemplate().queryForObject("KmsTaxPublishDAO.selectTaxPublishListTotCnt", param);
+	}
+	
+	public String selectMaxBondId() {
+		return (String) getSqlMapClientTemplate().queryForObject("KmsTaxPublishDAO.selectMaxBondId");
+	}
+
+	/* 한장의 세금계산서 발행요청서를 저장하는 함수 */
+	void insertTaxPublish(TaxPublishVO taxPublishVO) {
+		logT.debug("START");
+		insert("KmsTaxPublishDAO.insertTaxPublish", taxPublishVO);
+		logT.debug("AFTER insert");
+	}
+	
+	/* 세금계산서에 들어가는 세부내역을 저장하는 함수 */
+	void insertBondExpense(JSONObject ob) {
+		insert("KmsTaxPublishDAO.insertBondExpense", ob);
+	}
+	
+	/* 세금계산서와 관련있는 프로젝트를 저장하는 함수 */
+	void insertBondProject(JSONObject ob) {
+		insert("KmsTaxPublishDAO.insertBondProject", ob);
+	}
+	
+	public TaxPublishVO selectTaxPublish(Map<String, Object> param) {
+		return (TaxPublishVO) selectByPk("KmsTaxPublishDAO.selectTaxPublish", param);
+	}
+	
+	public List<TaxPublishVO> selectBondExpenseList(Map<String, Object> param) {
+		return (List<TaxPublishVO>) list("KmsTaxPublishDAO.selectBondExpenseList", param);
+	}
+	
+	public List<TaxPublishVO> selectBondProjectList(Map<String, Object> param) {
+		return (List<TaxPublishVO>) list("KmsTaxPublishDAO.selectBondProjectList", param);
+	}
+	
+	void updateTaxPublish(TaxPublishVO taxPublishVO) {
+		update("KmsTaxPublishDAO.updateTaxPublish", taxPublishVO);
+	}
+	
+	void updateBondExpense(JSONObject ob) {
+		update("KmsTaxPublishDAO.updateBondExpense", ob);
+	}
+	
+	void updateBondProject(JSONObject ob) {
+		update("KmsTaxPublishDAO.updateBondProject", ob);
+	}
+	
+	void deleteTaxPublish(TaxPublishVO taxPublishVO) {
+		update("KmsTaxPublishDAO.deleteTaxPublish", taxPublishVO);
+	}
+	
+	void updateTaxPublishState(TaxPublishVO taxPublishVO) {
+		update("KmsTaxPublishDAO.updateTaxPublishState", taxPublishVO);
+	}
+	
+	public TaxPublishVO selectTaxProject(Map<String, Object> param) {
+		return (TaxPublishVO) selectByPk("KmsTaxPublishDAO.selectTaxProject", param);
+	}
+	
+	public List selectBondPrjNo(Map<String, Object> param) {
+		return list("KmsTaxPublishDAO.selectBondPrjNo", param);
+	}
+}

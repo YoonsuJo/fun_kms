@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="WellBeingDAO">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+
+	<resultMap id="diningMoneyStatistic" class="kms.com.member.service.DiningMoneyStatistic">
+		<result	property="orgnztId"			column="ORGNZT_ID"			columnIndex="1"/>
+		<result	property="orgnztNm"			column="ORGNZT_NM"			columnIndex="2"/>
+		<result	property="dineMoney"		column="DINE_MONEY"			columnIndex="3"/>
+		<result	property="dineMoneyAdd"		column="DINE_MONEY_ADD"		columnIndex="4"/>
+		<result	property="dineMoneyFull"	column="DINE_MONEY_FULL"	columnIndex="5"/>
+		<result	property="dineMoneyUse"		column="DINE_MONEY_USE"		columnIndex="6"/>
+	</resultMap>
+
+	<resultMap id="diningMoneyDetail" class="kms.com.member.service.DiningMoneyDetail">
+		<result	property="expDt"		column="EXP_DT"			columnIndex="1"/>
+		<result	property="diningSpend"	column="DINING_SPEND"	columnIndex="2"/>
+		<result	property="userNo"		column="USER_NO"		columnIndex="3"/>
+		<result	property="userNm"		column="USER_NM"		columnIndex="4"/>
+		<result	property="userId"		column="USER_ID"		columnIndex="5"/>
+		<result	property="expCt"		column="EXP_CT"			columnIndex="6"/>
+	</resultMap>
+
+	<resultMap id="diningMoneyMonth" class="kms.com.member.service.DiningMoneyMonth">
+		<result	property="orgnztId"	column="ORGNZT_ID"	columnIndex="1"/>
+		<result	property="orgnztNm"	column="ORGNZT_NM"	columnIndex="2"/>
+		<result	property="yyyymm"	column="YYYYMM"		columnIndex="3"/>
+		<result	property="userCnt"	column="USER_CNT"	columnIndex="4"/>
+		<result	property="money"	column="MONEY"		columnIndex="5"/>
+	</resultMap>
+
+	<resultMap id="diningMoneyAdd" class="kms.com.member.service.DiningMoneyAdd">
+		<result	property="no"		column="NO"			columnIndex="1"/>
+		<result	property="orgnztId"	column="ORGNZT_ID"	columnIndex="2"/>
+		<result	property="yyyymm"	column="YYYYMM"		columnIndex="3"/>
+		<result	property="money"	column="MONEY"		columnIndex="4"/>
+		<result	property="note"		column="NOTE"		columnIndex="5"/>
+	</resultMap>
+	
+	
+	
+	<select id="WellBeingDAO.selectDiningMoneyStatisticList" resultMap="diningMoneyStatistic">
+		SELECT
+			org.ORGNZT_ID, org.ORGNZT_NM,
+			<![CDATA[
+			SUM(IF(dine.YYYYMM <= DATE_FORMAT(SYSDATE(), '%Y%m'), IFNULL(dine.MONEY,0), 0)) AS DINE_MONEY,
+			]]>
+			SUM(IFNULL(dineAdd.MONEY,0)) AS DINE_MONEY_ADD,
+			SUM(IFNULL(dine.MONEY,0)) AS DINE_MONEY_FULL,
+			SUM(IFNULL(DINING_SPEND,0)) AS DINE_MONEY_USE
+		FROM
+			TBL_ORGNZT org
+			LEFT OUTER JOIN (
+				SELECT
+					a.AFT_ORGNZT_ID AS ORGNZT_ID, b.YYYYMM, COUNT(*) AS USER_CNT, COUNT(*) * b.MONEY AS MONEY
+				FROM
+					TBL_POSITION_HISTORY a
+					INNER JOIN (
+						SELECT
+							cal.YYYYMM, b.USER_NO, SUBSTRING(b.CHNG_DT,1,6) M, MAX(b.NO) AS MAX_NO, a.MONEY
+						FROM
+							(
+								SELECT CONCAT(CAL_YEAR,CAL_MONTH) AS YYYYMM
+								FROM
+									TBL_CALENDAR_DATA
+								WHERE
+									CAL_YEAR = #searchYear#
+								GROUP BY CAL_MONTH
+							) cal
+							LEFT OUTER JOIN TBL_DINING a ON SUBSTRING(cal.YYYYMM,1,4) = a.YEAR
+							<![CDATA[
+							LEFT OUTER JOIN TBL_POSITION_HISTORY b ON b.CHNG_DT <= FN_GET_DATE(cal.yyyymm, a.DATE)
+							]]>
+						GROUP BY cal.YYYYMM, b.USER_NO
+					) b ON a.USER_NO = b.USER_NO AND a.NO = b.MAX_NO
+				WHERE
+					a.CHNG_CODE IN ('EN', 'CH', 'RE', 'BK')
+				GROUP BY a.AFT_ORGNZT_ID, b.YYYYMM
+			) dine ON org.ORGNZT_ID = dine.ORGNZT_ID
+			LEFT OUTER JOIN TBL_DINING_ADD dineAdd ON org.ORGNZT_ID = dineAdd.ORGNZT_ID AND dine.YYYYMM = dineAdd.YYYYMM
+			LEFT OUTER JOIN (
+				SELECT
+					dine.DINING_NO
+					,dine.EXP_ID
+					,dine.ORGNZT_ID
+					,dine.DINING_SPEND
+					,exp.EXP_DT
+				FROM
+					TBL_EAPP_DINING dine
+					LEFT OUTER JOIN TBL_EAPP_EXP EXP ON dine.EXP_ID = exp.EXP_ID
+					LEFT OUTER JOIN TBL_EAPP_DOC doc ON exp.DOC_ID = doc.DOC_ID
+				WHERE doc.NEW_AT = 1
+			)  dineUse ON org.ORGNZT_ID = dineUse.ORGNZT_ID AND dine.YYYYMM = LEFT(EXP_DT, 6)
+		WHERE
+			org.USE_YN = 'Y'
+		<isNotEmpty prepend="AND" property="searchOrgIdList">
+			<iterate prepend="org.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+				#searchOrgIdList[]#
+			</iterate>
+		</isNotEmpty>
+		GROUP BY org.ORGNZT_ID
+	</select>
+	
+	<select id="WellBeingDAO.selectDiningMoneyStatistic" resultMap="diningMoneyStatistic">
+		SELECT
+			org.ORGNZT_ID, org.ORGNZT_NM,
+			<![CDATA[
+			SUM(IF(dine.YYYYMM <= DATE_FORMAT(SYSDATE(), '%Y%m'), IFNULL(dine.MONEY,0), 0)) AS DINE_MONEY,
+			]]>
+			SUM(IFNULL(dineAdd.MONEY,0)) AS DINE_MONEY_ADD,
+			SUM(IFNULL(dine.MONEY,0)) AS DINE_MONEY_FULL,
+			SUM(IFNULL(DINING_SPEND,0)) AS DINE_MONEY_USE
+		FROM
+			TBL_ORGNZT org
+			LEFT OUTER JOIN (
+				SELECT
+					a.AFT_ORGNZT_ID AS ORGNZT_ID, b.YYYYMM, COUNT(*) AS USER_CNT, COUNT(*) * b.MONEY AS MONEY
+				FROM
+					TBL_POSITION_HISTORY a
+					INNER JOIN (
+						SELECT
+							cal.YYYYMM, b.USER_NO, SUBSTRING(b.CHNG_DT,1,6) M, MAX(b.NO) AS MAX_NO, a.MONEY
+						FROM
+							(
+								SELECT CONCAT(CAL_YEAR,CAL_MONTH) AS YYYYMM
+								FROM
+									TBL_CALENDAR_DATA
+								WHERE
+									CAL_YEAR = #searchYear#
+								GROUP BY CAL_MONTH
+							) cal
+							LEFT OUTER JOIN TBL_DINING a ON SUBSTRING(cal.YYYYMM,1,4) = a.YEAR
+							<![CDATA[
+							LEFT OUTER JOIN TBL_POSITION_HISTORY b ON b.CHNG_DT <= FN_GET_DATE(cal.yyyymm, a.DATE)
+							]]>
+						GROUP BY cal.YYYYMM, b.USER_NO
+					) b ON a.USER_NO = b.USER_NO AND a.NO = b.MAX_NO
+				WHERE
+					a.CHNG_CODE IN ('EN', 'CH', 'RE', 'BK')
+				GROUP BY a.AFT_ORGNZT_ID, b.YYYYMM
+			) dine ON org.ORGNZT_ID = dine.ORGNZT_ID
+			LEFT OUTER JOIN TBL_DINING_ADD dineAdd ON org.ORGNZT_ID = dineAdd.ORGNZT_ID AND dine.YYYYMM = dineAdd.YYYYMM
+			LEFT OUTER JOIN (
+				SELECT
+					dine.DINING_NO, dine.EXP_ID, dine.ORGNZT_ID, dine.DINING_SPEND
+				FROM
+					TBL_EAPP_DINING dine
+					LEFT OUTER JOIN TBL_EAPP_EXP EXP ON dine.EXP_ID = exp.EXP_ID
+					LEFT OUTER JOIN TBL_EAPP_DOC doc ON exp.DOC_ID = doc.DOC_ID
+				WHERE doc.NEW_AT = 1
+			)  dineUse ON org.ORGNZT_ID = dineUse.ORGNZT_ID
+		WHERE
+			org.USE_YN = 'Y'
+		<isNotEmpty prepend="AND" property="searchOrgId">
+			org.ORGNZT_ID = #searchOrgId#
+		</isNotEmpty>
+		GROUP BY org.ORGNZT_ID
+	</select>
+	
+	<select id="WellBeingDAO.selectDiningMoneyDetailList" resultMap="diningMoneyDetail">
+		SELECT
+			DATE_FORMAT(b.EXP_DT, '%Y.%m.%d') AS EXP_DT, DINING_SPEND,
+			a.WRITER_NO AS USER_NO, d.USER_NM, d.USER_ID, b.EXP_CT
+		FROM
+			TBL_EAPP_DOC a
+			LEFT JOIN TBL_EAPP_EXP b ON a.DOC_ID = b.DOC_ID
+			LEFT JOIN TBL_EAPP_DINING c ON b.EXP_ID = c.EXP_ID
+			INNER JOIN TBL_USERINFO d ON a.WRITER_NO = d.NO
+		WHERE
+			a.TEMPLT_ID = 12
+			AND a.NEW_AT = 1
+			AND LEFT(EXP_DT,4) = #searchYear#
+			AND c.ORGNZT_ID = #searchOrgId#
+	</select>
+	
+	<select id="WellBeingDAO.selectDiningMoneyMonth" resultMap="diningMoneyMonth">
+		SELECT
+			a.AFT_ORGNZT_ID AS ORGNZT_ID, c.ORGNZT_NM, b.YYYYMM,
+			COUNT(b.USER_NO) AS USER_CNT, COUNT(b.USER_NO) * IFNULL(b.MONEY,0) AS MONEY
+		FROM
+			TBL_POSITION_HISTORY a
+			INNER JOIN (
+				SELECT
+					cal.YYYYMM, b.USER_NO, SUBSTRING(b.CHNG_DT,1,6) M, MAX(b.NO) AS MAX_NO, a.MONEY
+				FROM
+					(
+						SELECT CONCAT(CAL_YEAR,CAL_MONTH) AS YYYYMM
+						FROM
+							TBL_CALENDAR_DATA
+						WHERE
+							CAL_YEAR = #searchYear#
+						GROUP BY CAL_MONTH
+					) cal
+					LEFT OUTER JOIN TBL_DINING a ON SUBSTRING(cal.YYYYMM,1,4) = a.YEAR
+					<![CDATA[
+					LEFT OUTER JOIN TBL_POSITION_HISTORY b ON b.CHNG_DT <= FN_GET_DATE(cal.yyyymm, a.DATE)
+					]]>
+				GROUP BY cal.YYYYMM, b.USER_NO
+			) b ON a.NO = b.MAX_NO
+			INNER JOIN TBL_ORGNZT c ON a.AFT_ORGNZT_ID = c.ORGNZT_ID
+		WHERE
+			a.CHNG_CODE IN ('EN', 'CH', 'RE', 'BK')
+			AND a.AFT_ORGNZT_ID = #searchOrgId#
+		GROUP BY a.AFT_ORGNZT_ID, b.YYYYMM
+	</select>
+	
+	<select id="WellBeingDAO.selectDiningMoneyAddList" resultMap="diningMoneyAdd">
+		SELECT 
+			NO, ORGNZT_ID, YYYYMM, MONEY, NOTE
+		FROM
+			TBL_DINING_ADD
+		WHERE
+			SUBSTRING(YYYYMM,1,4) = #searchYear#
+			AND ORGNZT_ID = #searchOrgId#
+		ORDER BY YYYYMM ASC, NO ASC
+	</select>
+	
+	<insert id="WellBeingDAO.insertDiningMoneyAdd">
+		INSERT INTO TBL_DINING_ADD
+		( 
+			ORGNZT_ID, YYYYMM, MONEY, NOTE
+		) VALUES (
+			#orgnztId#, #yyyymm#, #money#, #note#
+		)
+	</insert>
+	
+	<delete id="WellBeingDAO.deleteDiningMoneyAdd">
+		DELETE FROM TBL_DINING_ADD
+		WHERE
+			NO = #no#
+	</delete>
+	
+</sqlMap>

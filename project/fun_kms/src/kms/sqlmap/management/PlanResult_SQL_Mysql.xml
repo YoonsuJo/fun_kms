@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="BusiResultDAO">
+	
+	<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	<resultMap id="planResultList" class="kms.com.management.service.PlanResultVO">
+		<result property="prjId"			column="PRJ_ID"				columnIndex="1"/>
+		<result property="prjNm"			column="PRJ_NM"				columnIndex="2"/>
+		<result property="prjCd"			column="PRJ_CD"				columnIndex="3"/>
+		<result property="prjSn"			column="PRJ_SN"				columnIndex="4"/>
+		<result property="havingLeaf"		column="HAVING_LEAF"		columnIndex="5"/>
+		<result property="salaryPlan"		column="SALARY_PLAN"		columnIndex="6"/>
+		<result property="salary"			column="SALARY"				columnIndex="7"/>
+		<result property="expensePlan"		column="EXPENSE_PLAN"		columnIndex="8"/>
+		<result property="expense"			column="EXPENSE"			columnIndex="9"/>
+		<result property="salaryPlanAcc"	column="SALARY_PLAN_ACC"	columnIndex="10"/>
+		<result property="salaryAcc"		column="SALARY_ACC"			columnIndex="11"/>
+		<result property="expensePlanAcc"	column="EXPENSE_PLAN_ACC"	columnIndex="12"/>
+		<result property="expenseAcc"		column="EXPENSE_ACC"		columnIndex="13"/>
+		<result property="stat"				column="STAT"				columnIndex="14"/>
+	</resultMap>
+	
+	<select id="BusiResultDAO.selectPlanResultStatisticPreview" resultMap="planResultList">
+		<![CDATA[
+		(
+			SELECT
+				prj.PRJ_ID
+				,prj.PRJ_NM
+				,prj.PRJ_CD
+				,prj.ORG_PRJ_TREE_ORD AS PRJ_SN
+				,FALSE AS HAVING_LEAF
+				,prj.STAT
+				,0 AS SALARY_PLAN
+				,0 AS SALARY
+				,FN_GET_PLAN_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N') AS EXPENSE_PLAN
+				,FN_GET_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N') AS EXPENSE
+				,0 AS SALARY_PLAN_ACC
+				,0 AS SALARY_ACC
+				,FN_GET_PLAN_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','Y') AS EXPENSE_PLAN_ACC
+				,FN_GET_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','Y') AS EXPENSE_ACC
+			FROM
+				TBL_PRJ prj
+			WHERE
+		]]>
+			<iterate prepend="ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+				#searchOrgIdList[]#
+			</iterate>
+			<isEqual property="includeAllDate" compareValue="N">
+				<![CDATA[
+				AND prj.ST_DT <= #startDate#
+				AND prj.COMP_DUE_DT >= #endDate#
+				]]>
+			</isEqual>
+		<![CDATA[
+		)
+		UNION ALL
+		(
+			SELECT
+				prj.PRJ_ID
+				,prj.PRJ_NM
+				,prj.PRJ_CD
+				,CONCAT(prj.ORG_PRJ_TREE_ORD, '_SUM') AS PRJ_SN
+				,TRUE AS HAVING_LEAF
+				,prj.STAT
+				,0 AS SALARY_PLAN
+				,0 AS SALARY
+				,FN_GET_PLAN_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','Y','N') AS EXPENSE_PLAN
+				,FN_GET_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','Y','N') AS EXPENSE
+				,0 AS SALARY_PLAN_ACC
+				,0 AS SALARY_ACC
+				,FN_GET_PLAN_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','Y','Y') AS EXPENSE_PLAN_ACC
+				,FN_GET_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','Y','Y') AS EXPENSE_ACC
+			FROM
+				TBL_PRJ prj
+			WHERE
+		]]>
+			<iterate prepend="ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+				#searchOrgIdList[]#
+			</iterate>
+			<isEqual property="includeAllDate" compareValue="N">
+				<![CDATA[
+				AND prj.ST_DT <= #startDate#
+				AND prj.COMP_DUE_DT >= #endDate#
+				]]>
+			</isEqual>
+		<![CDATA[
+				AND prj.PRJ_ID = prj.PRNT_PRJ_ID
+		)
+		ORDER BY PRJ_SN
+		]]>
+	</select>
+	
+	
+	<select id="BusiResultDAO.selectPlanResultStatistic" resultMap="planResultList">
+		SELECT
+			prj.PRJ_ID AS PRJ_ID
+			,prj.PRJ_NM
+			,prj.PRJ_CD
+			,prj.PRJ_TREE AS PRJ_SN
+			,#havingLeaf# AS HAVING_LEAF
+			,prj.STAT
+		<isEqual property="havingLeaf" compareValue="false">
+			,FN_GET_PLAN_LABOR(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N') AS SALARY_PLAN
+			,FN_GET_LABOR(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N') AS SALARY
+			,FN_GET_PLAN_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N') AS EXPENSE_PLAN
+			,FN_GET_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N') AS EXPENSE
+			,FN_GET_PLAN_LABOR(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','Y') AS SALARY_PLAN_ACC
+			,FN_GET_LABOR(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','Y') AS SALARY_ACC
+			,FN_GET_PLAN_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','Y') AS EXPENSE_PLAN_ACC
+			,FN_GET_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','Y') AS EXPENSE_ACC
+		</isEqual>
+		<isEqual property="havingLeaf" compareValue="true">
+			,FN_GET_PLAN_LABOR(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','Y','N') AS SALARY_PLAN
+			,FN_GET_LABOR(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','Y','N') AS SALARY
+			,FN_GET_PLAN_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','Y','N') AS EXPENSE_PLAN
+			,FN_GET_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','Y','N') AS EXPENSE
+			,FN_GET_PLAN_LABOR(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','Y','Y') AS SALARY_PLAN_ACC
+			,FN_GET_LABOR(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','Y','Y') AS SALARY_ACC
+			,FN_GET_PLAN_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','Y','Y') AS EXPENSE_PLAN_ACC
+			,FN_GET_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','Y','Y') AS EXPENSE_ACC
+		</isEqual>
+		FROM
+			TBL_PRJ prj
+		WHERE
+			PRJ_ID = #prjId#
+	</select>
+	
+	<select id="BusiResultDAO.selectPlanResultOrgSumStatistic" resultMap="planResultList">
+		<![CDATA[
+		SELECT
+			NULL AS PRJ_ID
+			,NULL AS PRJ_NM
+			,NULL AS PRJ_CD
+			,NULL AS PRJ_SN
+			,TRUE AS HAVING_LEAF
+			,NULL AS STAT
+			,IFNULL(SUM(IFNULL(FN_GET_PLAN_LABOR(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N'),0)),0) AS SALARY_PLAN
+			,IFNULL(SUM(IFNULL(FN_GET_LABOR(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N'),0)),0) AS SALARY
+			,IFNULL(SUM(IFNULL(FN_GET_PLAN_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N'),0)),0) AS EXPENSE_PLAN
+			,IFNULL(SUM(IFNULL(FN_GET_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N'),0)),0) AS EXPENSE
+			,IFNULL(SUM(IFNULL(FN_GET_PLAN_LABOR(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','Y'),0)),0) AS SALARY_PLAN_ACC
+			,IFNULL(SUM(IFNULL(FN_GET_LABOR(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','Y'),0)),0) AS SALARY_ACC
+			,IFNULL(SUM(IFNULL(FN_GET_PLAN_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','Y'),0)),0) AS EXPENSE_PLAN_ACC
+			,IFNULL(SUM(IFNULL(FN_GET_EXP(prj.PRJ_ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','Y'),0)),0) AS EXPENSE_ACC
+		FROM
+			TBL_PRJ prj
+		WHERE
+		]]>
+		<iterate prepend="ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+			#searchOrgIdList[]#
+		</iterate>
+	</select>
+	
+</sqlMap>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC 
+    "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1//EN" 
+    "http://jakarta.apache.org/commons/dtds/validator_1_1.dtd">
+
+<form-validation>
+
+    <formset>
+		<form name="Consult">
+			<field property="custNm" depends="required">
+        		<arg0 key="고객사" />
+			</field>
+			<field property="typ" depends="required">
+        		<arg0 key="구분" />
+			</field>
+			<field property="service_typ" depends="required">
+        		<arg0 key="상담분류" />
+			</field> 
+			<field property="charged" depends="required">
+        		<arg0 key="담당자" />
+			</field>
+			<field property="q_cn" depends="required">
+        		<arg0 key="문의내용" />
+			</field>
+			<field property="state" depends="required">
+        		<arg0 key="처리상태" />
+			</field>
+			<field property="contact_dt" depends="required">
+        		<arg0 key="연락시한" />
+			</field>
+		</form>
+    </formset>
+
+</form-validation>

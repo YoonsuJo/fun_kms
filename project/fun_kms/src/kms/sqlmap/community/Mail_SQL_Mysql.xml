@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="TblMailsend">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="Mail" type="kms.com.community.service.Mail"/>
+	<typeAlias  alias="MailVO" type="kms.com.community.service.MailVO"/>
+	<typeAlias  alias="MemberVO" type="kms.com.member.service.MemberVO"/>
+	
+	<resultMap id="Mailinfo" class="kms.com.community.service.MailVO">
+		<result property="mailId" column="MAIL_ID" columnIndex="1"/>
+		<result property="senderId" column="SENDER_ID" columnIndex="2"/>
+		<result property="senderNm" column="SENDER_NM" columnIndex="3"/>
+		<result property="senderNo" column="SENDER_NO" columnIndex="4"/>
+		<result property="mailSj" column="MAIL_SJ" columnIndex="5"/>
+		<result property="mailCn" column="MAIL_CN" columnIndex="6"/>
+		<result property="mailSend" column="MAIL_SEND" columnIndex="7"/>
+		<result property="smsSend" column="SMS_SEND" columnIndex="8"/>
+		<result property="atchFileId" column="ATCH_FILE_ID" columnIndex="9"/>
+		<result property="sendDt" column="SEND_DT" columnIndex="10"/>
+		<result property="recieverId" column="RECIEVER_ID" columnIndex="11"/>
+		<result property="recieverNm" column="RECIEVER_NM" columnIndex="12"/>
+		<result property="recieverNo" column="RECIEVER_NO" columnIndex="13"/>
+		<result property="readDt" column="READ_DT" columnIndex="14"/>
+		<result property="isSend" column="IS_SEND" columnIndex="15"/>
+		<!-- //2013.08.20 김대현 PUSH 적용 -->
+		<result property="pushSend" column="PUSH_SEND" columnIndex="16"/>
+	</resultMap>
+	
+	<resultMap id="RecieveMailList" class="kms.com.community.service.MailVO">
+		<result property="mailId" column="MAIL_ID" columnIndex="1"/>
+		<result property="senderId" column="SENDER_ID" columnIndex="2"/>
+		<result property="senderNm" column="SENDER_NM" columnIndex="3"/>
+		<result property="senderNo" column="SENDER_NO" columnIndex="4"/>
+		<result property="mailSj" column="MAIL_SJ" columnIndex="5"/>
+		<result property="sendDt" column="SEND_DT" columnIndex="6"/>
+		<result property="readDt" column="READ_DT" columnIndex="7"/>
+	</resultMap>
+	
+	<resultMap id="SendMailList" class="kms.com.community.service.MailVO">
+		<result property="mailId" column="MAIL_ID" columnIndex="1"/>
+		<result property="recieverId" column="RECIEVER_ID" columnIndex="2"/>
+		<result property="recieverNm" column="RECIEVER_NM" columnIndex="3"/>
+		<result property="recieverNo" column="RECIEVER_NO" columnIndex="4"/>
+		<result property="mailSj" column="MAIL_SJ" columnIndex="5"/>
+		<result property="sendDt" column="SEND_DT" columnIndex="6"/>
+		<result property="readDt" column="READ_DT" columnIndex="7"/>
+		<result property="readCount" column="READ_COUNT" columnIndex="8"/>
+		<result property="recieverCount" column="RECIEVER_COUNT" columnIndex="9"/>
+	</resultMap>
+
+	<resultMap id="MailState" class="kms.com.community.service.MailVO">
+		<result property="recieverId" column="RECIEVER_ID" columnIndex="1"/>
+		<result property="recieverNm" column="RECIEVER_NM" columnIndex="2"/>
+		<result property="recieverNo" column="RECIEVER_NO" columnIndex="3"/>
+		<result property="readDt" column="READ_DT" columnIndex="4"/>
+	</resultMap>
+	
+	<resultMap id="MailOutList" class="kms.com.community.service.MailVO">
+		<result property="refId" column="REF_ID" columnIndex="1"/>
+		<result property="emailAddr" column="EMAIL_ADDR" columnIndex="2"/>
+		<result property="sendFlag" column="SEND_FLAG" columnIndex="3"/>
+	</resultMap>
+	
+	<insert id="mailDAO.insertMailOut">
+		INSERT INTO TBL_MAIL_OUT 
+		(
+			REF_ID, EMAIL_ADDR, SEND_FLAG
+		) VALUES (
+			#refId#, #emailAddr#, 'N'
+		)
+	</insert>
+	
+	<update id="mailDAO.setMailOut">
+		UPDATE TBL_MAIL_OUT SET
+			SEND_FLAG = 'Y'
+		WHERE
+			REF_ID = #refId#			
+	</update>
+	
+	<select id="mailDAO.selectMailOutList" parameterClass="MailVO" resultMap="MailOutList">
+		SELECT
+			REF_ID, EMAIL_ADDR, SEND_FLAG
+		FROM
+			TBL_MAIL_OUT
+		WHERE
+			REF_ID = #refId#		
+	</select>
+	
+	<select id="mailDAO.selectSMTPMailList" resultClass="String">
+		SELECT
+			EMAIL_ADDR
+		FROM
+			TBL_MAIL_OUT
+		WHERE
+			REF_ID = #refId#	
+	</select>
+	
+	<insert id="mailDAO.insertMailsend">
+		INSERT INTO TBL_MAILSEND 
+		(
+			MAIL_ID, SENDER_NO, MAIL_SJ, MAIL_CN, MAIL_SEND, SMS_SEND, SEND_DT, ATCH_FILE_ID, IS_SEND
+			<!-- //2013.08.20 김대현 PUSH 적용 -->
+			,PUSH_SEND		
+		) VALUES (
+			#mailId#, #senderNo#, #mailSj#, #mailCn#, #mailSend#, #smsSend#, SYSDATE(), #atchFileId#, #isSend#
+			<!-- //2013.08.20 김대현 PUSH 적용 -->
+			,#pushSend#
+		)
+	</insert>
+	
+	<insert id="mailDAO.insertMailrecieve">
+		INSERT INTO TBL_MAILRECIEVE (
+			MAIL_ID, RECIEVE_NO, READ_DT
+		) (
+			SELECT
+				#mailId#, NO, NULL
+			FROM
+				TBL_USERINFO
+		<iterate prepend="WHERE USER_ID IN " property="recieverIdList" open="(" close=")" conjunction=",">
+			#recieverIdList[]#
+		</iterate>
+		)
+	</insert>
+	
+	<select id="mailDAO.selectRecieveMailList" parameterClass="MailVO" resultMap="RecieveMailList">
+		SELECT
+			a.MAIL_ID, c.USER_ID AS SENDER_ID, c.USER_NM AS SENDER_NM, b.SENDER_NO, b.MAIL_SJ,
+			DATE_FORMAT(b.SEND_DT, '%Y.%m.%d %H:%i') AS SEND_DT,
+			DATE_FORMAT(a.READ_DT, '%Y.%m.%d %H:%i') AS READ_DT
+		FROM
+			TBL_MAILRECIEVE a
+			LEFT JOIN TBL_MAILSEND b ON a.MAIL_ID = b.MAIL_ID
+			LEFT JOIN TBL_USERINFO c ON b.SENDER_NO = c.NO
+		WHERE
+			a.RECIEVE_NO = #userNo#
+			AND a.DELETE_YN = 'N'
+			AND b.IS_SEND = 'Y'
+		<isNotEmpty property="searchKeyword">
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				b.MAIL_SJ LIKE CONCAT('%',#searchKeyword#,'%')
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				c.USER_NM LIKE CONCAT('%',#searchKeyword#,'%')
+			</isEqual>
+		</isNotEmpty>
+		ORDER BY
+			CASE
+				WHEN READ_DT IS NULL THEN 0
+				ELSE 1
+			END ASC, a.MAIL_ID DESC
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<select id="mailDAO.selectSendMailList" parameterClass="MailVO" resultMap="SendMailList">
+		SELECT
+			a.MAIL_ID, c.USER_ID AS RECIEVER_ID, c.USER_NM AS RECIEVER_NM, b.RECIEVE_NO AS RECIEVER_NO, a.MAIL_SJ,
+			DATE_FORMAT(a.SEND_DT, '%Y.%m.%d %H:%i') AS SEND_DT,
+			DATE_FORMAT(b.READ_DT, '%Y.%m.%d %H:%i') AS READ_DT,
+			COUNT(b.READ_DT) AS READ_COUNT,
+			COUNT(b.RECIEVE_NO) AS RECIEVER_COUNT
+		FROM
+			TBL_MAILSEND a
+			LEFT JOIN TBL_MAILRECIEVE b ON a.MAIL_ID = b.MAIL_ID
+			LEFT JOIN TBL_USERINFO c ON b.RECIEVE_NO = c.NO
+		WHERE
+			a.SENDER_NO = #userNo#
+			AND a.DELETE_YN = 'N'
+			AND a.IS_SEND = #isSend#
+		<isNotEmpty property="searchKeyword">
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				a.MAIL_SJ LIKE CONCAT('%',#searchKeyword#,'%')
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				c.USER_NM LIKE CONCAT('%',#searchKeyword#,'%')
+			</isEqual>
+		</isNotEmpty>
+		GROUP BY a.MAIL_ID, a.MAIL_SJ, a.SEND_DT
+		ORDER BY a.MAIL_ID DESC
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<select id="mailDAO.selectRecieveMailListTotCnt" parameterClass="MailVO" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			TBL_MAILRECIEVE a
+			LEFT JOIN TBL_MAILSEND b ON a.MAIL_ID = b.MAIL_ID
+			LEFT JOIN TBL_USERINFO c ON b.SENDER_NO = c.NO
+		WHERE
+			a.RECIEVE_NO = #userNo#
+			AND a.DELETE_YN = 'N'
+			AND b.IS_SEND = 'Y'
+		<isNotEmpty property="searchKeyword">
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				b.MAIL_SJ LIKE CONCAT('%',#searchKeyword#,'%')
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				c.USER_NM LIKE CONCAT('%',#searchKeyword#,'%')
+			</isEqual>
+		</isNotEmpty>
+	</select>
+	
+	<select id="mailDAO.selectSendMailListTotCnt" parameterClass="MailVO" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM (
+			SELECT
+				a.MAIL_ID
+			FROM
+				TBL_MAILSEND a
+				LEFT JOIN TBL_MAILRECIEVE b ON a.MAIL_ID = b.MAIL_ID
+				LEFT JOIN TBL_USERINFO c ON b.RECIEVE_NO = c.NO
+			WHERE
+				a.SENDER_NO = #userNo#
+				AND a.DELETE_YN = 'N'
+				AND a.IS_SEND = #isSend#
+			<isNotEmpty property="searchKeyword">
+				<isEqual prepend="AND" property="searchCondition" compareValue="0">
+					a.MAIL_SJ LIKE CONCAT('%',#searchKeyword#,'%')
+				</isEqual>
+				<isEqual prepend="AND" property="searchCondition" compareValue="1">
+					c.USER_NM LIKE CONCAT('%',#searchKeyword#,'%')
+				</isEqual>
+			</isNotEmpty>
+			GROUP BY a.MAIL_ID, a.MAIL_SJ, a.SEND_DT
+		) K
+	</select>
+	
+	<select id="mailDAO.selectMail" resultMap="Mailinfo">
+		SELECT
+			a.MAIL_ID, c.USER_ID AS SENDER_ID, c.USER_NM AS SENDER_NM, a.SENDER_NO,
+			a.MAIL_SJ, a.MAIL_CN, a.MAIL_SEND, a.SMS_SEND
+			<!-- //2013.08.20 김대현 PUSH 적용 -->
+			,a.PUSH_SEND
+			,a.ATCH_FILE_ID,
+			DATE_FORMAT(a.SEND_DT, '%Y.%m.%d %H:%i') AS SEND_DT,
+			d.USER_ID AS RECIEVER_ID, d.USER_NM AS RECIEVER_NM, b.RECIEVE_NO AS RECIEVER_NO,
+			DATE_FORMAT(b.READ_DT, '%Y.%m.%d %H:%i') AS READ_DT,
+			a.IS_SEND
+		FROM
+			TBL_MAILSEND a
+			LEFT JOIN TBL_MAILRECIEVE b ON a.MAIL_ID = b.MAIL_ID
+			LEFT JOIN TBL_USERINFO c ON a.SENDER_NO = c.NO
+			LEFT JOIN TBL_USERINFO d ON b.RECIEVE_NO = d.NO
+		WHERE
+			a.MAIL_ID = #mailId#
+		<isNotEqual prepend="AND" property="senderNo" compareValue="0">
+			A.SENDER_NO = #senderNo#
+		</isNotEqual>		
+		<isNotEmpty prepend="AND" property="recieverNo">
+			b.RECIEVE_NO = #recieverNo#
+		</isNotEmpty>
+	</select>
+
+	<update id="mailDAO.setReadDt">
+		UPDATE TBL_MAILRECIEVE SET
+			READ_DT = SYSDATE()
+		WHERE
+			MAIL_ID = #mailId#
+			AND RECIEVE_NO = #userNo#
+	</update>
+	
+	<insert id="mailDAO.insertMailsendR">
+		<![CDATA[
+			INSERT INTO TBL_MAILSEND 
+			(
+				MAIL_ID, SENDER_NO, MAIL_SJ, MAIL_CN, MAIL_SEND, SMS_SEND, SEND_DT, ATCH_FILE_ID,PUSH_SEND
+			) (
+				SELECT
+					#mailId#, SENDER_NO, MAIL_SJ, MAIL_CN, MAIL_SEND, SMS_SEND, SYSDATE(), ATCH_FILE_ID,PUSH_SEND
+				FROM
+					TBL_MAILSEND
+				WHERE
+					MAIL_ID = #mailIdEx#
+			)
+		]]>
+	</insert>
+	
+	<insert id="mailDAO.insertMailrecieveR">
+		<![CDATA[
+			INSERT INTO TBL_MAILRECIEVE 
+			(
+				MAIL_ID, RECIEVE_NO, READ_DT
+			) (
+				SELECT
+					#mailId#, RECIEVE_NO, NULL
+				FROM
+					TBL_MAILRECIEVE
+				WHERE
+					MAIL_ID = #mailIdEx#
+			)
+		]]>
+	</insert>
+	
+	
+	<update id="mailDAO.deleteSendMail">
+		UPDATE TBL_MAILSEND SET
+			DELETE_YN = 'Y'
+		WHERE
+		<iterate prepend=" MAIL_ID IN " property="mailIdList" open="(" close=")" conjunction=",">
+			#mailIdList[]#
+		</iterate>
+	</update>
+	
+	<update id="mailDAO.cancelSendMail">
+		UPDATE TBL_MAILRECIEVE SET
+			DELETE_YN = 'Y'
+		WHERE
+		<iterate prepend=" MAIL_ID IN " property="mailIdList" open="(" close=")" conjunction=",">
+			#mailIdList[]#
+		</iterate>
+			AND READ_DT IS NULL
+	</update>
+	
+	
+	<update id="mailDAO.deleteRecieveMail">
+		UPDATE TBL_MAILRECIEVE SET
+			DELETE_YN = 'Y'
+		WHERE
+			RECIEVE_NO = #userNo#
+		<iterate prepend="AND MAIL_ID IN " property="mailIdList" open="(" close=")" conjunction=",">
+			#mailIdList[]#
+		</iterate>
+	</update>
+	
+	
+	
+	<select id="mailDAO.selectSendMailState" parameterClass="MailVO" resultMap="MailState">
+		SELECT
+			b.USER_ID AS RECIEVER_ID, b.USER_NM AS RECIEVER_NM, a.RECIEVE_NO AS RECIEVER_NO,
+			DATE_FORMAT(a.READ_DT, '%Y.%m.%d %H:%i') AS READ_DT
+		FROM
+			TBL_MAILRECIEVE a
+			LEFT JOIN TBL_USERINFO b ON a.RECIEVE_NO = b.NO
+		WHERE
+			a.MAIL_ID = #mailId#
+		ORDER BY b.USER_NM ASC
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<select id="mailDAO.selectSendMailStateTotCnt" parameterClass="MailVO" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			TBL_MAILRECIEVE a
+			LEFT JOIN TBL_USERINFO b ON a.RECIEVE_NO = b.NO
+		WHERE
+			a.MAIL_ID = #mailId#
+	</select>
+	
+	
+	<select id="mailDAO.selectNewMailList" parameterClass="MemberVO" resultMap="RecieveMailList">
+		SELECT
+			a.MAIL_ID, c.USER_ID AS SENDER_ID, c.USER_NM AS SENDER_NM, b.SENDER_NO, b.MAIL_SJ,
+			DATE_FORMAT(b.SEND_DT, '%Y.%m.%d %H:%i') AS SEND_DT,
+			DATE_FORMAT(a.READ_DT, '%Y.%m.%d %H:%i') AS READ_DT
+		FROM
+			TBL_MAILRECIEVE a
+			LEFT JOIN TBL_MAILSEND b ON a.MAIL_ID = b.MAIL_ID
+			LEFT JOIN TBL_USERINFO c ON b.SENDER_NO = c.NO
+		WHERE
+			a.RECIEVE_NO = #no#
+			AND a.DELETE_YN = 'N'
+			AND b.IS_SEND = 'Y'
+		ORDER BY CASE
+				WHEN READ_DT IS NULL THEN 0
+				ELSE 1
+			END ASC, a.MAIL_ID DESC
+		LIMIT 5 OFFSET 0
+	</select>
+	
+	
+</sqlMap>

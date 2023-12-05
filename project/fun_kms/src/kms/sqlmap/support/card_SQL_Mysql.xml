@@ -1,0 +1,786 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="TblCard">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="cardVO" type="kms.com.support.service.CardVO"/>
+	<typeAlias  alias="cardSpendVO" type="kms.com.support.service.CardSpendVO"/>
+	
+	<resultMap id="cardVOAll" class="kms.com.support.service.CardVO">
+		<result property="cardId" column="CARD_ID" columnIndex="1"/>
+		<result property="beforeCardId" column="BEFORE_CARD_ID" columnIndex="1"/>
+		<result property="expiryYear" column="EXPIRY_YEAR" columnIndex="2"/>
+		<result property="expiryMonth" column="EXPIRY_MONTH" columnIndex="2"/>
+		<result property="companyCd" column="COMPANY_CD" columnIndex="3"/>
+		<result property="limitSpend" column="LIMIT_SPEND" columnIndex="4"/>
+		<result property="stat" column="STAT" columnIndex="5"/>
+		<result property="cardCt" column="CARD_CT" columnIndex="6"/>
+		<result property="userNo" column="USER_NO" columnIndex="7"/>
+		<result property="userNm" column="USER_NM" columnIndex="7"/>
+		<result property="userId" column="USER_ID" columnIndex="7"/>
+		<result property="companyNm" column="COMPANY_NM" columnIndex="8"/>
+		<result property="statNm" column="STAT_NM" columnIndex="9"/>
+	</resultMap>
+	
+	<resultMap id="cardSpendVOAll" class="kms.com.support.service.CardSpendVO">
+		<result property="cardSpendNo" column="CARD_SPEND_NO" columnIndex="1"/>
+		<result property="receiveInfoTyp" column="RECEIVE_INFO_TYP" columnIndex="2"/>
+		<result property="cardId" column="CARD_ID" columnIndex="3"/>
+		<result property="cardTyp" column="CARD_TYP" columnIndex="4"/>
+		<result property="payAccountNumber" column="PAY_ACCOUNT_NUMBER" columnIndex="5"/>
+		<result property="payBankNm" column="PAY_BANK_NM" columnIndex="6"/>
+		<result property="specifierNm" column="SPECIFIER_NM" columnIndex="7"/>
+		<result property="domesticForeign" column="DOMESTIC_FOREIGN" columnIndex="8"/>
+		<result property="approvalNo" column="APPROVAL_NO" columnIndex="9"/>
+		<result property="approvalDt" column="APPROVAL_DT" columnIndex="10"/>
+		<result property="approvalTm" column="APPROVAL_TM" columnIndex="11"/>
+		<result property="salesTyp" column="SALES_TYP" columnIndex="12"/>
+		<result property="approvedSpend" column="APPROVED_SPEND" columnIndex="13"/>
+		<result property="approvedSpendForeignCurrency" column="APPROVED_SPEND_FOREIGN_CURRENCY" columnIndex="14"/>
+		<result property="spendSignCd" column="SPEND_SIGN_CD" columnIndex="15"/>
+		<result property="realSpend" column="REAL_SPEND" columnIndex="16"/>
+		<result property="surtax" column="SURTAX" columnIndex="17"/>
+		<result property="serviceCharge" column="SERVICE_CHARGE" columnIndex="18"/>
+		<result property="installmentPeriod" column="INSTALLMENT_PERIOD" columnIndex="19"/>
+		<result property="exchangeRate" column="EXCHANGE_RATE" columnIndex="20"/>
+		<result property="exchangeNationCd" column="EXCHANGE_NATION_CD" columnIndex="21"/>
+		<result property="exchangeNationNm" column="EXCHANGE_NATION_NM" columnIndex="22"/>
+		<result property="storeBusinessNo" column="STORE_BUSINESS_NO" columnIndex="23"/>
+		<result property="storeBusinessNm" column="STORE_BUSINESS_NM" columnIndex="24"/>
+		<result property="storeBusinessTyp" column="STORE_BUSINESS_TYP" columnIndex="25"/>
+		<result property="storeZipCd" column="STORE_ZIP_CD" columnIndex="26"/>
+		<result property="storeAddress1" column="STORE_ADDRESS1" columnIndex="27"/>
+		<result property="storeAddress2" column="STORE_ADDRESS2" columnIndex="28"/>
+		<result property="storePhoneNumber" column="STORE_PHONE_NUMBER" columnIndex="29"/>
+		<result property="accountCd" column="ACCOUNT_CD" columnIndex="30"/>
+		<result property="accountNm" column="ACCOUNT_NM" columnIndex="31"/>
+		<result property="headquaterNm" column="HEADQUATER_NM" columnIndex="32"/>
+		<result property="departmentNm" column="DEPARTMENT_NM" columnIndex="33"/>
+	</resultMap>
+	
+	<select id="CardDAO.selectCardCnt" resultClass="java.lang.Integer">	
+		SELECT
+			COUNT(*)
+		FROM
+			tbl_card
+		WHERE
+			card_id = #cardId#	
+	</select>
+	
+	<insert id="CardDAO.insertCard">		
+		INSERT INTO TBL_CARD 
+			( CARD_ID
+			  , EXPIRY_YEAR
+			  , EXPIRY_MONTH
+			  , COMPANY_CD
+			  , LIMIT_SPEND
+			  , STAT
+			  , CARD_CT
+			)
+		VALUES ( #cardId#
+			  , #expiryYear#
+			  , #expiryMonth#
+			  , #companyCd#
+			  , #limitSpend#
+			  , #stat#
+			  , #cardCt#
+			)		
+	</insert>
+		
+	<update id="CardDAO.updateCard">
+		UPDATE TBL_CARD
+		SET CARD_ID = #cardId#
+			, EXPIRY_YEAR = #expiryYear#
+			, EXPIRY_MONTH = #expiryMonth#
+			, COMPANY_CD = #companyCd#
+			, LIMIT_SPEND = #limitSpend#
+			, STAT = #stat#
+			, CARD_CT = #cardCt#
+		WHERE CARD_ID = #beforeCardId#
+	</update>
+	
+	<delete id="CardDAO.deleteCard">
+		DELETE FROM TBL_CARD 
+		WHERE CARD_ID = #cardId#
+	</delete>
+	
+	<select id="CardDAO.selectCardView" resultMap="cardVOAll">
+		SELECT
+			a.CARD_ID
+			, a.CARD_ID AS BEFORE_CARD_ID
+			, a.EXPIRY_YEAR
+			, a.EXPIRY_MONTH
+			, a.COMPANY_CD
+			, a.LIMIT_SPEND
+			, a.STAT
+			, a.CARD_CT	
+			, b.CODE_NM COMPANY_NM
+			, c.CODE_NM STAT_NM
+			, e.USER_NO
+			, d.USER_NM
+			, d.USER_ID
+		FROM TBL_CARD a
+		INNER JOIN TBL_CARD_HISTORY e
+			ON a.CARD_ID = e.CARD_ID
+			AND e.ED_DT IS NULL
+		INNER JOIN COMTCCMMNDETAILCODE b
+			ON a.COMPANY_CD =b.CODE 
+			AND b.CODE_ID ='KMS007'  <!-- 회사 -->
+		INNER JOIN COMTCCMMNDETAILCODE c
+			ON a.STAT = c.CODE 
+			AND c.CODE_ID ='KMS017' <!-- 카드 상태 -->
+		LEFT OUTER JOIN TBL_USERINFO d
+			ON e.USER_NO = d.NO		
+		WHERE 
+			a.CARD_ID = #cardId#
+	</select>
+	
+	<select id="CardDAO.selectCardList" parameterClass="cardVO" resultClass="egovMap">
+	SELECT
+		a.CARD_ID
+		, a.EXPIRY_YEAR
+		, a.EXPIRY_MONTH
+		, a.COMPANY_CD
+		, a.LIMIT_SPEND
+		, a.STAT
+		, e.NOTE	
+		, b.CODE_NM COMPANY_NM
+		, c.CODE_NM STAT_NM
+		, e.USER_NO
+		, d.USER_NM
+		, d.USER_ID
+	FROM TBL_CARD a
+	INNER JOIN TBL_CARD_HISTORY e
+		ON a.CARD_ID = e.CARD_ID
+		AND e.ED_DT IS NULL
+	INNER JOIN COMTCCMMNDETAILCODE b
+		ON a.COMPANY_CD =b.CODE 
+		AND b.CODE_ID ='KMS007'  <!-- 회사 -->
+	INNER JOIN COMTCCMMNDETAILCODE c
+		ON a.STAT = c.CODE 
+		AND c.CODE_ID ='KMS017' <!-- 카드 상태 -->
+	LEFT OUTER JOIN TBL_USERINFO d
+		ON e.USER_NO = d.NO
+	WHERE 1=1
+	<isEqual property="searchCompanyAll" compareValue="false" >
+		AND a.COMPANY_CD = #searchCompanyCd#
+	</isEqual>	
+		
+	<isNotEmpty property="searchStatList">
+		AND a.STAT IN
+		<iterate property="searchStatList" open="(" close=")" conjunction=",">
+			<![CDATA[
+					#searchStatList[]#
+			]]>
+		</iterate>
+	</isNotEmpty>
+	<isEqual property="searchProvided" compareValue="true" >
+		<isEmpty property="searchUnProvided" >
+			AND e.USER_NO IS NOT NULL
+		</isEmpty>
+	</isEqual>
+	<isEmpty property="searchProvided" >
+		<isEqual property="searchUnProvided" compareValue="true" >
+			AND e.USER_NO IS NULL
+		</isEqual>
+	</isEmpty>
+	<isEqual property="searchUserOrgnzt" compareValue="user" >
+			AND d.USER_NM LIKE CONCAT('%',#searchUserNm#,'%')
+	</isEqual>
+	<isEqual property="searchUserOrgnzt" compareValue="orgnzt" >
+			AND d.ORGNZT_ID LIKE CONCAT('%',#searchOrgnztId#,'%')
+	</isEqual>	
+	ORDER BY 
+		a.CARD_ID
+	</select>
+		
+	<select id="CardDAO.selectCardHistoryList" parameterClass="cardVO" resultClass="egovMap">
+	SELECT
+		a.CARD_ID
+		, a.ST_DT
+		, a.ED_DT
+		, a.NOTE
+		, a.USER_NO
+		, d.USER_NM
+		, d.USER_ID
+	FROM TBL_CARD_HISTORY a
+	LEFT OUTER JOIN TBL_USERINFO d
+		ON a.USER_NO = d.NO
+	WHERE a.CARD_ID = #cardId#
+	ORDER BY 
+		a.ST_DT DESC
+	</select>	
+
+	<insert id="CardDAO.insertCardHistory">		
+	INSERT INTO TBL_CARD_HISTORY ( 
+			CARD_ID
+			, USER_NO
+			, ST_DT
+			, NOTE
+		)
+	VALUES ( 
+			#cardId#
+			, (SELECT NO FROM TBL_USERINFO where USER_ID = #userId#)
+			, SYSDATE()
+			, #note#
+		)
+	</insert>
+	
+	<update id="CardDAO.updateCardHistory">
+		UPDATE 
+			TBL_CARD_HISTORY
+		SET 
+			CARD_ID = #cardId#
+		WHERE 
+			CARD_ID = #beforeCardId#
+	</update>
+
+	<update id="CardDAO.updateLastestCardHistory">
+		UPDATE 
+			TBL_CARD_HISTORY
+		SET 
+			ED_DT = SYSDATE()
+		WHERE 
+			CARD_ID = #cardId#
+			AND ED_DT IS NULL
+	</update>
+	<!--사용안함-->
+	<update id="CardDAO.resetCardHistoryFisrtRegister">	
+		UPDATE 
+			TBL_CARD_HISTORY A
+		SET 
+			A.FIRST_REGISTER = 'N'
+		WHERE 
+			A.CARD_ID = #cardId#			
+	</update>
+	<!--사용안함-->
+	<update id="CardDAO.updateCardHistoryFisrtRegister">	
+		UPDATE
+			TBL_CARD_HISTORY A
+			INNER JOIN (
+				SELECT CARD_ID, MIN(beforeRegist.ST_DT) ST_DT
+				FROM TBL_CARD_HISTORY beforeRegist
+				WHERE beforeRegist.CARD_ID = #cardId#		 
+				GROUP BY CARD_ID
+			) B
+			ON A.CARD_ID = B.CARD_ID
+			AND A.ST_DT = B.ST_DT
+		SET 
+			A.FIRST_REGISTER = 'Y'
+	</update>
+	
+		
+	<insert id="CardDAO.insertCardSpendExcel">
+		INSERT INTO TBL_CARD_SPEND 
+			(
+				RECEIVE_INFO_TYP
+			  , CARD_ID
+			  , CARD_TYP
+			  , PAY_ACCOUNT_NUMBER
+			  , PAY_BANK_NM
+			  , SPECIFIER_NM
+			  , DOMESTIC_FOREIGN
+			  , APPROVAL_NO
+			  , APPROVAL_DT
+			  , APPROVAL_TM
+			  , SALES_TYP
+			  , APPROVED_SPEND
+			  , APPROVED_SPEND_FOREIGN_CURRENCY
+			  , SPEND_SIGN_CD
+			  , REAL_SPEND
+			  , SURTAX
+			  , SERVICE_CHARGE
+			  , INSTALLMENT_PERIOD
+			  , EXCHANGE_RATE
+			  , EXCHANGE_NATION_CD
+			  , EXCHANGE_NATION_NM
+			  , STORE_BUSINESS_NO
+			  , STORE_BUSINESS_NM
+			  , STORE_BUSINESS_TYP
+			  , STORE_ZIP_CD
+			  , STORE_ADDRESS1
+			  , STORE_ADDRESS2
+			  , STORE_PHONE_NUMBER
+			  , ACCOUNT_CD
+			  , ACCOUNT_NM
+			  , HEADQUATER_NM
+			  , DEPARTMENT_NM
+			  , APPROVAL_YEAR
+			  , APPROVAL_MONTH
+			  , APPROVAL_DTTM
+			  )
+		VALUES ( 
+				#receiveInfoTyp#
+			  , #cardId#
+			  , #cardTyp#
+			  , #payAccountNumber#
+			  , #payBankNm#
+			  , #specifierNm#
+			  , #domesticForeign#
+			  , #approvalNo#
+			  , DATE_FORMAT(REPLACE(#approvalDt#,' ',''), '%Y-%m-%d') 
+			  , #approvalTm#
+			  , #salesTyp#
+			  , #approvedSpend#
+			  , #approvedSpendForeignCurrency#
+			  , #spendSignCd#
+			  , #realSpend#
+			  , #surtax#
+			  , #serviceCharge#
+			  , #installmentPeriod#
+			  , #exchangeRate#
+			  , #exchangeNationCd#
+			  , #exchangeNationNm#
+			  , #storeBusinessNo#
+			  , #storeBusinessNm#
+			  , #storeBusinessTyp#
+			  , #storeZipCd#
+			  , #storeAddress1#
+			  , #storeAddress2#
+			  , #storePhoneNumber#
+			  , #accountCd#
+			  , #accountNm#
+			  , #headquaterNm#
+			  , #departmentNm#
+			  , YEAR(REPLACE(#approvalDt#,' ',''))
+			  , MONTH(REPLACE(#approvalDt#,' ',''))
+			  , DATE_FORMAT(CONCAT(REPLACE(#approvalDt#,' ',''),' ',#approvalTm#), '%Y-%m-%d %H:%i:%s') 
+			  )
+	</insert>
+	
+	<insert id="CardDAO.insertCardSpendExcelOld">
+		INSERT INTO TBL_CARD_SPEND 
+			(
+				RECEIVE_INFO_TYP
+			  , CARD_ID
+			  , CARD_TYP
+			  , PAY_ACCOUNT_NUMBER
+			  , PAY_BANK_NM
+			  , SPECIFIER_NM
+			  , DOMESTIC_FOREIGN
+			  , APPROVAL_NO
+			  , APPROVAL_DT
+			  , APPROVAL_TM
+			  , SALES_TYP
+			  , APPROVED_SPEND
+			  , APPROVED_SPEND_FOREIGN_CURRENCY
+			  , SPEND_SIGN_CD
+			  , REAL_SPEND
+			  , SURTAX
+			  , SERVICE_CHARGE
+			  , INSTALLMENT_PERIOD
+			  , EXCHANGE_RATE
+			  , EXCHANGE_NATION_CD
+			  , EXCHANGE_NATION_NM
+			  , STORE_BUSINESS_NO
+			  , STORE_BUSINESS_NM
+			  , STORE_BUSINESS_TYP
+			  , STORE_ZIP_CD
+			  , STORE_ADDRESS1
+			  , STORE_ADDRESS2
+			  , STORE_PHONE_NUMBER
+			  , ACCOUNT_CD
+			  , ACCOUNT_NM
+			  , HEADQUATER_NM
+			  , DEPARTMENT_NM )
+		VALUES ( 
+				 #receiveInfoTyp#
+			  , #cardId#
+			  , #cardTyp#
+			  , #payAccountNumber#
+			  , #payBankNm#
+			  , #specifierNm#
+			  , #domesticForeign#
+			  , #approvalNo#
+			  , #approvalDt#
+			  , #approvalTm#
+			  , #salesTyp#
+			  , #approvedSpend#
+			  , #approvedSpendForeignCurrency#
+			  , #spendSignCd#
+			  , #realSpend#
+			  , #surtax#
+			  , #serviceCharge#
+			  , #installmentPeriod#
+			  , #exchangeRate#
+			  , #exchangeNationCd#
+			  , #exchangeNationNm#
+			  , #storeBusinessNo#
+			  , #storeBusinessNm#
+			  , #storeBusinessTyp#
+			  , #storeZipCd#
+			  , #storeAddress1#
+			  , #storeAddress2#
+			  , #storePhoneNumber#
+			  , #accountCd#
+			  , #accountNm#
+			  , #headquaterNm#
+			  , #departmentNm# )
+	</insert>
+	
+	<delete id="CardDAO.deleteCardSpend">		
+		DELETE 
+		FROM 
+			TBL_CARD_SPEND
+		WHERE 
+			CARD_SPEND_NO IN
+		<iterate property="checkList" open="(" close=")" conjunction=",">
+			<![CDATA[ 
+			#checkList[]#
+			]]>
+		</iterate>		
+	</delete>
+	
+	<select id="CardDAO.selectCardSpendView" resultMap="cardSpendVOAll">		
+		SELECT
+			CARD_SPEND_NO
+			, RECEIVE_INFO_TYP
+			, CARD_ID
+			, CARD_TYP
+			, PAY_ACCOUNT_NUMBER
+			, PAY_BANK_NM
+			, SPECIFIER_NM
+			, DOMESTIC_FOREIGN
+			, APPROVAL_NO
+			, APPROVAL_DT
+			, APPROVAL_TM
+			, SALES_TYP
+			, APPROVED_SPEND
+			, APPROVED_SPEND_FOREIGN_CURRENCY
+			, SPEND_SIGN_CD
+			, REAL_SPEND
+			, SURTAX
+			, SERVICE_CHARGE
+			, INSTALLMENT_PERIOD
+			, EXCHANGE_RATE
+			, EXCHANGE_NATION_CD
+			, EXCHANGE_NATION_NM
+			, STORE_BUSINESS_NO
+			, STORE_BUSINESS_NM
+			, STORE_BUSINESS_TYP
+			, STORE_ZIP_CD
+			, STORE_ADDRESS1
+			, STORE_ADDRESS2
+			, STORE_PHONE_NUMBER
+			, ACCOUNT_CD
+			, ACCOUNT_NM
+			, HEADQUATER_NM
+			, DEPARTMENT_NM
+		FROM 
+			TBL_CARD_SPEND
+		WHERE 
+			CARD_SPEND_NO = #cardSpendNo#		
+	</select>
+	
+	<select id="CardDAO.selectCardSpendList" parameterClass="cardSpendVO" resultClass="egovMap">
+		SELECT
+			A.CARD_SPEND_NO
+			, A.RECEIVE_INFO_TYP
+			, A.CARD_ID
+			, A.CARD_TYP
+			, A.PAY_ACCOUNT_NUMBER
+			, A.PAY_BANK_NM
+			, A.SPECIFIER_NM
+			, A.DOMESTIC_FOREIGN
+			, A.APPROVAL_NO
+			, A.APPROVAL_DT
+			, A.APPROVAL_TM
+			, A.SALES_TYP
+			, A.APPROVED_SPEND
+			, A.APPROVED_SPEND_FOREIGN_CURRENCY
+			, A.SPEND_SIGN_CD
+			, A.REAL_SPEND
+			, A.SURTAX
+			, A.SERVICE_CHARGE
+			, A.INSTALLMENT_PERIOD
+			, A.EXCHANGE_RATE
+			, A.EXCHANGE_NATION_CD
+			, A.EXCHANGE_NATION_NM
+			, A.STORE_BUSINESS_NO
+			, A.STORE_BUSINESS_NM
+			, A.STORE_BUSINESS_TYP
+			, A.STORE_ZIP_CD
+			, A.STORE_ADDRESS1
+			, A.STORE_ADDRESS2
+			, A.STORE_PHONE_NUMBER
+			, A.ACCOUNT_CD
+			, A.ACCOUNT_NM
+			, A.HEADQUATER_NM
+			, A.DEPARTMENT_NM
+			, B.USER_NO
+			, C.USER_ID
+			, C.USER_NM
+			, D.COMPANY_CD
+			, G.CODE_NM COMPANY_NM
+			, G.COLUMN1 COMPANY_NM_SHORT
+			, IF( A.STATUS = 3, '미상신', '상신') AS STAT
+		FROM TBL_CARD_SPEND a
+			INNER JOIN TBL_CARD_HISTORY b
+				ON a.CARD_ID = b.CARD_ID
+				AND (
+						(
+							A.APPROVAL_DTTM >= b.ST_DT
+							AND (b.ED_DT > A.APPROVAL_DTTM
+								OR B.ED_DT IS NULL
+							)								
+						) OR (				 
+							B.FIRST_REGISTER = 'Y'
+							AND A.CARD_ID = B.CARD_ID
+							AND B.ST_DT > A.APPROVAL_DTTM
+						)
+				)
+			INNER JOIN TBL_CARD d
+				ON a.CARD_ID = d.CARD_ID
+			INNER JOIN COMTCCMMNDETAILCODE g
+				ON d.COMPANY_CD = g.CODE 
+				AND g.CODE_ID = 'KMS007'  <!-- 회사 -->
+			LEFT OUTER JOIN TBL_USERINFO c
+				ON b.USER_NO = c.NO
+			LEFT JOIN TBL_ORGNZT ORG 
+				ON C.ORGNZT_ID = ORG.ORGNZT_ID			
+		WHERE 1=1
+		<isNotEmpty prepend="AND" property="myOrgId">
+			ORG.ORG_TREE LIKE CONCAT('%', #myOrgId#, '%')
+		</isNotEmpty>
+		<isNotEqual property="searchYear" compareValue="0">
+			AND APPROVAL_YEAR = #searchYear#
+		</isNotEqual>
+		<isNotEqual property="searchMonth" compareValue="0">
+			AND APPROVAL_MONTH = #searchMonth#
+		</isNotEqual>
+		<isNotEqual property="searchAll" compareValue="Y">
+		<!--미상신자료만-->
+			AND A.STATUS = 3
+		</isNotEqual>
+		<isNotEmpty property="searchCardId">
+			AND A.CARD_ID like CONCAT('%',#searchCardId#, '%')
+		</isNotEmpty>
+		<isNotEmpty property="searchUserNm">
+			AND c.USER_NM like CONCAT('%',#searchUserNm#, '%')
+		</isNotEmpty>
+		<isEqual property="searchAdminAuth" compareValue="N">
+			<![CDATA[			
+			AND c.NO <> 2
+			]]>
+		</isEqual>
+		GROUP BY 
+			A.CARD_SPEND_NO
+		ORDER BY 
+			COMPANY_NM
+			,CARD_ID
+			,APPROVAL_DT
+	</select>
+	
+	<select id="CardDAO.selectCardSpendListAdmin" parameterClass="cardSpendVO" resultClass="egovMap">
+		SELECT
+			A.CARD_SPEND_NO
+			, A.RECEIVE_INFO_TYP
+			, A.CARD_ID
+			, A.CARD_TYP
+			, A.PAY_ACCOUNT_NUMBER
+			, A.PAY_BANK_NM
+			, A.SPECIFIER_NM
+			, A.DOMESTIC_FOREIGN
+			, A.APPROVAL_NO
+			, A.APPROVAL_DT
+			, A.APPROVAL_TM
+			, A.SALES_TYP
+			, A.APPROVED_SPEND
+			, A.APPROVED_SPEND_FOREIGN_CURRENCY
+			, A.SPEND_SIGN_CD
+			, A.REAL_SPEND
+			, A.SURTAX
+			, A.SERVICE_CHARGE
+			, A.INSTALLMENT_PERIOD
+			, A.EXCHANGE_RATE
+			, A.EXCHANGE_NATION_CD
+			, A.EXCHANGE_NATION_NM
+			, A.STORE_BUSINESS_NO
+			, A.STORE_BUSINESS_NM
+			, A.STORE_BUSINESS_TYP
+			, A.STORE_ZIP_CD
+			, A.STORE_ADDRESS1
+			, A.STORE_ADDRESS2
+			, A.STORE_PHONE_NUMBER
+			, A.ACCOUNT_CD
+			, A.ACCOUNT_NM
+			, A.HEADQUATER_NM
+			, A.DEPARTMENT_NM
+			, B.USER_NO
+			, C.USER_ID
+			, C.USER_NM
+			, D.COMPANY_CD
+			, G.CODE_NM COMPANY_NM
+			, G.COLUMN1 COMPANY_NM_SHORT
+			, IF( A.STATUS = 3, '미상신', '상신') AS STAT
+			, A.STATUS
+			, DATE_FORMAT(doc.DOC_DT, '%Y-%m-%d') AS DOC_DT
+		FROM TBL_CARD_SPEND a
+			INNER JOIN TBL_CARD_HISTORY b
+				ON a.CARD_ID = b.CARD_ID
+				AND (
+						(
+							A.APPROVAL_DTTM >= b.ST_DT
+							AND (b.ED_DT > A.APPROVAL_DTTM
+								OR B.ED_DT IS NULL
+							)								
+						) OR (				 
+							B.FIRST_REGISTER = 'Y'
+							AND A.CARD_ID = B.CARD_ID
+							AND B.ST_DT > A.APPROVAL_DTTM
+						)
+				)
+			INNER JOIN TBL_CARD d
+				ON a.CARD_ID = d.CARD_ID
+			INNER JOIN COMTCCMMNDETAILCODE g
+				ON d.COMPANY_CD = g.CODE 
+				AND g.CODE_ID = 'KMS007'  <!-- 회사 -->
+			LEFT OUTER JOIN TBL_USERINFO c
+				ON b.USER_NO = c.NO
+			LEFT JOIN TBL_ORGNZT ORG 
+				ON C.ORGNZT_ID = ORG.ORGNZT_ID
+			LEFT JOIN (SELECT MAX(DOC_ID) AS DOC_ID, CARD_SPEND_NO
+						FROM TBL_EAPP_EXP
+						GROUP BY CARD_SPEND_NO) EXP
+				ON a.CARD_SPEND_NO = EXP.CARD_SPEND_NO
+			LEFT JOIN TBL_EAPP_DOC DOC
+				ON DOC.DOC_ID = EXP.DOC_ID
+				AND DOC.DOC_STAT IN ('APP001', 'APP002', 'APP003', 'APP004', 'APP005')	
+		WHERE 1=1
+		<isNotEmpty prepend="AND" property="myOrgId">
+			ORG.ORG_TREE LIKE CONCAT('%', #myOrgId#, '%')
+		</isNotEmpty>
+		<isNotEqual property="searchYear" compareValue="0">
+			AND APPROVAL_YEAR = #searchYear#
+		</isNotEqual>
+		<isNotEqual property="searchMonth" compareValue="0">
+			AND APPROVAL_MONTH = #searchMonth#
+		</isNotEqual>
+		<iterate prepend="AND A.STATUS IN " open="(" close=")" conjunction="," property="searchStatus">
+			#searchStatus[]#
+		</iterate>
+		<isNotEmpty property="searchCardId">
+			AND A.CARD_ID like CONCAT('%',#searchCardId#, '%')
+		</isNotEmpty>
+		<isNotEmpty property="searchUserNmArr">
+			<iterate prepend="AND C.USER_NM IN " open="(" close=")" conjunction="," property="searchUserNmArr">
+				#searchUserNmArr[]#
+			</iterate>
+		</isNotEmpty>
+		GROUP BY 
+			A.CARD_SPEND_NO
+		ORDER BY 
+			COMPANY_NM
+			,CARD_ID
+			,APPROVAL_DT
+	</select>
+	
+	<select id="CardDAO.selectCardSpendSum" parameterClass="cardSpendVO" resultClass="java.lang.Integer">
+	SELECT
+		IFNULL(SUM(a.APPROVED_SPEND),0) SPEND_SUM
+	FROM 
+		TBL_CARD_SPEND a
+	INNER JOIN 
+		TBL_CARD_HISTORY b
+		ON a.CARD_ID = b.CARD_ID
+		AND (
+				(
+				DATE_FORMAT(CONCAT(APPROVAL_DT,' ',APPROVAL_TM), '%Y-%m-%d %H:%i:%s') >= b.ST_DT
+				AND
+				b.ED_DT > DATE_FORMAT(CONCAT(APPROVAL_DT,' ',APPROVAL_TM), '%Y-%m-%d %H:%i:%s')
+			) OR (
+				DATE_FORMAT(CONCAT(APPROVAL_DT,' ',APPROVAL_TM), '%Y-%m-%d %H:%i:%s') >= b.ST_DT
+				AND
+				b.ED_DT IS NULL
+			)
+		)
+	INNER JOIN TBL_CARD d
+		ON a.CARD_ID = d.CARD_ID
+	INNER JOIN COMTCCMMNDETAILCODE g
+		ON d.COMPANY_CD =g.CODE 
+		AND g.CODE_ID ='KMS007'  <!-- 회사 -->
+	LEFT OUTER JOIN TBL_USERINFO c
+		ON b.USER_NO = c.NO
+	LEFT OUTER JOIN (
+		SELECT
+			h.CARD_SPEND_NO
+			, h.DOC_ID
+			, i.DOC_STAT
+			, i.NEW_AT 
+		FROM 
+			TBL_EAPP_EXP h
+			INNER JOIN TBL_EAPP_DOC i
+				ON h.DOC_ID = i.DOC_ID
+				AND i.DOC_STAT NOT IN ('APP000','APP099')
+	) e ON a.CARD_SPEND_NO = e.CARD_SPEND_NO
+	WHERE 1=1
+		AND YEAR(APPROVAL_DT) = #searchYear#
+		AND MONTH(APPROVAL_DT) = #searchMonth#
+		AND 
+			(e.DOC_ID IS NULL
+			OR
+				(
+				e.DOC_STAT IN ('APP004','APP005') 
+				AND
+				e.NEW_AT = 0
+				)
+			)
+	<isNotEmpty property="searchUserNm">
+		AND c.USER_NM like CONCAT('%',#searchUserNm#, '%')
+	</isNotEmpty>
+	<isNotEmpty property="searchCardId">
+		AND a.CARD_ID like CONCAT('%',#searchCardId#, '%')
+	</isNotEmpty>
+	<isEqual property="searchAdminAuth" compareValue="N">
+		<![CDATA[			
+		AND c.NO <> 2
+		]]>
+	</isEqual>
+	</select>
+
+	<select id="CardDAO.selectCardSpendForExp" parameterClass="cardSpendVO" resultClass="egovMap">				
+		SELECT
+			'' AS docId
+			, '' AS expId
+			, NULL AS presetId
+			, NULL AS presetNm
+			, 'CC' AS expSpendTyp
+			, '' AS accId
+			, '' AS accNm
+			, '' AS prntAccNm
+			, '' AS prntAccId
+			, '' AS prjId
+			, '' AS prjCd
+			, '' AS prjNm
+			, CARD.COMPANY_CD AS companyCd
+			, COD.CODE_NM AS companyNm
+			, REPLACE(CARDS.APPROVAL_DT, '-', '') AS expDt
+			, CARDS.APPROVED_SPEND AS expSpend
+			, CONCAT(CARDS.APPROVAL_NO, ' ', CARDS.STORE_BUSINESS_NM) AS expCt
+			, NULL AS payingDueDate
+			, CARDS.CARD_SPEND_NO AS cardSpendNo
+			, 'N' AS exceedManage
+			, 'N' AS expiredDate
+			, CARD.CARD_ID AS cardId
+			, NULL column1
+			, NULL column2
+			, NULL AS stockList
+		FROM
+			TBL_CARD CARD
+			INNER JOIN 
+			TBL_CARD_SPEND CARDS
+			ON CARD.CARD_ID = CARDS.CARD_ID
+			LEFT OUTER JOIN 
+			COMTCCMMNDETAILCODE COD
+			ON CARD.COMPANY_CD = COD.CODE
+			AND COD.CODE_ID = 'KMS007'
+		WHERE
+			CARD_SPEND_NO IN
+			<iterate property="checkList" open="(" close=")" conjunction=",">
+				#checkList[]#
+			</iterate>
+	</select>
+	
+	
+</sqlMap>

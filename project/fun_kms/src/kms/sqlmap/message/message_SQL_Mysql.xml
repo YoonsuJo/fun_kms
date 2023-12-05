@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsMessageDAO">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="MessageVO"    type="kms.com.message.service.MessageVO"/>
+
+<!-- TENY_170206 Message를 만들면서 새로 만든 버젼의 resultMap들 -->
+<!-- TENY_170206 메시지 목록을 보기위한 처리시 사용되는 resultMap -->
+	<resultMap id="mapMessageVOList" 		class="MessageVO">
+		<result property="no"		 		column="NO" 			/>
+		<result property="title" 			column="TITLE" 			/>
+		<result property="contents" 		column="CONTENTS" 		/>
+		<result property="link" 			column="LINK" 			/>
+		<result property="sendUserNo" 		column="SEND_USER_NO" 	/>
+		<result property="sendDatetime" 	column="SEND_DATETIME"	/>
+		<result property="recvUserNo" 		column="RECV_USER_NO" 	/>
+		<result property="read" 			column="READ" 			/>
+		<result property="readDatetime" 	column="READ_DATETIME" 	/>
+		<result property="del" 				column="DEL" 			/>
+		<result property="delDatetime" 		column="DEL_DATETIME" 	/>
+		<result property="status" 			column="STATUS" 		/>
+		<result property="folderNo" 		column="FOLDER_NO" 		/>
+	</resultMap>
+
+
+<!--  SELECT 문들  -->	
+<!-- TENY_170220 Message를 만들면서 새로 만든 버젼의 SQL구분들 -->
+	<select id="KmsMessageDAO.selectMessageList"  parameterClass="MessageVO"  resultMap="mapMessageVOList">
+		SELECT
+		FROM
+			hm_message msg
+			INNER JOIN TBL_USERINFO usr
+				ON msg.SEND_USER_NO = usr.NO 
+		WHERE
+			msg.DEL != '0'
+		ORDER BY
+			msg.NO DESC
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+
+	
+</sqlMap>

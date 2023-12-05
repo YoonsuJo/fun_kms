@@ -1,0 +1,24 @@
+.salary {clear:both; width:700px; margin:0 auto; padding:0; font-size:12px; font-family:Gulim, dotum, malgungothic; color:#444; vertical-align:top; border:1px solid #fff; }
+
+.salary_tl {width:100%; text-align:center; font-weight:bold; font-size:22px; padding-bottom:15px; margin:15px 0; border-bottom:1px solid #6e6e6e;}
+
+.salary dl {margin:0; padding:0;}
+.salary dt {font-weight:bold; color:#222; margin-top:10px;}
+.salary dd {line-height:22px; text-indent:8px;}
+.salary dd p {text-indent:0; width:100%; padding-left:8px;}
+
+.salary ol {border:1px solid #ccc; padding:7px 5px; }
+.salary li {line-height:20px; list-style-position:inside;}
+.salary li.underline {text-decoration:underline;}
+
+.salary table { width:100%; padding:0; margin:0; table-layout:fixed; border-top:1px solid #444;}
+.salary caption{display:none;}
+.salary thead {margin:0; padding:0; background-color:#d7d7d7;}
+.salary thead th {font-weight:bold;height:25px; padding:0; margin:0; color:#454545; text-align:center; vertical-align:middle; border-bottom:1px solid #888;border-right:1px solid #888;}
+.salary tbody {margin:0; padding:0; COLOR: #666666;}
+.salary tbody td {height:22px; padding-top:3px; padding-bottom:1px; border-bottom:1px solid #888; border-right:1px solid #888;}
+
+.left_line { border-left:1px solid #888;}
+
+
+

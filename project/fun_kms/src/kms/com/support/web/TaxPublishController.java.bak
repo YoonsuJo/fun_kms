@@ -1,0 +1,700 @@
+package kms.com.support.web;
+
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import egovframework.com.cmm.ComDefaultCodeVO;
+import egovframework.com.cmm.EgovMessageSource;
+import egovframework.com.cmm.service.EgovCmmUseService;
+import egovframework.rte.fdl.property.EgovPropertyService;
+// import egovframework.rte.psl.dataaccess.util.EgovMap;
+import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
+
+import kms.com.common.utils.CalendarUtil;
+import kms.com.common.utils.SessionUtil;
+
+import kms.com.common.service.FileMngService;
+import kms.com.common.service.FileMngUtil;
+import kms.com.common.service.FileVO;
+// import kms.com.member.service.MemberService;
+import kms.com.member.service.MemberVO;
+// import kms.com.support.service.ResourceService;
+import kms.com.support.service.TaxPublishService;
+import kms.com.support.service.TaxPublishVO;
+
+/* TENY_170204 for Invoice */
+import kms.com.support.service.InvoiceService;
+import kms.com.support.service.InvoiceVO;
+
+/* TENY_ 170127 사용하지 않는 클래스
+import kms.com.app.service.ApprovalCommentVO;
+import kms.com.app.service.ApprovalVO;
+import kms.com.common.config.PathConfig;
+import kms.com.member.service.Msn;
+import kms.com.member.service.impl.MemberDAO;
+import kms.com.support.service.CarFixVO;
+import kms.com.support.service.CarReservation;
+import kms.com.support.service.CarReservationVO;
+import kms.com.support.service.CarVO;
+*/
+
+@Controller
+public class TaxPublishController {
+
+	Logger logT = Logger.getLogger("TENY");
+
+//	@Resource(name = "KmsResourceService")
+//	private ResourceService resourceService;
+
+	@Resource(name = "propertiesService")
+	protected EgovPropertyService propertyService;
+	
+	@Resource(name="egovMessageSource")
+	protected EgovMessageSource egovMessageSource;
+	
+	@Resource(name = "EgovCmmUseService")
+	 private EgovCmmUseService cmmUseService;
+
+	@Resource(name = "KmsFileMngUtil")
+	private FileMngUtil fileUtil;
+	
+	@Resource(name = "KmsFileMngService")
+	private FileMngService fileMngService;
+	
+//	@Resource(name = "KmsMemberService")
+//	private MemberService memberService;
+	
+	@Resource(name = "KmsInvoiceService")
+	private InvoiceService invoiceService;
+
+	@Resource(name = "KmsTaxPublishService")
+	private TaxPublishService taxPublishService;
+
+	@RequestMapping("/support/invoiceList.do")
+	public String selectInvoiceList(@ModelAttribute("invoiceVO") InvoiceVO searchVO,
+			HttpServletRequest request, HttpServletResponse response,
+			ModelMap model, Map<String, Object> commandMap) throws Exception{
+		
+		logT.debug("START");
+
+		/* 페이징 관련 내용 Start */
+		param.put("pageUnit", propertyService.getInt("pageUnit"));
+		param.put("pageSize", propertyService.getInt("pageSize"));
+	
+		PaginationInfo paginationInfo = new PaginationInfo();
+		
+		int pageIndex = 1;
+		if (commandMap.get("pageIndex") != null && !commandMap.get("pageIndex").equals(""))
+			pageIndex = Integer.parseInt(commandMap.get("pageIndex").toString());
+		
+		paginationInfo.setCurrentPageNo(pageIndex);
+		paginationInfo.setRecordCountPerPage((Integer)param.get("pageUnit"));
+		paginationInfo.setPageSize((Integer)param.get("pageSize"));
+	
+		param.put("firstIndex", paginationInfo.getFirstRecordIndex());
+		param.put("lastIndex", paginationInfo.getLastRecordIndex());
+		param.put("recordCountPerPage", paginationInfo.getRecordCountPerPage());
+		/* 페이징 관련 내용 End */
+		
+		/* 검색 조건 관련 내용 Start */
+		Map<String, Object> param = new HashMap<String, Object>();
+		
+//		param.put("searchCompanyCd", searchVO.getSearchCompanyCd());
+//		param.put("searchTitle", searchVO.getSearchTitle());
+		
+/* default 신청자를 로그인 사용자로 설정하기 위해 코딩중. . .		*/
+		if(searchVO.getInsertUserName().equals(""))
+		{
+			MemberVO user = SessionUtil.getMember(request);
+			searchVO.setSearchInsertUserName(user.getUserNm());
+			System.out.println("default user : " + user.getUserNm());
+		}
+
+		param.put("searchTitle", searchVO.getSearchTitle());
+		param.put("searchInsertUserName", searchVO.getSearchInsertUserName());
+		param.put("searchStatusN", searchVO.getSearchStatusN());
+		param.put("searchStatusY", searchVO.getSearchStatusY());
+		param.put("searchStatusC", searchVO.getSearchStatusC());
+
+//		param.put("searchPrjId", searchVO.getSearchPrjId());
+		
+//		if (commandMap.get("untilToday") != null && commandMap.get("untilToday").equals("Y"))
+//			param.put("searchDate", CalendarUtil.getToday());
+		/* 검색 조건 관련 내용 End */
+		
+		List<InsertVO> resultList = invoiceService.selectInvoiceList(param);
+		int totCnt = taxPublishService.selectIndexListTotCnt(param);
+
+		paginationInfo.setTotalRecordCount(totCnt);
+		
+		model.addAttribute("paginationInfo", paginationInfo);
+		model.addAttribute("resultList", resultList);
+	
+		ComDefaultCodeVO vo = new ComDefaultCodeVO();
+		vo.setCodeId("KMS007");
+		List compList = cmmUseService.selectCmmCodeDetail(vo);
+		
+		model.addAttribute("compList", compList);
+		model.addAttribute("invoiceVO", searchVO);
+		
+		return "support/support_InvoiceList";
+	}
+
+	@RequestMapping("/support/taxPublishL.do")
+	public String selectTaxPublishL(@ModelAttribute("taxPublishVO") TaxPublishVO searchVO,
+			HttpServletRequest request, HttpServletResponse response,
+			ModelMap model, Map<String, Object> commandMap) throws Exception{
+		
+		/* 검색 조건 관련 내용 Start */
+		Map<String, Object> param = new HashMap<String, Object>();
+		
+		param.put("searchCompanyCd", searchVO.getSearchCompanyCd());
+		param.put("searchTitle", searchVO.getSearchSj());
+		
+/* default 신청자를 로그인 사용자로 설정하기 위해 코딩중. . .		*/
+		if(searchVO.getUserNm().equals(""))
+		{
+			MemberVO user = SessionUtil.getMember(request);
+			searchVO.setUserNm(user.getUserNm());
+			System.out.println("default user : " + user.getUserNm());
+		}
+
+		param.put("userNm", searchVO.getUserNm());
+		param.put("bondStatN", searchVO.getBondStatN());
+		param.put("bondStatY", searchVO.getBondStatY());
+		param.put("bondStatC", searchVO.getBondStatC());
+		
+		param.put("searchPrjId", searchVO.getSearchPrjId());
+		
+		if (commandMap.get("untilToday") != null && commandMap.get("untilToday").equals("Y"))
+			param.put("searchDate", CalendarUtil.getToday());
+		
+		/* 검색 조건 관련 내용 End */
+		
+		/* 페이징 관련 내용 Start */
+		param.put("pageUnit", propertyService.getInt("pageUnit"));
+		param.put("pageSize", propertyService.getInt("pageSize"));
+	
+		PaginationInfo paginationInfo = new PaginationInfo();
+		
+		int pageIndex = 1;
+		if (commandMap.get("pageIndex") != null && !commandMap.get("pageIndex").equals(""))
+			pageIndex = Integer.parseInt(commandMap.get("pageIndex").toString());
+		
+		paginationInfo.setCurrentPageNo(pageIndex);
+		paginationInfo.setRecordCountPerPage((Integer)param.get("pageUnit"));
+		paginationInfo.setPageSize((Integer)param.get("pageSize"));
+	
+		param.put("firstIndex", paginationInfo.getFirstRecordIndex());
+		param.put("lastIndex", paginationInfo.getLastRecordIndex());
+		param.put("recordCountPerPage", paginationInfo.getRecordCountPerPage());
+		/* 페이징 관련 내용 End */
+		
+		List<TaxPublishVO> resultList = taxPublishService.selectTaxPublishList(param);
+		int totCnt = taxPublishService.selectTaxPublishListTotCnt(param);
+
+		paginationInfo.setTotalRecordCount(totCnt);
+		
+		model.addAttribute("paginationInfo", paginationInfo);
+		model.addAttribute("resultList", resultList);
+	
+		ComDefaultCodeVO vo = new ComDefaultCodeVO();
+		vo.setCodeId("KMS007");
+		List compList = cmmUseService.selectCmmCodeDetail(vo);
+		
+		model.addAttribute("compList", compList);
+		model.addAttribute("taxPublishVO", searchVO);
+		
+		return "support/sprt_taxPublishL";
+	}
+	
+	@RequestMapping("/support/taxPublishW.do")
+	public String taxPublishW(@ModelAttribute("taxPublishVO") TaxPublishVO searchVO,
+			HttpServletRequest request, HttpServletResponse response,
+			ModelMap model, Map<String, Object> commandMap) throws Exception{
+		
+		logT.debug("START");
+		
+		/* 회사구분을 불러옵니다. Start */
+		ComDefaultCodeVO vo = new ComDefaultCodeVO();
+		vo.setCodeId("KMS007");
+		List companyList = cmmUseService.selectCmmCodeDetail(vo);
+		model.addAttribute("companyList", companyList);
+		/* 회사구분을 불러옵니다. End */
+		
+		return "support/sprt_taxPublishW";
+	}
+	
+	/* TENY_170201
+	 * 세금계산서 등록하는 Controller 함수
+	 */
+	@RequestMapping("/support/taxPublishI.do")
+	public String insertTaxPublish(@ModelAttribute("taxPublishVO") TaxPublishVO taxPublishVO,
+			MultipartHttpServletRequest multiRequest, HttpServletResponse response,
+			String jsonExpenseString, String jsonProjectString,
+			ModelMap model, Map<String, Object> commandMap) throws Exception{
+
+		logT.debug("START");
+
+		MemberVO user = SessionUtil.getMember(multiRequest);
+		logT.debug("jsonExpenseString : " + jsonExpenseString);
+		taxPublishVO.setJsonExpenseString(jsonExpenseString);
+		taxPublishVO.setJsonProjectString(jsonProjectString);
+		
+		logT.debug(user.getUserNo());
+		taxPublishVO.setWriterNo(user.getUserNo());
+		
+		logT.debug(taxPublishVO.getBondSj());
+		if (taxPublishVO.getRepeat() != null && taxPublishVO.getRepeat().equals("Y")) {
+		/* 여러건의 계산서를 발행해야하는 경우
+		 * from부터 to까지 반복 발행 */
+			
+			String fromDate = taxPublishVO.getPublishDate();
+			String toDate = taxPublishVO.getPublishToDate();
+			
+			for (String tmpDate = fromDate; tmpDate.compareTo(toDate) <= 0;) {
+				int tmpAtDate = 1; /* 매월 발행 요청일 디폴트 값 */
+				if (taxPublishVO.getPublishAtDate() != null && !taxPublishVO.getPublishAtDate().equals(""))  // 매월 발행요청 일이 있는 경우
+					tmpAtDate = Integer.parseInt(taxPublishVO.getPublishAtDate());
+				tmpDate = tmpDate.substring(0, 6) + String.format("%02d", tmpAtDate);  // 발행하려고 하는 날
+				
+				if (fromDate.compareTo(tmpDate) > 0) {  // 발행시작일보다  발행하려고 하는 날이 큰경우 그 다음달 부터 발행
+					int month = Integer.parseInt(tmpDate.substring(4, 6)) + 1;
+					tmpDate = tmpDate.substring(0, 4) + String.format("%02d%02", month, tmpAtDate); // 다음달로 변경후 다시
+					tmpDate = CalendarUtil.getFixedDate(tmpDate);
+					continue;
+				}
+				tmpDate = CalendarUtil.getFixedDate(tmpDate);
+				taxPublishVO.setPublishDate(tmpDate);
+				
+				/* 파일 첨부 Start */
+				List<FileVO> result = null;
+				String atchFileId = "";
+				
+				final Map<String, MultipartFile> files = multiRequest.getFileMap();
+				if (!files.isEmpty()) {
+					result = fileUtil.parseFileInf(files, "BBS_", 0, "", "");
+					atchFileId = fileMngService.insertFileInfs(result);
+				}
+				taxPublishVO.setAtchFileId(atchFileId);
+				/* 파일 첨부 End */
+				
+				taxPublishService.insertTaxPublishList(taxPublishVO);
+				
+				int month = Integer.parseInt(tmpDate.substring(4, 6)) + 1;
+				int year = Integer.parseInt(tmpDate.substring(0, 4));
+				if (month == 13) {
+					month = 1;
+					year = year + 1;
+				}
+				tmpDate = year + String.format("%02d", month) + "01";
+			} /* for (String tmpDate = from; tmpDate... */
+			
+			String date = CalendarUtil.getDate(taxPublishVO.getPublishDate(), -1);
+			
+			TaxPublishVO t = taxPublishVO;
+			String params = "";
+			params = params + "?bondStatN=" + t.getBondStatN();
+			params = params + "&bondStatY=" + t.getBondStatY();
+			params = params + "&bondStatC=" + t.getBondStatC();
+			params = params + "&untilToday=" + t.getUntilToday();
+			params = params + "&searchSj=" + URLEncoder.encode(t.getSearchSj(), "UTF-8");
+			params = params + "&userNm=" + URLEncoder.encode(t.getUserNm(), "UTF-8");
+			params = params + "&searchNm=" + URLEncoder.encode(t.getSearchNm(), "UTF-8");
+			params = params + "&searchCompanyCd=" + URLEncoder.encode(t.getSearchCompanyCd(), "UTF-8");
+			params = params + "&pageIndex=" + Integer.toString(t.getPageIndex());
+
+			return "redirect:/support/taxPublishL.do" + params;
+		} else { /* 계산서 발행이 한건인 경우 */
+			/* 파일 첨부 Start */
+			logT.debug("반복발행 아님");
+
+			List<FileVO> result = null;
+			String atchFileId = "";
+			
+			final Map<String, MultipartFile> files = multiRequest.getFileMap();
+			if (!files.isEmpty()) {
+				result = fileUtil.parseFileInf(files, "BBS_", 0, "", "");
+				atchFileId = fileMngService.insertFileInfs(result);
+			}
+			taxPublishVO.setAtchFileId(atchFileId);
+			/* 파일 첨부 End */
+			
+			taxPublishService.insertTaxPublishList(taxPublishVO);
+			logT.debug("AFTER insertTaxPublishList");
+			
+			TaxPublishVO t = taxPublishVO;
+			String params = "";
+			params = params + "&bondStatN=" + t.getBondStatN();
+			params = params + "&bondStatY=" + t.getBondStatY();
+			params = params + "&bondStatC=" + t.getBondStatC();
+			params = params + "&untilToday=" + t.getUntilToday();
+			params = params + "&searchSj=" + URLEncoder.encode(t.getSearchSj(), "UTF-8");
+			params = params + "&userNm=" + URLEncoder.encode(t.getUserNm(), "UTF-8");
+			params = params + "&searchNm=" + URLEncoder.encode(t.getSearchNm(), "UTF-8");
+			params = params + "&searchCompanyCd=" + URLEncoder.encode(t.getSearchCompanyCd(), "UTF-8");
+			params = params + "&pageIndex=" + Integer.toString(t.getPageIndex());
+			
+			return "redirect:/support/taxPublishV.do?bondId=" + taxPublishVO.getBondId() + params;
+		} /* if if (taxPublishVO.getRepeat() != null.. */
+	}
+	
+	@RequestMapping("/support/taxPublishV.do")
+	public String selectTaxPublishV(@ModelAttribute("taxPublishVO") TaxPublishVO taxPublishVO,
+			HttpServletRequest request, HttpServletResponse response,
+			ModelMap model, Map<String, Object> commandMap) throws Exception{
+		
+		logT.debug("START");
+
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("bondId", commandMap.get("bondId"));
+		
+		TaxPublishVO result = taxPublishService.selectTaxPublish(param);
+		List<TaxPublishVO> resultExpenseList = taxPublishService.selectBondExpenseList(param);
+		List<TaxPublishVO> resultProjectList = taxPublishService.selectBondProjectList(param);
+		
+		/* 공급가액, 세액, 총액 관련 Start */
+		long supSum = 0;
+		long taxSum = 0;
+		long pubSum = 0;
+		for (int i = 0; i < resultExpenseList.size(); i++) {
+			long supExp = resultExpenseList.get(i).getPrice();
+			long taxExp = resultExpenseList.get(i).getSurtax();
+			supSum = supSum + supExp;
+			taxSum = taxSum + taxExp;
+		}
+		pubSum = supSum + taxSum;
+		
+		result.setSupSum(supSum);
+		result.setTaxSum(taxSum);
+		result.setPubSum(pubSum);
+		/* 공급가액, 세액, 총액 관련 End */
+		
+		model.addAttribute("taxPublishVO", taxPublishVO);
+		model.addAttribute("result", result);
+		model.addAttribute("resultExpenseList", resultExpenseList);
+		model.addAttribute("resultProjectList", resultProjectList);
+		
+		logT.debug("END");
+		return "support/sprt_taxPublishV";
+	}
+	
+	@RequestMapping("/support/taxPublishRW.do")
+	public String selectTaxPublishRW(@ModelAttribute("taxPublishVO") TaxPublishVO taxPublishVO,
+			HttpServletRequest request, HttpServletResponse response,
+			ModelMap model, Map<String, Object> commandMap) throws Exception{
+		
+		/* 회사구분을 불러옵니다. Start */
+		ComDefaultCodeVO vo = new ComDefaultCodeVO();
+		vo.setCodeId("KMS007");
+		List companyList = cmmUseService.selectCmmCodeDetail(vo);
+		model.addAttribute("companyList", companyList);
+		/* 회사구분을 불러옵니다. End */
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("bondId", commandMap.get("bondId"));
+		
+		TaxPublishVO result = taxPublishService.selectTaxPublish(param);
+		List<TaxPublishVO> resultExpenseList = taxPublishService.selectBondExpenseList(param);
+		List<TaxPublishVO> resultProjectList = taxPublishService.selectBondProjectList(param);
+		
+		/* 공급가액, 세액, 총액 관련 Start */
+		long supSum = 0;
+		long taxSum = 0;
+		long pubSum = 0;
+		for (int i = 0; i < resultExpenseList.size(); i++) {
+			long supExp = resultExpenseList.get(i).getSupplyExpense();
+			long taxExp = resultExpenseList.get(i).getTaxExpense();
+			supSum = supSum + supExp;
+			taxSum = taxSum + taxExp;
+			pubSum = pubSum + supExp + taxExp;
+		}
+		result.setSupSum(supSum);
+		result.setTaxSum(taxSum);
+		result.setPubSum(pubSum);
+		/* 공급가액, 세액, 총액 관련 End */
+		
+		model.addAttribute("taxPublishVO", taxPublishVO);
+		model.addAttribute("result", result);
+		model.addAttribute("resultExpenseList", resultExpenseList);
+		model.addAttribute("resultExpenseCnt", resultExpenseList.size());
+		model.addAttribute("resultProjectList", resultProjectList);
+		model.addAttribute("resultProjectCnt", resultProjectList.size());
+		
+		return "support/sprt_taxPublishRW";
+	}
+	
+	@RequestMapping("/support/taxPublishRI.do")
+	public String reInsertTaxPublish(@ModelAttribute("taxPublishVO") TaxPublishVO taxPublishVO,
+			MultipartHttpServletRequest multiRequest, HttpServletRequest request, HttpServletResponse response,
+			String jsonExpenseString, String jsonProjectString,
+			ModelMap model, Map<String, Object> commandMap) throws Exception{
+				
+		taxPublishVO.setJsonExpenseString(jsonExpenseString);
+		taxPublishVO.setJsonProjectString(jsonProjectString);
+		
+		/* 파일첨부 Start */
+		String atchFileId = taxPublishVO.getAtchFileId();
+
+		final Map<String, MultipartFile> files = multiRequest.getFileMap();
+		if (!files.isEmpty()) {
+		if (atchFileId == null || "".equals(atchFileId) ) {
+			List<FileVO> result = fileUtil.parseFileInf(files, "BBS_", 0, atchFileId, "");
+			atchFileId = fileMngService.insertFileInfs(result);
+			taxPublishVO.setAtchFileId(atchFileId);
+		} else {
+			FileVO fvo = new FileVO();
+			fvo.setAtchFileId(atchFileId);
+			int cnt = fileMngService.getMaxFileSN(fvo);
+			List<FileVO> _result = fileUtil.parseFileInf(files, "BBS_", cnt, atchFileId, "");
+			fileMngService.updateFileInfs(_result);
+		}
+		}
+		/* 파일첨부 End */
+		
+		MemberVO user = SessionUtil.getMember(multiRequest);
+		taxPublishVO.setWriterNo(user.getUserNo());
+		
+		taxPublishService.insertTaxPublishList(taxPublishVO);
+		
+		TaxPublishVO t = taxPublishVO;
+		String params = "";
+		params = params + "&bondStatN=" + t.getBondStatN();
+		params = params + "&bondStatY=" + t.getBondStatY();
+		params = params + "&bondStatC=" + t.getBondStatC();
+		params = params + "&untilToday=" + t.getUntilToday();
+		params = params + "&searchSj=" + URLEncoder.encode(t.getSearchSj(), "UTF-8");
+		params = params + "&userNm=" + URLEncoder.encode(t.getUserNm(), "UTF-8");
+		params = params + "&searchNm=" + URLEncoder.encode(t.getSearchNm(), "UTF-8");
+		params = params + "&searchCompanyCd=" + URLEncoder.encode(t.getSearchCompanyCd(), "UTF-8");
+		params = params + "&pageIndex=" + Integer.toString(t.getPageIndex());
+		
+		return "redirect:/support/taxPublishV.do?bondId=" + taxPublishVO.getBondId() + params;
+	}
+	
+	@RequestMapping("/support/taxPublishM.do")
+	public String selectTaxPublishM(@ModelAttribute("taxPublishVO") TaxPublishVO taxPublishVO,
+			HttpServletRequest request, HttpServletResponse response,
+			ModelMap model, Map<String, Object> commandMap) throws Exception{
+		
+		/* 회사구분을 불러옵니다. Start */
+		ComDefaultCodeVO vo = new ComDefaultCodeVO();
+		vo.setCodeId("KMS007");
+		List companyList = cmmUseService.selectCmmCodeDetail(vo);
+		model.addAttribute("companyList", companyList);
+		/* 회사구분을 불러옵니다. End */
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("bondId", commandMap.get("bondId"));
+		
+		TaxPublishVO result = taxPublishService.selectTaxPublish(param);
+		List<TaxPublishVO> resultExpenseList = taxPublishService.selectBondExpenseList(param);
+		List<TaxPublishVO> resultProjectList = taxPublishService.selectBondProjectList(param);
+		
+		/* 공급가액, 세액, 총액 관련 Start */
+		long supSum = 0;
+		long taxSum = 0;
+		long pubSum = 0;
+		for (int i = 0; i < resultExpenseList.size(); i++) {
+			long supExp = resultExpenseList.get(i).getSupplyExpense();
+			long taxExp = resultExpenseList.get(i).getTaxExpense();
+			supSum = supSum + supExp;
+			taxSum = taxSum + taxExp;
+			pubSum = pubSum + supExp + taxExp;
+		}
+		result.setSupSum(supSum);
+		result.setTaxSum(taxSum);
+		result.setPubSum(pubSum);
+		/* 공급가액, 세액, 총액 관련 End */
+		
+		model.addAttribute("taxPublishVO", taxPublishVO);
+		model.addAttribute("result", result);
+		model.addAttribute("resultExpenseList", resultExpenseList);
+		model.addAttribute("resultExpenseCnt", resultExpenseList.size());
+		model.addAttribute("resultProjectList", resultProjectList);
+		model.addAttribute("resultProjectCnt", resultProjectList.size());
+		
+		return "support/sprt_taxPublishM";
+	}
+	
+	@RequestMapping("/support/taxPublishU.do")
+	public String updateTaxPublish(@ModelAttribute("taxPublishVO") TaxPublishVO taxPublishVO,
+			MultipartHttpServletRequest multiRequest, HttpServletRequest request, HttpServletResponse response,
+			String jsonExpenseString, String jsonProjectString,
+			ModelMap model, Map<String, Object> commandMap) throws Exception{
+		
+		/* 수정하려는 세금계산서가  미발행 상태인지 검사합니다. Start */
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("bondId", commandMap.get("bondId"));
+		
+		TaxPublishVO chkPublishStat = taxPublishService.selectTaxPublish(param);
+		
+		if (!chkPublishStat.getBondStat().equals("N") && !chkPublishStat.getBondStat().equals("C")) {
+			model.addAttribute("message","미발행 상태의 세금계산서만 수정할 수 있습니다.");
+			model.addAttribute("redirectUrl", "/support/taxPublishV.do?bondId=" + taxPublishVO.getBondId());
+			return "error/messageRedirect";
+		}
+		/* 수정하려는 세금계산서가  미발행 상태인지 검사합니다. End */
+		
+		taxPublishVO.setJsonExpenseString(jsonExpenseString);
+		taxPublishVO.setJsonProjectString(jsonProjectString);
+		
+		/* 파일첨부 Start */
+		String atchFileId = taxPublishVO.getAtchFileId();
+
+		final Map<String, MultipartFile> files = multiRequest.getFileMap();
+		if (!files.isEmpty()) {
+		if (atchFileId == null || "".equals(atchFileId) ) {
+			List<FileVO> result = fileUtil.parseFileInf(files, "BBS_", 0, atchFileId, "");
+			atchFileId = fileMngService.insertFileInfs(result);
+			taxPublishVO.setAtchFileId(atchFileId);
+		} else {
+			FileVO fvo = new FileVO();
+			fvo.setAtchFileId(atchFileId);
+			int cnt = fileMngService.getMaxFileSN(fvo);
+			List<FileVO> _result = fileUtil.parseFileInf(files, "BBS_", cnt, atchFileId, "");
+			fileMngService.updateFileInfs(_result);
+		}
+		}
+		/* 파일첨부 End */
+		
+		taxPublishService.updateTaxPublishList(taxPublishVO);
+		
+		TaxPublishVO t = taxPublishVO;
+		String params = "";
+		params = params + "&bondStatN=" + t.getBondStatN();
+		params = params + "&bondStatY=" + t.getBondStatY();
+		params = params + "&bondStatC=" + t.getBondStatC();
+		params = params + "&untilToday=" + t.getUntilToday();
+		params = params + "&searchSj=" + URLEncoder.encode(t.getSearchSj(), "UTF-8");
+		params = params + "&userNm=" + URLEncoder.encode(t.getUserNm(), "UTF-8");
+		params = params + "&searchNm=" + URLEncoder.encode(t.getSearchNm(), "UTF-8");
+		params = params + "&searchCompanyCd=" + URLEncoder.encode(t.getSearchCompanyCd(), "UTF-8");
+		params = params + "&pageIndex=" + Integer.toString(t.getPageIndex());
+		
+		return "redirect:/support/taxPublishV.do?bondId=" + taxPublishVO.getBondId() + params;
+	}
+	
+	@RequestMapping("/support/taxPublishD.do")
+	public String deleteTaxPublish(@ModelAttribute("taxPublishVO") TaxPublishVO taxPublishVO,
+			HttpServletRequest request, HttpServletResponse response,
+			String jsonExpenseString, String jsonProjectString,
+			ModelMap model, Map<String, Object> commandMap) throws Exception{
+		
+		taxPublishService.deleteTaxPublishList(taxPublishVO);
+		
+		TaxPublishVO t = taxPublishVO;
+		String params = "";
+		params = params + "?bondStatN=" + t.getBondStatN();
+		params = params + "&bondStatY=" + t.getBondStatY();
+		params = params + "&bondStatC=" + t.getBondStatC();
+		params = params + "&untilToday=" + t.getUntilToday();
+		params = params + "&searchSj=" + URLEncoder.encode(t.getSearchSj(), "UTF-8");
+		params = params + "&userNm=" + URLEncoder.encode(t.getUserNm(), "UTF-8");
+		params = params + "&searchNm=" + URLEncoder.encode(t.getSearchNm(), "UTF-8");
+		params = params + "&searchCompanyCd=" + URLEncoder.encode(t.getSearchCompanyCd(), "UTF-8");
+		params = params + "&pageIndex=" + Integer.toString(t.getPageIndex());
+		
+		return "redirect:/support/taxPublishL.do" + params;
+	}
+	
+	@RequestMapping("/support/taxPublishProjectM.do")
+	public String selectTaxProjectM(@ModelAttribute("taxPublishVO") TaxPublishVO taxPublishVO,
+			HttpServletRequest request, HttpServletResponse response,
+			ModelMap model, Map<String, Object> commandMap) throws Exception{
+
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("bondId", commandMap.get("bondId"));
+		
+		TaxPublishVO result = taxPublishService.selectTaxPublish(param);
+		List<TaxPublishVO> resultExpenseList = taxPublishService.selectBondExpenseList(param);
+		List<TaxPublishVO> resultProjectList = taxPublishService.selectBondProjectList(param);
+		
+		/* 공급가액, 세액, 총액 관련 Start */
+		long supSum = 0;
+		long taxSum = 0;
+		long pubSum = 0;
+		for (int i = 0; i < resultExpenseList.size(); i++) {
+			long supExp = resultExpenseList.get(i).getSupplyExpense();
+			long taxExp = resultExpenseList.get(i).getTaxExpense();
+			supSum = supSum + supExp;
+			taxSum = taxSum + taxExp;
+			pubSum = pubSum + supExp + taxExp;
+		}
+		result.setSupSum(supSum);
+		result.setTaxSum(taxSum);
+		result.setPubSum(pubSum);
+		/* 공급가액, 세액, 총액 관련 End */
+		
+		model.addAttribute("taxPublishVO", taxPublishVO);
+		model.addAttribute("result", result);
+		model.addAttribute("resultExpenseList", resultExpenseList);
+		model.addAttribute("resultProjectList", resultProjectList);
+		model.addAttribute("resultProjectCnt", resultProjectList.size());
+		
+		return "support/sprt_taxPublishProjectM";
+	}
+	
+	@RequestMapping("/support/taxPublishProjectU.do")
+	public String updateTaxPublishProject(@ModelAttribute("taxPublishVO") TaxPublishVO taxPublishVO,
+			HttpServletRequest request, HttpServletResponse response, String jsonProjectString,
+			ModelMap model, Map<String, Object> commandMap) throws Exception{
+		
+		taxPublishVO.setJsonProjectString(jsonProjectString);
+		
+		taxPublishService.updateTaxPublishProjectList(taxPublishVO);
+		
+		TaxPublishVO t = taxPublishVO;
+		String params = "";
+		params = params + "&bondStatN=" + t.getBondStatN();
+		params = params + "&bondStatY=" + t.getBondStatY();
+		params = params + "&bondStatC=" + t.getBondStatC();
+		params = params + "&untilToday=" + t.getUntilToday();
+		params = params + "&searchSj=" + URLEncoder.encode(t.getSearchSj(), "UTF-8");
+		params = params + "&userNm=" + URLEncoder.encode(t.getUserNm(), "UTF-8");
+		params = params + "&searchNm=" + URLEncoder.encode(t.getSearchNm(), "UTF-8");
+		params = params + "&searchCompanyCd=" + URLEncoder.encode(t.getSearchCompanyCd(), "UTF-8");
+		params = params + "&pageIndex=" + Integer.toString(t.getPageIndex());
+		
+		return "redirect:/support/taxPublishV.do?bondId=" + taxPublishVO.getBondId() + params;
+	}
+	
+	@RequestMapping("/support/taxPublishStateU.do")
+	public String updateTaxPublishState(@ModelAttribute("taxPublishVO") TaxPublishVO taxPublishVO,
+			HttpServletRequest request, HttpServletResponse response,
+			ModelMap model, Map<String, Object> commandMap) throws Exception{
+
+		MemberVO user = SessionUtil.getMember(request);
+		taxPublishVO.setFnshUserNo(user.getUserNo());
+		
+		taxPublishService.updateTaxPublishState(taxPublishVO);
+		
+		TaxPublishVO t = taxPublishVO;
+		String params = "";
+		params = params + "&bondStatN=" + t.getBondStatN();
+		params = params + "&bondStatY=" + t.getBondStatY();
+		params = params + "&bondStatC=" + t.getBondStatC();
+		params = params + "&untilToday=" + t.getUntilToday();
+		params = params + "&searchSj=" + URLEncoder.encode(t.getSearchSj(), "UTF-8");
+		params = params + "&userNm=" + URLEncoder.encode(t.getUserNm(), "UTF-8");
+		params = params + "&searchNm=" + URLEncoder.encode(t.getSearchNm(), "UTF-8");
+		params = params + "&searchCompanyCd=" + URLEncoder.encode(t.getSearchCompanyCd(), "UTF-8");
+		params = params + "&pageIndex=" + Integer.toString(t.getPageIndex());
+		
+		return "redirect:/support/taxPublishV.do?bondId=" + taxPublishVO.getBondId() + params;
+	}
+}

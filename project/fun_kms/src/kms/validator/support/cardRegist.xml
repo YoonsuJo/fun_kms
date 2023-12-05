@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC 
+    "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1//EN" 
+    "http://jakarta.apache.org/commons/dtds/validator_1_1.dtd">
+
+<form-validation>
+
+    <formset>
+		<form name="cardReg">
+			<field property="cardId" depends="required,  maxlength, minlength">
+        		<arg0 key="카드번호" />
+        		<arg1 key="19" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>19</var-value>
+				</var>
+				<arg2 key="19" resource="false"/>
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>19</var-value>
+				</var>
+			</field>			
+			<field property="expiryYear" depends="required,integer, ,maxlength, minlength">
+        		<arg0 key="유효기간 - 년" />
+        		<arg1 key="4" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>4</var-value>
+				</var>
+				<arg2 key="4" resource="false"/>
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>4</var-value>
+				</var>
+			</field> 
+			<field property="expiryMonth" depends="required,integer,maxlength, minlength">
+        		<arg0 key="유효기간 - 월" />
+        		<arg1 key="2" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>2</var-value>
+				</var>
+				<arg2 key="1" resource="false"/>
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>1</var-value>
+				</var>
+			</field> 
+			<field property="companyCd" depends="required">
+        		<arg0 key="회사구분" />
+			</field>
+			<field property="limitSpend" depends="required">
+        		<arg0 key="한도" />
+			</field>
+			<field property="stat" depends="required">
+        		<arg0 key="카드상태" />
+			</field>
+		</form>
+    </formset>
+
+</form-validation>

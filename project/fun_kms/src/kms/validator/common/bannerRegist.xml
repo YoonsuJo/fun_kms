@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC 
+    "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1//EN" 
+    "http://jakarta.apache.org/commons/dtds/validator_1_1.dtd">
+
+<form-validation>
+
+    <formset>
+		<form name="KmsBanner">
+			<field property="bnrSj" depends="required, maxlength">
+        		<arg0 key="제목" />
+        		<arg1 key="100" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+			</field>			
+			<field property="bnrCn" depends="required, maxlength">
+        		<arg0 key="설명" />
+        		<arg1 key="65535" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>65535</var-value>
+				</var>
+			</field>
+			<field property="linkUrl" depends="required">
+        		<arg0 key="링크페이지 Url" />
+			</field> 
+			<field property="popYn" depends="required">
+        		<arg0 key="팝업여부" />
+			</field>
+			<field property="useAt" depends="required">
+        		<arg0 key="사용여부" />
+			</field>
+			<field property="ntceSdt" depends="required">
+        		<arg0 key="게시기간" />
+			</field>
+			<field property="ntceEdt" depends="required">
+        		<arg0 key="게시기간" />
+			</field>
+			<field property="popWidth" depends="integer, intRange">
+        		<arg0 key="팝업사이즈(X)" />
+        		<arg1 name="intRange" key="${var:min}" resource="false" />
+				<arg2 name="intRange" key="${var:max}" resource="false"/>
+				<var>
+					<var-name>min</var-name>
+					<var-value>100</var-value>
+				</var>
+				<var>
+					<var-name>max</var-name>
+					<var-value>1920</var-value>
+				</var>			
+			</field>
+			<field property="popHeight" depends="integer, intRange">
+        		<arg0 key="팝업사이즈(Y)" />
+        		<arg1 name="intRange" key="${var:min}" resource="false" />
+				<arg2 name="intRange" key="${var:max}" resource="false"/>
+				<var>
+					<var-name>min</var-name>
+					<var-value>100</var-value>
+				</var>
+				<var>
+					<var-name>max</var-name>
+					<var-value>1920</var-value>
+				</var>			
+			</field>
+		</form>
+    </formset>
+
+</form-validation>

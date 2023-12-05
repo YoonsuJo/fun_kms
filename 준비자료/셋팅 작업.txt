@@ -1,0 +1,27 @@
+* DB 작업
+
+1. database 생성 : kms_2110 으로 만듬
+
+2. 사용자 생성
+user_init.sql 실행 (skms 사용자 생성)
+
+3. 데이터베이스에 권한 설정
+grant all privileges on kms.* to 'skms'@'%';
+grant all privileges on kms_2110.* to 'skms'@'%';
+
+flush privileges;
+
+
+3. 백업 파일 import
+kms_2110.sql 실행
+
+
+* 이클립스
+propertis - java Build Path - jdk1.7.0_71 선택
+propertis - java Compiler - 1.7 선택
+Tomcat - Overview - Runtime Environment - ApacheTomcat v7.0
+Tomcat - Overview - Runtime Environment - JRE : jdk1.7.0_71
+Modules - Path - "/" 로 수정
+
+lombok.jar 더블클릭 - install 후 이클립스 기동 안되는 현상 발생
+- 조치 : eclipse 폴더 하단 eclipse.ini  최하단 -javaagent:lombok.jar 로 수정 후 실행

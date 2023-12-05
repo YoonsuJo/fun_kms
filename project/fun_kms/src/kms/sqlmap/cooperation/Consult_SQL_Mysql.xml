@@ -1,0 +1,1726 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsConsultDAO">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="customerVO" type="kms.com.cooperation.service.CustomerVO"/>
+	<typeAlias  alias="consultCommentVO" type="kms.com.cooperation.service.ConsultCommentVO"/>
+	<typeAlias  alias="consultManage" type="kms.com.cooperation.service.ConsultManage"/>
+	
+	<resultMap id="consultCommentList" class="kms.com.cooperation.service.ConsultCommentVO">
+		<result property="no"			column="NO"				columnIndex="1"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="2"/>
+		<result property="consult_no"	column="CONSULT_NO"		columnIndex="3"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="4"/>
+		<result property="userId"		column="USER_ID"		columnIndex="5"/>
+		<result property="atchFileId"	column="ATCH_FILE_ID"	columnIndex="6"/>
+		<result property="regDt"		column="REG_DT"			columnIndex="7"/>
+		<result property="udtDt"		column="UDT_DT"			columnIndex="8"/>
+		<result property="cn"		    column="CN"			    columnIndex="9"/>
+	</resultMap>
+	
+	<resultMap id="consultManageRecieveList" class="kms.com.cooperation.service.ConsultManage">
+		<result property="no"			column="NO"				columnIndex="1"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="2"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="3"/>
+		<result property="userId"		column="USER_ID"		columnIndex="4"/>
+		<result property="consultNo"	column="CONSULT_NO"		columnIndex="5"/>
+		<result property="recieveTyp"	column="RECIEVE_TYP"	columnIndex="6"/>
+		<result property="readtime"		column="READ_TM"		columnIndex="7"/>
+	</resultMap>
+	
+	<resultMap id="consultManageInfo" class="kms.com.cooperation.service.ConsultManage">
+		<result property="cust_nm"			column="CUST_NM"		columnIndex="1"/>
+		<result property="cust_manager"		column="CUST_MANAGER"	columnIndex="2"/>
+		<result property="cust_telno"		column="CUST_TELNO"		columnIndex="3"/>
+		<result property="user_nm"			column="USER_NM"		columnIndex="4"/>
+		<result property="reg_dt"			column="REG_DT"			columnIndex="5"/>
+		<result property="typ"				column="TYP"			columnIndex="6"/>
+		<result property="service_typ"		column="SERVICE_TYP"	columnIndex="7"/>
+		<result property="error_typ"		column="ERROR_TYP"		columnIndex="8"/>
+		<result property="state"			column="STATE"			columnIndex="9"/>
+		<result property="complete_date"	column="COMPLETE_DATE"	columnIndex="10"/>
+		<result property="complete_tm"		column="COMPLETE_TM"	columnIndex="11"/>
+		<result property="satisfaction"		column="SATISFACTION"	columnIndex="12"/>
+		<result property="jira_yn"			column="JIRA_YN"		columnIndex="13"/>
+		<result property="jira_code"		column="JIRA_CODE"		columnIndex="14"/>
+		<result property="issue_yn"			column="ISSUE_YN"		columnIndex="15"/>
+		<result property="sms_yn"			column="SMS_YN"			columnIndex="16"/>				
+		<result property="end_date"			column="END_DATE"		columnIndex="17"/>
+		<result property="q_cn"				column="Q_CN"			columnIndex="18"/>
+		<result property="a_cn"				column="A_CN"			columnIndex="19"/>
+		<result property="s_cn"				column="S_CN"			columnIndex="20"/>
+		<result property="atch_file_id"		column="ATCH_FILE_ID"	columnIndex="21"/>
+		<result property="consult_no"		column="CONSULT_NO"		columnIndex="22"/>
+		<result property="userNo"			column="USERNO"			columnIndex="23"/>
+		<result property="cust_no"			column="CUST_NO"		columnIndex="24"/>
+		<result property="cno"				column="C_NO"			columnIndex="25"/>
+		<result property="cust_email"		column="CUST_EMAIL"		columnIndex="26"/>
+		<result property="request_id"		column="REQUEST_ID"		columnIndex="27"/>
+		<result property="receive_typ"		column="RECEIVE_TYP"	columnIndex="28"/>
+		<result property="contact_dt"		column="CONTACT_DT"		columnIndex="29"/>
+		<result property="compny_id"		column="COMPNY_ID"		columnIndex="30"/>
+		<result property="comp_cn"			column="COMP_CN"		columnIndex="31"/>
+		<result property="comp_file_id"		column="COMP_FILE_ID"	columnIndex="32"/>
+		<result property="comp_duration"	column="COMP_DURATION"	columnIndex="33"/>
+		<result property="detail_typ"		column="DETAIL_TYP"		columnIndex="34"/>
+	</resultMap>
+	
+	<resultMap id="consultStateInfo" class="kms.com.cooperation.service.ConsultManage">
+		<result property="state"			column="STATE"			columnIndex="1"/>
+		<result property="complete_date"	column="COMPLETE_DATE"	columnIndex="2"/>
+		<result property="complete_tm"		column="COMPLETE_TM"	columnIndex="3"/>
+		<result property="satisfaction"		column="SATISFACTION"	columnIndex="4"/>
+		<result property="consult_no"		column="CONSULT_NO"		columnIndex="5"/>
+		<result property="writer_no"		column="WRITER_NO"		columnIndex="6"/>
+		<result property="cno"				column="C_NO"			columnIndex="7"/>
+	</resultMap>
+	
+	<resultMap id="consultJiraInfo" class="kms.com.cooperation.service.ConsultManage">
+		<result property="jira_yn"			column="JIRA_YN"		columnIndex="1"/>
+		<result property="jira_code"		column="JIRA_CODE"		columnIndex="2"/>
+		<result property="consult_no"		column="CONSULT_NO"		columnIndex="3"/>
+	</resultMap>	
+	
+	<!-- 고객사 관리 리스트 -->
+	<select id="ConsultCustomerDAO.selectCustomerList" resultClass="egovMap">
+	
+	SELECT jj.* 
+	FROM (
+			SELECT
+				cust.no
+				, cust.cust_nm
+				, cust.cust_manager
+				, cust.cust_telno
+				, cust.typ
+				, code.code_nm AS typ_nm
+				, cust.load_dt
+				, cust.ip1
+				, cust.ip2
+				, cust.ip3
+				, cust.ip4
+				, cust.ip5
+				, cust.db1
+				, cust.db2
+				, cust.db3
+				, cust.db4
+				, cust.db5
+				, cust.remote_info
+				, cust.etc_info
+				, cust.use_at
+				, cust.cust_email
+			FROM
+				tbl_consult_customer cust
+				LEFT JOIN comtccmmndetailcode code
+				ON cust.typ = code.code
+				AND code.code_id = 'KMS020'
+		) jj
+	WHERE
+		1=1 
+		<isNotEmpty prepend="AND (" property="searchCust">
+			jj.cust_nm LIKE CONCAT('%',#searchCust#,'%')
+		 OR jj.cust_manager LIKE CONCAT('%',#searchCust#,'%')
+		 OR jj.cust_telno LIKE CONCAT('%',#searchCust#,'%')
+		 OR jj.cust_email LIKE CONCAT('%',#searchCust#,'%')
+		 )
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchCustManager">
+			jj.cust_manager LIKE CONCAT('%',#searchCustManager#,'%')
+		</isNotEmpty>
+	AND jj.use_at='Y'
+	ORDER BY
+		jj.no DESC
+	LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<!--고객사관리 리스트 건수  -->
+	<select id="ConsultCustomerDAO.selectCustomerListCnt" resultClass="java.lang.Integer">
+	SELECT
+		COUNT(*)
+	FROM
+		tbl_consult_customer
+	WHERE
+		1=1 
+		<isNotEmpty prepend="AND (" property="searchCust">
+			cust_nm LIKE CONCAT('%', #searchCust#, '%')
+		 OR cust_manager LIKE CONCAT('%',#searchCust#,'%')
+		 OR cust_telno LIKE CONCAT('%',#searchCust#,'%')
+		 OR cust_email LIKE CONCAT('%',#searchCust#,'%')
+		 )
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchCustManager">
+			cust_manager LIKE CONCAT('%', #searchCustManager#, '%')
+		</isNotEmpty>
+		AND use_at='Y'
+	ORDER BY
+		no DESC
+	</select>
+	
+	<!--고객사관리 상세화면  -->
+	<select id="ConsultCustomerDAO.selectCustomer" resultClass="egovMap">
+	SELECT
+				no
+		, cust_nm
+		, cust_manager
+		, cust_telno
+		, typ
+		, load_dt
+		, ip1
+		, ip2
+		, ip3
+		, ip4
+		, ip5
+		, db1
+		, db2
+		, db3
+		, db4
+		, db5
+		, remote_info
+		, etc_info
+		, cust_email
+	FROM
+		tbl_consult_customer
+	WHERE
+		no = #no#
+	</select>
+	
+	<!-- 고객사관리 등록 -->
+	<insert id="ConsultCustomerDAO.insertCustomer">
+	INSERT INTO
+		tbl_consult_customer
+		(
+			cust_nm
+			, cust_manager
+			, cust_telno
+			, typ
+			, load_dt
+			, ip1
+			, ip2
+			, ip3
+			, ip4
+			, ip5
+			, db1
+			, db2
+			, db3
+			, db4
+			, db5
+			, remote_info
+			, etc_info
+			, use_at
+			, cust_email
+		)
+		VALUES
+		(
+			#custNm#
+			, #custManager#
+			, #custTelno#
+			, #typ#
+			, #loadDt#
+			, #ip1#
+			, #ip2#
+			, #ip3#
+			, #ip4#
+			, #ip5#
+			, #db1#
+			, #db2#
+			, #db3#
+			, #db4#
+			, #db5#
+			, #remoteInfo#
+			, #etcInfo#
+			, 'Y'
+			, #custEmail#
+		)
+	</insert>
+	
+	<!-- 고객사관리 수정 -->
+	<update id="ConsultCustomerDAO.updateCustomer">
+	UPDATE
+		tbl_consult_customer
+	SET
+		cust_nm = #custNm#
+		, cust_manager = #custManager#
+		, cust_telno = #custTelno#
+		, typ = #typ#
+		, load_dt = #loadDt#
+		, ip1 = #ip1#
+		, ip2 = #ip2#
+		, ip3 = #ip3#
+		, ip4 = #ip4#
+		, ip5 = #ip5#
+		, db1 = #db1#
+		, db2 = #db2#
+		, db3 = #db3#
+		, db4 = #db4#
+		, db5 = #db5#
+		, remote_info = #remoteInfo#
+		, etc_info = #etcInfo#
+		, cust_email = #custEmail#
+	WHERE
+		no = #no#
+	</update>
+	
+	<!-- 고객사관리 삭제 -->
+	<update id="ConsultCustomerDAO.deleteCustomer">
+	UPDATE
+		tbl_consult_customer
+	SET
+		use_at = 'N'
+	WHERE
+		no = #no#
+	</update>
+	
+	<select id="ConsultCustomerDAO.selectConsultStatList" resultClass="egovMap">
+		SELECT
+			con.NO,
+			con.TYP,
+			con.SERVICE_TYP,
+			con.ERROR_TYP,
+			con.DETAIL_TYP,
+			con.COMP_DURATION
+		FROM
+			tbl_consult con
+			LEFT JOIN tbl_consult_recieve rec
+			ON rec.RECIEVE_TYP = 'CM'
+			AND rec.CONSULT_NO = con.CONSULT_NO
+		WHERE
+			con.use_at = 'Y'
+			AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+			<isNotEqual prepend="AND" property="userNo" compareValue="0">
+				rec.USER_NO = #userNo#
+			</isNotEqual>
+		GROUP BY con.NO
+	</select>
+	
+	
+	<!-- 상담관리 리스트 -->
+	<select id="ConsultCustomerDAO.selectConsultManageList" resultClass="egovMap">
+<!--<select id="ConsultCustomerDAO.selectConsultManageList" parameterClass="customerVO" resultClass="egovMap"> -->
+	
+	SELECT
+		c.*
+		, COUNT(DISTINCT CMT.NO) AS comment_cnt
+		, FLOOR(c.REMAIN_TOTAL_MIN/60) AS remain_hour 
+		, (c.REMAIN_TOTAL_MIN - FLOOR(c.REMAIN_TOTAL_MIN/60) * 60) AS remain_min
+	FROM
+	(
+		SELECT 
+				CON.NO,
+				CON.CUST_NM,
+				CON.CUST_MANAGER,
+				CON.CUST_TELNO,
+				DATE_FORMAT(CON.REG_DT, '%Y-%m-%d %H') REG_DT,
+				DATE_FORMAT(CON.END_DATE, '%Y%m%d') END_DT,
+				CON.REG_DT AS REG_DT_ORI,
+				CON.TYP,
+				CON.SERVICE_TYP,
+				CON.ERROR_TYP,
+				CON.DETAIL_TYP,
+				CON.STATE,
+				IF(CON.request_id IS NULL, 'N', 'Y') AS REQUEST_YN,
+				CON.Q_CN,
+				CON.A_CN,
+				CON.CONSULT_NO,
+				CON.SATISFACTION,
+				CON.ISSUE_YN,
+				CON.USE_AT,
+				USR.NO AS USER_NO,
+				USR.USER_ID AS USER_ID,
+				USR.USER_NM AS USER_NM,
+				IF(SUM(IF((REC.READ_TM IS NULL), 1, 0)), '열람중', '완료') AS READ_STAT,
+				GROUP_CONCAT(IF(REC.RECIEVE_TYP = 'RE', CONCAT(U.USER_NM, ','), '') SEPARATOR '')  AS CHARGED,
+				GROUP_CONCAT(IF(REC.RECIEVE_TYP = 'CM', CONCAT(U.USER_NM, ','), '') SEPARATOR '')  AS COMP,
+				GROUP_CONCAT(IF(REC.RECIEVE_TYP = 'RE', CONCAT(U.USER_NM, '(', U.USER_ID ,')', ','), '') SEPARATOR '')  AS CHARGED_WORK,
+				GROUP_CONCAT(IF(REC.RECIEVE_TYP = 'RF', CONCAT(U.USER_NM, ','), '') SEPARATOR '')  AS ADD_LIST,
+				IF(SUM(IF(REC.USER_NO = #searchUserNo# AND REC.READ_TM IS NULL, 1, 0)), 'Y', 'N') AS RED,
+				CON.CONTACT_DT AS CONTACT_DT_ORI,
+				CON.COMPNY_ID,
+				CON.COMP_CN,
+				CON.COMP_FILE_ID,
+				CON.COMP_DURATION,
+				<![CDATA[
+				IF((TIMESTAMPDIFF(MINUTE, SYSDATE(), CON.CONTACT_DT) < 0) OR CON.CONTACT_DT IS NULL, 0, TIMESTAMPDIFF(MINUTE, SYSDATE(), CON.CONTACT_DT))  AS REMAIN_TOTAL_MIN
+				]]>,
+				CON.COMPLETE_DATE,
+				CON.COMPLETE_TM
+		FROM
+				tbl_consult con
+				INNER JOIN TBL_USERINFO USR
+				ON CON.WRITER_NO = USR.NO
+				INNER JOIN TBL_CONSULT_RECIEVE REC
+				ON REC.RECIEVE_TYP IN ('RE', 'RF', 'CM')
+				AND CON.CONSULT_NO = REC.CONSULT_NO
+				INNER JOIN TBL_USERINFO U
+				ON REC.USER_NO = U.NO
+		WHERE
+			TRUE
+			AND CON.USE_AT='Y'
+			<isNotEmpty prepend="AND" property="searchCuNm">
+				CON.cust_nm LIKE CONCAT('%',#searchCuNm#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchCuNm2"> <!-- 추가부분  -->
+				CON.cust_nm LIKE CONCAT('%',#searchCuNm2#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="excludeUserChangeTyp"> <!--  유저수변경 제외 -->
+						CON.service_typ != 6
+					</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchcustManager">
+				CON.cust_manager LIKE CONCAT('%',#searchcustManager#,'%')
+			</isNotEmpty>			
+			<isNotEmpty prepend="AND" property="searchQCn"><!--상담내용  -->
+				CON.q_cn LIKE CONCAT('%',#searchQCn#,'%')
+			</isNotEmpty>
+			<isNotEmpty property="searchTyp">
+				<iterate prepend="AND CON.typ IN " open="(" close=")" conjunction="," property="searchTyp">
+					#searchTyp[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty property="searchServiceTyp">
+				<iterate prepend="AND CON.service_typ IN " open="(" close=")" conjunction="," property="searchServiceTyp">
+					#searchServiceTyp[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty property="searchErrorTyp">
+				<iterate prepend="AND CON.error_typ IN " open="(" close=")" conjunction="," property="searchErrorTyp">
+					#searchErrorTyp[]#
+				</iterate>
+			</isNotEmpty>
+					<isNotEmpty property="searchState">
+				<iterate prepend="AND CON.state IN " open="(" close=")" conjunction="," property="searchState">
+					#searchState[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty property="searchReceiveTyp">
+				<iterate prepend="AND CON.receive_typ IN " open="(" close=")" conjunction="," property="searchReceiveTyp">
+					#searchReceiveTyp[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty property="searchDetailTyp">
+				<iterate prepend="AND CON.detail_typ IN " open="(" close=")" conjunction="," property="searchDetailTyp">
+					#searchDetailTyp[]#
+				</iterate>
+			</isNotEmpty>
+			<isEqual prepend="AND" property="defaultSearchState" compareValue="Y">
+				CON.state IN (1, 2)
+			</isEqual>
+			<isNotEmpty prepend="AND" property="searchSatisfaction">
+				CON.satisfaction = #searchSatisfaction#
+			</isNotEmpty>
+			
+			<isNotEmpty prepend="AND" property="searchJiraYn">
+				CON.jira_yn = #searchJiraYn#
+			</isNotEmpty>	         
+			<isNotEmpty prepend="AND" property="searchIssueYn">
+				CON.issue_yn = #searchIssueYn#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchRegDtS">
+				<![CDATA[
+				DATE_FORMAT(CON.reg_dt, '%Y%m%d') >= #searchRegDtS#
+				]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchRegDtE">
+				<![CDATA[
+				DATE_FORMAT(CON.reg_dt, '%Y%m%d') <= #searchRegDtE#
+				]]>
+			</isNotEmpty>
+				GROUP BY
+			CON.CONSULT_NO
+		<isEqual property="defaultSearchState" compareValue="Y">
+		HAVING
+			SUM(IF(REC.USER_NO = #searchUserNo#, 1, 0)) > 0
+				</isEqual>
+		ORDER BY
+			CON.REG_DT DESC
+			, CON.NO ASC
+	) c
+	LEFT JOIN TBL_CONSULT_COMMENT CMT
+	ON c.CONSULT_NO = CMT.CONSULT_NO
+	AND CMT.USE_AT = 'Y'
+	WHERE
+		1=1
+		<isNotEmpty prepend="AND" property="searchOpen">
+			C.READ_STAT = #searchOpen#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDamNm">
+			C.COMP LIKE CONCAT('%',#searchDamNm#,'%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchConNm"><!--상담원  -->
+			C.user_nm LIKE CONCAT('%',#searchConNm#,'%')
+		</isNotEmpty>
+	GROUP BY
+		c.CONSULT_NO
+	<!--
+	ORDER BY
+		c.NO DESC,
+		c.RED DESC
+	-->
+	ORDER BY
+		<isEqual property="excel" compareValue="Y">
+			c.SERVICE_TYP, c.ERROR_TYP, c.TYP, c.CUST_NM,
+				</isEqual>
+				<isEqual property="fromResultView" compareValue="Y">
+					c.NO DESC,
+				</isEqual>
+		c.STATE ASC,
+		c.CONTACT_DT_ORI ASC
+	</select>
+	
+	
+	<!--상담관리 리스트 건수  -->
+	<select id="ConsultCustomerDAO.selectConsultManageListCnt" resultClass="java.lang.Integer">
+	SELECT
+		COUNT(k.NO)
+	FROM
+		(
+		SELECT 
+			CON.NO
+			,IF(SUM(IF((REC.READ_TM IS NULL), 1, 0)), '열람중', '완료') AS READ_STAT
+			,GROUP_CONCAT(IF(REC.RECIEVE_TYP = 'RE', CONCAT(U.USER_NM, ','), '') SEPARATOR '')  AS CHARGED
+			,GROUP_CONCAT(IF(REC.RECIEVE_TYP = 'CM', CONCAT(U.USER_NM, ','), '') SEPARATOR '')  AS COMP
+			,USR.USER_NM AS USER_NM
+			FROM tbl_consult con
+			INNER JOIN TBL_USERINFO USR
+			ON CON.WRITER_NO = USR.NO
+			INNER JOIN TBL_CONSULT_RECIEVE REC
+			ON REC.RECIEVE_TYP IN ('RE', 'RF')
+			AND CON.CONSULT_NO = REC.CONSULT_NO
+			INNER JOIN TBL_USERINFO U
+			ON REC.USER_NO = U.NO
+		WHERE
+			TRUE
+			AND CON.USE_AT = 'Y'
+			<isNotEmpty prepend="AND" property="searchCuNm">
+				CON.cust_nm LIKE CONCAT('%',#searchCuNm#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchCuNm2"> <!-- 추가부분  -->
+				CON.cust_nm LIKE CONCAT('%',#searchCuNm2#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="excludeUserChangeTyp"> <!--  유저수변경 제외 -->
+				CON.service_typ != 6
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchcustManager">
+				CON.cust_manager LIKE CONCAT('%',#searchcustManager#,'%')
+			</isNotEmpty>			
+			<isNotEmpty prepend="AND" property="searchQCn"><!--상담내용  -->
+				CON.q_cn LIKE CONCAT('%',#searchQCn#,'%')
+			</isNotEmpty>
+			<isNotEmpty property="searchTyp">
+				<iterate prepend="AND CON.typ IN " open="(" close=")" conjunction="," property="searchTyp">
+					#searchTyp[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty property="searchServiceTyp">
+				<iterate prepend="AND CON.service_typ IN " open="(" close=")" conjunction="," property="searchServiceTyp">
+					#searchServiceTyp[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty property="searchErrorTyp">
+				<iterate prepend="AND CON.error_typ IN " open="(" close=")" conjunction="," property="searchErrorTyp">
+					#searchErrorTyp[]#
+				</iterate>
+			</isNotEmpty>
+					<isNotEmpty property="searchState">
+				<iterate prepend="AND CON.state IN " open="(" close=")" conjunction="," property="searchState">
+					#searchState[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty property="searchReceiveTyp">
+				<iterate prepend="AND CON.receive_typ IN " open="(" close=")" conjunction="," property="searchReceiveTyp">
+					#searchReceiveTyp[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty property="searchDetailTyp">
+				<iterate prepend="AND CON.detail_typ IN " open="(" close=")" conjunction="," property="searchDetailTyp">
+					#searchDetailTyp[]#
+				</iterate>
+			</isNotEmpty>
+			<isEqual prepend="AND" property="defaultSearchState" compareValue="Y">
+				CON.state IN (1, 2)
+			</isEqual>
+			<isNotEmpty prepend="AND" property="searchSatisfaction">
+				CON.satisfaction = #searchSatisfaction#
+			</isNotEmpty>
+			
+			<isNotEmpty prepend="AND" property="searchJiraYn">
+				CON.jira_yn = #searchJiraYn#
+			</isNotEmpty>	         
+			<isNotEmpty prepend="AND" property="searchIssueYn">
+				CON.issue_yn = #searchIssueYn#
+			</isNotEmpty>  
+			<isNotEmpty prepend="AND" property="searchRegDtS">
+				<![CDATA[
+				DATE_FORMAT(CON.reg_dt, '%Y%m%d') >= #searchRegDtS#
+				]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchRegDtE">
+				<![CDATA[
+				DATE_FORMAT(CON.reg_dt, '%Y%m%d') <= #searchRegDtE#
+				]]>
+			</isNotEmpty>
+				GROUP BY
+			CON.CONSULT_NO
+		<isEqual property="defaultSearchState" compareValue="Y">
+		HAVING
+			SUM(IF(REC.USER_NO = #searchUserNo#, 1, 0)) > 0
+				</isEqual>
+		) k
+	WHERE
+		1=1
+		<isNotEmpty prepend="AND" property="searchOpen">
+			K.READ_STAT = #searchOpen#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDamNm">
+			K.COMP LIKE CONCAT('%', #searchDamNm#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchConNm"><!--상담원  -->
+			K.user_nm LIKE CONCAT('%',#searchConNm#,'%')
+		</isNotEmpty>
+	</select>
+	
+	<!--상담관리 상세화면  -->
+	<select id="ConsultCustomerDAO.selectConsultManage" resultMap="consultManageInfo">
+		SELECT
+			CON.NO AS C_NO,
+			CON.CUST_NO,
+			CON.CUST_NM,
+			CON.CUST_MANAGER,
+			CON.CUST_TELNO,
+			CON.CUST_EMAIL,
+			U.USER_NM,
+			CON.REG_DT,
+			CON.TYP,
+			CON.SERVICE_TYP,
+			CON.ERROR_TYP,
+			CON.DETAIL_TYP,
+			CON.STATE,
+			CON.COMPLETE_DATE,
+			CON.COMPLETE_TM,
+			CON.SATISFACTION,
+			CON.JIRA_YN,
+			CON.JIRA_CODE,
+			CON.ISSUE_YN,
+			CON.SMS_YN,
+			REPLACE(CON.END_DATE,'-','') AS END_DATE,
+			CON.Q_CN,
+			CON.A_CN,
+			CON.S_CN,
+			CON.ATCH_FILE_ID,
+			CON.CONSULT_NO,
+			U.NO AS USERNO,
+			CON.NO AS CUST_NO,
+			CON.REQUEST_ID,
+			CON.RECEIVE_TYP,
+			CON.CONTACT_DT,
+			CON.COMPNY_ID,
+			CON.COMP_CN,
+			CON.COMP_FILE_ID,
+			CON.COMP_DURATION
+		FROM tbl_consult con,  TBL_USERINFO U
+		WHERE 
+			con.consult_no = #consult_no#
+			AND CON.WRITER_NO = U.NO
+	</select>
+	
+	<!--상담관리 인서트  -->
+	<insert id="ConsultCustomerDAO.insertConsultManage">
+	insert into tbl_consult 
+	( 
+		cust_manager 
+		,cust_telno
+		,cust_email 
+		,typ 
+		,service_typ 
+		,error_typ 
+		,detail_typ
+		,q_cn 
+		,a_cn 
+		,atch_file_id 
+		,reg_dt 
+		,sms_yn 
+		,writer_no 
+		,use_at
+		,consult_no
+		,cust_nm
+		,state
+		,s_cn
+		,end_date
+		,jira_yn
+		,receive_typ
+		,contact_dt
+		,compny_id
+		,complete_date
+		,complete_tm
+		,comp_cn
+		,comp_file_id
+		,comp_duration
+		<isNotEmpty prepend="," property="cust_no">
+				 cust_no
+		</isNotEmpty>
+	)
+	values
+	(
+		#cust_manager# 
+		,#cust_telno#
+		,#cust_email#  
+		,#typ# 
+		,#service_typ# 
+		,#error_typ# 
+		,#detail_typ#
+		,#q_cn# 
+		,#a_cn# 
+		,#atch_file_id# 
+		, now()	
+		,#sms_yn# 
+		,#writer_no# 
+		,'Y'
+		,#consult_no#
+		,#cust_nm#
+		,#state#
+		,#s_cn#
+		,#end_date#
+		,'N'
+		,#receive_typ#
+		,#contact_dt#
+		,#compny_id#
+		,#complete_date#
+		,#complete_tm#
+		,#comp_cn#
+		,#comp_file_id#
+		,#comp_duration#
+		<isNotEmpty prepend="," property="cust_no">
+				 #cust_no#
+		</isNotEmpty>
+	)
+	
+	</insert>
+	
+	<!-- 상담관리 담당자/참조자 등록 -->	
+	<insert id="ConsultCustomerDAO.insertConsultManageRecieve">
+		INSERT INTO TBL_CONSULT_RECIEVE
+		(
+			USER_NO
+			,CONSULT_NO
+			,RECIEVE_TYP
+			,INTEREST_YN
+		) (
+			SELECT
+				USER_NO
+				,CONSULT_NO
+				,RECIEVE_TYP
+				,'N'
+			FROM (
+				SELECT
+					#userNo# AS USER_NO, #consultNo# AS CONSULT_NO, 'WR' AS RECIEVE_TYP
+			<isNotEmpty property="chargedUserIdList" prepend=" UNION ">
+				SELECT
+					NO AS USER_NO, #consultNo# AS CONSULT_NO, 'RE' AS RECIEVE_TYP
+				FROM TBL_USERINFO
+				<iterate prepend="WHERE USER_ID IN " open="(" conjunction="," close=")" property="chargedUserIdList">
+					#chargedUserIdList[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty property="addUserIdList" prepend=" UNION ">
+				SELECT
+					NO AS USER_NO, #consultNo# AS CONSULT_NO, 'RF' AS RECIEVE_TYP
+				FROM TBL_USERINFO
+				<iterate prepend="WHERE USER_ID IN " open="(" conjunction="," close=")" property="addUserIdList">
+					#addUserIdList[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty property="compUserIdList" prepend="UNION">
+				SELECT
+					NO AS USER_NO, #consultNo# AS CONSULT_NO, 'CM' AS RECIEVE_TYP
+				FROM TBL_USERINFO
+				<iterate prepend="WHERE USER_ID IN" open="(" conjunction="," close=")" property="compUserIdList">
+					#compUserIdList[]#
+				</iterate>
+			</isNotEmpty>
+			) K
+		)
+	</insert>
+	
+	<!-- 상담관리 담당자/참조자 등록 -->	
+	<update id="ConsultCustomerDAO.updateConsultManageRecieve">
+		UPDATE TBL_CONSULT_RECIEVE
+		SET
+			READ_TM = NULL
+		WHERE
+			CONSULT_NO = #consultNo#
+	</update>
+	
+	<!-- 상담관리 담당자/참조자 수신상태 변경 -->
+	<update id="ConsultCustomerDAO.setReadtime">
+		UPDATE TBL_CONSULT_RECIEVE
+		SET
+			READ_TM = SYSDATE()
+		WHERE
+			CONSULT_NO = #consult_no#
+			AND USER_NO = #userNo#
+	</update>
+	
+	<!-- 상담관리 보기 -->
+	<select id="ConsultCustomerDAO.selectConsultManageRecieve" resultMap="consultManageRecieveList">
+		SELECT
+			a.NO, a.USER_NO, b.USER_NM, b.USER_ID, a.CONSULT_NO, a.RECIEVE_TYP,
+			DATE_FORMAT(a.READ_TM, '%Y.%m.%d %H:%i') AS READ_TM
+		FROM
+			TBL_CONSULT_RECIEVE a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+		WHERE
+			a.CONSULT_NO = #consult_no#
+	</select>
+	
+	<!-- 상담관리 수정 -->
+	<update id="ConsultCustomerDAO.updateConsultManage">
+		UPDATE TBL_CONSULT
+		SET 
+			mod_dt=now()
+			<isNotEmpty prepend="," property="cust_no">
+			cust_no=#cust_no#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="state">
+			state=#state#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="cust_manager">
+			cust_manager=#cust_manager# 
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="cust_telno">
+			cust_telno=#cust_telno#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="cust_email">
+			cust_email=#cust_email#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="typ">
+			typ=#typ#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="service_typ">
+			service_typ=#service_typ#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="error_typ">
+			error_typ=#error_typ# 
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="detail_typ">
+			detail_typ=#detail_typ# 
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="q_cn">
+			q_cn=#q_cn# 
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="a_cn">
+			a_cn=#a_cn# 
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="atch_file_id">
+			atch_file_id=#atch_file_id# 
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="sms_yn">
+			sms_yn=#sms_yn# 
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="consult_no">
+			consult_no=#consult_no#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="cust_nm">
+			cust_nm=#cust_nm#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="s_cn">
+			s_cn=#s_cn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="end_date">
+			end_date=#end_date#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="issue_yn">
+			issue_yn=#issue_yn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="request_id">
+			request_id=#request_id#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="receive_typ">
+			receive_typ=#receive_typ#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="contact_dt">
+			contact_dt=#contact_dt#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="compny_id">
+			compny_id=#compny_id#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="comp_cn">
+			comp_cn=#comp_cn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="complete_date">
+			complete_date=#complete_date#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="complete_tm">
+			complete_tm=#complete_tm#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="comp_file_id">
+			comp_file_id=#comp_file_id#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="comp_duration">
+			comp_duration=#comp_duration#
+			</isNotEmpty>
+		WHERE
+			CONSULT_NO = #consult_no#
+	</update>
+	
+	
+	<select id="ConsultCustomerDAO.selectInterestUserNoList" resultClass="java.lang.Integer">
+		SELECT
+			USER_NO
+		FROM
+			TBL_CONSULT_RECIEVE
+		WHERE
+			CONSULT_NO = #consult_no#
+			AND INTEREST_YN = 'Y'
+	</select>
+	
+	<update id="ConsultCustomerDAO.setInterestCon">
+		<isNotEmpty property="userList">
+		UPDATE TBL_CONSULT_RECIEVE
+		SET
+			INTEREST_YN = 'Y'
+		WHERE
+			CONSULT_NO = #consult_no#
+		<iterate prepend="AND USER_NO IN " open="(" conjunction="," close=")" property="userList">
+			#userList[]#
+		</iterate>
+		</isNotEmpty>
+		<isEmpty property="userList">
+		UPDATE TBL_CONSULT_RECIEVE
+		SET
+			INTEREST_YN = INTEREST_YN
+		WHERE
+			CONSULT_NO = #consult_no#
+		</isEmpty>
+	</update>
+	
+	<!-- 상담관리 담당자/참조자 삭제 -->
+	<delete id="ConsultCustomerDAO.deleteConsultManageRecieve">
+		DELETE FROM TBL_CONSULT_RECIEVE
+		WHERE
+			CONSULT_NO = #consult_no#
+	</delete>
+	
+	<!-- 상담관리 삭제 -->
+	<update id="ConsultCustomerDAO.deleteConsultManage">
+	UPDATE
+		tbl_consult
+	SET
+		use_at = 'N'
+	WHERE
+		CONSULT_NO = #consult_no#
+	</update>
+	
+	<!--상담관리 덧글 셀렉트 -->	
+	<select id="ConsultCustomerDAO.selectConsultCommentList" resultMap="consultCommentList">
+		SELECT
+			a.NO, a.USER_NO, a.CONSULT_NO, b.USER_NM, b.USER_ID, 
+			a.ATCH_FILE_ID , a.cn
+			, DATE_FORMAT(a.REG_DT, '%Y.%m.%d %H:%i:%s') AS REG_DT
+			, DATE_FORMAT(a.UDT_DT, '%Y.%m.%d %H:%i:%s') AS UDT_DT
+		FROM
+			TBL_CONSULT_COMMENT a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+		WHERE
+			a.USE_AT = 'Y'
+			AND a.CONSULT_NO = #consult_no#
+		<isNotEmpty prepend="AND" property="no">
+			a.NO = #no#
+		</isNotEmpty>
+		<!-- 2013.08.13 덧긋 정렬 순서 -->
+		ORDER BY IFNULL(a.UDT_DT,a.REG_DT) DESC	
+	</select>
+	
+	<!-- 상담관리 덧글 인서트  -->
+	<insert id="ConsultCustomerDAO.insertConsultComment">
+				
+		insert into tbl_consult_comment
+			( no 
+			, user_no 
+			, consult_no 
+			, cn 
+			, atch_file_id 
+			, reg_dt 
+			, udt_dt 
+			, use_at
+			)
+			values
+			(  #no# 
+				, #userNo# 
+				, #consult_no# 
+				, #cn# 
+				, #atchFileId# 
+				, SYSDATE()
+				, SYSDATE()
+				, 'Y'
+			)		
+	</insert>
+	
+	<!-- 덧글 내용 업데이트  -->
+	<update id="ConsultCustomerDAO.updateConsultComment">
+		UPDATE TBL_CONSULT_COMMENT
+		SET
+			CN = #cn#
+		<isNotEmpty prepend="," property="atchFileId">
+			ATCH_FILE_ID = #atchFileId#
+		</isNotEmpty>
+		WHERE
+			NO = #no#
+	</update>
+	
+	<!-- 덧글 내용 삭제 -->
+	<update id="ConsultCustomerDAO.deleteConsultComment">
+		UPDATE TBL_CONSULT_COMMENT
+		SET
+			USE_AT = 'N'
+		WHERE
+			NO = #no#
+	</update>
+	
+	<!--    -->
+	<update id="ConsultCustomerDAO.deleteReadtm">
+		update tbl_consult_recieve
+		set
+			read_tm = null
+		where
+			no = #no#
+	</update>
+	
+	<!--고객사 셀렉트 박스 리스트  -->
+	<select id="ConsultCustomerDAO.selectCustList" resultClass="egovMap">
+	SELECT
+				cust.no
+				, cust.cust_nm
+				, cust.cust_manager
+				, cust.cust_telno
+				, cust.typ				
+				, cust.load_dt
+				, cust.ip1
+				, cust.ip2
+				, cust.ip3
+				, cust.ip4
+				, cust.ip5
+				, cust.db1
+				, cust.db2
+				, cust.db3
+				, cust.db4
+				, cust.db5
+				, cust.remote_info
+				, cust.etc_info
+			FROM
+				tbl_consult_customer cust
+	</select>
+	
+	<!-- 처리상태 -->
+	<select id="ConsultCustomerDAO.selectConsultState" resultMap="consultStateInfo">
+		SELECT 
+			NO AS C_NO,
+					STATE,
+					DATE_FORMAT(COMPLETE_DATE, '%Y%m%d') AS COMPLETE_DATE,
+					COMPLETE_TM,
+					SATISFACTION,
+					CONSULT_NO,
+					WRITER_NO
+		FROM tbl_consult
+		WHERE 
+			consult_no = #consult_no#
+	</select>
+	
+	<!-- 상담관리 처리상태 수정 -->
+	<update id="ConsultCustomerDAO.updateConsultState">
+		UPDATE TBL_CONSULT
+		SET
+			STATE = #state#
+			<isNotEmpty prepend="," property="complete_date">
+			COMPLETE_DATE =#complete_date#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="complete_tm">
+			COMPLETE_TM=#complete_tm#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="comp_duration">
+			COMP_DURATION=#comp_duration#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="comp_cn">
+			COMP_CN=#comp_cn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="typ">
+			TYP=#typ#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="service_typ">
+			SERVICE_TYP=#service_typ#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="error_typ">
+			ERROR_TYP=#error_typ#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="detail_typ">
+			DETAIL_TYP=#detail_typ#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="satisfaction">
+			SATISFACTION=#satisfaction#
+			</isNotEmpty>
+		WHERE
+			CONSULT_NO = #consult_no#
+	</update>
+	
+		<!-- 처리상태 -->
+	<select id="ConsultCustomerDAO.selectConsultJira" resultMap="consultJiraInfo">
+		SELECT 
+					JIRA_YN,
+				JIRA_CODE,
+				CONSULT_NO
+		FROM tbl_consult
+		WHERE 
+			consult_no = #consult_no#
+	</select>
+	
+	
+	<!-- 상담관리 처리상태 수정 -->
+	<update id="ConsultCustomerDAO.updateConsultJira">
+		UPDATE TBL_CONSULT
+		SET
+			JIRA_YN=#jira_yn#,
+			JIRA_CODE=#jira_code#
+		WHERE
+			CONSULT_NO = #consult_no#
+	</update>
+	
+	<!-- 상담관리 통계 검색기간이전 -->
+	<select id="ConsultCustomerDAO.selectConsultManageList2" resultClass="egovMap">
+		SELECT 
+				CON.NO,
+				CON.CUST_NM,
+				CON.CUST_MANAGER,
+				DATE_FORMAT(CON.REG_DT, '%Y-%m-%d %H') REG_DT,
+				CON.TYP,
+				CON.SERVICE_TYP,
+				CON.ERROR_TYP,
+				CON.STATE,
+				CON.JIRA_YN,
+				CON.Q_CN,
+				CON.A_CN,
+				CON.CONSULT_NO,
+				CON.SATISFACTION,
+				CON.ISSUE_YN,
+				CON.USE_AT,
+				USR.NO AS USER_NO,
+				USR.USER_ID AS USER_ID,
+				USR.USER_NM AS USER_NM,
+				IF(SUM(IF((REC.READ_TM IS NULL), 1, 0)), '열람중', '완료') AS READ_STAT,
+				GROUP_CONCAT(U.USER_NM SEPARATOR ',')  AS CHARGED
+		FROM
+				tbl_consult con
+				INNER JOIN TBL_USERINFO USR
+				ON CON.WRITER_NO = USR.NO
+				INNER JOIN TBL_CONSULT_RECIEVE REC
+				ON REC.RECIEVE_TYP IN ('RE', 'RF')
+				AND CON.CONSULT_NO = REC.CONSULT_NO
+				INNER JOIN TBL_USERINFO U
+				ON REC.USER_NO = U.NO
+				AND REC.RECIEVE_TYP = 'RE'
+		WHERE
+			TRUE
+			AND CON.USE_AT='Y'
+			<isNotEmpty prepend="AND" property="searchState">
+					CON.state != #searchState#
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="searchRegDtS">
+					<![CDATA[
+					DATE_FORMAT(CON.reg_dt, '%Y%m%d') < #searchRegDtS#
+					]]>
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="jiraYn">
+					CON.JIRA_YN=#jiraYn#
+				</isNotEmpty>
+			GROUP BY
+			CON.CONSULT_NO
+		ORDER BY
+			CON.no DESC
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#	
+	</select>
+	
+	<!-- 상담관리 통계 검색기간이전 카운트 -->
+	<select id="ConsultCustomerDAO.selectConsultManageList2Cnt" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(k.NO)
+		FROM
+		(
+			SELECT 
+					CON.NO
+			FROM
+					tbl_consult con
+					INNER JOIN TBL_USERINFO USR
+					ON CON.WRITER_NO = USR.NO
+					INNER JOIN TBL_CONSULT_RECIEVE REC
+					ON REC.RECIEVE_TYP IN ('RE', 'RF')
+					AND CON.CONSULT_NO = REC.CONSULT_NO
+					INNER JOIN TBL_USERINFO U
+					ON REC.USER_NO = U.NO
+					AND REC.RECIEVE_TYP = 'RE'
+			WHERE
+					TRUE
+					AND CON.USE_AT='Y'
+					<isNotEmpty prepend="AND" property="searchState">
+							CON.state != #searchState#
+						</isNotEmpty>
+						<isNotEmpty prepend="AND" property="searchRegDtS">
+							<![CDATA[
+							DATE_FORMAT(CON.reg_dt, '%Y%m%d') < #searchRegDtS#
+							]]>
+						</isNotEmpty>
+						<isNotEmpty prepend="AND" property="jiraYn">
+							CON.JIRA_YN=#jiraYn#
+						</isNotEmpty>
+				GROUP BY
+					CON.CONSULT_NO
+		) k
+	</select>
+	
+	<select id="ConsultCustomerDAO.selectConsultStatisticsList" resultClass="egovMap">
+		SELECT
+			a.typ
+			, a.service_typ
+			, IFNULL(b.cnt, 0) AS cnt
+		FROM
+		(
+			SELECT
+				typ
+				, service_typ
+			FROM
+				tbl_consult con
+			WHERE
+				con.use_at = 'Y'
+		<isEqual prepend="" property="statisticsTyp" compareValue="typ">
+			GROUP BY
+				typ
+		</isEqual>
+		<isEqual prepend="" property="statisticsTyp" compareValue="serviceTyp">
+			GROUP BY
+				service_typ
+		</isEqual>
+		) a
+		LEFT JOIN (
+			SELECT
+				con.typ
+				, con.service_typ
+				, COUNT(DISTINCT con.no) AS cnt
+			FROM
+				tbl_consult con
+			WHERE
+				con.use_at = 'Y'
+				AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+				<isEqual prepend="AND" property="statisticsTyp" compareValue="typ">
+					con.service_typ = '2'
+				</isEqual>
+			<isEqual prepend="" property="statisticsTyp" compareValue="serviceTyp">
+			GROUP BY
+				con.service_typ
+			ORDER BY
+				con.service_typ ASC
+			</isEqual>
+			<isEqual prepend="" property="statisticsTyp" compareValue="typ">
+			GROUP BY
+				con.typ
+			ORDER BY
+				con.typ ASC
+			</isEqual>
+		) b
+		<isEqual prepend="" property="statisticsTyp" compareValue="typ">
+			ON a.typ = b.typ
+		</isEqual>
+		<isEqual prepend="" property="statisticsTyp" compareValue="serviceTyp">
+			ON a.service_typ = b.service_typ
+		</isEqual>
+	</select>
+	
+	<!-- 
+	<select id="ConsultCustomerDAO.selectConsultStatisticsList2" resultClass="egovMap">
+		SELECT
+			<isEqual prepend="" property="groupTypCd1" compareValue="KMS024">
+				typ, 
+			</isEqual>
+			<isEqual prepend="" property="groupTypCd1" compareValue="KMS028">
+				state, 
+			</isEqual>
+			<isEqual prepend="" property="groupTypCd2" compareValue="KMS025">
+				service_typ,
+			</isEqual>
+			<isEqual prepend="" property="groupTypCd2" compareValue="KMS027">
+				error_typ,
+			</isEqual>
+			count(*) AS cnt
+		FROM
+			tbl_consult
+		WHERE
+			use_at = 'Y'
+			AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+			<isEqual prepend="AND" property="groupTypCd2" compareValue="KMS027">
+				service_typ = '3'
+			</isEqual>
+		GROUP BY
+			<isEqual prepend="" property="groupTypCd1" compareValue="KMS024">
+				typ, 
+			</isEqual>
+			<isEqual prepend="" property="groupTypCd1" compareValue="KMS028">
+				state, 
+			</isEqual>
+			<isEqual prepend="" property="groupTypCd2" compareValue="KMS025">
+				service_typ
+			</isEqual>
+			<isEqual prepend="" property="groupTypCd2" compareValue="KMS027">
+				error_typ
+			</isEqual>
+	</select>
+	-->
+	
+	<select id="ConsultCustomerDAO.selectConsultStatisticsListType1" resultClass="egovMap">
+		SELECT
+			error_typ, typ,
+			count(*) AS cnt
+		FROM
+			tbl_consult con
+			<isNotEmpty property="userNo">
+				INNER JOIN tbl_consult_recieve rec
+				ON rec.RECIEVE_TYP = 'CM'
+				AND rec.CONSULT_NO = con.CONSULT_NO
+				AND rec.USER_NO = #userNo#
+			</isNotEmpty>
+		WHERE
+			use_at = 'Y'
+			AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+			AND service_typ = '3'	<!-- 장애분류를 카운트할때는, 상담분류가 장애인 경우만.. -->
+		GROUP BY
+			error_typ, typ
+	</select>
+	
+	<select id="ConsultCustomerDAO.selectConsultStatisticsListType2" resultClass="egovMap">
+		SELECT
+			error_typ, state,
+			count(*) AS cnt
+		FROM
+			tbl_consult con
+			<isNotEmpty property="userNo">
+				INNER JOIN tbl_consult_recieve rec
+				ON rec.RECIEVE_TYP = 'CM'
+				AND rec.CONSULT_NO = con.CONSULT_NO
+				AND rec.USER_NO = #userNo#
+			</isNotEmpty>
+		WHERE
+			use_at = 'Y'
+			AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+			AND service_typ = '3'	<!-- 장애분류를 카운트할때는, 상담분류가 장애인 경우만.. -->
+		GROUP BY
+			error_typ, state
+	</select>
+	
+	<select id="ConsultCustomerDAO.selectConsultStatisticsListType3" resultClass="egovMap">
+		SELECT
+			service_typ, typ,
+			count(*) AS cnt
+		FROM
+			tbl_consult con
+			<isNotEmpty property="userNo">
+				INNER JOIN tbl_consult_recieve rec
+				ON rec.RECIEVE_TYP = 'CM'
+				AND rec.CONSULT_NO = con.CONSULT_NO
+				AND rec.USER_NO = #userNo#
+			</isNotEmpty>
+		WHERE
+			use_at = 'Y'
+			AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+		GROUP BY
+			service_typ, typ
+	</select>
+	
+	<select id="ConsultCustomerDAO.selectConsultStatisticsListType4" resultClass="egovMap">
+		SELECT
+			service_typ, state,
+			count(*) AS cnt
+		FROM
+			tbl_consult con
+			<isNotEmpty property="userNo">
+				INNER JOIN tbl_consult_recieve rec
+				ON rec.RECIEVE_TYP = 'CM'
+				AND rec.CONSULT_NO = con.CONSULT_NO
+				AND rec.USER_NO = #userNo#
+			</isNotEmpty>
+		WHERE
+			use_at = 'Y'
+			AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+		GROUP BY
+			service_typ, state
+	</select>
+	
+	<select id="ConsultCustomerDAO.selectConsultStatisticsListType5" resultClass="egovMap">
+		SELECT
+			detail_typ, typ,
+			count(*) AS cnt
+		FROM
+			tbl_consult con
+			<isNotEmpty property="userNo">
+				INNER JOIN tbl_consult_recieve rec
+				ON rec.RECIEVE_TYP = 'CM'
+				AND rec.CONSULT_NO = con.CONSULT_NO
+				AND rec.USER_NO = #userNo#
+			</isNotEmpty>
+		WHERE
+			use_at = 'Y'
+			AND error_typ = '1'
+			AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+		GROUP BY
+			detail_typ, typ
+	</select>
+	
+	<select id="ConsultCustomerDAO.selectConsultStatisticsListType6" resultClass="egovMap">
+		SELECT
+			detail_typ, state,
+			count(*) AS cnt
+		FROM
+			tbl_consult con
+			<isNotEmpty property="userNo">
+				INNER JOIN tbl_consult_recieve rec
+				ON rec.RECIEVE_TYP = 'CM'
+				AND rec.CONSULT_NO = con.CONSULT_NO
+				AND rec.USER_NO = #userNo#
+			</isNotEmpty>
+		WHERE
+			use_at = 'Y'
+			AND error_typ = '1'
+			AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+		GROUP BY
+			detail_typ, state
+	</select>
+	
+	<select id="ConsultCustomerDAO.selectConsultStatisticsListType7" resultClass="egovMap">
+		SELECT
+			detail_typ, typ,
+			count(*) AS cnt
+		FROM
+			tbl_consult con
+			<isNotEmpty property="userNo">
+				INNER JOIN tbl_consult_recieve rec
+				ON rec.RECIEVE_TYP = 'CM'
+				AND rec.CONSULT_NO = con.CONSULT_NO
+				AND rec.USER_NO = #userNo#
+			</isNotEmpty>
+		WHERE
+			use_at = 'Y'
+			AND error_typ = '2'
+			AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+		GROUP BY
+			detail_typ, typ
+	</select>
+	
+	<select id="ConsultCustomerDAO.selectConsultStatisticsListType8" resultClass="egovMap">
+		SELECT
+			detail_typ, state,
+			count(*) AS cnt
+		FROM
+			tbl_consult con
+			<isNotEmpty property="userNo">
+				INNER JOIN tbl_consult_recieve rec
+				ON rec.RECIEVE_TYP = 'CM'
+				AND rec.CONSULT_NO = con.CONSULT_NO
+				AND rec.USER_NO = #userNo#
+			</isNotEmpty>
+		WHERE
+			use_at = 'Y'
+			AND error_typ = '2'
+			AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+		GROUP BY
+			detail_typ, state
+	</select>
+	
+	<select id="ConsultCustomerDAO.selectConsultStatisticsListType9" resultClass="egovMap">
+		SELECT
+			detail_typ, typ,
+			count(*) AS cnt
+		FROM
+			tbl_consult con
+			<isNotEmpty property="userNo">
+				INNER JOIN tbl_consult_recieve rec
+				ON rec.RECIEVE_TYP = 'CM'
+				AND rec.CONSULT_NO = con.CONSULT_NO
+				AND rec.USER_NO = #userNo#
+			</isNotEmpty>
+		WHERE
+			use_at = 'Y'
+			AND error_typ = '3'
+			AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+		GROUP BY
+			detail_typ, typ
+	</select>
+	
+	<select id="ConsultCustomerDAO.selectConsultStatisticsListType10" resultClass="egovMap">
+		SELECT
+			detail_typ, state,
+			count(*) AS cnt
+		FROM
+			tbl_consult con
+			<isNotEmpty property="userNo">
+				INNER JOIN tbl_consult_recieve rec
+				ON rec.RECIEVE_TYP = 'CM'
+				AND rec.CONSULT_NO = con.CONSULT_NO
+				AND rec.USER_NO = #userNo#
+			</isNotEmpty>
+		WHERE
+			use_at = 'Y'
+			AND error_typ = '3'
+			AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+		GROUP BY
+			detail_typ, state
+	</select>
+	
+	<select id="ConsultCustomerDAO.selectConsultStatisticsListType11" resultClass="egovMap">
+		SELECT
+			detail_typ, typ,
+			count(*) AS cnt
+		FROM
+			tbl_consult con
+			<isNotEmpty property="userNo">
+				INNER JOIN tbl_consult_recieve rec
+				ON rec.RECIEVE_TYP = 'CM'
+				AND rec.CONSULT_NO = con.CONSULT_NO
+				AND rec.USER_NO = #userNo#
+			</isNotEmpty>
+		WHERE
+			use_at = 'Y'
+			AND error_typ = '4'
+			AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+		GROUP BY
+			detail_typ, typ
+	</select>
+	
+	<select id="ConsultCustomerDAO.selectConsultStatisticsListType12" resultClass="egovMap">
+		SELECT
+			detail_typ, state,
+			count(*) AS cnt
+		FROM
+			tbl_consult con
+			<isNotEmpty property="userNo">
+				INNER JOIN tbl_consult_recieve rec
+				ON rec.RECIEVE_TYP = 'CM'
+				AND rec.CONSULT_NO = con.CONSULT_NO
+				AND rec.USER_NO = #userNo#
+			</isNotEmpty>
+		WHERE
+			use_at = 'Y'
+			AND error_typ = '4'
+			AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+		GROUP BY
+			detail_typ, state
+	</select>
+	
+	<select id="ConsultCustomerDAO.selectConsultStatisticsListType13" resultClass="egovMap">
+		SELECT
+			detail_typ, typ,
+			count(*) AS cnt
+		FROM
+			tbl_consult con
+			<isNotEmpty property="userNo">
+				INNER JOIN tbl_consult_recieve rec
+				ON rec.RECIEVE_TYP = 'CM'
+				AND rec.CONSULT_NO = con.CONSULT_NO
+				AND rec.USER_NO = #userNo#
+			</isNotEmpty>
+		WHERE
+			use_at = 'Y'
+			AND error_typ = '5'
+			AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+		GROUP BY
+			detail_typ, typ
+	</select>
+	
+	<select id="ConsultCustomerDAO.selectConsultStatisticsListType14" resultClass="egovMap">
+		SELECT
+			detail_typ, state,
+			count(*) AS cnt
+		FROM
+			tbl_consult con
+			<isNotEmpty property="userNo">
+				INNER JOIN tbl_consult_recieve rec
+				ON rec.RECIEVE_TYP = 'CM'
+				AND rec.CONSULT_NO = con.CONSULT_NO
+				AND rec.USER_NO = #userNo#
+			</isNotEmpty>
+		WHERE
+			use_at = 'Y'
+			AND error_typ = '5'
+			AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+		GROUP BY
+			detail_typ, state
+	</select>
+	
+	<select id="ConsultCustomerDAO.selectConsultStatisticsListType15" resultClass="egovMap">
+		SELECT
+			detail_typ, typ,
+			count(*) AS cnt
+		FROM
+			tbl_consult con
+			<isNotEmpty property="userNo">
+				INNER JOIN tbl_consult_recieve rec
+				ON rec.RECIEVE_TYP = 'CM'
+				AND rec.CONSULT_NO = con.CONSULT_NO
+				AND rec.USER_NO = #userNo#
+			</isNotEmpty>
+		WHERE
+			use_at = 'Y'
+			AND error_typ = '6'
+			AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+		GROUP BY
+			detail_typ, typ
+	</select>
+	
+	<select id="ConsultCustomerDAO.selectConsultStatisticsListType16" resultClass="egovMap">
+		SELECT
+			detail_typ, state,
+			count(*) AS cnt
+		FROM
+			tbl_consult con
+			<isNotEmpty property="userNo">
+				INNER JOIN tbl_consult_recieve rec
+				ON rec.RECIEVE_TYP = 'CM'
+				AND rec.CONSULT_NO = con.CONSULT_NO
+				AND rec.USER_NO = #userNo#
+			</isNotEmpty>
+		WHERE
+			use_at = 'Y'
+			AND error_typ = '6'
+			AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+		GROUP BY
+			detail_typ, state
+	</select>
+	
+	<select id="ConsultCustomerDAO.selectConsultStatisticsListType17" resultClass="egovMap">
+		SELECT
+			detail_typ, typ,
+			count(*) AS cnt
+		FROM
+			tbl_consult con
+			<isNotEmpty property="userNo">
+				INNER JOIN tbl_consult_recieve rec
+				ON rec.RECIEVE_TYP = 'CM'
+				AND rec.CONSULT_NO = con.CONSULT_NO
+				AND rec.USER_NO = #userNo#
+			</isNotEmpty>
+		WHERE
+			use_at = 'Y'
+			AND error_typ = '7'
+			AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+		GROUP BY
+			detail_typ, typ
+	</select>
+	
+	<select id="ConsultCustomerDAO.selectConsultStatisticsListType18" resultClass="egovMap">
+		SELECT
+			detail_typ, state,
+			count(*) AS cnt
+		FROM
+			tbl_consult con
+			<isNotEmpty property="userNo">
+				INNER JOIN tbl_consult_recieve rec
+				ON rec.RECIEVE_TYP = 'CM'
+				AND rec.CONSULT_NO = con.CONSULT_NO
+				AND rec.USER_NO = #userNo#
+			</isNotEmpty>
+		WHERE
+			use_at = 'Y'
+			AND error_typ = '7'
+			AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+		GROUP BY
+			detail_typ, state
+	</select>
+	
+	<select id="ConsultCustomerDAO.selectCompDurationService" resultClass="egovMap">
+		SELECT
+			service_typ,
+			count(*) AS cnt,
+			SUM(comp_duration) AS comp_duration
+		FROM
+			tbl_consult con
+			<isNotEmpty property="userNo">
+				INNER JOIN tbl_consult_recieve rec
+				ON rec.RECIEVE_TYP = 'CM'
+				AND rec.CONSULT_NO = con.CONSULT_NO
+				AND rec.USER_NO = #userNo#
+			</isNotEmpty>
+		WHERE
+			use_at = 'Y'
+			AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+		GROUP BY
+			service_typ
+	</select>
+	
+	<select id="ConsultCustomerDAO.selectCompDurationError" resultClass="egovMap">
+		SELECT
+			error_typ,
+			count(*) AS cnt,
+			SUM(comp_duration) AS comp_duration
+		FROM
+			tbl_consult con
+			<isNotEmpty property="userNo">
+				INNER JOIN tbl_consult_recieve rec
+				ON rec.RECIEVE_TYP = 'CM'
+				AND rec.CONSULT_NO = con.CONSULT_NO
+				AND rec.USER_NO = #userNo#
+			</isNotEmpty>
+		WHERE
+			use_at = 'Y'
+			AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+		GROUP BY
+			error_typ
+	</select>
+	
+	<select id="ConsultCustomerDAO.selectCompDurationDetail" resultClass="egovMap">
+		SELECT
+			error_typ, detail_typ,
+			count(*) AS cnt,
+			SUM(comp_duration) AS comp_duration
+		FROM
+			tbl_consult con
+			<isNotEmpty property="userNo">
+				INNER JOIN tbl_consult_recieve rec
+				ON rec.RECIEVE_TYP = 'CM'
+				AND rec.CONSULT_NO = con.CONSULT_NO
+				AND rec.USER_NO = #userNo#
+			</isNotEmpty>
+		WHERE
+			use_at = 'Y'
+			AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+		GROUP BY
+			error_typ, detail_typ
+	</select>
+	
+	<select id="ConsultCustomerDAO.selectCompDurationTotal" resultClass="egovMap">
+		SELECT
+			count(*) AS cnt,
+			SUM(comp_duration) AS comp_duration
+		FROM
+			tbl_consult con
+			<isNotEmpty property="userNo">
+				INNER JOIN tbl_consult_recieve rec
+				ON rec.RECIEVE_TYP = 'CM'
+				AND rec.CONSULT_NO = con.CONSULT_NO
+				AND rec.USER_NO = #userNo#
+			</isNotEmpty>
+		WHERE
+			use_at = 'Y'
+			AND DATE_FORMAT(reg_dt, '%Y%m%d') BETWEEN #searchRegDtS# AND #searchRegDtE#
+	</select>
+	 
+	<update id="ConsultCustomerDAO.updateIssue">
+		UPDATE
+			tbl_consult con
+		SET
+			con.issue_yn = IF(con.issue_yn = 'Y', 'N', 'Y')
+		WHERE
+			con.CONSULT_NO = #consult_no#
+	</update>
+	
+	<update id="ConsultCustomerDAO.deleteRequestId">
+		UPDATE
+			tbl_consult con
+		SET
+			con.request_id = ''
+		WHERE
+			con.CONSULT_NO = #consult_no#
+	</update>
+	
+</sqlMap>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="AdminDbManage">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+
+	<select id="AdminDbManageDAO.selectSchemaChangeList" resultClass="egovMap">
+		SELECT
+			newDB.TABLE_SCHEMA
+			, newDB.TABLE_NAME
+			, newDB.COLUMN_NAME
+			, 'ADD' AS CHANGE_TYPE
+		FROM
+			(
+				SELECT
+					a.TABLE_SCHEMA
+					, a.TABLE_NAME
+					, a.COLUMN_NAME
+				FROM
+					information_schema.columns a
+					INNER JOIN information_schema.tables b
+						ON a.TABLE_NAME = b.TABLE_NAME
+						AND a.TABLE_SCHEMA = b.TABLE_SCHEMA
+				WHERE
+					a.TABLE_SCHEMA = 'KMS'
+					AND b.TABLE_TYPE = 'BASE TABLE'
+			) newDB
+			LEFT JOIN TBL_DB_SCHEMA orgDB
+				ON newDB.TABLE_SCHEMA = orgDB.TABLE_SCHEMA
+				AND newDB.TABLE_NAME = orgDB.TABLE_NAME
+				AND newDB.COLUMN_NAME = orgDB.COLUMN_NAME
+		WHERE
+			orgDB.COLUMN_NAME IS NULL
+		
+		UNION
+		
+		SELECT
+			orgDB.TABLE_SCHEMA
+			, orgDB.TABLE_NAME
+			, orgDB.COLUMN_NAME
+			, 'DEL' AS CHANGE_TYPE
+		FROM
+			TBL_DB_SCHEMA orgDB
+			LEFT JOIN (
+				SELECT
+					a.TABLE_SCHEMA
+					, a.TABLE_NAME
+					, a.COLUMN_NAME
+				FROM
+					information_schema.columns a
+					INNER JOIN information_schema.tables b
+						ON a.TABLE_NAME = b.TABLE_NAME
+						AND a.TABLE_SCHEMA = b.TABLE_SCHEMA
+				WHERE
+					a.TABLE_SCHEMA = 'KMS'
+					AND b.TABLE_TYPE = 'BASE TABLE'
+			) newDB
+				ON newDB.TABLE_SCHEMA = orgDB.TABLE_SCHEMA
+				AND newDB.TABLE_NAME = orgDB.TABLE_NAME
+				AND newDB.COLUMN_NAME = orgDB.COLUMN_NAME
+		WHERE
+			newDB.COLUMN_NAME IS NULL
+		
+		ORDER BY
+			TABLE_NAME, COLUMN_NAME
+	</select>
+
+	<delete id="AdminDbManageDAO.clearOldDbSchema">
+		DELETE FROM TBL_DB_SCHEMA
+	</delete>
+	
+	<insert id="AdminDbManageDAO.makeNewDbSchema">
+		INSERT INTO TBL_DB_SCHEMA
+		(
+		SELECT
+			a.TABLE_SCHEMA
+			, a.TABLE_NAME
+			, a.COLUMN_NAME
+		FROM
+			information_schema.columns a
+			INNER JOIN information_schema.tables b
+				ON a.TABLE_NAME = b.TABLE_NAME
+				AND a.TABLE_SCHEMA = b.TABLE_SCHEMA
+		WHERE
+			a.TABLE_SCHEMA = 'KMS'
+			AND b.TABLE_TYPE = 'BASE TABLE'
+		)
+	</insert>	
+
+</sqlMap>

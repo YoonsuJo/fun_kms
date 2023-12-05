@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsWeekReportDAO">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="customer" type="kms.com.cooperation.service.Customer"/>
+	<typeAlias  alias="customerVO" type="kms.com.cooperation.service.CustomerVO"/>
+	<typeAlias  alias="customerPerson" type="kms.com.cooperation.service.CustomerPerson"/>
+	<typeAlias  alias="customerComment" type="kms.com.cooperation.service.CustomerComment"/>
+	
+	<resultMap id="customerList" class="kms.com.cooperation.service.CustomerVO">
+		<result property="custId"			column="CUST_ID"		columnIndex="1"/>
+		<result property="custNm"			column="CUST_NM"		columnIndex="2"/>
+		<result property="userNoReg"		column="USER_NO_REG"	columnIndex="3"/>
+		<result property="userNmReg"		column="USER_NM_REG"	columnIndex="4"/>
+		<result property="userIdReg"		column="USER_ID_REG"	columnIndex="5"/>
+		<result property="regDt"			column="REG_DT"			columnIndex="6"/>
+		<result property="modDt"			column="MOD_DT"			columnIndex="7"/>
+		<result property="custTelno"		column="CUST_TELNO"		columnIndex="8"/>
+		<result property="custFaxno"		column="CUST_FAXNO"		columnIndex="9"/>
+		<result property="commentCnt"		column="COMMENT_CNT"	columnIndex="10"/>
+	</resultMap>
+	<resultMap id="customerInfo" class="kms.com.cooperation.service.CustomerVO">
+		<result property="custId"			column="CUST_ID"		columnIndex="1"/>
+		<result property="custNm"			column="CUST_NM"		columnIndex="2"/>
+		<result property="userNoReg"		column="USER_NO_REG"	columnIndex="3"/>
+		<result property="userNmReg"		column="USER_NM_REG"	columnIndex="4"/>
+		<result property="userIdReg"		column="USER_ID_REG"	columnIndex="5"/>
+		<result property="userNoMod"		column="USER_NO_MOD"	columnIndex="6"/>
+		<result property="userNmMod"		column="USER_NM_MOD"	columnIndex="7"/>
+		<result property="userIdMod"		column="USER_ID_MOD"	columnIndex="8"/>
+		<result property="regDt"			column="REG_DT"			columnIndex="9"/>
+		<result property="modDt"			column="MOD_DT"			columnIndex="10"/>
+		<result property="custBusiNo"		column="CUST_BUSI_NO"	columnIndex="11"/>
+		<result property="custRepNm"		column="CUST_REP_NM"	columnIndex="12"/>
+		<result property="custAdres"		column="CUST_ADRES"		columnIndex="13"/>
+		<result property="custTelno"		column="CUST_TELNO"		columnIndex="14"/>
+		<result property="custFaxno"		column="CUST_FAXNO"		columnIndex="15"/>
+		<result property="custBusiCond"		column="CUST_BUSI_COND"	columnIndex="16"/>
+		<result property="custBusiTyp"		column="CUST_BUSI_TYP"	columnIndex="17"/>
+		<result property="note"				column="NOTE"			columnIndex="18"/>
+		<result property="bankNm"			column="BANK_NM"		columnIndex="19"/>
+		<result property="bankNo"			column="BANK_NO"		columnIndex="20"/>
+		<result property="bankUserNm"		column="BANK_USER_NM"	columnIndex="21"/>
+		<result property="atchFileId"		column="ATCH_FILE_ID"	columnIndex="22"/>
+		<result property="taxEmail1"		column="TAX_EMAIL_1"	columnIndex="23"/>
+		<result property="taxUserNm1"		column="TAX_USER_NM_1"	columnIndex="24"/>
+		<result property="taxTelno1"		column="TAX_TELNO_1"	columnIndex="25"/>
+		<result property="taxEmail2"		column="TAX_EMAIL_2"	columnIndex="26"/>
+		<result property="taxUserNm2"		column="TAX_USER_NM_2"	columnIndex="27"/>
+		<result property="taxTelno2"		column="TAX_TELNO_2"	columnIndex="28"/>
+		<result property="taxEmail3"		column="TAX_EMAIL_3"	columnIndex="29"/>
+		<result property="taxUserNm3"		column="TAX_USER_NM_3"	columnIndex="30"/>
+		<result property="taxTelno3"		column="TAX_TELNO_3"	columnIndex="31"/>
+		<result property="taxEmail4"		column="TAX_EMAIL_4"	columnIndex="32"/>
+		<result property="taxUserNm4"		column="TAX_USER_NM_4"	columnIndex="33"/>
+		<result property="taxTelno4"		column="TAX_TELNO_4"	columnIndex="34"/>
+		<result property="taxEmail5"		column="TAX_EMAIL_5"	columnIndex="35"/>
+		<result property="taxUserNm5"		column="TAX_USER_NM_5"	columnIndex="36"/>
+		<result property="taxTelno5"		column="TAX_TELNO_5"	columnIndex="37"/>
+	</resultMap>
+	
+	<resultMap id="customerPersonList" class="kms.com.cooperation.service.CustomerPerson">
+		<result property="no"			column="NO"				columnIndex="1"/>
+		<result property="custId"		column="CUST_ID"		columnIndex="2"/>
+		<result property="personNm"		column="PERSON_NM"		columnIndex="3"/>
+		<result property="personEmail"	column="PERSON_EMAIL"	columnIndex="4"/>
+		<result property="personHpno"	column="PERSON_HPNO"	columnIndex="5"/>
+		<result property="personTelno"	column="PERSON_TELNO"	columnIndex="6"/>
+		<result property="personNote"	column="PERSON_NOTE"	columnIndex="7"/>
+	</resultMap>
+	
+	<resultMap id="customerCommentInfo" class="kms.com.cooperation.service.CustomerComment">
+		<result property="no"			column="NO"				columnIndex="1"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="2"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="3"/>
+		<result property="userId"		column="USER_ID"		columnIndex="4"/>
+		<result property="custId"		column="CUST_ID"		columnIndex="5"/>
+		<result property="commentCn"	column="COMMENT_CN"		columnIndex="6"/>
+		<result property="atchFileId"	column="ATCH_FILE_ID"	columnIndex="7"/>
+		<result property="regDt"		column="REG_DT"			columnIndex="8"/>
+	</resultMap>
+	
+	<sql id="SQL_selectCustomerList">
+		FROM
+			TBL_CUSTOMER a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO_REG = b.NO
+			LEFT JOIN TBL_CUSTOMER_COMMENT c ON a.CUST_ID = c.CUST_ID AND c.USE_AT = 'Y'
+			LEFT JOIN TBL_CUSTOMER_PERSON d ON a.CUST_ID = d.CUST_ID
+		WHERE
+			a.USE_AT = 'Y'
+		<isNotEmpty prepend="AND" property="searchKeyword">
+			a.CUST_NM LIKE CONCAT('%', #searchKeyword#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchBusiNo">
+			a.CUST_BUSI_NO LIKE CONCAT('%', REPLACE(#searchBusiNo#,'-',''), '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchPersonNm">
+			d.PERSON_NM LIKE CONCAT('%', #searchPersonNm#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchTelno">
+			REPLACE(a.CUST_TELNO,'-','') LIKE CONCAT('%', REPLACE(#searchTelno#,'-',''), '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchFaxno">
+			REPLACE(a.CUST_FAXNO,'-','') LIKE CONCAT('%', REPLACE(#searchFaxno#,'-',''), '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchUserId">
+			b.USER_ID = #searchUserId#
+		</isNotEmpty>
+	</sql>
+	
+	<select id="CustomerDAO.selectCustomerListAll" resultMap="customerInfo">
+		SELECT
+			a.CUST_ID, a.CUST_NM, a.USER_NO_REG, NULL AS USER_NM_REG, NULL AS USER_ID_REG,
+			a.USER_NO_MOD, NULL AS USER_NM_MOD, NULL AS USER_ID_MOD,
+			DATE_FORMAT(a.REG_DT, '%Y.%m.%d %H:%i') AS REG_DT, DATE_FORMAT(a.MOD_DT, '%Y.%m.%d %H:%i') AS MOD_DT,
+			a.CUST_BUSI_NO, a.CUST_REP_NM, a.CUST_ADRES, a.CUST_TELNO, a.CUST_FAXNO, a.CUST_BUSI_COND, a.CUST_BUSI_TYP,
+			a.NOTE, a.BANK_NM, a.BANK_NO, a.BANK_USER_NM, a.ATCH_FILE_ID,
+			a.TAX_EMAIL_1, a.TAX_USER_NM_1, a.TAX_TELNO_1,
+			a.TAX_EMAIL_2, a.TAX_USER_NM_2, a.TAX_TELNO_2,
+			a.TAX_EMAIL_3, a.TAX_USER_NM_3, a.TAX_TELNO_3,
+			a.TAX_EMAIL_4, a.TAX_USER_NM_4, a.TAX_TELNO_4,
+			a.TAX_EMAIL_5, a.TAX_USER_NM_5, a.TAX_TELNO_5
+		<include refid="SQL_selectCustomerList"/>
+		GROUP BY a.CUST_ID
+	</select>
+
+	<select id="CustomerDAO.selectCustomerList" resultMap="customerList">
+		SELECT
+			a.CUST_ID, a.CUST_NM, a.USER_NO_REG, b.USER_NM AS USER_NM_REG, b.USER_ID AS USER_ID_REG,
+			DATE_FORMAT(a.REG_DT, '%Y.%m.%d') AS REG_DT, DATE_FORMAT(a.MOD_DT, '%Y.%m.%d') AS MOD_DT,
+			a.CUST_TELNO, a.CUST_FAXNO, COUNT(DISTINCT c.NO) AS COMMENT_CNT
+		<include refid="SQL_selectCustomerList"/>
+		GROUP BY a.CUST_ID
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<select id="CustomerDAO.selectCustomerListTotCnt" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(DISTINCT a.CUST_ID)
+		<include refid="SQL_selectCustomerList"/>
+	</select>
+	
+	<select id="CustomerDAO.selectCustomer" resultMap="customerInfo">
+		SELECT
+			a.CUST_ID, a.CUST_NM, a.USER_NO_REG, b.USER_NM AS USER_NM_REG, b.USER_ID AS USER_ID_REG,
+			a.USER_NO_MOD, c.USER_NM AS USER_NM_MOD, c.USER_ID AS USER_ID_MOD,
+			DATE_FORMAT(a.REG_DT, '%Y.%m.%d %H:%i') AS REG_DT, DATE_FORMAT(a.MOD_DT, '%Y.%m.%d %H:%i') AS MOD_DT,
+			a.CUST_BUSI_NO, a.CUST_REP_NM, a.CUST_ADRES, a.CUST_TELNO, a.CUST_FAXNO, a.CUST_BUSI_COND, a.CUST_BUSI_TYP,
+			a.NOTE, a.BANK_NM, a.BANK_NO, a.BANK_USER_NM, a.ATCH_FILE_ID,
+			a.TAX_EMAIL_1, a.TAX_USER_NM_1, a.TAX_TELNO_1,
+			a.TAX_EMAIL_2, a.TAX_USER_NM_2, a.TAX_TELNO_2,
+			a.TAX_EMAIL_3, a.TAX_USER_NM_3, a.TAX_TELNO_3,
+			a.TAX_EMAIL_4, a.TAX_USER_NM_4, a.TAX_TELNO_4,
+			a.TAX_EMAIL_5, a.TAX_USER_NM_5, a.TAX_TELNO_5
+		FROM
+			TBL_CUSTOMER a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO_REG = b.NO
+			LEFT JOIN TBL_USERINFO c ON a.USER_NO_MOD = c.NO
+		WHERE
+			a.CUST_ID = #custId#
+	</select>
+	
+	<select id="CustomerDAO.selectCustomerPersonList" resultMap="customerPersonList">
+		SELECT
+			NO, CUST_ID, PERSON_NM, PERSON_EMAIL, PERSON_HPNO, PERSON_TELNO, PERSON_NOTE
+		FROM
+			TBL_CUSTOMER_PERSON
+		WHERE
+			CUST_ID = #custId#
+	</select>
+	
+	<insert id="CustomerDAO.insertCustomer">
+		INSERT INTO TBL_CUSTOMER
+		(
+			CUST_ID, CUST_NM, USER_NO_REG, USER_NO_MOD, REG_DT, MOD_DT,
+			CUST_BUSI_NO, CUST_REP_NM, CUST_ADRES, CUST_TELNO, CUST_FAXNO,
+			CUST_BUSI_COND, CUST_BUSI_TYP, NOTE,
+			BANK_NM, BANK_NO, BANK_USER_NM, ATCH_FILE_ID,
+			TAX_EMAIL_1, TAX_USER_NM_1, TAX_TELNO_1,
+			TAX_EMAIL_2, TAX_USER_NM_2, TAX_TELNO_2,
+			TAX_EMAIL_3, TAX_USER_NM_3, TAX_TELNO_3,
+			TAX_EMAIL_4, TAX_USER_NM_4, TAX_TELNO_4,
+			TAX_EMAIL_5, TAX_USER_NM_5, TAX_TELNO_5, USE_AT
+		) VALUES (
+			#custId#, #custNm#, #userNoReg#, #userNoReg#, SYSDATE(), SYSDATE(),
+			#custBusiNo#, #custRepNm#, #custAdres#, #custTelno#, #custFaxno#,
+			#custBusiCond#, #custBusiTyp#, #note#,
+			#bankNm#, #bankNo#, #bankUserNm#, #atchFileId#,
+			#taxEmail1#, #taxUserNm1#, #taxTelno1#,
+			#taxEmail2#, #taxUserNm2#, #taxTelno2#,
+			#taxEmail3#, #taxUserNm3#, #taxTelno3#,
+			#taxEmail4#, #taxUserNm4#, #taxTelno4#,
+			#taxEmail5#, #taxUserNm5#, #taxTelno5#, 'Y'
+		)
+	</insert>
+	
+	<update id="CustomerDAO.updateCustomer">
+		UPDATE TBL_CUSTOMER
+		SET
+			CUST_NM = #custNm#,
+			USER_NO_MOD = #userNoMod#,
+			MOD_DT = SYSDATE(),
+			CUST_BUSI_NO = #custBusiNo#,
+			CUST_REP_NM = #custRepNm#,
+			CUST_ADRES = #custAdres#,
+			CUST_TELNO = #custTelno#,
+			CUST_FAXNO = #custFaxno#,
+			CUST_BUSI_COND = #custBusiCond#,
+			CUST_BUSI_TYP = #custBusiTyp#,
+			NOTE = #note#,
+			BANK_NM = #bankNm#,
+			BANK_NO = #bankNo#,
+			ATCH_FILE_ID = #atchFileId#,
+			BANK_USER_NM = #bankUserNm#,
+			TAX_EMAIL_1 = #taxEmail1#,
+			TAX_USER_NM_1 = #taxUserNm1#,
+			TAX_TELNO_1 = #taxTelno1#,
+			TAX_EMAIL_2 = #taxEmail2#,
+			TAX_USER_NM_2 = #taxUserNm2#,
+			TAX_TELNO_2 = #taxTelno2#,
+			TAX_EMAIL_3 = #taxEmail3#,
+			TAX_USER_NM_3 = #taxUserNm3#,
+			TAX_TELNO_3 = #taxTelno3#,
+			TAX_EMAIL_4 = #taxEmail4#,
+			TAX_USER_NM_4 = #taxUserNm4#,
+			TAX_TELNO_4 = #taxTelno4#,
+			TAX_EMAIL_5 = #taxEmail5#,
+			TAX_USER_NM_5 = #taxUserNm5#,
+			TAX_TELNO_5 = #taxTelno5#
+		WHERE
+			CUST_ID = #custId#
+	</update>
+	
+	<update id="CustomerDAO.deleteCustomer">
+		UPDATE TBL_CUSTOMER
+		SET
+			USE_AT = 'N'
+		WHERE
+			CUST_ID = #custId#
+	</update>
+	
+	<insert id="CustomerDAO.insertCustomerPerson">
+		INSERT INTO TBL_CUSTOMER_PERSON
+		(
+			CUST_ID, PERSON_NM, PERSON_EMAIL, PERSON_HPNO, PERSON_TELNO, PERSON_NOTE
+		) VALUES (
+			#custId#, #personNm#, #personEmail#, #personHpno#, #personTelno#, #personNote#
+		)
+	</insert>
+
+	<delete id="CustomerDAO.deleteCustomerPerson">
+		DELETE
+		FROM TBL_CUSTOMER_PERSON
+		WHERE
+			CUST_ID = #custId#
+	</delete>
+	
+	<select id="CustomerDAO.selectCustomerComment" resultMap="customerCommentInfo">
+		SELECT
+			a.NO, a.USER_NO, b.USER_NM, b.USER_ID, a.CUST_ID, a.COMMENT_CN, a.ATCH_FILE_ID, a.REG_DT
+		FROM
+			TBL_CUSTOMER_COMMENT a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+		WHERE
+			a.USE_AT = 'Y'
+			AND a.CUST_ID = #custId#
+		<isNotEmpty prepend="AND" property="no">
+			a.NO = #no#
+		</isNotEmpty>
+		<!-- 2013.08.13 덧긋 정렬 순서 -->
+		ORDER BY a.REG_DT DESC
+	</select>
+	
+	<insert id="CustomerDAO.insertCustomerComment">
+		INSERT INTO TBL_CUSTOMER_COMMENT
+		(
+			USER_NO, CUST_ID, COMMENT_CN, ATCH_FILE_ID, REG_DT, USE_AT
+		) VALUES (
+			#userNo#, #custId#, #commentCn#, #atchFileId#, SYSDATE(), 'Y'
+		)
+	</insert>
+	
+	<update id="CustomerDAO.updateCustomerComment">
+		UPDATE TBL_CUSTOMER_COMMENT
+		SET
+			COMMENT_CN = #commentCn#
+		<isNotEmpty prepend="," property="atchFileId">
+			ATCH_FILE_ID = #atchFileId#
+		</isNotEmpty>
+		WHERE
+			NO = #no#
+	</update>
+	
+	<update id="CustomerDAO.deleteCustomerComment">
+		UPDATE TBL_CUSTOMER_COMMENT
+		SET
+			USE_AT = 'N'
+		WHERE
+			NO = #no#
+	</update>
+	
+</sqlMap>

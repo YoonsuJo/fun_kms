@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Account">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="accountVO" type="kms.com.app.service.AccountVO"/>
+	
+	<resultMap id="accountAll" class="kms.com.app.service.AccountVO">
+		<result property="accId" column="ACC_ID" columnIndex="1"/>
+		<result property="accNm" column="ACC_NM" columnIndex="2"/>
+		<result property="accLv" column="ACC_LV" columnIndex="3"/>
+		<result property="prntAccId" column="PRNT_ACC_ID" columnIndex="4"/>
+		<result property="prntAccNm" column="PRNT_ACC_NM" columnIndex="5"/>
+		<result property="accCt" column="ACC_CT" columnIndex="6"/>
+		<result property="useAt" column="USE_AT" columnIndex="7"/>
+		<result property="prntTyp" column="PRNT_TYP" columnIndex="7"/>
+		<result property="prntTypNm" column="PRNT_TYP_NM" columnIndex="7"/>
+		<result property="childTyp" column="CHILD_TYP" columnIndex="7"/>
+		<result property="childTypNm" column="CHILD_TYP_NM" columnIndex="7"/>
+				
+	</resultMap>
+	
+	<insert id="accountDAO.insertAccount"  parameterClass="accountVO" >
+		<selectKey  resultClass="java.lang.Integer" keyProperty="accOrd" >
+			SELECT IFNULL(MAX(ACC_ORD),-1)+1 ACC_ORD
+			FROM TBL_ACCOUNT
+		</selectKey>
+		<![CDATA[
+			INSERT INTO TBL_ACCOUNT 
+				( ACC_ID
+				  , ACC_NM
+				  , ACC_LV
+				  , PRNT_ACC_ID
+				  , PRNT_TYP
+				  , CHILD_TYP
+				  , ACC_CT
+				  , USE_AT
+				  , ACC_ORD )
+			VALUES ( #accId#
+				  , #accNm#
+				  , #accLv#
+				  , #prntAccId#
+				  , #prntTyp#
+				  , #childTyp#
+				  , #accCt#
+				  , #useAt#
+				  , #accOrd# )
+		]]>
+	</insert>
+	
+	
+	
+	<update id="accountDAO.updateAccount"  parameterClass="accountVO" >
+		<![CDATA[
+			UPDATE TBL_ACCOUNT
+				SET ACC_NM=#accNm#
+				, PRNT_ACC_ID=#prntAccId#
+				, ACC_CT=#accCt#
+				, USE_AT=#useAt#
+				, PRNT_TYP=#prntTyp#
+				, CHILD_TYP=#childTyp#
+			WHERE ACC_ID=#accId#
+		]]>
+	</update>
+	
+		<update id="accountDAO.updateAccountOrder"  parameterClass="accountVO" >
+		<![CDATA[
+			UPDATE TBL_ACCOUNT
+				SET ACC_ORD = #accOrd#
+			WHERE ACC_ID=#accId#
+		]]>
+	</update>
+	
+	<delete id="accountDAO.deleteTblAccount_S"  parameterClass="accountVO" >
+		<![CDATA[
+			DELETE FROM TBL_ACCOUNT 
+			WHERE ACC_ID=#accId#
+		]]>
+	</delete>
+	
+	<select id="accountDAO.selectAccountView" resultMap="accountAll">
+		<![CDATA[
+			SELECT
+				ACC1.ACC_ID
+				, ACC1.ACC_NM
+				, ACC1.ACC_LV
+				, ACC1.PRNT_ACC_ID
+				, ACC2.ACC_NM AS PRNT_ACC_NM
+				, ACC1.ACC_CT
+				, ACC1.USE_AT
+				, ACC2.PRNT_TYP
+				, COD1.CODE_NM PRNT_TYP_NM
+				, ACC1.CHILD_TYP
+				, COD2.CODE_NM CHILD_TYP_NM
+			FROM TBL_ACCOUNT ACC1
+				INNER JOIN TBL_ACCOUNT ACC2
+				ON ACC1.PRNT_ACC_ID = ACC2.ACC_ID
+				LEFT OUTER JOIN COMTCCMMNDETAILCODE COD1
+				ON ACC2.PRNT_TYP = COD1.CODE
+				AND COD1.CODE_ID = 'KMS015'
+				LEFT OUTER JOIN COMTCCMMNDETAILCODE COD2
+				ON ACC1.CHILD_TYP = COD2.CODE
+				AND COD2.CODE_ID = 'KMS016'
+			WHERE ACC1.ACC_ID=#accId#
+		]]>
+	</select>
+	
+	<select id="accountDAO.selectAccountList" parameterClass="accountVO" resultMap="accountAll">
+			SELECT
+				ACC1.ACC_ID
+				, ACC1.ACC_NM
+				, ACC1.ACC_LV
+				, ACC1.PRNT_ACC_ID
+				, ACC2.ACC_NM AS PRNT_ACC_NM
+				, ACC1.ACC_CT
+				, ACC1.USE_AT
+				, ACC2.PRNT_TYP
+				, COD1.CODE_NM PRNT_TYP_NM
+				, ACC1.CHILD_TYP
+				, COD2.CODE_NM CHILD_TYP_NM
+			FROM TBL_ACCOUNT ACC1
+				INNER JOIN TBL_ACCOUNT ACC2
+				ON ACC1.PRNT_ACC_ID = ACC2.ACC_ID
+				LEFT OUTER JOIN COMTCCMMNDETAILCODE COD1
+				ON ACC2.PRNT_TYP = COD1.CODE
+				AND COD1.CODE_ID = 'KMS015'
+				LEFT OUTER JOIN COMTCCMMNDETAILCODE COD2
+				ON ACC1.CHILD_TYP = COD2.CODE
+				AND COD2.CODE_ID = 'KMS016'
+			WHERE 1=1
+				AND ACC1.ACC_LV = #accLv#
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				ACC1.ACC_ID = #searchKeyword#
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				ACC1.ACC_NM LIKE CONCAT('%',#searchKeyword#,'%')
+			</isEqual>
+			GROUP BY 
+				ACC1.ACC_ID
+			ORDER BY 
+				ACC2.ACC_ORD ASC
+				,ACC2.PRNT_ACC_ID
+				,ACC1.ACC_ORD
+	</select>	
+	
+	
+	<select id="accountDAO.selectAccountListTree" parameterClass="accountVO" resultClass="egovMap">
+	SELECT
+		ACC1.ACC_ID
+		, ACC1.ACC_NM
+		, ACC1.ACC_LV
+		, ACC1.PRNT_ACC_ID
+		, ACC2.ACC_NM PRNT_ACC_NM
+		, ACC1.ACC_CT
+		, ACC1.USE_AT
+		, ACC1.ACC_ORD
+	FROM TBL_ACCOUNT ACC1
+	INNER JOIN TBL_ACCOUNT ACC2
+	ON ACC1.PRNT_ACC_ID = ACC2.ACC_ID
+	WHERE 1=1
+		AND ACC1.USE_AT = "Y"
+		AND ACC1.ACC_LV = 2
+	<isNotEqual property="searchChildTyp" compareValue="0">
+		AND ACC1.CHILD_TYP = #searchChildTyp#
+	</isNotEqual>
+	UNION ALL
+	
+	SELECT
+		ACC1.ACC_ID
+		, ACC1.ACC_NM
+		, ACC1.ACC_LV
+		, ACC1.PRNT_ACC_ID
+		, "" 
+		, ACC1.ACC_CT
+		, ACC1.USE_AT
+		, ACC1.ACC_ORD
+	FROM TBL_ACCOUNT ACC1
+	INNER JOIN TBL_ACCOUNT ACC2 
+	ON ACC1.ACC_ID = ACC2.PRNT_ACC_ID
+	AND ACC2.PRNT_ACC_ID != ACC2.ACC_ID
+	<isNotEqual property="searchChildTyp" compareValue="0">
+		AND ACC2.CHILD_TYP = #searchChildTyp#
+	</isNotEqual> 
+	WHERE 1=1
+		AND ACC1.USE_AT = "Y"
+		AND ACC1.ACC_LV = 1
+	
+	GROUP BY ACC1.ACC_ID 
+	
+	ORDER BY 
+		PRNT_ACC_ID,
+		ACC_LV,
+		ACC_ORD
+	</select>	
+	
+	<select id="accountDAO.selectChildAccountCnt" parameterClass="accountVO" resultClass="java.lang.Integer">
+			SELECT
+				COUNT(*)
+			FROM TBL_ACCOUNT 
+			WHERE 
+				ACC_ID != #accId# 
+				AND PRNT_ACC_ID = #accId#
+	</select>	
+	
+	<update id="accountDAO.updateBatchChildAccTyp">
+	<!-- 변경되는 부모타임에 따라 해당 하위 결재코드의 값을 바꿔줌 -->
+	UPDATE 
+		 TBL_ACCOUNT a
+	SET  CHILD_TYP = IF( #prntTyp#='E',10,13)
+	WHERE PRNT_ACC_ID =#accId#
+	AND ACC_LV = 2
+	
+	</update>
+
+	<select id="accountDAO.selectPresetChildAccCnt" resultClass="java.lang.Integer">
+	SELECT
+		COUNT(*) CNT
+	
+	FROM TBL_ACCOUNT a
+	INNER JOIN TBL_EAPP_PRESET b
+	ON a.ACC_ID = b.ACC_ID
+	
+	WHERE PRNT_ACC_ID = #accId#
+	AND ACC_LV = 2
+	</select>
+	
+	<select id="accountDAO.selectPresetAccCnt" resultClass="java.lang.Integer">
+	SELECT
+		COUNT(*) CNT
+	
+	FROM TBL_ACCOUNT a
+	INNER JOIN TBL_EAPP_PRESET b
+	ON a.ACC_ID = b.ACC_ID
+	
+	WHERE a.ACC_ID = #accId#
+	AND ACC_LV = 2
+	</select>
+
+</sqlMap>

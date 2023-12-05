@@ -1,0 +1,1515 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="MemberDAO">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>	
+	<typeAlias  alias="memberVO" type="kms.com.member.service.MemberVO"/>
+	<typeAlias  alias="workStateVO" type="kms.com.member.service.WorkStateVO"/>
+
+	<resultMap id="absenceList" class="kms.com.member.service.WorkStateVO">
+		<result	property="wsId"				column="WS_ID"				columnIndex="1"/>
+		<result	property="userNo"			column="USER_NO"			columnIndex="2"/>
+		<result	property="userId"			column="USER_ID"			columnIndex="3"/>
+		<result	property="userNm"			column="USER_NM"			columnIndex="4"/>
+		<result	property="writerNo"			column="WRITER_NO"			columnIndex="5"/>
+		<result	property="writerId"			column="WRITER_ID"			columnIndex="6"/>
+		<result	property="writerNm"			column="WRITER_NM"			columnIndex="7"/>
+		<result	property="orgnztId"			column="ORGNZT_ID"			columnIndex="8"/>
+		<result	property="orgnztNm"			column="ORGNZT_NM"			columnIndex="9"/>
+		<result	property="offmAdres"		column="OFFM_ADRES"			columnIndex="10"/>
+		<result	property="wsBgnDe"			column="WS_BGN_DE"			columnIndex="11"/>
+		<result	property="wsEndDe"			column="WS_END_DE"			columnIndex="12"/>
+		<result	property="wsBgnTm"			column="WS_BGN_TM"			columnIndex="13"/>
+		<result	property="wsEndTm"			column="WS_END_TM"			columnIndex="14"/>
+		<result	property="userTelno"		column="USER_TELNO"			columnIndex="15"/>
+		<result	property="userMoblphonNo"	column="USER_MOBLPHON_NO"	columnIndex="16"/>
+		<result	property="wsPlace"			column="WS_PLACE"			columnIndex="17"/>
+		<result	property="wsPurpose"		column="WS_PURPOSE"			columnIndex="18"/>
+		<result	property="wsTyp"			column="WS_TYP"				columnIndex="19"/>
+		<result	property="attendTm"			column="ATTEND_TM"			columnIndex="20"/>
+		<result	property="regDt"			column="REG_DT"				columnIndex="21"/>
+	</resultMap>
+	
+	<resultMap id="absentData" class="kms.com.member.service.WorkStateVO">
+		<result	property="wsId"				column="WS_ID"				columnIndex="1"/>		
+	</resultMap>
+	
+	<resultMap id="workState" class="kms.com.member.service.WorkStateVO">
+		<result	property="wsId"				column="WS_ID"				columnIndex="1"/>
+		<result	property="userNo"			column="USER_NO"			columnIndex="2"/>
+		<result	property="wsBgnDe"			column="WS_BGN_DE"			columnIndex="3"/>
+		<result	property="wsEndDe"			column="WS_END_DE"			columnIndex="4"/>
+		<result	property="wsBgnTm"			column="WS_BGN_TM"			columnIndex="5"/>
+		<result	property="wsEndTm"			column="WS_END_TM"			columnIndex="6"/>
+		<result	property="wsHrCnt"			column="WS_HR_CNT"			columnIndex="7"/>
+		<result	property="userTelno"		column="USER_TELNO"			columnIndex="8"/>
+		<result	property="userMoblphonNo"	column="USER_MOBLPHON_NO"	columnIndex="9"/>
+		<result	property="wsPlace"			column="WS_PLACE"			columnIndex="10"/>
+		<result	property="wsPurpose"		column="WS_PURPOSE"			columnIndex="11"/>
+		<result	property="wsTyp"			column="WS_TYP"				columnIndex="12"/>
+		<result	property="userNm"			column="USER_NM"			columnIndex="13"/>
+		<result	property="userId"			column="USER_ID"			columnIndex="14"/>
+	</resultMap>
+
+	<resultMap id="overtimeList" class="kms.com.member.service.WorkStateVO">
+		<result	property="wsId"				column="WS_ID"				columnIndex="1"/>
+		<result	property="userNo"			column="USER_NO"			columnIndex="2"/>
+		<result	property="userId"			column="USER_ID"			columnIndex="3"/>
+		<result	property="userNm"			column="USER_NM"			columnIndex="4"/>
+		<result	property="writerNo"			column="WRITER_NO"			columnIndex="5"/>
+		<result	property="writerId"			column="WRITER_ID"			columnIndex="6"/>
+		<result	property="writerNm"			column="WRITER_NM"			columnIndex="7"/>
+		<result	property="orgnztId"			column="ORGNZT_ID"			columnIndex="8"/>
+		<result	property="orgnztNm"			column="ORGNZT_NM"			columnIndex="9"/>
+		<result	property="wsBgnDe"			column="WS_BGN_DE"			columnIndex="10"/>
+		<result	property="wsBgnTm"			column="WS_BGN_TM"			columnIndex="11"/>
+		<result	property="wsHrCnt"			column="WS_HR_CNT"			columnIndex="12"/>
+		<result	property="userTelno"		column="USER_TELNO"			columnIndex="13"/>
+		<result	property="userMoblphonNo"	column="USER_MOBLPHON_NO"	columnIndex="14"/>
+		<result	property="wsPurpose"		column="WS_PURPOSE"			columnIndex="15"/>		
+		<result	property="regDt"			column="REG_DT"				columnIndex="16"/>
+		<result	property="userIp"			column="USER_IP"			columnIndex="17"/>
+		<result	property="isInnerNetwork"	column="IS_INNER_NETWORK"	columnIndex="18"/>
+		<result	property="isRegBefore"		column="IS_REG_BEFORE_WS_BGN_TM"	columnIndex="19"/>
+		<result	property="isRegBeforeTen"	column="IS_REG_BEFORE_TEN"			columnIndex="20"/>		
+	</resultMap>
+	
+	<resultMap id="dailyWorkStateStatistic" class="kms.com.member.service.WorkStateStatistic">
+		<result	property="userCnt"		column="USER_CNT"		columnIndex="1"/>
+		<result	property="vac"			column="VAC"			columnIndex="2"/>
+		<result	property="bizTrip"		column="BIZ_TRIP"		columnIndex="3"/>
+		<result	property="send"			column="SEND"			columnIndex="4"/>
+		<result	property="workOut"		column="WORK_OUT"		columnIndex="5"/>
+		<result	property="earlyAtnd"	column="EARLY_ATND"		columnIndex="6"/>
+		<result	property="atnd"			column="ATND"			columnIndex="7"/>
+		<result	property="night"		column="NIGHT"			columnIndex="8"/>
+		<result	property="etc"			column="ETC"			columnIndex="9"/>
+		<result	property="late"			column="LATE"			columnIndex="10"/>
+	</resultMap>
+	
+	<resultMap id="dailyWorkStateDetail" class="kms.com.member.service.WorkStateDetail">
+		<result	property="userNo"		column="USER_NO"	columnIndex="1"/>
+		<result	property="userNm"		column="USER_NM"	columnIndex="2"/>
+		<result	property="userId"		column="USER_ID"	columnIndex="3"/>
+		<result	property="orgnztId"		column="ORGNZT_ID"	columnIndex="4"/>
+		<result	property="orgnztNm"		column="ORGNZT_NM"	columnIndex="5"/>
+		<result	property="attendCd"		column="ATTEND_CD"	columnIndex="6"/>
+		<result	property="attendDt"		column="ATTEND_DT"	columnIndex="7"/>
+		<result	property="attendTm"		column="ATTEND_TM"	columnIndex="8"/>
+		<result	property="attendIp"		column="ATTEND_IP"	columnIndex="9"/>
+		<result	property="wsPlace"		column="WS_PLACE"	columnIndex="10"/>
+		<result	property="wsPurpose"	column="WS_PURPOSE"	columnIndex="11"/>
+		<result	property="wsId"			column="WS_ID"		columnIndex="12"/>
+		<result	property="wsBgnTm"		column="WS_BGN_TM"	columnIndex="13"/>
+		<result	property="wsEndTm"		column="WS_END_TM"	columnIndex="14"/>
+		<result	property="wsBgnDe"		column="WS_BGN_DE"	columnIndex="15"/>
+		<result	property="wsEndDe"		column="WS_END_DE"	columnIndex="16"/>
+		<result property="orgnztNmFull"	column="ORGNZT_NM_FULL"	columnIndex="17"/>
+		<result property="rankNm"		column="RANK_NM"	columnIndex="18"/>	
+	</resultMap>
+		
+	<resultMap id="workStateStatistic" class="kms.com.member.service.WorkStateStatistic">
+		<result	property="userNo"		column="USER_NO"		columnIndex="1"/>
+		<result	property="userNm"		column="USER_NM"		columnIndex="1"/>
+		<result	property="userId"		column="USER_ID"		columnIndex="1"/>
+		<result	property="orgnztId"		column="ORGNZT_ID"		columnIndex="1"/>
+		<result	property="orgnztNm"		column="ORGNZT_NM"		columnIndex="1"/>
+		<result	property="dateCnt"		column="DATE_CNT"		columnIndex="1"/>
+		<result	property="vac"			column="VAC"			columnIndex="2"/>
+		<result	property="bizTrip"		column="BIZ_TRIP"		columnIndex="3"/>
+		<result	property="send"			column="SEND"			columnIndex="4"/>
+		<result	property="workOut"		column="WORK_OUT"		columnIndex="5"/>
+		<result	property="earlyAtnd"	column="EARLY_ATND"		columnIndex="6"/>
+		<result	property="atnd"			column="ATND"			columnIndex="7"/>
+		<result	property="night"		column="NIGHT"			columnIndex="8"/>
+		<result	property="etc"			column="ETC"			columnIndex="9"/>
+		<result	property="late"			column="LATE"			columnIndex="10"/>
+	</resultMap>
+	
+	<resultMap id="workStateDetail" class="kms.com.member.service.WorkStateDetail">
+		<result	property="userNo"		column="USER_NO"	columnIndex="1"/>
+		<result	property="userNm"		column="USER_NM"	columnIndex="2"/>
+		<result	property="userId"		column="USER_ID"	columnIndex="3"/>
+		<result	property="orgnztId"		column="ORGNZT_ID"	columnIndex="4"/>
+		<result	property="orgnztNm"		column="ORGNZT_NM"	columnIndex="5"/>
+		<result	property="attendCd"		column="ATTEND_CD"	columnIndex="6"/>
+		<result	property="attendDt"		column="ATTEND_DT"	columnIndex="7"/>
+		<result	property="attendTm"		column="ATTEND_TM"	columnIndex="8"/>
+		<result	property="attendIp"		column="ATTEND_IP"	columnIndex="9"/>
+		<result	property="wsPlace"		column="WS_PLACE"	columnIndex="10"/>
+		<result	property="wsPurpose"	column="WS_PURPOSE"	columnIndex="11"/>
+		<result	property="wsId"			column="WS_ID"		columnIndex="12"/>
+		<result	property="wsBgnTm"		column="WS_BGN_TM"	columnIndex="13"/>
+		<result	property="wsTyp"		column="WS_TYP"		columnIndex="14"/>
+	</resultMap>
+	
+
+	<select id="WorkStateDAO.selectAbsenceList" resultMap="absenceList">	
+		SELECT
+			result.*
+		FROM (
+				(
+				SELECT
+					a.WS_ID
+					, a.USER_NO
+					, b.USER_ID AS USER_ID
+					, b.USER_NM AS USER_NM
+					, a.WRITER_NO
+					, c.USER_ID AS WRITER_ID
+					, c.USER_NM AS WRITER_NM
+					, b.ORGNZT_ID
+					, d.ORGNZT_NM
+					, f.COLUMN1 AS OFFM_ADRES
+					, DATE_FORMAT(a.WS_BGN_DE, '%Y.%m.%d(%a)') AS WS_BGN_DE
+					, DATE_FORMAT(a.WS_END_DE, '%Y.%m.%d(%a)') AS WS_END_DE
+					, a.WS_BGN_TM
+					, a.WS_END_TM
+					, a.USER_TELNO
+					, a.USER_MOBLPHON_NO
+					, a.WS_PLACE
+					, a.WS_PURPOSE
+					, a.WS_TYP
+					, CAST(a.REG_DT AS CHAR) AS ATTEND_TM
+					, CAST(a.REG_DT AS CHAR) AS REG_DT
+				FROM
+					TBL_WORK_STATE a
+					LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+					LEFT JOIN TBL_USERINFO c ON a.WRITER_NO = c.NO
+					LEFT JOIN TBL_ORGNZT d ON b.ORGNZT_ID = d.ORGNZT_ID
+					LEFT JOIN (
+						SELECT
+							doc.WRITER_NO
+							, vac.*
+							, 1 AS VAC
+						FROM
+							TBL_EAPP_DOC doc
+							INNER JOIN TBL_EAPP_VAC vac
+							ON doc.DOC_ID = vac.DOC_ID
+						WHERE
+							doc.DOC_STAT IN ('APP004', 'APP005')
+							AND doc.NEW_AT = 1
+						<!--오전 오후 반차 12시 기준 -> 14시 기준으로 변경 IF(DATE_FORMAT(SYSDATE(),'%H') >= '12' -> '14' -->
+							AND CONCAT(DATE_FORMAT(SYSDATE(), '%Y%m%d'), IF(DATE_FORMAT(SYSDATE(),'%H') >= '14', '2', '1')) >= CONCAT(vac.ST_DT, vac.ST_AMPM)
+							AND CONCAT(vac.ED_DT, vac.ED_AMPM) >= CONCAT(DATE_FORMAT(SYSDATE(), '%Y%m%d'), IF(DATE_FORMAT(SYSDATE(),'%H') >= '14', '2', '1'))
+					) e ON a.USER_NO = e.WRITER_NO
+						AND a.WS_TYP = 'V'
+						AND A.DOC_ID = E.DOC_ID
+					LEFT JOIN COMTCCMMNDETAILCODE f ON f.CODE_ID = 'KMS005' AND b.OFFM_ID = f.CODE
+				WHERE
+					a.USE_AT = 'Y'
+					AND	(
+							(
+							a.WS_TYP = 'O'
+							AND a.WS_BGN_DE = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+							AND DATE_FORMAT(SYSDATE(),'%H') >= a.WS_BGN_TM
+							AND a.WS_END_TM > DATE_FORMAT(SYSDATE(),'%H')
+						) OR (
+							a.WS_TYP IN ('S', 'T')
+							AND DATEDIFF(DATE_FORMAT(SYSDATE(), '%Y%m%d'), a.WS_BGN_DE) >= 0
+							AND DATEDIFF(a.WS_END_DE, DATE_FORMAT(SYSDATE(), '%Y%m%d')) >= 0
+						) OR (
+							a.WS_TYP IN ('V')
+							AND e.VAC = 1
+							AND DATEDIFF(DATE_FORMAT(SYSDATE(), '%Y%m%d'), a.WS_BGN_DE) >= 0
+							AND DATEDIFF(a.WS_END_DE, DATE_FORMAT(SYSDATE(), '%Y%m%d')) >= 0
+						)
+					)
+					AND fn_get_orgid_history(b.NO, DATE_FORMAT(SYSDATE(), '%Y%m%d')) != 'ORGAN_RET_ORGAN_CODE'	
+					<isNotEmpty prepend="AND" property="searchOrgId">
+						<iterate prepend="b.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+							#searchOrgIdList[]#
+						</iterate>
+					</isNotEmpty>	
+			) UNION ALL (
+				SELECT
+					'ATTEND' AS WS_ID
+					, a.USER_NO
+					, b.USER_ID AS USER_ID
+					, b.USER_NM AS USER_NM
+					, a.USER_NO AS WRITER_NO
+					, c.USER_ID AS WRITER_ID
+					, c.USER_NM AS WRITER_NM
+					, b.ORGNZT_ID
+					, d.ORGNZT_NM
+					, f.COLUMN1 AS OFFM_ADRES
+					, DATE_FORMAT(SYSDATE(), '%Y.%m.%d(%a)') AS WS_BGN_DE
+					, DATE_FORMAT(SYSDATE(), '%Y.%m.%d(%a)') AS WS_END_DE
+					, IFNULL(e.WS_BGN_TM, '-') AS WS_BGN_TM
+					, '' AS WS_END_TM
+					, b.HOME_TELNO AS USER_TELNO
+					, b.MOBLPHON_NO AS USER_MOBLPHON_NO
+					, '' AS WS_PLACE
+					, IFNULL(e.WS_PURPOSE, '-') AS WS_PURPOSE
+					, IF(a.ATTEND_CD = 'NT', 'N', 'L') AS WS_TYP
+					, ATTEND_TM
+					, ATTEND_TM AS REG_DT
+				FROM
+					TBL_ATTEND_CHECK a
+					LEFT JOIN (
+						SELECT
+							usr.*
+							, IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'executive', ',%'), 'Y', 'N') AS IS_LEADER
+						FROM
+							TBL_USERINFO usr
+							LEFT JOIN TBL_USER_AUTH auth
+							ON usr.NO = auth.USER_NO
+						WHERE
+							usr.GHOST = '0'
+							AND usr.COMPIN_DT IS NOT NULL
+						GROUP BY
+							usr.NO
+					) b ON a.USER_NO = b.NO
+					LEFT JOIN TBL_USERINFO c ON a.USER_NO = c.NO
+					LEFT JOIN TBL_ORGNZT d ON b.ORGNZT_ID = d.ORGNZT_ID
+					LEFT JOIN TBL_WORK_STATE e ON a.USER_NO = e.USER_NO
+					AND DATEDIFF(SYSDATE(), e.WS_BGN_DE) = 1
+					AND e.WS_TYP = 'N'
+					AND e.USE_AT = 'Y'
+					LEFT JOIN COMTCCMMNDETAILCODE f ON f.CODE_ID = 'KMS005' AND b.OFFM_ID = f.CODE
+				WHERE
+					a.ATTEND_DT = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+					AND DATE_FORMAT(SYSDATE(), '%H:%i') >= '09:00'
+					AND C.ORGNZT_ID != 'ORGAN_RET_ORGAN_CODE'
+					AND (
+							(
+							a.ATTEND_CD IS NULL							
+						<isEqual property="excludeLeader" compareValue="Y">
+							AND B.IS_LEADER = 'N'
+						</isEqual>
+						) OR (
+							a.ATTEND_CD = 'NT'
+							AND a.ATTEND_TM IS NULL
+						) OR (
+							a.ATTEND_CD = 'LT'
+							AND a.ATTEND_TM IS NULL	
+						<isEqual property="excludeLeader" compareValue="Y">
+							AND B.IS_LEADER = 'N'
+						</isEqual>	
+						)
+					)					
+					<isNotEmpty property="exceptionUsersList">
+						AND B.NO NOT IN
+						<iterate property="exceptionUsersList" open="(" close=")" conjunction=",">
+			           		 #exceptionUsersList[]#
+						</iterate>				
+					</isNotEmpty>
+					<isNotEmpty prepend="AND" property="searchOrgId">
+						<iterate prepend="b.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+							#searchOrgIdList[]#
+						</iterate>
+					</isNotEmpty>
+			)
+		) result
+	<isNotEmpty property="orderBy">			
+		ORDER BY USER_NM
+	</isNotEmpty>
+	<isEmpty property="orderBy">
+		ORDER BY WS_TYP, WS_PLACE, USER_NM			
+	</isEmpty>
+	</select>
+	
+	
+	<select id="WorkStateDAO.selectAbsenceState" resultClass="egovMap">	
+		SELECT
+			result.*
+		FROM (
+				(
+				SELECT
+					a.WS_TYP AS WS_TYP, COUNT(*) AS WS_TYP_CNT
+				FROM
+					TBL_WORK_STATE a
+					LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+					LEFT JOIN TBL_ORGNZT d ON b.ORGNZT_ID = d.ORGNZT_ID
+					LEFT JOIN (
+						SELECT
+							doc.WRITER_NO
+							, vac.*
+							, 1 AS VAC
+						FROM
+							TBL_EAPP_DOC doc
+							INNER JOIN TBL_EAPP_VAC vac
+							ON doc.DOC_ID = vac.DOC_ID
+						WHERE
+							doc.DOC_STAT IN ('APP004', 'APP005')
+							AND doc.NEW_AT = 1
+							AND CONCAT(DATE_FORMAT(SYSDATE(), '%Y%m%d'), IF(DATE_FORMAT(SYSDATE(),'%H') >= '14', '2', '1')) >= CONCAT(vac.ST_DT, vac.ST_AMPM)
+							AND CONCAT(vac.ED_DT, vac.ED_AMPM) >= CONCAT(DATE_FORMAT(SYSDATE(), '%Y%m%d'), IF(DATE_FORMAT(SYSDATE(),'%H') >= '14', '2', '1'))
+					) e ON a.USER_NO = e.WRITER_NO
+						AND a.WS_TYP = 'V'
+						AND A.DOC_ID = E.DOC_ID
+				WHERE
+					USE_AT = 'Y'
+					AND (
+							(
+							a.WS_TYP = 'O'
+							AND a.WS_BGN_DE = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+							AND DATE_FORMAT(SYSDATE(),'%H') >= a.WS_BGN_TM
+							AND a.WS_END_TM > DATE_FORMAT(SYSDATE(),'%H')
+						) OR (
+							a.WS_TYP IN ('S', 'T')
+							AND DATEDIFF(DATE_FORMAT(SYSDATE(), '%Y%m%d'), a.WS_BGN_DE) >= 0
+							AND DATEDIFF(a.WS_END_DE, DATE_FORMAT(SYSDATE(), '%Y%m%d')) >= 0
+						) OR (
+							a.WS_TYP IN ('V')
+							AND e.VAC = 1
+							AND DATEDIFF(DATE_FORMAT(SYSDATE(), '%Y%m%d'), a.WS_BGN_DE) >= 0
+							AND DATEDIFF(a.WS_END_DE, DATE_FORMAT(SYSDATE(), '%Y%m%d')) >= 0
+						)
+					)
+					AND fn_get_orgid_history(b.NO, DATE_FORMAT(SYSDATE(), '%Y%m%d')) != 'ORGAN_RET_ORGAN_CODE'
+
+					<isNotEmpty prepend="AND" property="searchOrgId">
+						<iterate prepend="b.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+							#searchOrgIdList[]#
+						</iterate>
+					</isNotEmpty>
+	
+				GROUP BY a.WS_TYP
+			) UNION ALL (
+				SELECT
+					IF(a.ATTEND_CD = 'NT', 'N', 'L') AS WS_TYP
+					, COUNT(*) AS WS_TYP_CNT
+				FROM
+					TBL_ATTEND_CHECK a
+					LEFT JOIN (
+						SELECT
+							usr.*
+							, IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'executive', ',%'), 'Y', 'N') AS IS_LEADER
+						FROM
+							TBL_USERINFO usr
+							LEFT JOIN TBL_USER_AUTH auth
+							ON usr.NO = auth.USER_NO
+						WHERE
+							usr.GHOST = '0'
+							AND usr.COMPIN_DT IS NOT NULL
+						GROUP BY
+							usr.NO
+					) b ON a.USER_NO = b.NO
+					LEFT JOIN TBL_USERINFO c ON a.USER_NO = c.NO
+					LEFT JOIN TBL_ORGNZT d ON b.ORGNZT_ID = d.ORGNZT_ID
+				WHERE
+					a.ATTEND_DT = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+					AND DATE_FORMAT(SYSDATE(), '%H:%i') >= '09:00'
+					AND C.ORGNZT_ID != 'ORGAN_RET_ORGAN_CODE'
+					AND	(	
+							(
+							a.ATTEND_CD IS NULL
+						)
+						OR (
+							a.ATTEND_CD = 'NT'
+							AND a.ATTEND_TM IS NULL
+						)
+						OR (
+							a.ATTEND_CD = 'LT'
+							AND a.ATTEND_TM IS NULL				
+						)
+					)					
+				<isNotEmpty property="exceptionUsersList">
+					AND B.NO NOT IN
+					<iterate property="exceptionUsersList" open="(" close=")" conjunction=",">
+		           		 #exceptionUsersList[]#
+					</iterate>				
+				</isNotEmpty>
+				<isEqual property="excludeLeader" compareValue="Y">
+					AND B.IS_LEADER = 'N'
+				</isEqual>
+	
+					<isNotEmpty prepend="AND" property="searchOrgId">
+						<iterate prepend="b.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+							#searchOrgIdList[]#
+						</iterate>
+					</isNotEmpty>
+				GROUP BY
+					IFNULL(a.ATTEND_CD, 'LT')
+			)
+		) result
+	</select>
+	
+	<select id="WorkStateDAO.selectAbsenceStateDatail" resultMap="dailyWorkStateDetail">
+		SELECT
+			USER_NO, USER_NM, USER_ID
+			,ORGNZT_ID
+			,ORGNZT_NM
+			,ATTEND_CD
+			,ATTEND_DT
+			,ATTEND_TM
+			,ATTEND_IP
+			,WS_PLACE
+			,WS_PURPOSE
+			,WS_ID
+			,WS_BGN_TM
+			,WS_END_TM
+			,DATE_FORMAT(WS_BGN_DE, '%Y.%m.%d(%a)') AS WS_BGN_DE
+			,DATE_FORMAT(WS_END_DE, '%Y.%m.%d(%a)') AS WS_END_DE
+			,FN_CREATE_ORGAN_FNM(ORGNZT_ID) AS ORGNZT_NM_FULL
+			,CODE_NM AS RANK_NM
+		FROM (
+				(
+				SELECT
+					a.WS_ID
+					, a.USER_NO
+					, b.USER_ID AS USER_ID
+					, b.USER_NM AS USER_NM
+					, a.WRITER_NO
+					, c.USER_ID AS WRITER_ID
+					, c.USER_NM AS WRITER_NM
+					, b.ORGNZT_ID
+					, d.ORGNZT_NM
+					, f.COLUMN1 AS OFFM_ADRES
+					, DATE_FORMAT(a.WS_BGN_DE, '%Y.%m.%d(%a)') AS WS_BGN_DE
+					, DATE_FORMAT(a.WS_END_DE, '%Y.%m.%d(%a)') AS WS_END_DE
+					, a.WS_BGN_TM
+					, a.WS_END_TM
+					, a.USER_TELNO
+					, a.USER_MOBLPHON_NO
+					, a.WS_PLACE
+					, a.WS_PURPOSE
+					, a.WS_TYP					
+					, CAST(a.REG_DT AS CHAR) AS REG_DT
+					, AC.ATTEND_TM
+					, CASE WHEN WS_TYP = 'O' THEN 'OT'
+						WHEN WS_TYP = 'S' THEN 'SD'
+						WHEN WS_TYP = 'T' THEN 'TR'
+						WHEN WS_TYP = 'V' THEN 'VC'
+						WHEN WS_TYP = 'N' THEN 'NT'						
+						END ATTEND_CD
+					, AC.ATTEND_DT
+					, AC.ATTEND_IP
+					, RC.CODE_NM
+				FROM
+					TBL_WORK_STATE a
+					LEFT JOIN TBL_ATTEND_CHECK AC
+						ON A.USER_NO = AC.USER_NO
+						AND AC.ATTEND_DT = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+					LEFT JOIN TBL_USERINFO b 
+						ON a.USER_NO = b.NO
+					LEFT JOIN TBL_USERINFO c 
+						ON a.WRITER_NO = c.NO
+					LEFT JOIN COMTCCMMNDETAILCODE RC 
+						ON B.RANK_ID = RC.CODE 
+						AND RC.CODE_ID = 'KMS003'
+					LEFT JOIN TBL_ORGNZT d 
+						ON b.ORGNZT_ID = d.ORGNZT_ID
+					LEFT JOIN (
+						SELECT
+							doc.WRITER_NO
+							, vac.*
+							, 1 AS VAC
+						FROM
+							TBL_EAPP_DOC doc
+							INNER JOIN TBL_EAPP_VAC vac
+							ON doc.DOC_ID = vac.DOC_ID
+						WHERE
+							doc.DOC_STAT IN ('APP004', 'APP005')
+							AND doc.NEW_AT = 1
+<!--							오전 오후 반차 12시 기준 -> 14시 기준으로 변경 IF(DATE_FORMAT(SYSDATE(),'%H') >= '12' -> '14' -->
+							AND CONCAT(DATE_FORMAT(SYSDATE(), '%Y%m%d'), IF(DATE_FORMAT(SYSDATE(),'%H') >= '14', '2', '1')) >= CONCAT(vac.ST_DT, vac.ST_AMPM)
+							AND CONCAT(vac.ED_DT, vac.ED_AMPM) >= CONCAT(DATE_FORMAT(SYSDATE(), '%Y%m%d'), IF(DATE_FORMAT(SYSDATE(),'%H') >= '14', '2', '1'))
+					) e ON a.USER_NO = e.WRITER_NO
+						AND a.WS_TYP = 'V'
+						AND A.DOC_ID = E.DOC_ID
+					LEFT JOIN COMTCCMMNDETAILCODE f ON f.CODE_ID = 'KMS005' AND b.OFFM_ID = f.CODE
+				WHERE
+					a.USE_AT = 'Y'
+					AND	(
+							(
+							a.WS_TYP = 'O'
+							AND a.WS_BGN_DE = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+							AND DATE_FORMAT(SYSDATE(),'%H') >= a.WS_BGN_TM
+							AND a.WS_END_TM > DATE_FORMAT(SYSDATE(),'%H')
+						) OR (
+							a.WS_TYP IN ('S', 'T')
+							AND DATEDIFF(DATE_FORMAT(SYSDATE(), '%Y%m%d'), a.WS_BGN_DE) >= 0
+							AND DATEDIFF(a.WS_END_DE, DATE_FORMAT(SYSDATE(), '%Y%m%d')) >= 0
+						) OR (
+							a.WS_TYP IN ('V')
+							AND e.VAC = 1
+							AND DATEDIFF(DATE_FORMAT(SYSDATE(), '%Y%m%d'), a.WS_BGN_DE) >= 0
+							AND DATEDIFF(a.WS_END_DE, DATE_FORMAT(SYSDATE(), '%Y%m%d')) >= 0
+						)
+					)
+					AND fn_get_orgid_history(b.NO, DATE_FORMAT(SYSDATE(), '%Y%m%d')) != 'ORGAN_RET_ORGAN_CODE'	
+					<isNotEmpty prepend="AND" property="searchOrgId">
+						<iterate prepend="b.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+							#searchOrgIdList[]#
+						</iterate>
+					</isNotEmpty>	
+			) UNION ALL (
+				SELECT
+					'ATTEND' AS WS_ID
+					, a.USER_NO
+					, b.USER_ID AS USER_ID
+					, b.USER_NM AS USER_NM
+					, a.USER_NO AS WRITER_NO
+					, c.USER_ID AS WRITER_ID
+					, c.USER_NM AS WRITER_NM
+					, b.ORGNZT_ID
+					, d.ORGNZT_NM
+					, f.COLUMN1 AS OFFM_ADRES
+					, DATE_FORMAT(SYSDATE(), '%Y.%m.%d(%a)') AS WS_BGN_DE
+					, DATE_FORMAT(SYSDATE(), '%Y.%m.%d(%a)') AS WS_END_DE
+					, IFNULL(e.WS_BGN_TM, '-') AS WS_BGN_TM
+					, '' AS WS_END_TM
+					, b.HOME_TELNO AS USER_TELNO
+					, b.MOBLPHON_NO AS USER_MOBLPHON_NO
+					, '' AS WS_PLACE
+					, IFNULL(e.WS_PURPOSE, '-') AS WS_PURPOSE
+					, IF(a.ATTEND_CD = 'NT', 'N', 'L') AS WS_TYP
+					, A.ATTEND_TM
+					, A.ATTEND_TM AS REG_DT
+					, A.ATTEND_CD
+					, A.ATTEND_DT
+					, A.ATTEND_IP
+					, RC.CODE_NM
+				FROM
+					TBL_ATTEND_CHECK a
+					LEFT JOIN (
+						SELECT
+							usr.*
+							, IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'executive', ',%'), 'Y', 'N') AS IS_LEADER
+						FROM
+							TBL_USERINFO usr
+							LEFT JOIN TBL_USER_AUTH auth
+							ON usr.NO = auth.USER_NO
+						WHERE
+							usr.GHOST = '0'
+							AND usr.COMPIN_DT IS NOT NULL
+						GROUP BY
+							usr.NO
+					) b ON a.USER_NO = b.NO
+					LEFT JOIN TBL_USERINFO c 
+						ON a.USER_NO = c.NO
+					LEFT JOIN COMTCCMMNDETAILCODE RC 
+						ON B.RANK_ID = RC.CODE 
+						AND RC.CODE_ID = 'KMS003'
+					LEFT JOIN TBL_ORGNZT d 
+						ON b.ORGNZT_ID = d.ORGNZT_ID
+					LEFT JOIN TBL_WORK_STATE e 
+						ON a.USER_NO = e.USER_NO
+						AND DATEDIFF(SYSDATE(), e.WS_BGN_DE) = 1
+						AND e.WS_TYP = 'N'
+						AND e.USE_AT = 'Y'
+					LEFT JOIN COMTCCMMNDETAILCODE f 
+						ON f.CODE_ID = 'KMS005' 
+						AND b.OFFM_ID = f.CODE
+				WHERE
+					a.ATTEND_DT = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+					AND DATE_FORMAT(SYSDATE(), '%H:%i') >= '09:00'
+					AND B.ORGNZT_ID != 'ORGAN_RET_ORGAN_CODE'
+					AND (
+							(
+							a.ATTEND_CD IS NULL							
+						<isEqual property="excludeLeader" compareValue="Y">
+							AND B.IS_LEADER = 'N'
+						</isEqual>
+						) OR (
+							a.ATTEND_CD = 'NT'
+							AND a.ATTEND_TM IS NULL
+						) OR (
+							a.ATTEND_CD = 'LT'
+							AND a.ATTEND_TM IS NULL	
+						<isEqual property="excludeLeader" compareValue="Y">
+							AND B.IS_LEADER = 'N'
+						</isEqual>	
+						)
+					)					
+					<isNotEmpty property="exceptionUsersList">
+						AND B.NO NOT IN
+						<iterate property="exceptionUsersList" open="(" close=")" conjunction=",">
+			           		 #exceptionUsersList[]#
+						</iterate>				
+					</isNotEmpty>
+					<isNotEmpty prepend="AND" property="searchOrgId">
+						<iterate prepend="b.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+							#searchOrgIdList[]#
+						</iterate>
+					</isNotEmpty>
+			)
+		) result
+		WHERE
+			TRUE
+		<isNotEmpty prepend="AND" property="searchAttendCd">
+			(	ATTEND_CD = #searchAttendCd#
+			<isEqual prepend="OR" property="searchAttendCd" compareValue="LT">
+				ATTEND_CD IS NULL
+			</isEqual>
+			<iterate prepend="OR ATTEND_CD IN " open="(" close=")" conjunction="," property="searchAttendCdList">
+				#searchAttendCdList[]#
+			</iterate>
+			)
+		</isNotEmpty>
+		ORDER BY 
+			USER_NM
+	</select>
+	
+	<select id="WorkStateDAO.selectAbsenceListAll" resultMap="absenceList">
+		SELECT
+			a.WS_ID, a.USER_NO, b.USER_ID AS USER_ID, b.USER_NM AS USER_NM,
+			a.WRITER_NO, c.USER_ID AS WRITER_ID, c.USER_NM AS WRITER_NM, b.ORGNZT_ID, d.ORGNZT_NM, '' AS OFFM_ADRES,
+			DATE_FORMAT(a.WS_BGN_DE, '%Y.%m.%d(%a)') AS WS_BGN_DE, DATE_FORMAT(a.WS_END_DE, '%Y.%m.%d(%a)') AS WS_END_DE,
+			a.WS_BGN_TM, a.WS_END_TM, a.USER_TELNO, a.USER_MOBLPHON_NO, a.WS_PLACE, a.WS_PURPOSE, a.WS_TYP
+			, CAST(E.ATTEND_TM AS CHAR) AS ATTEND_TM, CAST(a.REG_DT AS CHAR) AS REG_DT
+		FROM
+			TBL_WORK_STATE a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+			LEFT JOIN TBL_USERINFO c ON a.WRITER_NO = c.NO
+			LEFT JOIN TBL_ORGNZT d ON b.ORGNZT_ID = d.ORGNZT_ID
+			LEFT JOIN (
+						SELECT
+							doc.WRITER_NO
+							, vac.*
+							, 1 AS VAC
+						FROM
+							TBL_EAPP_DOC doc
+							INNER JOIN TBL_EAPP_VAC vac
+							ON doc.DOC_ID = vac.DOC_ID
+						WHERE
+							doc.DOC_STAT IN ('APP004', 'APP005')
+							AND doc.NEW_AT = 1
+							AND DATE_FORMAT(#searchDate#, '%Y%m%d') >= vac.ST_DT
+							AND vac.ED_DT >= DATE_FORMAT(#searchDate#, '%Y%m%d') 
+<!--							AND CONCAT(DATE_FORMAT(#searchDate#, '%Y%m%d'), IF(DATE_FORMAT(#searchDate#,'%H') >= '12', '2', '1')) >= CONCAT(vac.ST_DT, vac.ST_AMPM)-->
+<!--							AND CONCAT(vac.ED_DT, vac.ED_AMPM) >= CONCAT(DATE_FORMAT(#searchDate#, '%Y%m%d'), IF(DATE_FORMAT(#searchDate#,'%H') >= '12', '2', '1'))-->
+					) e ON a.USER_NO = e.WRITER_NO
+						AND A.DOC_ID = E.DOC_ID
+			LEFT JOIN TBL_ATTEND_CHECK E 
+				ON A.USER_NO = E.USER_NO
+				AND E.ATTEND_DT = #searchDate#
+		WHERE
+			USE_AT = 'Y'
+			AND
+			(
+				(
+					a.WS_TYP = 'O'
+					AND a.WS_BGN_DE = #searchDate#
+				) OR (
+					a.WS_TYP IN ('S', 'T')
+					AND DATEDIFF(#searchDate#, a.WS_BGN_DE) >= 0
+					AND DATEDIFF(a.WS_END_DE, #searchDate#) >= 0
+				) OR (
+					a.WS_TYP IN ('V')
+					AND e.VAC = 1
+					AND DATEDIFF(#searchDate#, a.WS_BGN_DE) >= 0
+					AND DATEDIFF(a.WS_END_DE, #searchDate#) >= 0
+				) OR (
+					a.WS_TYP IN ('N')
+					AND DATEDIFF(#searchDate#, a.WS_BGN_DE) = 1
+				)
+			)
+			AND fn_get_orgid_history(b.NO, #searchDate#) != 'ORGAN_RET_ORGAN_CODE'
+		<isNotEmpty prepend="AND" property="userNo">
+			B.NO = #userNo#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchOrgId">
+			<iterate prepend="b.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+				#searchOrgIdList[]#
+			</iterate>
+		</isNotEmpty>
+		
+		<isEmpty property="userNo">
+		ORDER BY
+<!--			A.WS_TYP, A.WS_PLACE, B.USER_NM-->
+			A.WS_TYP, B.USER_NM, A.WS_PLACE	
+		</isEmpty>		
+		<isNotEmpty property="userNo">
+		ORDER BY
+			A.WS_BGN_DE, A.WS_BGN_TM	
+		</isNotEmpty>
+		
+	</select>
+	
+	
+	<select id="WorkStateDAO.selectAbsenceStateAll" resultClass="egovMap">
+		SELECT
+			a.WS_TYP AS WS_TYP, COUNT(*) AS WS_TYP_CNT
+		FROM
+			TBL_WORK_STATE a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+			LEFT JOIN TBL_ORGNZT d ON b.ORGNZT_ID = d.ORGNZT_ID
+		WHERE			
+			USE_AT = 'Y'
+			AND (
+					(
+					a.WS_TYP = 'O'
+					AND a.WS_BGN_DE = #searchDate#
+				) OR (
+					a.WS_TYP IN ('S', 'T', 'V')
+					AND DATEDIFF(#searchDate#, a.WS_BGN_DE) >= 0
+					AND DATEDIFF(a.WS_END_DE, #searchDate#) >= 0
+				) OR (
+					a.WS_TYP IN ('N')
+					AND DATEDIFF(#searchDate#, a.WS_BGN_DE) = 1
+				)
+			)
+			AND fn_get_orgid_history(b.NO, #searchDate#) != 'ORGAN_RET_ORGAN_CODE'
+		<isNotEmpty prepend="AND" property="searchOrgId">
+			<iterate prepend="b.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+				#searchOrgIdList[]#
+			</iterate>
+		</isNotEmpty>
+		GROUP BY a.WS_TYP
+	</select>
+
+	
+	<insert id="WorkStateDAO.insertWorkStateOld">
+		INSERT INTO TBL_WORK_STATE
+		(
+			WS_ID, USER_NO, WRITER_NO, WS_TYP, WS_BGN_DE, WS_END_DE, WS_BGN_TM, WS_END_TM,
+			USER_TELNO, USER_MOBLPHON_NO, WS_PLACE, WS_PURPOSE, USE_AT, WS_HR_CNT, REG_DT
+		) VALUES (
+			#wsId#, #userNo#, #writerNo#, #wsTyp#, #wsBgnDe#, #wsEndDe#, #wsBgnTm#, #wsEndTm#,
+			#userTelno#, #userMoblphonNo#, #wsPlace#, #wsPurpose#, 'Y', #wsHrCnt#, SYSDATE()
+		)
+	</insert>
+	
+	<insert id="WorkStateDAO.insertWorkState">
+		INSERT INTO TBL_WORK_STATE
+		(
+			WS_ID, USER_NO, WRITER_NO, WS_TYP, WS_BGN_DE, WS_END_DE, WS_BGN_TM, WS_END_TM,
+			USER_TELNO, USER_MOBLPHON_NO, WS_PLACE, WS_PURPOSE, USE_AT, WS_HR_CNT, REG_DT
+			, USER_IP, IS_INNER_NETWORK, DOC_ID
+		) VALUES (
+			#wsId#, #userNo#, #writerNo#, #wsTyp#, #wsBgnDe#, #wsEndDe#, #wsBgnTm#, #wsEndTm#,
+			#userTelno#, #userMoblphonNo#, #wsPlace#, #wsPurpose#, 'Y', #wsHrCnt#, SYSDATE()
+			, #userIp#, #isInnerNetwork#, IFNULL(#docId#, 'N')
+		)
+	</insert>
+	
+	<select id="WorkStateDAO.checkExistAbsentData" resultClass="java.lang.Integer">
+		SELECT 
+			COUNT(WS_ID)
+		FROM
+			TBL_WORK_STATE
+		WHERE
+			USE_AT = 'Y'		
+			<isNotEmpty prepend="AND" property="wsId">
+			WS_ID NOT IN (#wsId#)
+			</isNotEmpty>
+			AND	USER_NO = #userNo# 
+			AND	WS_TYP = #wsTyp#
+			AND WS_BGN_DE = #wsBgnDe#
+			AND (	
+				WS_BGN_TM = #wsBgnTm#
+				OR WS_END_TM = #wsEndTm#
+				OR #wsBgnTm# BETWEEN WS_BGN_TM AND WS_END_TM - 1
+				OR #wsEndTm# BETWEEN WS_BGN_TM + 1 AND WS_END_TM
+				OR WS_BGN_TM BETWEEN #wsBgnTm# AND #wsEndTm# - 1
+				OR WS_END_TM BETWEEN #wsBgnTm# + 1 AND #wsEndTm#
+			) 
+	</select>
+	
+	<select id="WorkStateDAO.selectExistAbsentDataWsId" resultClass="java.lang.String">
+		SELECT 
+			WS_ID
+		FROM
+			TBL_WORK_STATE
+		WHERE
+			USE_AT = 'Y'
+			AND	USER_NO = #userNo# 
+			AND	WS_TYP = #wsTyp#
+			AND WS_BGN_DE = #wsBgnDe#
+			<isNotEqual property="wsTyp" compareValue="N">
+			AND (
+				WS_BGN_TM BETWEEN #wsBgnTm# AND #wsEndTm#
+				OR WS_END_TM BETWEEN #wsBgnTm# AND #wsEndTm#
+			)
+			</isNotEqual>
+		LIMIT 1
+	</select>
+	
+	<select id="WorkStateDAO.selectWorkState" resultMap="workState">
+		SELECT
+			a.WS_ID, a.USER_NO, a.WS_BGN_DE, a.WS_END_DE,
+			a.WS_BGN_TM, a.WS_END_TM, a.WS_HR_CNT,
+			a.USER_TELNO, a.USER_MOBLPHON_NO, a.WS_PLACE, a.WS_PURPOSE, a.WS_TYP
+			, b.USER_NM, b.USER_ID
+		FROM
+			TBL_WORK_STATE a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+		WHERE
+			a.WS_ID = #wsId#
+	</select>
+	
+	<select id="WorkStateDAO.selectWorkStateByDocId" resultMap="workState">
+		SELECT
+			a.WS_ID, a.USER_NO, a.WS_BGN_DE, a.WS_END_DE,
+			a.WS_BGN_TM, a.WS_END_TM, a.WS_HR_CNT,
+			a.USER_TELNO, a.USER_MOBLPHON_NO, a.WS_PLACE, a.WS_PURPOSE, a.WS_TYP
+			, b.USER_NM, b.USER_ID
+		FROM
+			TBL_WORK_STATE a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+		WHERE
+			a.DOC_ID = #docId#
+		LIMIT 1
+	</select>
+	
+	<update id="WorkStateDAO.updateWorkState">
+		UPDATE TBL_WORK_STATE
+		SET
+			UPDT_DT = SYSDATE()
+		<isNotEmpty prepend="," property="userNo">
+			USER_NO = #userNo#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="wsBgnDe">
+			WS_BGN_DE = #wsBgnDe#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="wsEndDe">
+			WS_END_DE = #wsEndDe#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="wsBgnTm">
+			WS_BGN_TM = #wsBgnTm#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="wsEndTm">
+			WS_END_TM = #wsEndTm#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="wsHrCnt">
+			WS_HR_CNT = #wsHrCnt#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="userTelno">
+			USER_TELNO = #userTelno#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="userMoblphonNo">
+			USER_MOBLPHON_NO = #userMoblphonNo#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="wsPlace">
+			WS_PLACE = #wsPlace#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="wsPurpose">
+			WS_PURPOSE = #wsPurpose#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="wsTyp">
+			WS_TYP = #wsTyp#
+		</isNotEmpty>
+		WHERE
+			WS_ID = #wsId#
+	</update>
+	
+	<update id="WorkStateDAO.deleteWorkState">
+		UPDATE TBL_WORK_STATE
+		SET
+			USE_AT = 'N'
+		WHERE
+			WS_ID = #wsId#
+	</update>
+	
+	<select id="WorkStateDAO.selectOvertimeList" resultClass="egovMap">
+		SELECT 
+			b.NO AS USER_NO, b.USER_NM, b.USER_ID, c.ORGNZT_NM,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='01',IFNULL(a.WS_HR_CNT,0),0)) AS SUM_1,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='02',IFNULL(a.WS_HR_CNT,0),0)) AS SUM_2,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='03',IFNULL(a.WS_HR_CNT,0),0)) AS SUM_3,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='04',IFNULL(a.WS_HR_CNT,0),0)) AS SUM_4,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='05',IFNULL(a.WS_HR_CNT,0),0)) AS SUM_5,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='06',IFNULL(a.WS_HR_CNT,0),0)) AS SUM_6,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='07',IFNULL(a.WS_HR_CNT,0),0)) AS SUM_7,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='08',IFNULL(a.WS_HR_CNT,0),0)) AS SUM_8,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='09',IFNULL(a.WS_HR_CNT,0),0)) AS SUM_9,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='10',IFNULL(a.WS_HR_CNT,0),0)) AS SUM_10,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='11',IFNULL(a.WS_HR_CNT,0),0)) AS SUM_11,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='12',IFNULL(a.WS_HR_CNT,0),0)) AS SUM_12,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='01',1,0)) AS CNT_1,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='02',1,0)) AS CNT_2,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='03',1,0)) AS CNT_3,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='04',1,0)) AS CNT_4,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='05',1,0)) AS CNT_5,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='06',1,0)) AS CNT_6,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='07',1,0)) AS CNT_7,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='08',1,0)) AS CNT_8,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='09',1,0)) AS CNT_9,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='10',1,0)) AS CNT_10,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='11',1,0)) AS CNT_11,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='12',1,0)) AS CNT_12,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 1, 4) = #searchYear#,a.WS_HR_CNT,0)) AS SUM,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 1, 4) = #searchYear#,1,0)) AS CNT
+		FROM
+			TBL_USERINFO b
+			LEFT JOIN TBL_WORK_STATE a ON a.USER_NO = b.NO AND WS_TYP = 'N' AND USE_AT = 'Y' AND SUBSTRING(a.WS_BGN_DE, 1, 4) = #searchYear#
+			LEFT JOIN TBL_ORGNZT c ON b.ORGNZT_ID = c.ORGNZT_ID
+			LEFT JOIN TBL_ORGNZT d ON b.ORGNZT_ID = d.ORGNZT_ID
+		WHERE
+			b.GHOST = '0'
+			AND b.COMPIN_DT IS NOT NULL
+			AND b.WORK_ST = 'W'
+		<isEqual prepend="AND" property="searchCondition" compareValue="0">
+			CONCAT(b.USER_NM, '(', b.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+		</isEqual>
+		<isEqual property="searchCondition" compareValue="1">
+			<isNotEmpty prepend="AND" property="searchOrgId">
+				<iterate prepend="b.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+					#searchOrgIdList[]#
+				</iterate>
+			</isNotEmpty>
+		</isEqual>
+		GROUP BY b.USER_NM
+		<isNotEmpty property="orderBy">			
+			ORDER BY $orderBy$ DESC
+		</isNotEmpty>		
+		<isEmpty property="orderBy">
+			ORDER BY SUM DESC			
+		</isEmpty>
+	</select>
+	
+	<select id="WorkStateDAO.selectOvertimeListSum" resultClass="egovMap">
+		SELECT 
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='01',IFNULL(a.WS_HR_CNT,0),0)) AS SUM_1,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='02',IFNULL(a.WS_HR_CNT,0),0)) AS SUM_2,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='03',IFNULL(a.WS_HR_CNT,0),0)) AS SUM_3,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='04',IFNULL(a.WS_HR_CNT,0),0)) AS SUM_4,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='05',IFNULL(a.WS_HR_CNT,0),0)) AS SUM_5,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='06',IFNULL(a.WS_HR_CNT,0),0)) AS SUM_6,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='07',IFNULL(a.WS_HR_CNT,0),0)) AS SUM_7,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='08',IFNULL(a.WS_HR_CNT,0),0)) AS SUM_8,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='09',IFNULL(a.WS_HR_CNT,0),0)) AS SUM_9,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='10',IFNULL(a.WS_HR_CNT,0),0)) AS SUM_10,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='11',IFNULL(a.WS_HR_CNT,0),0)) AS SUM_11,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='12',IFNULL(a.WS_HR_CNT,0),0)) AS SUM_12,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='01',1,0)) AS CNT_1,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='02',1,0)) AS CNT_2,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='03',1,0)) AS CNT_3,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='04',1,0)) AS CNT_4,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='05',1,0)) AS CNT_5,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='06',1,0)) AS CNT_6,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='07',1,0)) AS CNT_7,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='08',1,0)) AS CNT_8,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='09',1,0)) AS CNT_9,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='10',1,0)) AS CNT_10,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='11',1,0)) AS CNT_11,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='12',1,0)) AS CNT_12,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 1, 4) = #searchYear#,a.WS_HR_CNT,0)) AS SUM,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 1, 4) = #searchYear#,1,0)) AS CNT
+		FROM
+			TBL_USERINFO b
+			LEFT JOIN TBL_WORK_STATE a ON a.USER_NO = b.NO AND WS_TYP = 'N' AND USE_AT = 'Y' AND SUBSTRING(a.WS_BGN_DE, 1, 4) = #searchYear#
+			LEFT JOIN TBL_ORGNZT c ON b.ORGNZT_ID = c.ORGNZT_ID
+		WHERE
+			b.GHOST = '0'
+			AND b.COMPIN_DT IS NOT NULL
+			AND b.WORK_ST = 'W'
+		<isEqual prepend="AND" property="searchCondition" compareValue="0">
+			CONCAT(b.USER_NM, '(', b.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+		</isEqual>
+		<isEqual property="searchCondition" compareValue="1">
+			<isNotEmpty prepend="AND" property="searchOrgId">
+				<iterate prepend="b.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+					#searchOrgIdList[]#
+				</iterate>
+			</isNotEmpty>
+		</isEqual>
+	</select>
+	
+	<select id="WorkStateDAO.selectOvertime" resultClass="egovMap">
+		SELECT 
+			b.NO AS USER_NO, b.USER_NM, b.USER_ID, c.ORGNZT_NM,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='01',a.WS_HR_CNT,0)) AS SUM_1,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='02',a.WS_HR_CNT,0)) AS SUM_2,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='03',a.WS_HR_CNT,0)) AS SUM_3,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='04',a.WS_HR_CNT,0)) AS SUM_4,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='05',a.WS_HR_CNT,0)) AS SUM_5,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='06',a.WS_HR_CNT,0)) AS SUM_6,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='07',a.WS_HR_CNT,0)) AS SUM_7,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='08',a.WS_HR_CNT,0)) AS SUM_8,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='09',a.WS_HR_CNT,0)) AS SUM_9,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='10',a.WS_HR_CNT,0)) AS SUM_10,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='11',a.WS_HR_CNT,0)) AS SUM_11,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='12',a.WS_HR_CNT,0)) AS SUM_12,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='01',1,0)) AS CNT_1,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='02',1,0)) AS CNT_2,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='03',1,0)) AS CNT_3,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='04',1,0)) AS CNT_4,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='05',1,0)) AS CNT_5,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='06',1,0)) AS CNT_6,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='07',1,0)) AS CNT_7,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='08',1,0)) AS CNT_8,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='09',1,0)) AS CNT_9,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='10',1,0)) AS CNT_10,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='11',1,0)) AS CNT_11,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 5, 2)='12',1,0)) AS CNT_12,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 1, 4) = #searchYear#,a.WS_HR_CNT,0)) AS SUM,
+			SUM(IF(SUBSTRING(a.WS_BGN_DE, 1, 4) = #searchYear#,1,0)) AS CNT
+		FROM
+			TBL_USERINFO b
+			LEFT JOIN TBL_WORK_STATE a ON a.USER_NO = b.NO AND a.WS_TYP = 'N' AND a.USE_AT = 'Y' AND SUBSTRING(a.WS_BGN_DE, 1, 4) = #searchYear#
+			LEFT JOIN TBL_ORGNZT c ON b.ORGNZT_ID = c.ORGNZT_ID
+		WHERE
+			b.GHOST = '0'
+			AND b.WORK_ST = 'W'
+		<isNotEmpty prepend="AND" property="userNo">
+			b.NO = #userNo#
+		</isNotEmpty>
+		<isEqual prepend="AND" property="searchCondition" compareValue="0">
+			CONCAT(b.USER_NM, '(', b.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+		</isEqual>
+		<isEqual property="searchCondition" compareValue="1">
+			<isNotEmpty prepend="AND" property="searchOrgId">
+				<iterate prepend="b.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+					#searchOrgIdList[]#
+				</iterate>
+			</isNotEmpty>
+		</isEqual>
+	</select>
+	
+	<select id="WorkStateDAO.selectOvertimeDetailList" resultMap="overtimeList">
+		SELECT
+			a.WS_ID, a.USER_NO, b.USER_ID AS USER_ID, b.USER_NM AS USER_NM,
+			a.WRITER_NO, c.USER_ID AS WRITER_ID, c.USER_NM AS WRITER_NM, b.ORGNZT_ID, d.ORGNZT_NM,
+			DATE_FORMAT(a.WS_BGN_DE, '%Y.%m.%d(%a)') AS WS_BGN_DE,
+			a.WS_BGN_TM, a.WS_HR_CNT, a.USER_TELNO, a.USER_MOBLPHON_NO, a.WS_PURPOSE,
+			a.REG_DT, a.USER_IP, A.IS_INNER_NETWORK,
+			CASE WHEN DATE_FORMAT(CONCAT(WS_BGN_DE, WS_BGN_TM, '0000'), '%Y-%m-%d %H:%i:%s ') > REG_DT
+				 THEN 'Y' ELSE 'N' END IS_REG_BEFORE_WS_BGN_TM,
+			CASE WHEN DATE_FORMAT(CONCAT(WS_BGN_DE, '220000'), '%Y-%m-%d %H:%i:%s ') > REG_DT
+				 THEN 'Y' ELSE 'N' END IS_REG_BEFORE_TEN				
+		FROM
+			TBL_WORK_STATE a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+			LEFT JOIN TBL_USERINFO c ON a.WRITER_NO = c.NO
+			LEFT JOIN TBL_ORGNZT d ON b.ORGNZT_ID = d.ORGNZT_ID
+		WHERE
+			USE_AT = 'Y'
+			AND a.WS_TYP = 'N'
+			AND a.USER_NO = #userNo#
+			AND SUBSTRING(a.WS_BGN_DE, 1, 4) = #searchYear#
+		<isNotEmpty prepend="AND" property="searchMonth">
+			SUBSTRING(a.WS_BGN_DE, 5, 2) = #searchMonth#
+		</isNotEmpty>
+	</select>
+	
+	
+	<select id="WorkStateDAO.selectDailyWorkStateStatistic" resultMap="dailyWorkStateStatistic">
+		SELECT
+			COUNT(*) AS USER_CNT,
+			SUM(IF(b.ATTEND_CD = 'VC', 1, 0)) AS VAC,
+			SUM(IF(b.ATTEND_CD = 'TR', 1, 0)) AS BIZ_TRIP,
+			SUM(IF(b.ATTEND_CD = 'SD', 1, 0)) AS SEND,
+			SUM(IF(b.ATTEND_CD = 'OT', 1, 0)) AS WORK_OUT,
+			SUM(IF(b.ATTEND_CD = 'EA', 1, 0)) AS EARLY_ATND,
+			SUM(IF(b.ATTEND_CD = 'AT', 1, 0)) AS ATND,
+			SUM(IF(b.ATTEND_CD = 'NT', 1, 0)) AS NIGHT,
+			SUM(IF(b.ATTEND_CD = 'ET', 1, 0)) AS ETC,
+			SUM(IF(b.ATTEND_CD = 'LT' OR (b.USER_NO IS NOT NULL AND b.ATTEND_CD IS NULL), 1, 0)) AS LATE
+		FROM
+			TBL_USERINFO a
+			LEFT JOIN TBL_ATTEND_CHECK b ON a.NO = b.USER_NO AND b.ATTEND_DT = #searchDate#
+			LEFT JOIN (
+				SELECT
+					usr.NO AS USER_NO,
+					IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'executive', ',%'), 'Y', 'N') AS IS_LEADER
+				FROM
+					TBL_USERINFO usr
+					LEFT JOIN TBL_USER_AUTH auth ON usr.NO = auth.USER_NO
+				GROUP BY usr.NO
+			) c ON a.NO = c.USER_NO
+		WHERE
+			a.GHOST = '0'
+			AND a.COMPIN_DT IS NOT NULL
+			AND a.WORK_ST = 'W'
+			
+		<isNotEmpty property="exceptionUsersList">
+			AND A.NO NOT IN
+			<iterate property="exceptionUsersList" open="(" close=")" conjunction=",">
+           		 #exceptionUsersList[]#
+			</iterate>				
+		</isNotEmpty>
+		<isEqual property="excludeLeader" compareValue="Y">
+			AND c.IS_LEADER = 'N'
+		</isEqual>
+		<isNotEmpty prepend="AND" property="searchOrgId">
+			<iterate prepend="a.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+				#searchOrgIdList[]#
+			</iterate>
+		</isNotEmpty>
+	</select>
+	
+	<select id="WorkStateDAO.selectDailyWorkStateDetail" resultMap="dailyWorkStateDetail">
+		SELECT
+			a.USER_NO, b.USER_NM, b.USER_ID
+			,b.ORGNZT_ID
+			,c.ORGNZT_NM
+			,a.ATTEND_CD
+			,a.ATTEND_DT
+			,a.ATTEND_TM
+			,a.ATTEND_IP
+			,d.WS_PLACE
+			,d.WS_PURPOSE
+			,d.WS_ID
+			,d.WS_BGN_TM
+			,d.WS_END_TM
+			,DATE_FORMAT(d.WS_BGN_DE, '%Y.%m.%d(%a)') AS WS_BGN_DE
+			,DATE_FORMAT(d.WS_END_DE, '%Y.%m.%d(%a)') AS WS_END_DE
+			,FN_CREATE_ORGAN_FNM(c.ORGNZT_ID) AS ORGNZT_NM_FULL
+			, RC.CODE_NM AS RANK_NM
+		FROM
+			TBL_ATTEND_CHECK a
+			LEFT JOIN (
+				SELECT
+					usr.*,
+					IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'executive', ',%'), 'Y', 'N') AS IS_LEADER
+				FROM
+					TBL_USERINFO usr
+					LEFT JOIN TBL_USER_AUTH auth ON usr.NO = auth.USER_NO
+				WHERE
+					usr.GHOST = '0'
+					AND usr.COMPIN_DT IS NOT NULL
+				GROUP BY usr.NO
+			) b 
+				ON a.USER_NO = b.NO
+			LEFT JOIN COMTCCMMNDETAILCODE RC 
+				ON B.RANK_ID = RC.CODE 
+				AND RC.CODE_ID = 'KMS003'
+			LEFT JOIN TBL_ORGNZT c 
+				ON b.ORGNZT_ID = c.ORGNZT_ID
+			LEFT JOIN TBL_WORK_STATE d
+				ON a.USER_NO = d.USER_NO
+				AND d.USE_AT = 'Y'
+				AND (
+						(
+						d.WS_TYP = 'O'
+						AND a.ATTEND_DT = d.WS_BGN_DE
+					) OR (
+						d.WS_TYP IN ('S', 'T', 'V')
+						AND DATEDIFF(a.ATTEND_DT, d.WS_BGN_DE) >= 0
+						AND DATEDIFF(d.WS_END_DE, a.ATTEND_DT) >= 0
+					) OR (
+						d.WS_TYP = 'N'
+						AND DATEDIFF(a.ATTEND_DT, d.WS_BGN_DE) = 1
+					) OR (
+						d.WS_TYP = 'E'
+						AND a.ATTEND_DT = d.WS_BGN_DE
+					)
+				)
+		WHERE
+			a.ATTEND_DT = #searchDate#
+			AND B.ORGNZT_ID != 'ORGAN_RET_ORGAN_CODE'
+		<isNotEmpty property="exceptionUsersList">
+			AND B.NO NOT IN
+			<iterate property="exceptionUsersList" open="(" close=")" conjunction=",">
+           		 #exceptionUsersList[]#
+			</iterate>				
+		</isNotEmpty>
+		<isEqual property="excludeLeader" compareValue="Y">
+			AND B.IS_LEADER = 'N'
+		</isEqual>
+		
+		<isNotEmpty prepend="AND" property="searchAttendCd">
+			(
+				a.ATTEND_CD = #searchAttendCd#
+			<isEqual prepend="OR" property="searchAttendCd" compareValue="LT">
+				a.ATTEND_CD IS NULL
+			</isEqual>
+			<iterate prepend="OR a.ATTEND_CD IN " open="(" close=")" conjunction="," property="searchAttendCdList">
+				#searchAttendCdList[]#
+			</iterate>
+			)
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchOrgId">
+			<iterate prepend="b.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+				#searchOrgIdList[]#
+			</iterate>
+		</isNotEmpty>
+		GROUP BY a.USER_NO
+		ORDER BY B.USER_NM, FN_ORGAN_TREE(B.ORGNZT_ID) ASC
+		<!--	ORDER BY FN_ORGAN_TREE(b.ORGNZT_ID) ASC, b.USER_NM-->
+	</select>
+		
+	<select id="WorkStateDAO.selectWorkStateStatistic" resultMap="workStateStatistic">
+		SELECT
+			usr.NO AS USER_NO, usr.USER_NM, usr.USER_ID,
+			usr.ORGNZT_ID, org.ORGNZT_NM,
+			SUM(IF(a.ATTEND_CD != 'HD', 1, 0)) AS DATE_CNT,
+			SUM(IF(a.ATTEND_CD = 'VC', 1, 0)) AS VAC,
+			SUM(IF(a.ATTEND_CD = 'TR', 1, 0)) AS BIZ_TRIP,
+			SUM(IF(a.ATTEND_CD = 'SD', 1, 0)) AS SEND,
+			SUM(IF(a.ATTEND_CD = 'OT', 1, 0)) AS WORK_OUT,
+			SUM(IF(a.ATTEND_CD = 'NT', 1, 0)) AS NIGHT,
+			SUM(IF(a.ATTEND_CD = 'ET', 1, 0)) AS ETC,
+			SUM(IF(a.ATTEND_CD = 'EA', 1, 0)) AS EARLY_ATND,
+			SUM(IF(a.ATTEND_CD = 'AT', 1, 0)) AS ATND,
+			SUM(IF(a.ATTEND_CD = 'LT', 1, 0)) AS LATE
+			<!-- 검색 기간이 휴일일 경우 NULL 값이 전부 지각처리되는 현상 수정. 근태기록이 없으면  -->
+			<!-- SUM(IF(a.ATTEND_CD = 'LT' OR a.ATTEND_CD IS NULL, 1, 0)) AS LATE -->			
+		FROM
+			TBL_USERINFO USR
+			LEFT JOIN TBL_ORGNZT org ON usr.ORGNZT_ID = org.ORGNZT_ID
+			LEFT JOIN TBL_ATTEND_CHECK a
+				ON USR.NO = a.USER_NO
+				AND DATEDIFF(a.ATTEND_DT, #searchDateFrom#) >= 0
+				AND DATEDIFF(#searchDateTo#, a.ATTEND_DT) >= 0
+			LEFT JOIN (
+				SELECT
+					USR.NO AS USER_NO,
+					IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'executive', ',%'), 'Y', 'N') AS IS_LEADER
+				FROM
+					TBL_USERINFO USR
+					LEFT JOIN TBL_USER_AUTH auth 
+						ON USR.NO = auth.USER_NO
+				GROUP BY USR.NO
+			) C ON USR.NO = c.USER_NO
+		WHERE
+			USR.GHOST = '0'
+			AND usr.COMPIN_DT IS NOT NULL
+			
+		<isNotEmpty property="exceptionUsersList">
+			AND USR.NO NOT IN
+			<iterate property="exceptionUsersList" open="(" close=")" conjunction=",">
+           		 #exceptionUsersList[]#
+			</iterate>				
+		</isNotEmpty>
+		<isEqual property="excludeLeader" compareValue="Y">
+			AND c.IS_LEADER = 'N'
+		</isEqual>
+		<isEqual property="searchCondition" compareValue="0">
+			<isNotEmpty prepend="AND" property="searchUserMix">
+				CONCAT(usr.USER_NM, '(', usr.USER_ID, ')') LIKE CONCAT('%', #searchUserMix#, '%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchCondition" compareValue="1">
+			<isNotEmpty prepend="AND" property="searchOrgId">
+				<iterate prepend="usr.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+					#searchOrgIdList[]#
+				</iterate>
+			</isNotEmpty>
+		</isEqual>
+		GROUP BY 
+			USR.ORGNZT_ID, USR.NO			
+		HAVING 
+			ORGNZT_ID != 'ORGAN_RET_ORGAN_CODE'
+			OR DATE_CNT > 0
+		ORDER BY
+			FN_ORGAN_TREE(usr.ORGNZT_ID) ASC, usr.USER_NM ASC
+			<!--A.USER_NM ASC, FN_ORGAN_TREE(A.ORGNZT_ID) ASC -->
+	</select>
+	
+	<select id="WorkStateDAO.selectWorkStateDetail" resultMap="workStateDetail">
+		SELECT
+			a.USER_NO, b.USER_NM, b.USER_ID, b.ORGNZT_ID, c.ORGNZT_NM,
+			a.ATTEND_CD, a.ATTEND_DT, a.ATTEND_TM, a.ATTEND_IP,
+			d.WS_PLACE, d.WS_PURPOSE, d.WS_ID, d.WS_BGN_TM, D.WS_TYP
+		FROM
+			TBL_ATTEND_CHECK a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+			LEFT JOIN TBL_ORGNZT c ON b.ORGNZT_ID = c.ORGNZT_ID
+			LEFT JOIN TBL_WORK_STATE d
+				ON a.USER_NO = d.USER_NO
+					AND d.USE_AT = 'Y'
+					AND (
+						(
+							d.WS_TYP = 'O'
+							AND a.ATTEND_DT = d.WS_BGN_DE
+						) OR (
+							d.WS_TYP IN ('S', 'T', 'V')
+							AND DATEDIFF(a.ATTEND_DT, d.WS_BGN_DE) >= 0
+							AND DATEDIFF(d.WS_END_DE, a.ATTEND_DT) >= 0
+						) OR (
+							d.WS_TYP = 'N'
+							AND DATEDIFF(a.ATTEND_DT, d.WS_BGN_DE) = 1
+						) OR (
+							d.WS_TYP = 'E'
+							AND a.ATTEND_DT = d.WS_BGN_DE
+						)
+					)
+		WHERE
+			DATEDIFF(a.ATTEND_DT, #searchDateFrom#) >= 0
+			AND DATEDIFF(#searchDateTo#, a.ATTEND_DT) >= 0
+		<isNotEqual prepend="AND" property="searchUserNo" compareValue="0">
+			a.USER_NO = #searchUserNo#
+		</isNotEqual>
+	</select>
+	
+	<select id="WorkStateDAO.selectWorkStateDetailNew" resultMap="workStateDetail">
+	<![CDATA[
+		SELECT
+			a.USER_NO, b.USER_NM, b.USER_ID, b.ORGNZT_ID, c.ORGNZT_NM,
+			a.ATTEND_CD, a.ATTEND_DT, a.ATTEND_TM, a.ATTEND_IP
+			,SUBSTRING( CONCAT( 
+				IF(D.WS_TYP IS NULL, '', CONCAT('<br/>전일야근: ', D.WS_PURPOSE, ' (', D.WS_BGN_TM, '시)'))
+				,IF(E.WS_TYP IS NULL, '', 
+					IF(E.WS_TYP = 'S', CONCAT('<br/>파견: ', E.WS_PLACE), '') )
+				,IF(E.WS_TYP IS NULL, '', 
+					IF(E.WS_TYP = 'T', CONCAT('<br/>출장: ', E.WS_PLACE), '') ) 
+				,IF(E.WS_TYP IS NULL, '', 
+					IF(E.WS_TYP = 'V', CONCAT('<br/>휴가: ', E.WS_PURPOSE), '') ) 
+				,IF(F.WS_TYP IS NULL, '', CONCAT('<br/>외근: ', F.WS_PLACE)) 
+				,IF(G.WS_TYP IS NULL, '', CONCAT('<br/>기타: ', G.WS_PURPOSE))
+			), 6) AS ATTEND_NOTE 
+			,D.WS_PLACE, D.WS_PURPOSE, D.WS_ID, D.WS_BGN_TM, D.WS_TYP #연장근무:N(Night)
+			,E.WS_PLACE, E.WS_PURPOSE, E.WS_ID, E.WS_BGN_TM, E.WS_TYP #출장:T(business Trip) 파견:S(Send)  휴가:V(Vacation)
+			,F.WS_PLACE, F.WS_PURPOSE, F.WS_ID, F.WS_BGN_TM, F.WS_TYP #외근:O(work Outside)
+			,G.WS_PLACE, G.WS_PURPOSE, G.WS_ID, G.WS_BGN_TM, G.WS_TYP #기타(주로 면제로 쓰임):E(Etc) ]]>
+		FROM
+			TBL_ATTEND_CHECK a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+			LEFT JOIN TBL_ORGNZT c ON b.ORGNZT_ID = c.ORGNZT_ID
+			LEFT JOIN TBL_WORK_STATE D
+				ON a.USER_NO = D.USER_NO
+				AND D.USE_AT = 'Y'
+				AND D.WS_TYP = 'N'
+				AND DATEDIFF(a.ATTEND_DT, d.WS_BGN_DE) = 1		
+			LEFT JOIN TBL_WORK_STATE E
+				ON a.USER_NO = E.USER_NO
+				AND E.USE_AT = 'Y'
+				AND E.WS_TYP IN ('S', 'T', 'V')
+				AND DATEDIFF(a.ATTEND_DT, E.WS_BGN_DE) >= 0
+				AND DATEDIFF(E.WS_END_DE, a.ATTEND_DT) >= 0			
+			LEFT JOIN TBL_WORK_STATE F
+				ON a.USER_NO = F.USER_NO
+				AND F.USE_AT = 'Y'
+				AND F.WS_TYP = 'O'
+				AND a.ATTEND_DT = F.WS_BGN_DE
+			LEFT JOIN TBL_WORK_STATE G
+				ON a.USER_NO = G.USER_NO
+				AND G.USE_AT = 'Y'
+				AND G.WS_TYP = 'E'
+				AND a.ATTEND_DT = G.WS_BGN_DE
+		WHERE
+			DATEDIFF(a.ATTEND_DT, #searchDateFrom#) >= 0
+			AND DATEDIFF(#searchDateTo#, a.ATTEND_DT) >= 0
+		<isNotEqual prepend="AND" property="searchUserNo" compareValue="0">
+			a.USER_NO = #searchUserNo#
+		</isNotEqual>
+	</select>
+	
+	<select id="WorkStateDAO.selectLoginStatusList" resultClass="egovMap">
+	SELECT TB.USER_NO
+	      ,TB.USER_NM
+	      ,TB.USER_ID
+	      ,SUM(IF(SUBSTR(TB.TM, 6, 2) = '01', 1, 0)) MONTH01
+	      ,SUM(IF(SUBSTR(TB.TM, 6, 2) = '02', 1, 0)) MONTH02
+	      ,SUM(IF(SUBSTR(TB.TM, 6, 2) = '03', 1, 0)) MONTH03
+	      ,SUM(IF(SUBSTR(TB.TM, 6, 2) = '04', 1, 0)) MONTH04
+	      ,SUM(IF(SUBSTR(TB.TM, 6, 2) = '05', 1, 0)) MONTH05
+	      ,SUM(IF(SUBSTR(TB.TM, 6, 2) = '06', 1, 0)) MONTH06
+	      ,SUM(IF(SUBSTR(TB.TM, 6, 2) = '07', 1, 0)) MONTH07
+	      ,SUM(IF(SUBSTR(TB.TM, 6, 2) = '08', 1, 0)) MONTH08
+	      ,SUM(IF(SUBSTR(TB.TM, 6, 2) = '09', 1, 0)) MONTH09
+	      ,SUM(IF(SUBSTR(TB.TM, 6, 2) = '10', 1, 0)) MONTH10
+	      ,SUM(IF(SUBSTR(TB.TM, 6, 2) = '11', 1, 0)) MONTH11
+	      ,SUM(IF(SUBSTR(TB.TM, 6, 2) = '12', 1, 0)) MONTH12
+	      ,SUBSTR(#searchYear#, 1, 6) AS SEARCH_MONTH
+	  FROM (SELECT B.NO AS USER_NO
+		      ,B.USER_NM
+		      ,B.USER_ID
+		      ,MIN(SUBSTR(A.TM,1,10)) AS TM
+		  FROM TBL_LOGIN_LOG A,
+		       TBL_USERINFO B
+		 WHERE A.USER_NO = B.NO
+		   AND B.GHOST = '0'
+		   AND B.COMPIN_DT IS NOT NULL
+		   AND A.TM IS NOT NULL
+		   AND SUBSTR(A.TM, 1, 4) = #searchYear#		   
+		 GROUP BY A.USER_NO,SUBSTR(A.TM,1,10)) TB
+  	 GROUP BY TB.USER_NO		
+	</select>
+	
+	<select id="WorkStateDAO.selectLoginStatusExcel" resultClass="egovMap">
+		SELECT
+			detail.USER_NO AS USER_NO,
+			detail.USER_NM AS USER_NM,
+			detail.USER_ID AS USER_ID,
+			org.ORGNZT_ID AS ORG_ID,
+			org.ORGNZT_NM AS ORG_NM,
+			COUNT(detail.DATE) AS TOTAL_WORK_DAY,
+			SUM(IF(detail.ATTEND_DT IS NULL, 0, 1)) AS USER_WORK_DAY,
+			SUM(IF(detail.ATTEND_CD = 'VC', 1, 0)) AS VAC,
+			SUM(IF(detail.ATTEND_DT IS NULL, 0, 1)) - SUM(IF(detail.ATTEND_CD = 'VC', 1, 0)) AS DUTY,
+			IFNULL(
+				(SELECT SUM(IF(TB.TM IS NOT NULL, 1, 0))
+				FROM (SELECT A.USER_NO,
+				      	MIN(SUBSTR(A.TM, 1, 10)) AS TM
+					FROM TBL_LOGIN_LOG A
+					WHERE A.TM IS NOT NULL
+						AND DATE_FORMAT(A.TM, '%Y%m%d') BETWEEN #startDt# AND #endDt#
+					GROUP BY A.USER_NO,SUBSTR(A.TM,1,10)
+				) TB
+				WHERE TB.USER_NO = detail.USER_NO)
+			,0) AS GOOD,
+			IFNULL(
+				(SELECT SUM(IF(atd.TM IS NOT NULL, 1, 0))
+				FROM (SELECT A.USER_NO,
+					MIN(SUBSTR(A.TM,1,10)) AS TM
+					FROM TBL_LOGIN_LOG A
+					WHERE A.TM IS NOT NULL
+						AND DATE_FORMAT(A.TM, '%Y%m%d') BETWEEN #startDt# AND #endDt#
+					GROUP BY 
+						A.USER_NO,SUBSTR(A.TM, 1, 10)
+				) atd
+				INNER JOIN TBL_CALENDAR_DATA dt
+					ON dt.CAL_DATE = DATE_FORMAT(atd.TM,'%Y%m%d')	
+				LEFT JOIN TBL_SCHEDULE sch
+					ON dt.CAL_DATE = sch.SCHE_DATE_ALL
+					AND sch.DELETE_YN = 'N'
+					AND sch.SCHE_TYP IN ('H', 'I', 'J')
+				WHERE atd.TM IS NOT NULL
+					AND atd.USER_NO = detail.USER_NO
+					AND (DAYOFWEEK(dt.CAL_DATE) IN ('1', '7') 
+				       		OR dt.CAL_DATE = sch.SCHE_DATE_ALL )
+					AND DATE_FORMAT(atd.TM,'%Y%m%d') BETWEEN #startDt# AND #endDt#)
+			,0) AS ZEROTIME
+		FROM (
+				SELECT
+					cal.CAL_DATE AS DATE,
+					allUser.NO AS USER_NO,
+					allUser.USER_NM AS USER_NM,
+					allUser.USER_ID AS USER_ID,
+					allUser.ORGNZT_ID AS ORGNZT_ID,
+					IF(SUM(dr.DAY_REPORT_TM) IS NULL, 0, COUNT(*)) AS DR_COUNT,
+					IFNULL(SUM(IFNULL(dr.DAY_REPORT_TM, 0)), 0) AS DR_TIME,
+					chk.ATTEND_DT AS ATTEND_DT,
+					chk.ATTEND_CD AS ATTEND_CD,
+					sch.SCHE_DATE_ALL AS SCHE_DATE
+				FROM (
+						TBL_CALENDAR_DATA cal,
+						TBL_USERINFO allUser
+					)
+					LEFT JOIN TBL_SCHEDULE sch
+						ON cal.CAL_DATE = sch.SCHE_DATE_ALL
+						AND sch.DELETE_YN = 'N'
+						AND sch.SCHE_TYP IN ('H', 'I', 'J')
+					LEFT JOIN TBL_DAY_REPORT dr
+						ON allUser.NO = dr.USER_NO
+						AND cal.CAL_DATE = dr.DAY_REPORT_DT
+					LEFT JOIN TBL_ATTEND_CHECK chk
+						ON allUser.NO = chk.USER_NO
+						AND cal.CAL_DATE = chk.ATTEND_DT
+				WHERE
+					DAYOFWEEK(cal.CAL_DATE) IN ('2', '3', '4', '5', '6')
+					AND DATEDIFF(#endDt#, cal.CAL_DATE) >= 0
+					AND DATEDIFF(cal.CAL_DATE, #startDt#) >= 0
+					AND sch.SCHE_TYP IS NULL
+				GROUP BY
+					cal.CAL_DATE,
+					allUser.NO
+			) detail
+			INNER JOIN TBL_ORGNZT org
+				ON detail.ORGNZT_ID = org.ORGNZT_ID
+		GROUP BY detail.USER_NO
+		HAVING USER_WORK_DAY > 0	
+	</select>
+	
+	
+	<select id="WorkStateDAO.selectLoginStatus" resultClass="egovMap">
+	SELECT 
+		 '' AS NO
+		,'' AS attend_cd
+		,DATE_FORMAT(A.TM,'%Y%m%d') AS attend_dt
+		,CONCAT(DATE_FORMAT(A.TM,'%h'),':',DATE_FORMAT(A.TM,'%i'),':',DATE_FORMAT(A.TM,'%s')) AS attend_tm
+		,'' AS attend_ip
+		,B.NO AS user_no
+		,B.USER_NM AS user_nm
+		,B.USER_ID AS user_id
+	  FROM TBL_LOGIN_LOG A,
+	       TBL_USERINFO B
+	 WHERE A.USER_NO = B.NO
+	   AND A.TM IS NOT NULL
+		<isNotEmpty prepend="AND" property="searchUserNo" >
+			A.USER_NO = #searchUserNo#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchMonth" >
+			SUBSTR(DATE_FORMAT(A.TM,'%Y%m%d'),1,6) = #searchMonth#
+		</isNotEmpty>
+	GROUP BY B.NO,DATE_FORMAT(A.TM,'%Y%m%d')	
+	ORDER BY DATE_FORMAT(A.TM,'%Y%m%d') ASC
+	</select>
+	
+</sqlMap>

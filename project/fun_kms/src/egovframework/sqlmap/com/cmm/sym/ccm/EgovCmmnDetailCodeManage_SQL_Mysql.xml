@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="CmmnDetailCodeManage">
+
+	<typeAlias  alias="egovMap"          type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="CmmnDetailCode"   type="egovframework.com.sym.ccm.cde.service.CmmnDetailCode"/>
+	<typeAlias  alias="CmmnDetailCodeVO" type="egovframework.com.sym.ccm.cde.service.CmmnDetailCodeVO"/>
+
+	<select id="CmmnDetailCodeManageDAO.selectCmmnDetailCodeList" parameterClass="CmmnDetailCodeVO" resultClass="egovMap">
+		<![CDATA[
+			SELECT  A.CODE_ID
+			     ,  A.CODE
+			     ,  A.CODE_NM 
+			     ,  A.USE_AT
+			  FROM  COMTCCMMNDETAILCODE A
+			     ,  COMTCCMMNCODE       B
+			 WHERE 	B.USE_AT  = 'Y'
+			   AND  A.CODE_ID = B.CODE_ID
+		]]>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				<![CDATA[A.CODE_ID like CONCAT('%',#searchKeyword#,'%')]]>
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="2">
+				<![CDATA[A.CODE   like CONCAT('%',#searchKeyword#,'%')]]>
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="3">
+				<![CDATA[A.CODE_NM like CONCAT('%',#searchKeyword#,'%')]]>
+			</isEqual>
+			<isEqual property="mode" compareValue="2">				
+				<isNotEmpty property="modeDcList">
+					AND A.CODE_ID IN 
+					<iterate property="modeDcList" open="(" close=")" conjunction=",">
+		           		 #modeDcList[]#
+					</iterate>				
+				</isNotEmpty>
+			</isEqual>
+			 LIMIT  #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+
+	<select id="CmmnDetailCodeManageDAO.selectCmmnDetailCodeListTotCnt" parameterClass="CmmnDetailCodeVO" resultClass="int">
+		<![CDATA[
+			SELECT  COUNT(*) totcnt 
+			  FROM  COMTCCMMNDETAILCODE A
+			     ,  COMTCCMMNCODE       B
+			 WHERE 	B.USE_AT  = 'Y'
+			   AND  A.CODE_ID = B.CODE_ID
+		]]>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				<![CDATA[A.CODE_ID like CONCAT('%',#searchKeyword#,'%')]]>
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="2">
+				<![CDATA[A.CODE   like CONCAT('%',#searchKeyword#,'%')]]>
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="3">
+				<![CDATA[A.CODE_NM like CONCAT('%',#searchKeyword#,'%')]]>
+			</isEqual>
+			<isEqual property="mode" compareValue="2">				
+				<isNotEmpty property="modeDcList">
+					AND A.CODE_ID IN 
+					<iterate property="modeDcList" open="(" close=")" conjunction=",">
+		           		 #modeDcList[]#
+					</iterate>				
+				</isNotEmpty>				
+			</isEqual>
+	</select>
+
+	<select id="CmmnDetailCodeManageDAO.selectCmmnDetailCodeDetail" parameterClass="CmmnDetailCode" resultClass="CmmnDetailCode">
+		<![CDATA[
+            SELECT  A.CODE_ID    codeId
+                 ,  B.CODE_ID_NM codeIdNm
+                 ,  A.CODE       code
+                 ,  A.CODE_NM    codeNm
+                 ,  A.CODE_DC    codeDc
+                 ,  A.USE_AT     useAt
+                 ,  A.COLUMN1	column1
+                 ,  A.COLUMN2	column2
+                 ,  A.COLUMN3	column3
+                 ,  A.COLUMN4	column4
+                 ,  A.ORD		ord
+              FROM  COMTCCMMNDETAILCODE A
+                 ,  COMTCCMMNCODE       B
+             WHERE  B.USE_AT  = 'Y'
+               AND  A.CODE_ID = B.CODE_ID
+			   AND  A.CODE_ID = #codeId#
+			   AND  A.CODE    = #code#
+		]]>
+		
+	</select>
+
+	<insert id="CmmnDetailCodeManageDAO.insertCmmnDetailCode">
+		<![CDATA[
+		    INSERT 
+		      INTO  COMTCCMMNDETAILCODE
+		         (  CODE_ID
+		         ,  CODE
+		         ,  CODE_NM
+		         ,  CODE_DC
+		         ,  USE_AT
+		         ,  FRST_REGISTER_PNTTM
+		         ,  FRST_REGISTER_ID
+		         ,  LAST_UPDUSR_PNTTM
+		         ,  LAST_UPDUSR_ID
+		         ,  COLUMN1	
+                 ,  COLUMN2	
+                 ,  COLUMN3	
+                 ,  COLUMN4	
+                 ,  ORD		
+		         ) 
+		    VALUES  
+		         (  #codeId#
+		         ,  #code#
+		         ,  #codeNm#
+		         ,  #codeDc#
+		         ,  #useAt#
+		         ,  sysdate()
+		         ,  #frstRegisterId#
+		         ,  sysdate()
+		         ,  #frstRegisterId#
+		         ,  #column1#
+                 ,  #column2#
+                 ,  #column3#
+                 ,  #column4#
+                 ,  #ord#
+		         ) 
+		]]>
+	</insert>
+
+	<update id="CmmnDetailCodeManageDAO.updateCmmnDetailCode">
+		<![CDATA[
+            UPDATE  COMTCCMMNDETAILCODE 
+               SET  CODE_NM           = #codeNm#
+                 ,  CODE_DC           = #codeDc#
+                 ,  USE_AT            = #useAt#
+                 ,  LAST_UPDUSR_PNTTM = sysdate()
+                 ,  LAST_UPDUSR_ID    = #lastUpdusrId#
+                 ,  COLUMN1 		= #column1#
+                 ,  COLUMN2			= #column2#
+                 ,  COLUMN3			= #column3#
+                 ,  COLUMN4			= #column4#
+                 ,  ORD				= #ord#
+             WHERE  CODE_ID   = #codeId# 
+               AND  CODE      = #code#
+		]]>
+	</update>
+
+	<delete id="CmmnDetailCodeManageDAO.deleteCmmnDetailCode">
+		<![CDATA[
+            UPDATE  COMTCCMMNDETAILCODE 
+               SET  USE_AT    = 'N'
+             WHERE  CODE_ID   = #codeId# 
+               AND  CODE      = #code#
+		]]>
+	</delete>
+
+</sqlMap>            

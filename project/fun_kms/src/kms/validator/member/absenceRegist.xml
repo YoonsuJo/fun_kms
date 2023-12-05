@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC 
+    "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1//EN" 
+    "http://jakarta.apache.org/commons/dtds/validator_1_1.dtd">
+
+<form-validation>
+
+    <formset>
+		<form name="KmsAbsence">
+			<field property="userNo" depends="required">
+        		<arg0 key="이름" />
+			</field>			
+			<field property="absTyp" depends="required">
+        		<arg0 key="근무형태" />
+			</field> 
+			<field property="absBgnDe" depends="required">
+        		<arg0 key="시작일" />
+			</field>
+			<field property="absEndDe" depends="required">
+        		<arg0 key="종료일" />
+			</field>
+			<field property="absPlace" depends="required">
+        		<arg0 key="장소" />
+			</field>
+			<field property="absPurpose" depends="required">
+        		<arg0 key="목적" />
+			</field>
+		</form>
+		<form name="KmsOvertime">
+			<field property="userNo" depends="required">
+        		<arg0 key="이름" />
+			</field>
+			<field property="wsBgnDe" depends="required">
+        		<arg0 key="날짜" />
+			</field>
+			<field property="wsPurpose" depends="required">
+        		<arg0 key="사유" />
+			</field>
+		</form>
+    </formset>
+
+</form-validation>

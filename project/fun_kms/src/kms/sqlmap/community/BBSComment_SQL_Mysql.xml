@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsBBSComment">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="Comment2" type="kms.com.community.service.Comment"/>
+	<typeAlias  alias="CommentVO2" type="kms.com.community.service.CommentVO"/>
+	
+	<resultMap id="commentList" class="kms.com.community.service.CommentVO">
+		<result property="commentNo" column="COMMENT_NO" columnIndex="1"/>
+		<result property="nttId" column="NTT_ID" columnIndex="2"/>
+		<result property="bbsId" column="BBS_ID" columnIndex="3"/>
+		<result property="wrterNo" column="WRTER_NO" columnIndex="4"/>
+		<result property="wrterId" column="WRTER_ID" columnIndex="5"/>
+		<result property="wrterNm" column="WRTER_NM" columnIndex="6"/>
+		<result property="commentPassword" column="PASSWORD" columnIndex="7"/>
+		<result property="commentCn" column="COMMENT_CN" columnIndex="8"/>
+		<result property="useAt" column="USE_AT" columnIndex="9"/>
+		<result property="frstRegisterPnttm" column="FRST_REGISTER_PNTTM" columnIndex="10"/>
+		<result property="frstRegisterId" column="FRST_REGISTER_ID" columnIndex="11"/>
+		<result property="frstRegisterNm" column="FRST_REGISTER_NM" columnIndex="12"/>
+		<result property="atchFileId" column="ATCH_FILE_ID" columnIndex="13"/>
+		<result property="lastUpdaterPnttm" column="LAST_UPDUSR_PNTTM" columnIndex="14"/>
+	</resultMap>
+	
+	<resultMap id="commentDetail" class="kms.com.community.service.Comment">
+		<result property="commentNo" column="COMMENT_NO" columnIndex="1"/>
+		<result property="nttId" column="NTT_ID" columnIndex="2"/>
+		<result property="bbsId" column="BBS_ID" columnIndex="3"/>
+		<result property="wrterNo" column="WRTER_NO" columnIndex="4"/>
+		<result property="wrterId" column="WRTER_ID" columnIndex="5"/>
+		<result property="wrterNm" column="WRTER_NM" columnIndex="6"/>
+		<result property="commentPassword" column="PASSWORD" columnIndex="7"/>
+		<result property="commentCn" column="COMMENT_CN" columnIndex="8"/>
+		<result property="useAt" column="USE_AT" columnIndex="9"/>
+		<result property="frstRegisterPnttm" column="FRST_REGISTER_PNTTM" columnIndex="10"/>
+		<result property="frstRegisterNm" column="FRST_REGISTER_NM" columnIndex="11"/>
+	</resultMap>
+
+	<select id="KmsBBSCommentDAO.selectCommentList" parameterClass="CommentVO2" resultMap="commentList" >
+		<![CDATA[
+			SELECT
+				a.COMMENT_NO
+				,a.NTT_ID
+				,a.BBS_ID
+				,a.WRTER_NO, b.USER_ID AS WRTER_ID, b.USER_NM AS WRTER_NM
+				,a.PASSWORD
+				,a.COMMENT_CN
+				,a.USE_AT
+				,DATE_FORMAT(a.FRST_REGISTER_PNTTM, '%Y-%m-%d %H:%i:%S') as FRST_REGISTER_PNTTM
+				,DATE_FORMAT(a.LAST_UPDUSR_PNTTM, '%Y-%m-%d %H:%i:%S') as LAST_UPDUSR_PNTTM
+				,a.FRST_REGISTER_ID
+				,c.USER_NM AS FRST_REGISTER_NM
+				,a.ATCH_FILE_ID
+			FROM
+				COMTNCOMMENT a
+				LEFT OUTER JOIN TBL_USERINFO b ON a.WRTER_NO = b.NO
+				LEFT OUTER JOIN TBL_USERINFO c ON a.FRST_REGISTER_ID = c.NO
+			WHERE
+				a.BBS_ID = #bbsId# AND a.NTT_ID = #nttId#
+			AND
+				a.USE_AT = 'Y'
+			ORDER BY IFNULL(a.LAST_UPDUSR_PNTTM,a.FRST_REGISTER_PNTTM) DESC
+		]]>
+		<!-- 2013.08.13 덧긋 정렬 순서 -->				
+	</select>	
+	
+	<select id="KmsBBSCommentDAO.selectCommentListCnt" parameterClass="CommentVO2" resultClass="java.lang.Integer" >
+		<![CDATA[
+			SELECT
+				COUNT(COMMENT_NO)
+			FROM
+				COMTNCOMMENT 
+			WHERE
+				BBS_ID = #bbsId# AND NTT_ID = #nttId#
+			AND
+				USE_AT = 'Y'
+		]]>			
+	</select>
+	
+	<insert id="KmsBBSCommentDAO.insertComment" parameterClass="Comment2" >
+		<selectKey resultClass="java.lang.String" keyProperty="commentNo">
+			SELECT IFNULL(MAX(COMMENT_NO),0)+1 AS COMMENT_NO  FROM COMTNCOMMENT
+		</selectKey>
+		<![CDATA[
+			INSERT INTO COMTNCOMMENT
+			(
+				COMMENT_NO, NTT_ID, BBS_ID, WRTER_NO, PASSWORD, 
+				COMMENT_CN, USE_AT, 
+				FRST_REGISTER_ID, FRST_REGISTER_PNTTM,
+				ATCH_FILE_ID
+			 )
+			VALUES
+			(
+				#commentNo#, #nttId#, #bbsId#, #wrterNo#, #commentPassword#, 
+			 	#commentCn#, 'Y',
+			 	#frstRegisterId#, SYSDATE(),
+			 	#atchFileId#
+			 )
+		]]>
+	</insert>
+	
+	<update id="KmsBBSCommentDAO.deleteComment" parameterClass="CommentVO2">
+		<![CDATA[
+			UPDATE COMTNCOMMENT
+			SET USE_AT = 'N'
+			WHERE COMMENT_NO = #commentNo#
+		]]>			
+	</update>
+	
+	<select id="KmsBBSCommentDAO.selectComment" parameterClass="CommentVO2" resultMap="commentDetail" >
+		<![CDATA[
+			SELECT
+				a.COMMENT_NO
+				,a.NTT_ID
+				,a.BBS_ID
+				,a.WRTER_NO, b.USER_ID AS WRTER_ID, b.USER_NM AS WRTER_NM
+				,a.PASSWORD
+				,a.COMMENT_CN
+				,a.USE_AT
+				,DATE_FORMAT(a.FRST_REGISTER_PNTTM, '%Y-%m-%d %H:%i:%S') AS FRST_REGISTER_PNTTM
+				,c.USER_NM as FRST_REGISTER_NM
+			FROM
+				COMTNCOMMENT a
+				LEFT OUTER JOIN TBL_USERINFO b ON a.WRTER_NO = b.NO
+				LEFT OUTER JOIN TBL_USERINFO c ON a.FRST_REGISTER_ID = c.NO
+			WHERE
+				a.COMMENT_NO = #commentNo#
+
+		]]>				
+	</select> 
+
+ 	 <update id="KmsBBSCommentDAO.updateComment" parameterClass="Comment2">
+ 		<![CDATA[
+			UPDATE COMTNCOMMENT SET 
+				PASSWORD = #commentPassword#,
+				COMMENT_CN = #commentCn#,
+				LAST_UPDUSR_ID = #lastUpdusrId#,
+				LAST_UPDUSR_PNTTM = SYSDATE()
+ 		]]>
+			<isNotEmpty prepend="," property="atchFileId">
+ 		<![CDATA[	ATCH_FILE_ID = #atchFileId#	]]>
+			</isNotEmpty>
+ 		<![CDATA[
+			WHERE COMMENT_NO = #commentNo# 
+ 		]]>
+ 	</update>
+ 	
+ 	<select id="KmsBBSCommentDAO.getCommentPassword" parameterClass="Comment2" resultClass="java.lang.String">
+		<![CDATA[
+			SELECT
+				PASSWORD
+			FROM
+				COMTNCOMMENT	
+			WHERE COMMENT_NO = #commentNo# 		
+		]]>
+	</select>
+</sqlMap>

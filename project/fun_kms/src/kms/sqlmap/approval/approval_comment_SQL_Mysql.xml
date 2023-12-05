@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsEappComment">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="ApprovalCommentVO" type="kms.com.app.service.ApprovalCommentVO"/>
+	<typeAlias  alias="ApprovalComment" type="kms.com.app.service.ApprovalComment"/>
+	
+	<resultMap id="approvalCommentVOAll" class="kms.com.app.service.ApprovalCommentVO">
+		<result property="no" column="NO" columnIndex="1"/>
+		<result property="docId" column="DOC_ID" columnIndex="2"/>
+		<result property="writerNo" column="WRITER_NO" columnIndex="3"/>
+		<result property="eappCt" column="EAPP_CT" columnIndex="4"/>
+		<result property="wtDt" column="WT_DT" columnIndex="5"/>
+		<result property="fkEappReader" column="FK_EAPP_READER" columnIndex="6"/>
+		<result property="appTyp" column="APP_TYP" columnIndex="7"/>
+		<result property="stat" column="STAT" columnIndex="8"/>
+		<result property="writerId" column="WRITER_ID" columnIndex="9"/>
+		<result property="writerNm" column="WRITER_NM" columnIndex="10"/>
+			
+			
+	</resultMap>
+	
+	<insert id="kmsEappCommentDAO.insertKmsEappComment_S">
+		<![CDATA[
+			INSERT INTO TBL_EAPP_COMMENT 
+				(  DOC_ID
+				  , WRITER_NO
+				  , EAPP_CT
+				  , WT_DT
+				  , FK_EAPP_READER
+				  , APP_TYP
+				  , STAT )
+			VALUES (
+				   #docId#
+				  , #writerNo#
+				  , #eappCt#
+				  , SYSDATE()
+				  , #fkEappReader#
+				  , #appTyp#
+				  , #stat# )
+		]]>
+	</insert>
+	
+	
+	<delete id="kmsEappCommentDAO.deleteKmsEappComment_S">
+		<![CDATA[
+			DELETE FROM TBL_EAPP_COMMENT 
+			WHERE NO=#no#
+		]]>
+	</delete>
+
+	
+	<select id="kmsEappCommentDAO.selectKmsEappCommentList_D" parameterClass="ApprovalCommentVO" resultMap="approvalCommentVOAll">
+		SELECT
+			APC.NO
+			, APC.DOC_ID
+			, APC.WRITER_NO
+			, APC.EAPP_CT
+			, DATE_FORMAT(APC.WT_DT, '%Y.%m.%d %H:%i') AS WT_DT
+			, APC.FK_EAPP_READER
+			, APC.APP_TYP
+			, USR.USER_ID WRITER_ID
+			, USR.USER_NM WRITER_NM
+			, APC.STAT
+		FROM
+			TBL_EAPP_COMMENT APC
+			INNER JOIN TBL_USERINFO USR
+				ON APC.WRITER_NO = USR.`NO`
+			
+		WHERE 1=1 
+			<isNotEqual prepend="AND" property="docId" compareValue="-1">
+				APC.DOC_ID = #docId#
+			</isNotEqual>
+			
+			<!--  mode 값에 따른 검색 값 변경 -->
+			<!-- mode = 1 일 경우 채용현황에서 결재 관련 건만 불러옴 -->
+			<isEqual property="mode" compareValue="1">
+				<!-- 기안자, 전결자, 처리자 정보만 불러옴 -->
+				AND APC.APP_TYP IN ('APR000', 'APR003', 'APR005')
+			</isEqual>
+			<isNotEmpty prepend="AND" property="appTyp">
+				APC.APP_TYP = #appTyp#
+			</isNotEmpty>
+		GROUP BY
+			APC.NO
+		ORDER BY
+			APC.WT_DT DESC
+	</select>	
+	
+	
+	<select id="kmsEappCommentDAO.selectKmsEappCommentListTotCnt_S" parameterClass="ApprovalCommentVO" resultClass="int">
+			SELECT COUNT(*) totcnt
+			FROM TBL_EAPP_COMMENT
+			WHERE 1=1
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				NO = #searchKeyword#
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				DOC_ID LIKE CONCAT('%',#searchKeyword#,'%')
+			</isEqual>
+	</select>
+
+</sqlMap>

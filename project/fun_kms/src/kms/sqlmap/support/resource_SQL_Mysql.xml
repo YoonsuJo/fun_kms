@@ -1,0 +1,774 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsResourceDAO">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="carVO" type="kms.com.support.service.CarVO"/>
+	<typeAlias  alias="carFixVO" type="kms.com.support.service.CarFixVO"/>
+	<typeAlias  alias="carReservation" type="kms.com.support.service.CarReservation"/>
+	<typeAlias  alias="equipVO" type="kms.com.support.service.EquipVO"/>
+	<typeAlias  alias="IpVO" type="kms.com.support.service.IpVO"/>
+	
+	<resultMap id="ipInfo" class="kms.com.support.service.IpVO">
+		<result property="no" 			column="NO" 				columnIndex="1"/>
+		<result property="bw" 			column="BW" 				columnIndex="2"/>
+		<result property="ip" 			column="IP" 				columnIndex="3"/>
+		<result property="ipUserNo" 	column="IP_USER_NO" 		columnIndex="4"/>
+		<result property="ipUserNm" 	column="IP_USER_NM" 		columnIndex="5"/>
+		<result property="ipUserId" 	column="IP_USER_ID" 		columnIndex="6"/>
+		<result property="ipPurpose" 	column="IP_PURPOSE" 		columnIndex="7"/>
+		<result property="ipModDate" 	column="IP_MOD_DATE" 		columnIndex="8"/>
+		<result property="ipModUserNo" 	column="IP_MOD_USER_NO" 	columnIndex="9"/>
+		<result property="ipModUserNm" 	column="IP_MOD_USER_NM" 	columnIndex="10"/>
+		<result property="ipModUserId" 	column="IP_MOD_USER_ID" 	columnIndex="11"/>
+	</resultMap>
+	
+	<resultMap id="carInfo" class="kms.com.support.service.CarVO">
+		<result property="carId"		column="CAR_ID"			columnIndex="1"/>
+		<result property="carTyp"		column="CAR_TYP"		columnIndex="2"/>
+		<result property="userTyp"		column="USER_TYP"		columnIndex="3"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="4"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="5"/>
+		<result property="userId"		column="USER_ID"		columnIndex="6"/>
+		<result property="insComp"		column="INS_COMP"		columnIndex="7"/>
+		<result property="insCallNo"	column="INS_CALL_NO"	columnIndex="8"/>
+		<result property="insEdate"		column="INS_EDATE"		columnIndex="9"/>
+		<result property="insAge"		column="INS_AGE"		columnIndex="10"/>
+		<result property="insLicTyp"	column="INS_LIC_TYP"	columnIndex="11"/>
+		<result property="compnyId"		column="COMPNY_ID"		columnIndex="12"/>
+		<result property="compnyNm"		column="COMPNY_NM"		columnIndex="13"/>
+		<result property="imgFileId"	column="IMG_FILE_ID"	columnIndex="14"/>
+	</resultMap>
+	
+	<resultMap id="carFixInfo" class="kms.com.support.service.CarFixVO">
+		<result property="no"				column="NO"					columnIndex="1"/>
+		<result property="carId"			column="CAR_ID"				columnIndex="2"/>
+		<result property="fixDate"			column="FIX_DATE"			columnIndex="3"/>
+		<result property="userNo"			column="USER_NO"			columnIndex="4"/>
+		<result property="userNm"			column="USER_NM"			columnIndex="5"/>
+		<result property="userId"			column="USER_ID"			columnIndex="6"/>
+		<result property="runLength"		column="RUN_LENGTH"			columnIndex="7"/>
+		<result property="fixItem"			column="FIX_ITEM"			columnIndex="8"/>
+		<result property="fixItemDetail"	column="FIX_ITEM_DETAIL"	columnIndex="9"/>
+		<result property="fixNote"			column="FIX_NOTE"			columnIndex="10"/>
+	</resultMap>
+	
+	<resultMap id="carReservationList" class="kms.com.support.service.CarReservation">
+		<result property="no"			column="NO"				columnIndex="1"/>
+		<result property="carId"		column="CAR_ID"			columnIndex="2"/>
+		<result property="imgFileId"	column="IMG_FILE_ID"	columnIndex="3"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="4"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="5"/>
+		<result property="userId"		column="USER_ID"		columnIndex="6"/>
+		<result property="stDt"			column="ST_DT"			columnIndex="7"/>
+		<result property="edDt"			column="ED_DT"			columnIndex="8"/>
+	</resultMap>
+	
+	<resultMap id="carReservationInfo" class="kms.com.support.service.CarReservation">
+		<result property="no"			column="NO"				columnIndex="1"/>
+		<result property="carId"		column="CAR_ID"			columnIndex="2"/>
+		<result property="carTyp"		column="CAR_TYP"		columnIndex="3"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="4"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="5"/>
+		<result property="userId"		column="USER_ID"		columnIndex="6"/>
+		<result property="writerNo"		column="WRITER_NO"		columnIndex="7"/>
+		<result property="writerNm"		column="WRITER_NM"		columnIndex="8"/>
+		<result property="writerId"		column="WRITER_ID"		columnIndex="9"/>
+		<result property="stDt"			column="ST_DT"			columnIndex="10"/>
+		<result property="stTm"			column="ST_TM"			columnIndex="11"/>
+		<result property="edDt"			column="ED_DT"			columnIndex="12"/>
+		<result property="edTm"			column="ED_TM"			columnIndex="13"/>
+		<result property="purpose"		column="PURPOSE"		columnIndex="14"/>
+		<result property="destination"	column="DESTINATION"	columnIndex="15"/>
+		<result property="runLength"	column="RUN_LENGTH"		columnIndex="16"/>
+		<result property="rsvNote"		column="RSV_NOTE"		columnIndex="17"/>
+	</resultMap>
+	
+	<select id="KmsResourceDAO.selectCarList" resultMap="carInfo">
+		SELECT
+			a.CAR_ID, a.CAR_TYP, a.USER_TYP, a.USER_NO, b.USER_NM, b.USER_ID,
+			a.INS_COMP, a.INS_CALL_NO, a.INS_EDATE, a.INS_AGE, a.INS_LIC_TYP,
+			a.COMPNY_ID, c.CODE_NM AS COMPNY_NM, a.IMG_FILE_ID
+		FROM
+			TBL_CAR a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+			LEFT JOIN COMTCCMMNDETAILCODE c ON a.COMPNY_ID = c.CODE AND c.CODE_ID = 'KMS007'
+		WHERE
+			a.USE_AT = 'Y'
+		<isNotEmpty prepend="AND" property="userTyp">
+			a.USER_TYP = #userTyp#
+		</isNotEmpty>
+		ORDER BY a.CAR_ORD
+	</select>
+	
+	<select id="KmsResourceDAO.selectCarInfo" resultMap="carInfo">
+		SELECT
+			a.CAR_ID, a.CAR_TYP, a.USER_TYP, a.USER_NO, b.USER_NM, b.USER_ID,
+			a.INS_COMP, a.INS_CALL_NO, a.INS_EDATE, a.INS_AGE, a.INS_LIC_TYP,
+			a.COMPNY_ID, c.CODE_NM AS COMPNY_NM, a.IMG_FILE_ID
+		FROM
+			TBL_CAR a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+			LEFT JOIN COMTCCMMNDETAILCODE c ON a.COMPNY_ID = c.CODE AND c.CODE_ID = 'KMS007'
+		WHERE
+			a.CAR_ID = #carId#
+	</select>
+	
+	<insert id="KmsResourceDAO.insertCarInfo">
+		INSERT INTO TBL_CAR
+		(
+			CAR_ID, CAR_TYP, USER_TYP, USER_NO,
+			INS_COMP, INS_CALL_NO, INS_EDATE, INS_AGE,
+			INS_LIC_TYP, COMPNY_ID, IMG_FILE_ID, USE_AT
+		)
+		<isEmpty property="userNo">
+		(
+			SELECT
+				#carId#, #carTyp#, #userTyp#, NO,
+				#insComp#, #insCallNo#, #insEdate#, #insAge#,
+				#insLicTyp#, #compnyId#, #imgFileId#, 'Y'
+			FROM
+				TBL_USERINFO
+			WHERE
+				USER_ID = #userId#
+		)
+		</isEmpty>
+		<isNotEmpty prepend="VALUES" property="userNo">
+		(
+			#carId#, #carTyp#, #userTyp#, #userNo#,
+			#insComp#, #insCallNo#, #insEdate#, #insAge#,
+			#insLicTyp#, #compnyId#, #imgFileId#, 'Y'
+		)
+		</isNotEmpty>
+	</insert>
+	
+	<update id="KmsResourceDAO.updateCarInfo">
+		UPDATE TBL_CAR
+		SET
+			CAR_TYP = #carTyp#,
+			USER_TYP = #userTyp#,
+			USER_NO = (
+			<isEmpty property="userNo">
+				SELECT
+					NO
+				FROM
+					TBL_USERINFO
+				WHERE
+					USER_ID = #userId#
+			</isEmpty>
+			<isNotEmpty property="userNo">
+				#userNo#
+			</isNotEmpty>
+			),
+			INS_COMP = #insComp#,
+			INS_CALL_NO = #insCallNo#,
+			INS_EDATE = #insEdate#,
+			INS_AGE = #insAge#,
+			INS_LIC_TYP = #insLicTyp#,
+			COMPNY_ID = #compnyId#,
+			IMG_FILE_ID = #imgFileId#
+		WHERE
+			CAR_ID = #carId#
+	</update>
+	
+	<update id="KmsResourceDAO.deleteCarInfo">
+		UPDATE TBL_CAR
+		SET
+			USE_AT = 'N'
+		WHERE
+			CAR_ID = #carId#
+	</update>
+	
+	
+	
+	<select id="KmsResourceDAO.selectCarFixList" resultMap="carFixInfo">
+		SELECT
+			a.NO, a.CAR_ID, a.FIX_DATE,
+			a.USER_NO, b.USER_NM, b.USER_ID,
+			a.RUN_LENGTH, a.FIX_ITEM, a.FIX_ITEM_DETAIL, a.FIX_NOTE
+		FROM
+			TBL_CAR_FIX a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+		WHERE
+			a.USE_AT = 'Y'
+			AND a.CAR_ID = #carId#
+		ORDER BY
+			a.FIX_DATE DESC
+	</select>
+	
+	<select id="KmsResourceDAO.selectCarFixInfo" resultMap="carFixInfo">
+		SELECT
+			a.NO, a.CAR_ID, a.FIX_DATE,
+			a.USER_NO, b.USER_NM, b.USER_ID,
+			a.RUN_LENGTH, a.FIX_ITEM, a.FIX_ITEM_DETAIL, a.FIX_NOTE
+		FROM
+			TBL_CAR_FIX a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+		WHERE
+			a.USE_AT = 'Y'
+			AND a.NO = #no#
+	</select>
+	
+	<insert id="KmsResourceDAO.insertCarFixInfo">
+		INSERT INTO TBL_CAR_FIX
+		(
+			CAR_ID, FIX_DATE, USER_NO,
+			RUN_LENGTH, FIX_ITEM, FIX_ITEM_DETAIL, FIX_NOTE, USE_AT
+		) (
+			SELECT
+				#carId#, #fixDate#, NO,
+				#runLength#, #fixItem#, #fixItemDetail#, #fixNote#, 'Y'
+			FROM
+				TBL_USERINFO
+			WHERE
+				USER_ID = #userId#
+		)
+	</insert>
+	
+	<update id="KmsResourceDAO.updateCarFixInfo">
+		UPDATE TBL_CAR_FIX
+		SET
+			CAR_ID = #carId#,
+			FIX_DATE = #fixDate#,
+			USER_NO = (
+				SELECT
+					NO
+				FROM
+					TBL_USERINFO
+				WHERE
+					USER_ID = #userId#
+			),
+			RUN_LENGTH = #runLength#,
+			FIX_ITEM = #fixItem#,
+			FIX_ITEM_DETAIL = #fixItemDetail#,
+			FIX_NOTE = #fixNote#
+		WHERE
+			NO = #no#
+	</update>
+	
+	<update id="KmsResourceDAO.deleteCarFixInfo">
+		UPDATE TBL_CAR_FIX
+		SET
+			USE_AT = 'N'
+		WHERE
+			NO = #no#
+	</update>
+	
+	<select id="KmsResourceDAO.selectCarReservationList" resultMap="carReservationList">
+		SELECT
+			a.NO, a.CAR_ID, b.IMG_FILE_ID,
+			a.USER_NO, c.USER_NM, c.USER_ID,
+			a.ST_DT, a.ED_DT
+		FROM
+			TBL_CAR_RESERVATION a
+			LEFT JOIN TBL_CAR b ON a.CAR_ID = b.CAR_ID
+			LEFT JOIN TBL_USERINFO c ON a.USER_NO = c.NO
+		WHERE
+			DATEDIFF(a.ED_DT, CONCAT(SUBSTRING(#searchDate#,1,6),'01')) >= 0
+			AND DATEDIFF(DATE_ADD(CONCAT(SUBSTRING(#searchDate#,1,6),'01'), INTERVAL 1 MONTH), a.ST_DT) >= 1
+		ORDER BY b.CAR_ORD
+	</select>
+	
+	<select id="KmsResourceDAO.selectCarReservationInfo" resultMap="carReservationInfo">
+		SELECT
+			a.NO, a.CAR_ID, b.CAR_TYP, a.USER_NO, c.USER_NM, c.USER_ID,
+			a.WRITER_NO, d.USER_NM AS WRITER_NM, d.USER_ID AS WRITER_ID,
+			a.ST_DT, a.ST_TM, a.ED_DT, a.ED_TM,
+			a.PURPOSE, a.DESTINATION, a.RUN_LENGTH, a.RSV_NOTE
+		FROM
+			TBL_CAR_RESERVATION a
+			LEFT JOIN TBL_CAR b ON a.CAR_ID = b.CAR_ID
+			LEFT JOIN TBL_USERINFO c ON a.USER_NO = c.NO
+			LEFT JOIN TBL_USERINFO d ON a.WRITER_NO = d.NO
+		WHERE
+			a.NO = #no#
+	</select>
+	
+	
+	<select id="KmsResourceDAO.selectCarReservationInfoList" resultMap="carReservationInfo">
+		SELECT
+			a.NO, a.CAR_ID, b.CAR_TYP, a.USER_NO, c.USER_NM, c.USER_ID,
+			a.WRITER_NO, d.USER_NM AS WRITER_NM, d.USER_ID AS WRITER_ID,
+			a.ST_DT, a.ST_TM, a.ED_DT, a.ED_TM,
+			a.PURPOSE, a.DESTINATION, a.RUN_LENGTH, a.RSV_NOTE
+		FROM
+			TBL_CAR_RESERVATION a
+			LEFT JOIN TBL_CAR b ON a.CAR_ID = b.CAR_ID
+			LEFT JOIN TBL_USERINFO c ON a.USER_NO = c.NO
+			LEFT JOIN TBL_USERINFO d ON a.WRITER_NO = d.NO
+		WHERE
+			DATEDIFF(#searchDate#, a.ST_DT) >= 0
+			AND DATEDIFF(a.ED_DT, #searchDate#) >= 0
+	</select>
+	
+	<select id="KmsResourceDAO.selectCarReservationInfoListTotCnt" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			TBL_CAR_RESERVATION
+		WHERE
+			CAR_ID = #carId#
+			<![CDATA[
+			AND CONCAT(#edDt#, IF(#edTm#<10, CONCAT('0',#edTm#), #edTm#)) > CONCAT(ST_DT, IF(ST_TM<10, CONCAT('0',ST_TM), ST_TM))
+			AND CONCAT(#stDt#, IF(#stTm#<10, CONCAT('0',#stTm#), #stTm#)) < CONCAT(ED_DT, IF(ED_TM<10, CONCAT('0',ED_TM), ED_TM))
+			]]>
+	</select>
+	
+	<insert id="KmsResourceDAO.insertCarReservation">
+		INSERT INTO TBL_CAR_RESERVATION
+		(
+			CAR_ID, USER_NO, WRITER_NO,
+			ST_DT, ST_TM, ED_DT, ED_TM,
+			PURPOSE, DESTINATION, RUN_LENGTH, RSV_NOTE
+		) (
+			SELECT
+				#carId#, NO, #writerNo#,
+				#stDt#, #stTm#, #edDt#, #edTm#,
+				#purpose#, #destination#, #runLength#, #rsvNote#
+			FROM
+				TBL_USERINFO
+			WHERE
+				USER_ID = #userId#
+		)
+	</insert>
+	
+	<update id="KmsResourceDAO.updateCarReservation">
+		UPDATE TBL_CAR_RESERVATION
+		SET
+			CAR_ID = #carId#,
+			USER_NO = (
+				SELECT
+					NO
+				FROM
+					TBL_USERINFO
+				WHERE
+					USER_ID = #userId#
+			),
+			WRITER_NO = #writerNo#,
+			ST_DT = #stDt#,
+			ST_TM = #stTm#,
+			ED_DT = #edDt#,
+			ED_TM = #edTm#,
+			PURPOSE = #purpose#,
+			DESTINATION = #destination#,
+			RUN_LENGTH = #runLength#,
+			RSV_NOTE = #rsvNote#
+		WHERE
+			NO = #no#
+	</update>
+	
+	<delete id="KmsResourceDAO.deleteCarReservation">
+		DELETE FROM TBL_CAR_RESERVATION
+		WHERE NO = #no#
+	</delete>
+	
+
+	<select id="KmsResourceDAO.selectEquipList" resultClass="equipVO">
+		SELECT 
+			EQUIP_NO
+			,EQUIP_TYPE
+			,SERIAL_NO
+			,MODEL
+			,CPU
+			,MEMORY
+			,VGA
+			,HDD
+			,ODD
+			,ETC
+			,STATUS
+			,REG_DT
+			,A.USER_ID
+			,A.USER_NM
+			,PLACE
+			,DCO.CODE_NM AS rankNm
+			,ORG.ORGNZT_NM AS orgnztNm
+		FROM 
+			TBL_EQUIP A
+			LEFT OUTER JOIN TBL_USERINFO USR
+				ON A.USER_ID = USR.USER_ID
+			LEFT OUTER JOIN COMTCCMMNDETAILCODE DCO
+				ON DCO.CODE_ID = 'KMS003'
+				AND USR.RANK_ID = DCO.CODE
+			LEFT OUTER JOIN TBL_ORGNZT ORG
+				ON USR.ORGNZT_ID = ORG.ORGNZT_ID					
+		WHERE 
+			TRUE		
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				<isNotEmpty property="searchSelect">EQUIP_TYPE = #searchSelect#</isNotEmpty>
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				MODEL LIKE CONCAT('%',#searchKeyword#,'%')
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="2">
+				A.USER_NM LIKE CONCAT('%',#searchKeyword#,'%')
+			</isEqual>
+		ORDER BY SERIAL_NO
+	<!--ORDER BY EQUIP_TYPE,EQUIP_NO-->		 	
+	<!--LIMIT #recordCountPerPage# OFFSET #firstIndex#-->	   	
+	</select>	
+	
+	<select id="KmsResourceDAO.selectEquipListTotCnt" resultClass="java.lang.Integer">
+		SELECT COUNT(*)
+		  FROM TBL_EQUIP
+		 WHERE TRUE
+		 <isEqual prepend="AND" property="searchCondition" compareValue="0">
+		 	<isNotEmpty property="searchSelect">EQUIP_TYPE = #searchSelect#</isNotEmpty>
+		 </isEqual>
+		 <isEqual prepend="AND" property="searchCondition" compareValue="1">
+		 	MODEL LIKE CONCAT('%',#searchKeyword#,'%')
+		 </isEqual>
+		 <isEqual prepend="AND" property="searchCondition" compareValue="2">
+		 	USER_NM LIKE CONCAT('%',#searchKeyword#,'%')
+		 </isEqual>
+	</select>
+
+	<select id="KmsResourceDAO.selectEquipInfo" resultClass="equipVO">
+		SELECT EQUIP_NO
+		      ,EQUIP_TYPE
+		      ,SERIAL_NO
+		      ,MODEL
+		      ,CPU
+		      ,MEMORY
+		      ,VGA
+		      ,HDD
+		      ,ODD
+		      ,ETC
+		      ,STATUS
+		      ,REG_DT
+		      ,USER_ID
+		      ,USER_NM
+		      ,PLACE
+		      ,BUY_PLACE
+		      ,BUY_ADDR
+		      ,BUY_TEL
+		      ,BUY_DT
+		      ,SIRIAL_NO
+		      ,BUY_PRICE
+		  FROM TBL_EQUIP
+		 WHERE EQUIP_NO = #equip_no#
+	</select>
+
+	<select id="KmsResourceDAO.selectEquipInfoDetail" resultClass="equipVO">
+		SELECT IDX
+		      ,EQUIP_NO
+		      ,USER_ID
+		      ,USER_NM
+		      ,REG_DT
+		      ,UDT_DT
+		      ,USE_YN
+		      ,TEAM_NAME
+		      ,PLACE
+		      ,STATUS
+		      ,ETC
+		      ,USE_PURPS
+		  FROM TBL_EQUIP_DETAIL
+		 WHERE IDX = #idx#
+	</select>
+
+	<select id="KmsResourceDAO.selectEquipHistoryList" resultClass="equipVO">
+		SELECT A.IDX
+		      ,A.EQUIP_NO
+		      ,A.USER_ID
+		      ,A.USER_NM
+		      ,CONCAT(SUBSTR(A.REG_DT,1,10),' ~ ',
+		       IFNULL((SELECT SUBSTR(B.REG_DT,1,10) 
+		                 FROM TBL_EQUIP_DETAIL B 
+		                WHERE B.EQUIP_NO = A.EQUIP_NO
+		                  AND B.IDX > A.IDX         
+		                ORDER BY B.IDX LIMIT 1),'현재')) AS REG_DT
+		      ,A.USE_YN
+		      ,A.TEAM_NAME
+		      ,A.PLACE
+		      ,A.STATUS
+		      ,A.ETC
+		      ,A.USE_PURPS
+		  FROM TBL_EQUIP_DETAIL A
+		 WHERE A.EQUIP_NO = #equip_no#
+		 ORDER BY A.IDX DESC
+	</select>
+	
+	<insert id="KmsResourceDAO.insertEquip">
+		INSERT INTO TBL_EQUIP
+		(
+			EQUIP_TYPE, SERIAL_NO, MODEL, CPU, MEMORY,
+			VGA, HDD, ODD, ETC, BUY_PLACE, BUY_ADDR, BUY_TEL, BUY_DT, SIRIAL_NO, BUY_PRICE
+		)
+		VALUES
+		(
+			#equip_type#, #serial_no#, #model#, #cpu#, #memory#,
+			#vga#, #hdd#, #odd#, #etc#, #buy_place#, #buy_addr#, #buy_tel#, #buy_dt#, #sirial_no#, #buy_price#
+		)
+	</insert>
+	
+	<update id="KmsResourceDAO.updateEquip">
+		UPDATE TBL_EQUIP
+		   SET EQUIP_TYPE = #equip_type#,
+			   SERIAL_NO = #serial_no#,
+			   MODEL = #model#,
+			   CPU = #cpu#,
+			   MEMORY = #memory#,
+			   VGA = #vga#,
+			   HDD = #hdd#,
+			   ODD = #odd#,
+			   ETC = #etc#,
+			   UDT_DT = SYSDATE(),
+			   BUY_PLACE = #buy_place#,
+			   BUY_ADDR = #buy_addr#,
+			   BUY_TEL = #buy_tel#,
+			   BUY_DT = #buy_dt#,
+			   SIRIAL_NO = #sirial_no#,
+			   BUY_PRICE = #buy_price#
+		 WHERE EQUIP_NO = #equip_no#
+	</update>
+	
+	<delete id="KmsResourceDAO.deleteEquip">
+		DELETE FROM TBL_EQUIP WHERE EQUIP_NO = #equip_no#
+	</delete>
+	
+	<insert id="KmsResourceDAO.insertEquipDetail">
+		INSERT INTO TBL_EQUIP_DETAIL
+		(
+			EQUIP_NO, USER_ID, USER_NM, REG_DT, USE_YN,
+			TEAM_NAME, PLACE, STATUS, ETC, USE_PURPS
+		)
+		VALUES
+		(
+			#equip_no#, #user_id#, #user_nm#, SYSDATE(), 'Y',
+			#team_name#, #place#, #status#, #etc#, #use_purps#
+		)
+	</insert>
+	
+	<update id="KmsResourceDAO.updateEquipDetail">
+		UPDATE TBL_EQUIP_DETAIL
+		   SET USER_ID = #user_id#,
+			   USER_NM = #user_nm#,
+			   TEAM_NAME = #team_name#,
+			   PLACE = #place#,
+			   STATUS = #status#,
+			   ETC = #etc#,
+			   USE_PURPS = #use_purps#,
+			   UDT_DT = SYSDATE()
+		 WHERE IDX = #idx#
+	</update>
+	
+	<delete id="KmsResourceDAO.deleteEquipDetail">
+		DELETE FROM TBL_EQUIP_DETAIL 
+		 WHERE EQUIP_NO = #equip_no#
+		 <isNotEmpty prepend="AND" property="idx"> IDX = #idx# </isNotEmpty>
+	</delete>
+	
+	<update id="KmsResourceDAO.updateEquipUser">
+		UPDATE TBL_EQUIP
+		   SET USER_ID = #user_id#,
+			   USER_NM = #user_nm#,
+			   PLACE = #place#,
+			   STATUS = #status#,
+			   ETC = #etc#,
+			   UDT_DT = SYSDATE()
+		 WHERE EQUIP_NO = #equip_no#
+	</update>
+		
+	<update id="KmsResourceDAO.updateEquipNotUsed">
+		UPDATE TBL_EQUIP_DETAIL
+		   SET USE_YN = 'N',
+			   UDT_DT = SYSDATE()
+		 WHERE EQUIP_NO = #equip_no#
+	</update>
+	
+	<select id="KmsResourceDAO.selectMaxIdx" resultClass="java.lang.String">
+		SELECT CAST(MAX(IDX) AS CHAR (30))
+		  FROM TBL_EQUIP_DETAIL
+		 WHERE EQUIP_NO = #equip_no#
+	</select>
+	
+	<insert id="KmsResourceDAO.insertEquipRepair">
+		INSERT INTO TBL_EQUIP_REPAIR
+		(
+			EQUIP_NO, REG_NO, REG_DT, USE_YN,
+			REPAIR_DT, COST, CONTENT, NOTE
+		)
+		VALUES
+		(
+			#equip_no#, #regNo#, SYSDATE(), 'Y',
+			#repairDt#, #cost#, #content#, #note#
+		)
+	</insert>
+	
+	<update id="KmsResourceDAO.updateEquipRepair">
+		UPDATE 
+			TBL_EQUIP_REPAIR
+		SET 
+		   	UDT_NO = #udtNo#
+		   	,UDT_DT = SYSDATE()
+		   	,REPAIR_DT = #repairDt#
+		   	,COST = #cost#
+		   	,CONTENT = #content#
+		   	,NOTE = #note#		   	
+		 WHERE 
+		 	IDX = #idx#
+	</update>
+	
+	<delete id="KmsResourceDAO.deleteEquipRepair">
+		DELETE FROM TBL_EQUIP_REPAIR 
+		 WHERE EQUIP_NO = #equip_no#
+		 <isNotEmpty prepend="AND" property="idx"> IDX = #idx# </isNotEmpty>
+	</delete>
+	
+	<select id="KmsResourceDAO.selectEquipInfoRepair" resultClass="equipVO">			
+		SELECT
+			IDX
+			,EQUIP_NO
+			,REG_NO AS regNo
+			,IFNULL(UDT_NO,0) AS udtNo
+			,REG_DT
+			,UDT_DT
+			,USE_YN
+			,REPAIR_DT AS repairDt
+			,COST
+			,CONTENT
+			,NOTE
+			,B.USER_NM AS regNm
+			,C.USER_NM AS udtNm
+		FROM
+			TBL_EQUIP_REPAIR A
+			LEFT JOIN TBL_USERINFO B
+				ON A.REG_NO = B.NO
+			LEFT JOIN TBL_USERINFO C
+				ON A.UDT_NO = C.NO
+		WHERE 
+		 	IDX = #idx#
+	</select>
+
+	<select id="KmsResourceDAO.selectEquipRepairHistoryList" resultClass="equipVO">
+		SELECT
+			IDX
+			,EQUIP_NO
+			,REG_NO AS regNo
+			,IFNULL(UDT_NO,0) AS udtNo
+			,REG_DT
+			,UDT_DT
+			,USE_YN
+			,REPAIR_DT AS repairDt
+			,COST
+			,CONTENT
+			,NOTE
+			,B.USER_NM AS regNm
+			,C.USER_NM AS udtNm
+		FROM
+			TBL_EQUIP_REPAIR A
+			LEFT JOIN TBL_USERINFO B
+				ON A.REG_NO = B.NO
+			LEFT JOIN TBL_USERINFO C
+				ON A.UDT_NO = C.NO
+		 WHERE 
+		 	A.EQUIP_NO = #equip_no#
+		 ORDER BY 
+		 	A.IDX DESC
+	</select>
+	
+	<select id="KmsResourceDAO.selectEquipTypeList" resultClass="equipVO">
+		SELECT 
+			A.TYPE_NO
+			,A.TYPE_NAME
+			,A.TYPE_VALUE
+			,IFNULL(B.CNT,0) AS TYPE_CNT
+		FROM 
+			TBL_EQUIP_TYPE A
+			LEFT OUTER JOIN (
+				SELECT EQUIP_TYPE, COUNT(*) AS cnt
+				  FROM TBL_EQUIP
+				 WHERE STATUS != '6-disuse'
+				GROUP BY EQUIP_TYPE ) B
+			ON A.TYPE_VALUE = B.EQUIP_TYPE
+		GROUP BY
+			A.TYPE_NO, A.TYPE_NAME, A.TYPE_VALUE 
+	</select>	
+
+	<select id="KmsResourceDAO.selectEquipTypeInfo" resultClass="equipVO">
+		SELECT TYPE_NO
+		      ,TYPE_NAME
+		      ,TYPE_VALUE
+		  FROM TBL_EQUIP_TYPE
+		 WHERE TYPE_NO = #type_no#
+	</select>
+
+	<insert id="KmsResourceDAO.insertEquipType">
+		INSERT INTO TBL_EQUIP_TYPE (TYPE_NAME, TYPE_VALUE)
+		VALUES(#type_name#, #type_value#)
+	</insert>
+	
+	<update id="KmsResourceDAO.updateEquipType">
+		UPDATE TBL_EQUIP_TYPE
+		   SET TYPE_NAME = #type_name#,
+			   TYPE_VALUE = #type_value#
+		 WHERE TYPE_NO = #type_no#
+	</update>
+	
+	<delete id="KmsResourceDAO.deleteEquipType">
+		DELETE FROM TBL_EQUIP_TYPE WHERE TYPE_NO = #type_no#
+	</delete>
+
+
+	<select id="KmsResourceDAO.selectIpList" resultMap="ipInfo">
+		SELECT
+			a.NO, a.BW, a.IP, a.IP_USER_NO, b.USER_NM AS IP_USER_NM, b.USER_ID AS IP_USER_ID, a.IP_PURPOSE,
+			a.IP_MOD_DATE, a.IP_MOD_USER_NO, c.USER_NM AS IP_MOD_USER_NM, c.USER_ID AS IP_MOD_USER_ID
+		FROM
+			TBL_IP a
+			LEFT JOIN TBL_USERINFO b ON a.IP_USER_NO = b.NO
+			LEFT JOIN TBL_USERINFO c ON a.IP_MOD_USER_NO = c.NO
+		ORDER BY a.BW, a.IP *1 ASC
+	</select>
+	
+	<select id="KmsResourceDAO.selectIp" resultMap="ipInfo">
+		SELECT
+			a.NO, a.BW, a.IP, a.IP_USER_NO, b.USER_NM AS IP_USER_NM, b.USER_ID AS IP_USER_ID, a.IP_PURPOSE,
+			a.IP_MOD_DATE, a.IP_MOD_USER_NO, c.USER_NM AS IP_MOD_USER_NM, c.USER_ID AS IP_MOD_USER_ID
+		FROM
+			TBL_IP a
+			LEFT JOIN TBL_USERINFO b ON a.IP_USER_NO = b.NO
+			LEFT JOIN TBL_USERINFO c ON a.IP_MOD_USER_NO = c.NO
+		WHERE
+			a.NO = #no#
+	</select>
+	
+	<select id="KmsResourceDAO.selectIpInfo" resultMap="ipInfo">
+		SELECT
+			a.NO, a.BW, a.IP, a.IP_USER_NO, b.USER_NM AS IP_USER_NM, b.USER_ID AS IP_USER_ID, a.IP_PURPOSE,
+			a.IP_MOD_DATE, a.IP_MOD_USER_NO, c.USER_NM AS IP_MOD_USER_NM, c.USER_ID AS IP_MOD_USER_ID
+		FROM
+			TBL_IP a
+			LEFT JOIN TBL_USERINFO b ON a.IP_USER_NO = b.NO
+			LEFT JOIN TBL_USERINFO c ON a.IP_MOD_USER_NO = c.NO
+		WHERE
+			a.BW = #bw#
+			AND a.IP = #ip#
+	</select>
+	
+	<insert id="KmsResourceDAO.insertIpInfo">
+		INSERT INTO TBL_IP
+		(
+			BW, IP, IP_USER_NO, IP_PURPOSE, IP_MOD_DATE, IP_MOD_USER_NO
+		)
+		VALUES(
+			#bw#, #ip#, #ipUserNo#, #ipPurpose#, #ipModDate#, #ipModUserNo#
+		)
+	</insert>
+	
+	<update id="KmsResourceDAO.updateIpInfo">
+		UPDATE
+			TBL_IP
+		  SET  BW = #bw#,
+		       IP = #ip#,
+		   	   IP_USER_NO = #ipUserNo#,
+		   	   IP_PURPOSE = #ipPurpose#,
+		   	   IP_MOD_DATE = #ipModDate#,
+		   	   IP_MOD_USER_NO = #ipModUserNo#
+		 WHERE NO = #no#
+	</update>
+	
+	<delete id="KmsResourceDAO.deleteIpInfo">
+		DELETE FROM TBL_IP WHERE NO = #no#
+	</delete>
+</sqlMap>

@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC 
+    "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1//EN" 
+    "http://jakarta.apache.org/commons/dtds/validator_1_1.dtd">
+
+<form-validation>
+
+    <formset>
+		<form name="approvalWriteCommon">
+			<field property="subject" depends="required, maxlength">
+        		<arg0 key="제목" />
+        		<arg1 key="200" resource="false" />
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>200</var-value>
+				</var>
+			</field> 
+			<field property="deciderMix" depends="required">
+        		<arg0 key="전결자" />
+			</field>			
+			
+			<field property="content" depends="maxlength">
+        		<arg0 key="내용" />
+        		<arg1 key="4000" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>4000</var-value>
+				</var>
+			</field> 
+		</form>
+		
+		<form name="approvalWrite1">
+			<field property="content" depends="maxlength,required">
+        		<arg0 key="내용" />
+        		<arg1 key="4000" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>4000</var-value>
+				</var>
+			</field> 
+		</form>
+		
+		<form name="approvalWrite2">
+	
+			<field property="stDt" depends="required, integer, maxlength, minlength">
+        		<arg0 key="시작일" />
+        		<arg1 key="8" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>8</var-value>
+				</var>
+				<arg2 key="8" resource="false"/>
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>8</var-value>
+				</var>
+			</field>			
+			<field property="edDt" depends="required, integer, maxlength, minlength">
+        		<arg0 key="종료일" />
+        		<arg1 key="8" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>8</var-value>
+				</var>
+				<arg2 key="8" resource="false"/>
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>8</var-value>
+				</var>
+			</field>	
+			
+			<field property="sumDate" depends="required, float">
+        		<arg0 key="합계일" />
+			</field>
+			
+			<field property="wsPlace" depends="required">
+        		<arg0 key="행선지" />
+			</field>
+		</form>
+		
+		<form name="approvalWrite3">
+			<field property="companyId" depends="required, maxlength">
+        		<arg0 key="발신구분" />
+        		<arg1 key="1" resource="false" />
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>1</var-value>
+				</var>
+			</field>						
+			<field property="destn" depends="required,maxlength">
+        		<arg0 key="수신처" />
+        		<arg1 key="100" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>20</var-value>
+				</var>
+			</field>			 
+		</form>
+		
+		<form name="approvalWrite4">
+			<field property="orgnztId" depends="required, maxlength">
+        		<arg0 key="채용부서" />
+        		<arg1 key="100" resource="false" />
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+			</field>
+			<field property="mngTsk" depends="required, maxlength">
+        		<arg0 key="담당업무" />
+        		<arg1 key="100" resource="false" />
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+			</field>
+			<field property="carCd" depends="required, maxlength">
+        		<arg0 key="경력" />
+        		<arg1 key="10" resource="false" />
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>10</var-value>
+				</var>
+			</field>  
+			
+			<field property="carMinYear" depends="required, maxlength">
+        		<arg0 key="경력최소년수" />
+        		<arg1 key="2" resource="false" />
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>2</var-value>
+				</var>
+			</field>  
+			
+			<field property="carMaxYear" depends="required, maxlength,integer ">
+        		<arg0 key="경력최대년수" />
+        		<arg1 key="2" resource="false" />
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>2</var-value>
+				</var>
+			</field>  
+			
+			<field property="monPayMin" depends="required, maxlength,integer">
+        		<arg0 key="임금최소" />
+        		<arg1 key="5" resource="false" />
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>5</var-value>
+				</var>
+			</field> 
+			
+			<field property="carMaxYear" depends="required, maxlength,integer">
+        		<arg0 key="임금최대" />
+        		<arg1 key="5" resource="false" />
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>5</var-value>
+				</var>
+			</field> 
+			
+			<field property="educationList" depends="required, minlength">
+        		<arg0 key="학력" />
+        		<arg1 key="1" resource="false" />
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>1</var-value>
+				</var>
+			</field> 
+			
+			<field property="ageMin" depends="required, maxlength, integer">
+        		<arg0 key="최소연령" />
+        		<arg1 key="2" resource="false" />
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>2</var-value>
+				</var>
+			</field> 
+			
+			<field property="ageMax" depends="required, maxlength,integer">
+        		<arg0 key="최대연령" />
+        		<arg1 key="2" resource="false" />
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>2</var-value>
+				</var>
+			</field> 
+			
+			<field property="rankIdList" depends="required, minlength">
+        		<arg0 key="직급" />
+        		<arg1 key="1" resource="false" />
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>1</var-value>
+				</var>
+			</field> 
+			
+			<field property="gendCd" depends="required, maxlength">
+        		<arg0 key="성별" />
+        		<arg1 key="5" resource="false" />
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>5</var-value>
+				</var>
+			</field> 
+			
+			
+			<field property="dsdFrWk" depends="required, maxlength, minlength, integer">
+        		<arg0 key="출근희망일" />
+        		<arg1 key="8" resource="false" />
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>8</var-value>
+				</var>
+				<arg2 key="8" resource="false"/>
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>8</var-value>
+				</var>			
+			</field>
+			
+			<field property="keywd" depends="required, maxlength, minlength">
+        		<arg0 key="키워드" />
+        		<arg1 name="maxlength" key="${var:maxlength}" resource="false" />
+				<arg1 name="minlength" key="${var:minlength}" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>200</var-value>
+				</var>
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>6</var-value>
+				</var>			
+			</field>
+			
+			
+			<field property="otrCon" depends="required, maxlength, minlength">
+        		<arg0 key="기타조건" />
+        		<arg1 name="maxlength" key="${var:maxlength}" resource="false" />
+				<arg1 name="minlength" key="${var:minlength}" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>2000</var-value>
+				</var>
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>6</var-value>
+				</var>			
+			</field>
+			
+			
+		</form>
+		
+		
+		<form name="approvalWrite5">
+	
+			<field property="prjId" depends="required, integer, maxlength, minlength">
+        		<arg0 key="프로젝트" />
+        		<arg1 key="20" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>20</var-value>
+				</var>
+				<arg2 key="20" resource="false"/>
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>20</var-value>
+				</var>
+			</field>	
+			<field property="period" depends="required">
+        		<arg0 key="근무일수" />
+			</field>			
+			<field property="stDt" depends="required, integer, maxlength, minlength">
+        		<arg0 key="시작일" />
+        		<arg1 key="8" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>8</var-value>
+				</var>
+				<arg2 key="8" resource="false"/>
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>8</var-value>
+				</var>
+			</field>	
+			<field property="stTm" depends="required, maxlength, minlength">
+        		<arg0 key="시작시간" />
+        		<arg1 key="5" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>5</var-value>
+				</var>
+				<arg2 key="8" resource="false"/>
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>5</var-value>
+				</var>
+			</field>	
+			<field property="edDt" depends="required, integer, maxlength, minlength">
+        		<arg0 key="종료일" />
+        		<arg1 key="8" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>8</var-value>
+				</var>
+				<arg2 key="8" resource="false"/>
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>8</var-value>
+				</var>
+			</field>	
+			
+			<field property="edTm" depends="required, maxlength, minlength">
+        		<arg0 key="종료시간" />
+        		<arg1 key="5" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>5</var-value>
+				</var>
+				<arg2 key="8" resource="false"/>
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>5</var-value>
+				</var>
+			</field>
+		</form>
+		
+    </formset>
+
+</form-validation>

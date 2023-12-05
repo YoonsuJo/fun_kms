@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Organ">
+
+	<typeAlias  alias="egovMap"      type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="OrganVO"	 	type="kms.com.admin.organ.service.OrganVO"/>
+	<typeAlias  alias="Organ"  		 type="kms.com.admin.organ.service.Organ"/>
+
+	<select id="OrganDAO.selectOrganList" parameterClass="OrganVO" resultClass="egovMap">
+		<![CDATA[
+			SELECT
+				ORG1.ORGNZT_ID
+				, ORG1.ORGNZT_NM
+				, ORG1.ORGNZT_DC
+				, ORG1.ORG_UP
+				, ORG2.ORGNZT_NM AS ORG_UP_NM
+				, ORG1.USE_YN
+				, ORG1.FRST_REGISTER_PNTTM
+				, ORG1.LAST_UPDUSR_PNTTM 
+				, ORG1.FRST_REGISTER_ID
+				, ORG1.LAST_UPDUSR_ID
+				, ORG1.POSTCP_NM
+				, ORG1.POSTCP_RNM
+				, FN_STR_COUNT(ORG1.ORG_TREE,"/") ORG_LV
+				, ORG1.ORD
+			FROM TBL_ORGNZT ORG1
+			INNER JOIN TBL_ORGNZT ORG2
+			ON ORG1.ORG_UP = ORG2.ORGNZT_ID
+			
+			 WHERE  1 = 1
+		]]>
+			
+			<!-- 2013.08.02 김대현 조직개편 검색 기능 추가 -->
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				<![CDATA[FN_STR_COUNT(ORG1.ORG_TREE,"/") = #searchLV#]]>
+			</isEqual>
+			
+			<isEqual property="searchCondition" compareValue="2">
+               <iterate prepend="AND ORG2.ORGNZT_NM IN" property="searchUpList" open="(" close=")" conjunction=",">
+                <![CDATA[ #searchUpList[]#]]>
+               </iterate>               
+			</isEqual>
+
+			<isEqual property="searchCondition" compareValue="3">
+               <iterate prepend="AND ORG1.ORGNZT_NM IN" property="searchOrgNmList" open="(" close=")" conjunction=",">
+                <![CDATA[ #searchOrgNmList[]#]]>
+               </iterate>
+			</isEqual>		
+			 LIMIT  #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+
+	<select id="OrganDAO.selectOrganTreeList" parameterClass="OrganVO" resultClass="egovMap">		
+		SELECT * , FN_STR_COUNT(SN,'/') ORG_LV FROM
+		(SELECT
+			ORGNZT_ID
+			, ORGNZT_NM
+			, ORG_UP
+			, ORG_TREE AS SN_OLD
+			, ORG_TREE_ORD AS SN
+			, (SELECT COUNT(ORGNZT_ID) FROM TBL_ORGNZT WHERE ORG_UP = M0.ORGNZT_ID) AS DCOUNT
+		FROM TBL_ORGNZT M0
+		WHERE  1 = 1
+		 	AND USE_YN = 'Y'		 	
+		 	<isNotEqual prepend="AND" property="orgnztId" compareValue="">
+		 		ORG_TREE LIKE CONCAT('%', #orgnztId#, '%')
+		 	</isNotEqual>		 	
+		 	) a						
+		ORDER BY SN
+	</select>	
+
+	<!-- 조직 보기 페이지 하단의 조직 이력 목록  -->
+	<select id="OrganDAO.selectOrganListHis" parameterClass="Organ" resultClass="Organ">
+		<![CDATA[
+			SELECT
+				 ORG_HIS_ID orghisId          
+				,HGR_STAT    orgStat         
+				,HRG_NM   orgnztNm           
+				,USE_YN useYn              
+				,ORGNZT_ID  orgnztId          
+				,FRST_REGISTER_PNTTM frstRegisterPnttm 
+				,LAST_UPDUSR_PNTTM  lastUpdusrPnttm  
+				,FRST_REGISTER_ID frstRegisterId     
+				,LAST_UPDUSR_ID lastUpdusrId
+			FROM TBL_ORG_HIS
+			 WHERE  ORGNZT_ID = #orgnztId#
+		]]>
+	</select>
+
+
+	<select id="OrganDAO.selectOrganListTotCnt" parameterClass="OrganVO" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(*) totcnt			
+			FROM TBL_ORGNZT ORG1
+			INNER JOIN TBL_ORGNZT ORG2
+			ON ORG1.ORG_UP = ORG2.ORGNZT_ID			
+			WHERE  1 = 1
+		]]>
+			<!-- 2013.08.02 김대현 조직개편 검색 기능 추가 -->
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				<![CDATA[FN_STR_COUNT(ORG1.ORG_TREE,"/") = #searchLV#]]>
+			</isEqual>
+			
+			<isEqual property="searchCondition" compareValue="2">
+               <iterate prepend="AND ORG2.ORGNZT_NM IN" property="searchUpList" open="(" close=")" conjunction=",">
+                <![CDATA[ #searchUpList[]#]]>
+               </iterate>               
+			</isEqual>
+
+			<isEqual property="searchCondition" compareValue="3">
+               <iterate prepend="AND ORG1.ORGNZT_NM IN" property="searchOrgNmList" open="(" close=")" conjunction=",">
+                <![CDATA[ #searchOrgNmList[]#]]>
+               </iterate>
+			</isEqual>	
+	</select>
+
+	<select id="OrganDAO.selectOrganDetail" parameterClass="Organ" resultClass="Organ">
+		<![CDATA[
+		SELECT
+			a.ORGNZT_ID 		orgnztId
+			, a.ORGNZT_NM 		orgnztNm
+			, a.ORGNZT_SNM 		orgnztSnm
+			, a.ORGNZT_DC		orgnztDc
+			, a.ORG_UP			orgUp
+			, FN_STR_COUNT(a.ORG_TREE,"/") orgLv
+			, c.ORGNZT_NM		prntOrgnztNm
+			, c.ORGNZT_SNM		prntOrgnztSnm
+			, a.USE_YN			useYn
+			, a.FRST_REGISTER_PNTTM frstRegisterPnttm
+			, a.LAST_UPDUSR_PNTTM lastUpdusrPnttm
+			, a.FRST_REGISTER_ID frstRegisterId
+			, a.LAST_UPDUSR_ID lastUpdusrId
+			, a.POSTCP_NM postcpNm
+			, a.POSTCP_RNM postcpRnm
+			, a.DEFAULT_PRJ_ID defaultPrjId
+			, b.PRJ_NM defaultPrjNm
+			, A.ORD ORD
+		FROM TBL_ORGNZT a
+		LEFT JOIN TBL_PRJ b ON a.DEFAULT_PRJ_ID = b.PRJ_ID
+		INNER JOIN TBL_ORGNZT c
+			ON a.ORG_UP = c.ORGNZT_ID
+		WHERE
+			a.ORGNZT_ID = #orgnztId#
+		]]>	
+	</select>
+
+	<!-- 조직 변경 내역 등록 -->
+	<insert id="OrganDAO.insertOrganHis">
+		<![CDATA[
+			INSERT INTO TBL_ORG_HIS 
+				( 
+				HGR_STAT             
+				,HRG_NM               
+				,USE_YN               
+				,ORGNZT_ID            
+				,FRST_REGISTER_PNTTM  
+				,LAST_UPDUSR_PNTTM    
+				,FRST_REGISTER_ID     
+				,LAST_UPDUSR_ID 
+				)
+			VALUES 
+			    ( 
+
+				   #orgStat#
+				  , #orgnztNm#
+				  , #useYn#
+			      , #orgnztId#				  
+				  , SYSDATE()
+				  , SYSDATE()
+				  , #frstRegisterId#
+				  , #lastUpdusrId#
+				)
+		]]>
+	</insert>
+	
+	<insert id="OrganDAO.insertOrgan">
+		<![CDATA[
+			INSERT INTO TBL_ORGNZT 
+				( ORGNZT_ID
+				  , ORGNZT_NM
+				  , ORGNZT_SNM
+				  , ORGNZT_DC
+				  , ORG_UP
+				  , USE_YN
+				  , FRST_REGISTER_PNTTM
+				  , LAST_UPDUSR_PNTTM
+				  , FRST_REGISTER_ID
+				  , LAST_UPDUSR_ID
+				  , POSTCP_NM
+				  , POSTCP_RNM
+				  , DEFAULT_PRJ_ID
+				  , ORD )
+			VALUES ( #orgnztId#
+				  , #orgnztNm#
+				  , #orgnztSnm#
+				  , #orgnztDc#
+				  , #orgUp#
+				  , #useYn#
+				  , SYSDATE()
+				  , SYSDATE()
+				  , #frstRegisterId#
+				  , #lastUpdusrId#
+				  , #postcpNm#
+				  , #postcpRnm#
+				  , #defaultPrjId#
+				  , #ord# )
+		]]>
+	</insert>	
+
+	<update id="OrganDAO.updateOrgan">
+		<![CDATA[
+			UPDATE TBL_ORGNZT
+			SET 
+				  ORGNZT_NM=#orgnztNm#
+				,  ORGNZT_SNM=#orgnztSnm#
+				, ORGNZT_DC=#orgnztDc#
+				, ORG_UP=#orgUp#
+				, USE_YN=#useYn#
+				, LAST_UPDUSR_PNTTM = SYSDATE()
+				, LAST_UPDUSR_ID=#lastUpdusrId#
+				, POSTCP_NM=#postcpNm#
+				, POSTCP_RNM=#postcpRnm#
+				, DEFAULT_PRJ_ID = #defaultPrjId#
+				, ORD = #ord#
+             WHERE  ORGNZT_ID  = #orgnztId# 
+		]]>
+	</update>
+
+	<delete id="OrganDAO.deleteOrgan">
+		<![CDATA[
+            UPDATE  TBL_ORGNZT 
+               SET  USE_YN  = 'N'
+				, LAST_UPDUSR_PNTTM=SYSDATE()
+				, LAST_UPDUSR_ID=#lastUpdusrId#               
+             WHERE  ORGNZT_ID = #orgnztId# 
+		]]>
+	</delete>
+
+	<update id="OrganDAO.updatePrjCdBatch">
+	UPDATE TBL_PRJ
+		SET PRJ_CD = CONCAT(#curOrgSnm#,SUBSTR(PRJ_CD,LOCATE('-',PRJ_CD))) 
+	WHERE ORGNZT_ID = #orgnztId#
+	</update>
+	
+	<update id="OrganDAO.updateOrganTree">
+	UPDATE TBL_ORGNZT
+		SET ORG_TREE = FN_ORGAN_TREE(ORGNZT_ID)
+			,ORG_TREE_ORD = FN_ORGAN_TREE_ORD(ORGNZT_ID)
+	WHERE FN_ORGAN_TREE(ORGNZT_ID) LIKE CONCAT('%',#orgnztId#,'%')
+	</update>
+
+	<!-- TENY_170420 특정조직의 하위 조직 가져오기(자기 포함, 겸직부서 포함) -->
+	<select id="OrganDAO.selectSubOrganList"  resultClass="Organ">
+	SELECT 
+			o.ORGNZT_ID 		orgnztId,
+			o.ORGNZT_NM 		orgnztNm
+	FROM tbl_orgnzt o
+	WHERE
+		o.USE_YN = 'Y'
+	<isNotEmpty prepend="AND" property="orgnztId">
+		o.ORG_TREE LIKE CONCAT('%', #orgnztId#, '%')
+	</isNotEmpty>
+	ORDER BY o.ORG_TREE_ORD
+	</select>
+
+</sqlMap>            

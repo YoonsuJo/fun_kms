@@ -1,0 +1,924 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsLoginUsr">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="memberVO" type="kms.com.member.service.MemberVO"/>
+	<typeAlias  alias="mobileLog" type="kms.com.member.service.MobileLogVO"/>
+
+	<resultMap id="userinfo" class="kms.com.member.service.MemberVO">
+		<result property="no"				column="NO"					columnIndex="1"/>
+		<result property="userId"			column="USER_ID"			columnIndex="2"/>
+		<result property="userNm"			column="USER_NM"			columnIndex="3"/>
+		<result property="userEnm"			column="USER_ENM"			columnIndex="4"/>
+		<result property="password"			column="PASSWORD"			columnIndex="5"/>
+		<result property="sabun"			column="SABUN"				columnIndex="6"/>
+		<result property="ihidNum"			column="IHIDNUM"			columnIndex="7"/>
+		<result property="sexDstnCode"		column="SEXDSTN_CODE"		columnIndex="8"/>
+		<result property="brth"				column="BRTH"				columnIndex="9"/>
+		<result property="greLun"			column="GRE_LUN"			columnIndex="10"/>
+		<result property="homeAdres"		column="HOME_ADRES"			columnIndex="11"/>
+		<result property="moblphonNo"		column="MOBLPHON_NO"		columnIndex="12"/>
+		<result property="homeTelno"		column="HOME_TELNO"			columnIndex="13"/>
+		<result property="offmId"			column="OFFM_ID"			columnIndex="14"/>
+		<result property="offmTelno"		column="OFFM_TELNO"			columnIndex="15"/>
+		<result property="offmTelnoInner"	column="OFFM_TELNO_INNER"	columnIndex="16"/>
+		<result property="emailAdres"		column="EMAIL_ADRES"		columnIndex="17"/>
+		<result property="emailAdres2"		column="EMAIL_ADRES2"		columnIndex="18"/>
+		<result property="expCompId"		column="EXP_COMP_ID"		columnIndex="19"/>
+		<result property="compnyId"			column="COMPNY_ID"			columnIndex="20"/>
+		<result property="orgnztId"			column="ORGNZT_ID"			columnIndex="21"/>
+		<result property="rankId"			column="RANK_ID"			columnIndex="22"/>
+		<result property="position"			column="POSITION"			columnIndex="23"/>
+		<result property="compinDt"			column="COMPIN_DT"			columnIndex="24"/>
+		<result property="acceptCompinDt"	column="ACCEPT_COMPIN_DT"	columnIndex="24"/>
+		<result property="compotDt"			column="COMPOT_DT"			columnIndex="25"/>
+		<result property="workSt"			column="WORK_ST"			columnIndex="26"/>
+		<result property="carId"			column="CAR_ID"				columnIndex="27"/>
+		<result property="carLicTyp"		column="CAR_LIC_TYP"		columnIndex="28"/>
+		<result property="abutMe"			column="ABUTME"				columnIndex="29"/>
+		<result property="picFileId"		column="PIC_FILE_ID"		columnIndex="30"/>
+		<result property="picFileId2"		column="PIC_FILE_ID2"		columnIndex="31"/>
+		<result property="adminNote"		column="ADMIN_NOTE"			columnIndex="32"/>
+		<result property="isAdmin"			column="IS_ADMIN"			columnIndex="33"/>
+		<result property="isDocAdmin"		column="IS_DOCADMIN"		columnIndex="34"/>
+		<result property="isTaxAdmin"		column="IS_TAXADMIN"		columnIndex="35"/>
+		<result property="isBoard"			column="IS_BOARD"			columnIndex="36"/>
+		<result property="isLeader"			column="IS_LEADER"			columnIndex="37"/>
+		<result property="isProjectadmin"	column="IS_PROJECTADMIN"	columnIndex="38"/>
+		<result property="isPrjtransferadmin"	column="IS_PRJTRANSFERADMIN"	columnIndex="38"/>
+		<result property="isConferenceadmin" column="IS_CONFERENCEADMIN"	columnIndex="39"/>
+		<result property="isSalaryadmin"	column="IS_SALARYADMIN"		columnIndex="40"/>
+		<result property="attendCd"			column="ATTEND_CD"			columnIndex="41"/>
+		<result property="attendTm"			column="ATTEND_TM"			columnIndex="42"/>
+		<result property="orgnztNm"			column="ORGNZT_NM"			columnIndex="43"/>
+		<result property="showRight"		column="SHOW_RIGHT"			columnIndex="44"/>
+		<result property="dayReportTyp"		column="DAY_REPORT_TYP"		columnIndex="45"/>
+		<result property="isAuthadmin"		column="IS_AUTHADMIN"		columnIndex="46"/>
+		<result property="isLoginauth"		column="IS_LOGINAUTH"		columnIndex="47"/>
+		<result property="isInputresult"	column="IS_INPUTRESULT"		columnIndex="48"/>
+		<result property="isEapp20"			column="IS_EAPP20"			columnIndex="49"/>
+		<result property="isEapp24"			column="IS_EAPP24"			columnIndex="50"/>
+		<result property="isEapp25"			column="IS_EAPP25"			columnIndex="51"/>
+		<result property="isHmdev"			column="IS_HMDEV"			columnIndex="52"/>
+		<result property="isDephead"		column="IS_DEPHEAD"			columnIndex="53"/>
+		<result property="isDayreportuserlist"	column="IS_DAYREPORTUSERLIST"	columnIndex="54"/>
+		<result property="isBpmboard"		column="IS_BPMBOARD"		columnIndex="55"/>
+		<result property="isEappadmin"		column="IS_EAPPADMIN"		columnIndex="56"/>
+		<result property="isFundAdmin"		column="IS_FUNDADMIN"		columnIndex="57"/>
+		<!-- 2013.07.24 김대현 웹메일 주소-->
+	    <result property="emailLink"		column="EMAIL_LINK"		columnIndex="57"/>
+	    <result property="isConsultadmin"	column="IS_CONSULTADMIN"	columnIndex="58"/>
+	    <result property="isProductadmin"	column="IS_PRODUCTADMIN"	columnIndex="59"/>
+	    <result property="isEapp28"			column="IS_EAPP28"			columnIndex="60"/>
+	    <result property="orgnztIdSec"		column="ORGNZT_ID_SEC"		columnIndex="61"/>
+	</resultMap>
+	
+	<resultMap id="memInfo" class="kms.com.member.service.MemberVO">
+		<result property="no"				column="NO"					columnIndex="1"/>
+		<result property="userId"			column="USER_ID"			columnIndex="2"/>
+		<result property="userNm"			column="USER_NM"			columnIndex="3"/>
+		<result property="userEnm"			column="USER_ENM"			columnIndex="4"/>
+		<result property="sabun"			column="SABUN"				columnIndex="5"/>
+		<result property="orgnztId"			column="ORGNZT_ID"			columnIndex="6"/>
+		<result property="orgnztNm"			column="ORGNZT_NM"			columnIndex="7"/>
+		<result property="rankId"			column="RANK_ID"			columnIndex="8"/>
+		<result property="rankNm"			column="RANK_NM"			columnIndex="9"/>
+		<result property="abutMe"			column="ABUTME"				columnIndex="10"/>
+		<result property="picFileId"		column="PIC_FILE_ID"		columnIndex="11"/>
+		<result property="picFileId2"		column="PIC_FILE_ID2"		columnIndex="12"/>
+	</resultMap>
+
+
+	<sql id="SQL_isHoliday">
+		SELECT
+			CASE
+				WHEN DAYOFWEEK(#attendDt#) = 1 THEN 1
+				WHEN DAYOFWEEK(#attendDt#) = 7 THEN 1
+				WHEN COUNT(*) >= 1 THEN 1
+				ELSE 0
+			END AS IS_HOLIDAY
+		FROM
+			TBL_SCHEDULE
+		WHERE
+			SCHE_TYP IN ('H','I','J')
+			AND DELETE_YN = 'N'
+			AND SCHE_DATE_ALL = #attendDt#
+	</sql>
+
+
+	<!-- 일반 로그인 -->
+	<select id="KmsLoginDAO.actionLogin" resultMap="userinfo">
+		SELECT
+			a.NO
+			,a.USER_ID
+			,a.USER_NM
+			,a.USER_ENM
+			,a.PASSWORD
+			,a.SABUN
+			,a.IHIDNUM
+			,a.SEXDSTN_CODE
+			,a.BRTH
+			,a.GRE_LUN
+			,a.HOME_ADRES
+			,a.MOBLPHON_NO
+			,a.HOME_TELNO
+			,a.OFFM_ID
+			,a.OFFM_TELNO
+			,a.OFFM_TELNO_INNER
+			,a.EMAIL_ADRES
+			,a.EMAIL_ADRES2
+		    <!-- 2013.07.24 김대현 웹메일 주소-->
+		    ,a.EMAIL_LINK
+			,a.EXP_COMP_ID
+			,a.COMPNY_ID
+			,a.ORGNZT_ID
+			,a.RANK_ID
+			,a.POSITION
+			,a.COMPIN_DT
+			,IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) as ACCEPT_COMPIN_DT
+			,a.COMPOT_DT
+			,a.WORK_ST
+			,a.CAR_ID
+			,a.CAR_LIC_TYP
+			,a.ABUTME
+			,a.PIC_FILE_ID
+			,a.PIC_FILE_ID2
+			,a.ADMIN_NOTE
+			,d.ATTEND_CD
+			,d.ATTEND_TM
+			,b.ORGNZT_NM
+			,a.SHOW_RIGHT
+			,a.DAY_REPORT_TYP
+			,a.ORGNZT_ID_SEC
+			,c.IS_ADMIN
+			,c.IS_DOCADMIN
+			,c.IS_TAXADMIN
+			,c.IS_BOARD
+			,c.IS_LEADER
+			,c.IS_PROJECTADMIN
+			,c.IS_PRJTRANSFERADMIN
+			,c.IS_CONFERENCEADMIN
+			,C.IS_SALARYADMIN
+			,C.IS_AUTHADMIN
+			,C.IS_LOGINAUTH
+			,C.IS_INPUTRESULT
+			,C.IS_EAPP20
+			,C.IS_EAPP24
+			,C.IS_EAPP25
+			,C.IS_EAPP28
+			,C.IS_HMDEV	
+			,C.IS_DEPHEAD
+			,C.IS_DAYREPORTUSERLIST			
+			,C.IS_BPMBOARD
+			,C.IS_EAPPADMIN
+			,C.IS_CONSULTADMIN
+			,C.IS_PRODUCTADMIN
+			,C.IS_FUNDADMIN
+		FROM
+			TBL_USERINFO a
+			LEFT JOIN TBL_ORGNZT b ON a.ORGNZT_ID = b.ORGNZT_ID
+			LEFT JOIN (
+				SELECT
+					usr.NO AS USER_NO,
+					IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'admin', ',%'), 'Y', 'N') AS IS_ADMIN
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'docadmin', ',%'), 'Y', 'N') AS IS_DOCADMIN
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'taxadmin', ',%'), 'Y', 'N') AS IS_TAXADMIN
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'board', ',%'), 'Y', 'N') AS IS_BOARD
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'executive', ',%'), 'Y', 'N') AS IS_LEADER
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'projectadmin', ',%'), 'Y', 'N') AS IS_PROJECTADMIN
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'prjtransferadmin', ',%'), 'Y', 'N') AS IS_PRJTRANSFERADMIN
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'conferenceadmin', ',%'), 'Y', 'N') AS IS_CONFERENCEADMIN
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'salauth', ',%'), 'Y', 'N') AS IS_SALARYADMIN
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'authadmin', ',%'), 'Y', 'N') AS IS_AUTHADMIN
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'loginauth', ',%'), 'Y', 'N') AS IS_LOGINAUTH
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'inputresult', ',%'), 'Y', 'N') AS IS_INPUTRESULT
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'eapp20', ',%'), 'Y', 'N') AS IS_EAPP20
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'eapp24', ',%'), 'Y', 'N') AS IS_EAPP24
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'eapp25', ',%'), 'Y', 'N') AS IS_EAPP25
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'eapp28', ',%'), 'Y', 'N') AS IS_EAPP28
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'hmdev', ',%'), 'Y', 'N') AS IS_HMDEV
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'dephead', ',%'), 'Y', 'N') AS IS_DEPHEAD
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'dayreportuserlist', ',%'), 'Y', 'N') AS IS_DAYREPORTUSERLIST
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'bpmboard', ',%'), 'Y', 'N') AS IS_BPMBOARD
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'eappadmin', ',%'), 'Y', 'N') AS IS_EAPPADMIN
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'consultadmin', ',%'), 'Y', 'N') AS IS_CONSULTADMIN
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'productadmin', ',%'), 'Y', 'N') AS IS_PRODUCTADMIN
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'fundadmin', ',%'), 'Y', 'N') AS IS_FUNDADMIN
+				FROM
+					TBL_USERINFO usr
+					LEFT JOIN TBL_USER_AUTH auth ON usr.NO = auth.USER_NO
+				GROUP BY usr.NO
+			) c ON a.NO = c.USER_NO
+			LEFT JOIN TBL_ATTEND_CHECK d ON a.NO = d.USER_NO AND d.ATTEND_DT = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+		WHERE
+			a.USER_ID = #userId#
+			AND a.PASSWORD = BINARY(#password#)
+<!--  
+			<isEmpty property="moblphonNo">
+			a.USER_ID = BINARY(#userId#)
+				<isNotEqual property="reLoginYn" compareValue="Y">
+				AND a.PASSWORD = BINARY(#password#)
+				</isNotEqual>
+			</isEmpty>
+			<isNotEmpty property="moblphonNo">
+			a.MOBLPHON_NO = #moblphonNo#
+			</isNotEmpty>
+-->
+	</select>
+	
+	<!-- 오버라이드 로그인 -->
+	<select id="KmsLoginDAO.actionLoginOverride" resultMap="userinfo">
+		SELECT
+			a.NO
+			,a.USER_ID
+			,a.USER_NM
+			,a.USER_ENM
+			,a.PASSWORD
+			,a.SABUN
+			,a.IHIDNUM
+			,a.SEXDSTN_CODE
+			,a.BRTH
+			,a.GRE_LUN
+			,a.HOME_ADRES
+			,a.MOBLPHON_NO
+			,a.HOME_TELNO
+			,a.OFFM_ID
+			,a.OFFM_TELNO
+			,a.OFFM_TELNO_INNER
+			,a.EMAIL_ADRES
+			,a.EMAIL_ADRES2
+		    <!-- 2013.07.24 김대현 웹메일 주소-->
+		    ,a.EMAIL_LINK
+			,a.EXP_COMP_ID
+			,a.COMPNY_ID
+			,a.ORGNZT_ID
+			,a.RANK_ID
+			,a.POSITION
+			,a.COMPIN_DT
+			,IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) as ACCEPT_COMPIN_DT		
+			,a.COMPOT_DT
+			,a.WORK_ST
+			,a.CAR_ID
+			,a.CAR_LIC_TYP
+			,a.ABUTME
+			,a.PIC_FILE_ID
+			,a.PIC_FILE_ID2
+			,a.ADMIN_NOTE
+			,d.ATTEND_CD
+			,d.ATTEND_TM
+			,b.ORGNZT_NM
+			,a.SHOW_RIGHT
+			,a.DAY_REPORT_TYP
+			,a.ORGNZT_ID_SEC
+			,c.IS_ADMIN
+			,c.IS_DOCADMIN
+			,c.IS_TAXADMIN
+			,c.IS_BOARD
+			,c.IS_LEADER
+			,c.IS_PROJECTADMIN
+			,c.IS_PRJTRANSFERADMIN
+			,c.IS_CONFERENCEADMIN
+			,C.IS_SALARYADMIN
+			,C.IS_AUTHADMIN
+			,C.IS_LOGINAUTH
+			,C.IS_INPUTRESULT
+			,C.IS_EAPP20
+			,C.IS_EAPP24
+			,C.IS_EAPP25
+			,C.IS_EAPP28
+			,C.IS_HMDEV
+			,C.IS_DEPHEAD
+			,C.IS_DAYREPORTUSERLIST			
+			,C.IS_BPMBOARD
+			,C.IS_EAPPADMIN
+			,C.IS_CONSULTADMIN
+			,C.IS_PRODUCTADMIN
+			,C.IS_FUNDADMIN
+		FROM
+			TBL_USERINFO a
+			LEFT JOIN TBL_ORGNZT b ON a.ORGNZT_ID = b.ORGNZT_ID
+			LEFT JOIN (
+				SELECT
+					usr.NO AS USER_NO,
+					IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'admin', ',%'), 'Y', 'N') AS IS_ADMIN
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'docadmin', ',%'), 'Y', 'N') AS IS_DOCADMIN
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'taxadmin', ',%'), 'Y', 'N') AS IS_TAXADMIN
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'board', ',%'), 'Y', 'N') AS IS_BOARD
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'executive', ',%'), 'Y', 'N') AS IS_LEADER
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'projectadmin', ',%'), 'Y', 'N') AS IS_PROJECTADMIN
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'prjtransferadmin', ',%'), 'Y', 'N') AS IS_PRJTRANSFERADMIN
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'conferenceadmin', ',%'), 'Y', 'N') AS IS_CONFERENCEADMIN
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'salauth', ',%'), 'Y', 'N') AS IS_SALARYADMIN
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'authadmin', ',%'), 'Y', 'N') AS IS_AUTHADMIN
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'loginauth', ',%'), 'Y', 'N') AS IS_LOGINAUTH
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'inputresult', ',%'), 'Y', 'N') AS IS_INPUTRESULT
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'eapp20', ',%'), 'Y', 'N') AS IS_EAPP20
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'eapp24', ',%'), 'Y', 'N') AS IS_EAPP24
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'eapp25', ',%'), 'Y', 'N') AS IS_EAPP25
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'eapp28', ',%'), 'Y', 'N') AS IS_EAPP28
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'hmdev', ',%'), 'Y', 'N') AS IS_HMDEV
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'dephead', ',%'), 'Y', 'N') AS IS_DEPHEAD
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'dayreportuserlist', ',%'), 'Y', 'N') AS IS_DAYREPORTUSERLIST
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'bpmboard', ',%'), 'Y', 'N') AS IS_BPMBOARD					
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'eappadmin', ',%'), 'Y', 'N') AS IS_EAPPADMIN
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'consultadmin', ',%'), 'Y', 'N') AS IS_CONSULTADMIN
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'productadmin', ',%'), 'Y', 'N') AS IS_PRODUCTADMIN
+					,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'fundadmin', ',%'), 'Y', 'N') AS IS_FUNDADMIN
+				FROM
+					TBL_USERINFO usr
+					LEFT JOIN TBL_USER_AUTH auth ON usr.NO = auth.USER_NO
+				GROUP BY usr.NO
+			) c ON a.NO = c.USER_NO
+			LEFT JOIN TBL_ATTEND_CHECK d ON a.NO = d.USER_NO AND d.ATTEND_DT = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+		WHERE
+			a.no = #no#			
+	</select>
+	
+	<select id="KmsLoginDAO.selectAttendCheck" resultClass="egovMap">
+		SELECT
+			NO, USER_NO, ATTEND_CD, ATTEND_DT, ATTEND_TM, ATTEND_IP
+		FROM
+			TBL_ATTEND_CHECK
+		WHERE
+			ATTEND_DT = #attendDt#
+		<isNotEmpty prepend="AND" property="userNo">
+			USER_NO = #userNo#
+		</isNotEmpty>
+	</select>
+	
+	<insert id="KmsLoginDAO.insertMobileLoginLog" parameterClass="mobileLog">
+	INSERT INTO TBL_MOBILE_LOGIN_LOG
+		( 
+			USER_NO, CONNECT_TIME, CONNECT_IP
+		)
+	VALUES
+		( 
+			#user_no#, SYSDATE(), #connect_ip#
+		)
+	</insert>
+	
+	<insert id="KmsLoginDAO.insertLoginLog">
+	INSERT INTO TBL_LOGIN_LOG 
+		( user_no, tm, ip, mobile_yn, innernet_yn, confirm_yn )
+	VALUES 
+		( #userNo#, SYSDATE(), #userIp#, #mobileYn#, #innernetYn#, #confirmYn# )
+	</insert>
+	
+	<select id="KmsLoginDAO.selectRecentLoginLog" resultClass="EgovMap">
+	SELECT
+		*
+	FROM
+		TBL_LOGIN_LOG
+	WHERE
+		user_no = #userNo#
+		AND tm > SUBDATE(NOW(), INTERVAL 10 MINUTE)
+	ORDER BY
+		tm DESC
+	LIMIT
+		1
+	</select>
+	
+	<insert id="KmsLoginDAO.insertAttendChecks">
+		INSERT INTO TBL_ATTEND_CHECK
+		(
+			USER_NO
+			,ATTEND_CD
+			,ATTEND_DT
+			,ATTEND_YM
+			,IS_HOLIDAY
+		) (
+			SELECT
+				a.NO AS USER_NO
+				, CASE
+					WHEN b.WS_TYP = 'O' THEN 'OT'
+					WHEN b.WS_TYP = 'S' THEN 'SD'
+					WHEN b.WS_TYP = 'T' THEN 'TR'
+					WHEN b.WS_TYP = 'V' THEN 'VC'
+					WHEN b.WS_TYP = 'N' THEN 'NT'
+					ELSE NULL
+				END AS ATTEND_CD
+				, DATE_FORMAT(SYSDATE(), '%Y%m%d') AS ATTEND_DT
+				, DATE_FORMAT(SYSDATE(), '%Y%m') AS ATTEND_YM				
+				, FN_IS_HOLIDAY(DATE_FORMAT(SYSDATE(), '%Y%m%d') ) AS IS_HOLIDAY
+			FROM
+				TBL_USERINFO a
+				LEFT JOIN (
+					SELECT
+						USER_NO
+						,MAX(WS_TYP) AS WS_TYP
+					FROM
+						TBL_WORK_STATE
+					WHERE
+						USE_AT = 'Y'
+						AND (
+								(
+								WS_TYP = 'O'
+								AND WS_BGN_DE = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+								AND (
+									SELECT CONCAT(DATE_FORMAT(SYSDATE(), '%Y-%m-%d '), LPAD(CODE_DC, 2, '0'), ':00:00')
+									FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'KMS014'
+								) > DATE_FORMAT(REG_DT, '%Y-%m-%d %H:%i:%s')
+							) OR (
+								WS_TYP = 'T'
+								AND DATEDIFF(SYSDATE(), WS_BGN_DE) >= 0
+								AND DATEDIFF(WS_END_DE, SYSDATE()) >= 0
+								AND (
+									SELECT CONCAT(DATE_FORMAT(SYSDATE(), '%Y-%m-%d '), LPAD(CODE_DC, 2, '0'), ':00:00')
+									FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'KMS014'
+								) > DATE_FORMAT(REG_DT, '%Y-%m-%d %H:%i:%s')
+							) OR (
+								WS_TYP = 'N'
+								AND DATEDIFF(SYSDATE(), WS_BGN_DE) = 1
+								AND (
+									SELECT CONCAT(DATE_FORMAT(SYSDATE(), '%Y-%m-%d '), LPAD(CODE_DC, 2, '0'), ':00:00')
+									FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'KMS014'
+								) > DATE_FORMAT(REG_DT, '%Y-%m-%d %H:%i:%s')
+							) OR (
+								WS_TYP IN ('S', 'V')
+								AND DATEDIFF(SYSDATE(), WS_BGN_DE) >= 0
+								AND DATEDIFF(WS_END_DE, SYSDATE()) >= 0
+							)
+						)
+					GROUP BY USER_NO
+				)b ON a.NO = b.USER_NO
+			WHERE
+				a.WORK_ST = 'W'
+				AND a.GHOST = '0'
+		)
+	</insert>
+		
+	<insert id="KmsLoginDAO.insertAttendCheck">
+		INSERT INTO TBL_ATTEND_CHECK
+		(
+			USER_NO, ATTEND_CD, ATTEND_DT, ATTEND_TM, ATTEND_IP
+			,ATTEND_YM ,IS_HOLIDAY
+		) VALUES (
+			#userNo#, #attendCd#, DATE_FORMAT(SYSDATE(), '%Y%m%d'), SYSDATE(), #attendIp#
+			, DATE_FORMAT(SYSDATE(), '%Y%m')			
+			, FN_IS_HOLIDAY(DATE_FORMAT(SYSDATE(), '%Y%m%d') )
+		)
+	</insert>
+	
+	<update id="KmsLoginDAO.updateAttendCheck">
+		UPDATE
+			TBL_ATTEND_CHECK
+		SET
+			ATTEND_TM = SYSDATE(),
+			ATTEND_CD = (
+				SELECT
+					CASE
+						WHEN (
+								<include refid="SQL_isHoliday"/>
+						) = 1
+							THEN 'HD'
+						WHEN (
+								SELECT CONCAT(LPAD(CODE_DC, 2, '0'), ':00:00')
+								FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'KMS013'
+						) >= DATE_FORMAT(SYSDATE(), '%H:%i:%s')
+							THEN 'EA'
+						WHEN (
+								SELECT CONCAT(LPAD(CODE_DC, 2, '0'), ':00:00')
+								FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'KMS014'
+						) >= DATE_FORMAT(SYSDATE(), '%H:%i:%s')
+							THEN 'AT'
+						WHEN a.WS_TYP = 'V' THEN 'VC'
+						WHEN a.WS_TYP = 'S' THEN 'SD'
+						WHEN a.WS_TYP = 'T' THEN 'TR'
+						WHEN a.WS_TYP = 'O' THEN 'OT'
+						WHEN a.WS_TYP = 'N' THEN 'NT'
+						WHEN a.WS_TYP = 'E' THEN 'ET'
+						WHEN c.IS_LEADER = 'Y' THEN 'AT'
+						ELSE 'LT'
+					END AS ATTEND_CD
+				FROM
+					TBL_USERINFO usr
+					LEFT JOIN TBL_WORK_STATE a
+						ON usr.NO = a.USER_NO
+							AND USE_AT = 'Y'
+							AND (
+								(
+									a.WS_TYP = 'O'
+									AND a.WS_BGN_DE = #attendDt#
+									AND (
+										SELECT CONCAT(DATE_FORMAT(#attendDt#, '%Y-%m-%d '), LPAD(CODE_DC,2,'0'), ':00:00')
+										FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'KMS014'
+									) > DATE_FORMAT(a.REG_DT, '%Y-%m-%d %H:%i:%s')
+								) OR (
+									a.WS_TYP = 'T'
+									AND DATEDIFF(#attendDt#, a.WS_BGN_DE) >= 0
+									AND DATEDIFF(a.WS_END_DE, #attendDt#) >= 0
+									AND (
+										SELECT CONCAT(DATE_FORMAT(#attendDt#, '%Y-%m-%d '), LPAD(CODE_DC,2,'0'), ':00:00')
+										FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'KMS014'
+									) > DATE_FORMAT(a.REG_DT, '%Y-%m-%d %H:%i:%s')
+								) OR (
+									a.WS_TYP = 'N'
+									AND DATEDIFF(#attendDt#, a.WS_BGN_DE) = 1
+									AND (
+										SELECT CONCAT(DATE_FORMAT(#attendDt#, '%Y-%m-%d '), LPAD(CODE_DC,2,'0'), ':00:00')
+										FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'KMS014'
+									) > DATE_FORMAT(a.REG_DT, '%Y-%m-%d %H:%i:%s')
+								) OR (
+									a.WS_TYP IN ('S', 'V')
+									AND DATEDIFF(#attendDt#, a.WS_BGN_DE) >= 0
+									AND DATEDIFF(a.WS_END_DE, #attendDt#) >= 0
+								)
+							)
+					LEFT JOIN (
+						SELECT
+							usr.NO AS USER_NO,
+							IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'admin', ',%'), 'Y', 'N') AS IS_ADMIN
+							,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'docadmin', ',%'), 'Y', 'N') AS IS_DOCADMIN
+							,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'taxadmin', ',%'), 'Y', 'N') AS IS_TAXADMIN
+							,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'board', ',%'), 'Y', 'N') AS IS_BOARD
+							,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'executive', ',%'), 'Y', 'N') AS IS_LEADER
+							,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'projectadmin', ',%'), 'Y', 'N') AS IS_PROJECTADMIN
+							,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'prjtransferadmin', ',%'), 'Y', 'N') AS IS_PRJTRANSFERADMIN
+							,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'conferenceadmin', ',%'), 'Y', 'N') AS IS_CONFERENCEADMIN
+							,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'salauth', ',%'), 'Y', 'N') AS IS_SALARYADMIN
+							,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'bpmboard', ',%'), 'Y', 'N') AS IS_BPMBOARD				
+							,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'eappadmin', ',%'), 'Y', 'N') AS IS_EAPPADMIN
+							,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'fundadmin', ',%'), 'Y', 'N') AS IS_FUNDADMIN
+						FROM
+							TBL_USERINFO usr
+							LEFT JOIN TBL_USER_AUTH auth ON usr.NO = auth.USER_NO
+						GROUP BY usr.NO
+					) c ON usr.NO = c.USER_NO
+				WHERE
+					usr.NO = #userNo#
+				ORDER BY
+					CASE ATTEND_CD
+						WHEN 'HD' THEN 0
+						WHEN 'EA' THEN 1
+						WHEN 'AT' THEN 2
+						WHEN 'VC' THEN 3
+						WHEN 'SD' THEN 5
+						WHEN 'TR' THEN 4
+						WHEN 'OT' THEN 6
+						WHEN 'NT' THEN 7
+						WHEN 'ET' THEN 8
+						WHEN 'LT' THEN 9
+					END
+				LIMIT 1
+			),
+			ATTEND_IP = #attendIp#
+		WHERE
+			USER_NO = #userNo#
+			AND ATTEND_DT = DATE_FORMAT(#attendDt#, '%Y%m%d')
+	</update>
+	
+	<update id="KmsLoginDAO.updateAttendCheckEx">
+		UPDATE
+			TBL_ATTEND_CHECK
+		SET
+			ATTEND_TM = SYSDATE(),
+			ATTEND_CD = (
+				SELECT
+					CASE
+						WHEN (
+								<include refid="SQL_isHoliday"/>
+						) = 1
+							THEN 'HD'
+						WHEN (
+								SELECT CONCAT(LPAD(CODE_DC, 2, '0'), ':00:00')
+								FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'KMS013'
+						) >= DATE_FORMAT(SYSDATE(), '%H:%i:%s')
+							THEN 'EA'
+						WHEN (
+								SELECT CODE_DC
+								FROM COMTCCMMNDETAILCODE 
+								WHERE CODE_ID = 'KMS041' AND CODE = 4
+						) >= DATE_FORMAT(SYSDATE(), '%H:%i:%s')
+							THEN 'AT'
+						WHEN a.WS_TYP = 'V' THEN 'VC'
+						WHEN a.WS_TYP = 'S' THEN 'SD'
+						WHEN a.WS_TYP = 'T' THEN 'TR'
+						WHEN a.WS_TYP = 'O' THEN 'OT'
+						WHEN a.WS_TYP = 'N' THEN 'NT'
+						WHEN a.WS_TYP = 'E' THEN 'ET'
+						WHEN c.IS_LEADER = 'Y' THEN 'AT'
+						ELSE 'LT'
+					END AS ATTEND_CD
+				FROM
+					TBL_USERINFO usr
+					LEFT JOIN TBL_WORK_STATE a
+						ON usr.NO = a.USER_NO
+							AND USE_AT = 'Y'
+							AND (
+								(
+									a.WS_TYP = 'O'
+									AND a.WS_BGN_DE = #attendDt#
+									AND (
+										SELECT CODE_DC
+										FROM COMTCCMMNDETAILCODE 
+										WHERE CODE_ID = 'KMS041' AND CODE = 4
+									) > DATE_FORMAT(a.REG_DT, '%Y-%m-%d %H:%i:%s')
+								) OR (
+									a.WS_TYP = 'T'
+									AND DATEDIFF(#attendDt#, a.WS_BGN_DE) >= 0
+									AND DATEDIFF(a.WS_END_DE, #attendDt#) >= 0
+									AND (
+										SELECT CODE_DC
+										FROM COMTCCMMNDETAILCODE 
+										WHERE CODE_ID = 'KMS041' AND CODE = 4
+									) > DATE_FORMAT(a.REG_DT, '%Y-%m-%d %H:%i:%s')
+								) OR (
+									a.WS_TYP = 'N'
+									AND DATEDIFF(#attendDt#, a.WS_BGN_DE) = 1
+									AND (
+										SELECT CODE_DC
+										FROM COMTCCMMNDETAILCODE 
+										WHERE CODE_ID = 'KMS041' AND CODE = 4
+									) > DATE_FORMAT(a.REG_DT, '%Y-%m-%d %H:%i:%s')
+								) OR (
+									a.WS_TYP IN ('S', 'V')
+									AND DATEDIFF(#attendDt#, a.WS_BGN_DE) >= 0
+									AND DATEDIFF(a.WS_END_DE, #attendDt#) >= 0
+								)
+							)
+					LEFT JOIN (
+						SELECT
+							usr.NO AS USER_NO,
+							IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'admin', ',%'), 'Y', 'N') AS IS_ADMIN
+							,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'docadmin', ',%'), 'Y', 'N') AS IS_DOCADMIN
+							,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'taxadmin', ',%'), 'Y', 'N') AS IS_TAXADMIN
+							,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'board', ',%'), 'Y', 'N') AS IS_BOARD
+							,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'executive', ',%'), 'Y', 'N') AS IS_LEADER
+							,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'projectadmin', ',%'), 'Y', 'N') AS IS_PROJECTADMIN
+							,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'prjtransferadmin', ',%'), 'Y', 'N') AS IS_PRJTRANSFERADMIN
+							,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'conferenceadmin', ',%'), 'Y', 'N') AS IS_CONFERENCEADMIN
+							,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'salauth', ',%'), 'Y', 'N') AS IS_SALARYADMIN
+							,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'bpmboard', ',%'), 'Y', 'N') AS IS_BPMBOARD	
+							,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'eappadmin', ',%'), 'Y', 'N') AS IS_EAPPADMIN
+							,IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'fundadmin', ',%'), 'Y', 'N') AS IS_FUNDADMIN
+						FROM
+							TBL_USERINFO usr
+							LEFT JOIN TBL_USER_AUTH auth ON usr.NO = auth.USER_NO
+						GROUP BY usr.NO
+					) c ON usr.NO = c.USER_NO
+				WHERE
+					usr.NO = #userNo#
+				ORDER BY
+					CASE ATTEND_CD
+						WHEN 'HD' THEN 0
+						WHEN 'EA' THEN 1
+						WHEN 'AT' THEN 2
+						WHEN 'VC' THEN 3
+						WHEN 'SD' THEN 5
+						WHEN 'TR' THEN 4
+						WHEN 'OT' THEN 6
+						WHEN 'NT' THEN 7
+						WHEN 'ET' THEN 8
+						WHEN 'LT' THEN 9
+					END
+				LIMIT 1
+			),
+			ATTEND_IP = #attendIp#
+		WHERE
+			USER_NO = #userNo#
+			AND ATTEND_DT = DATE_FORMAT(#attendDt#, '%Y%m%d')
+	</update>
+	
+	<update id="KmsLoginDAO.updateWorkStateNullCheck">
+		UPDATE
+			TBL_WORK_STATE
+		SET
+			WS_BGN_DE = NULL
+		WHERE
+			USER_NO = #userNo#
+			AND WS_BGN_DE = ''
+	</update>
+	
+	<update id="KmsLoginDAO.updatePastAttendCheck">
+		UPDATE
+			TBL_ATTEND_CHECK
+		SET
+			ATTEND_CD = (
+				SELECT
+					CASE a.WS_TYP
+						WHEN 'V' THEN 'VC'
+						WHEN 'S' THEN 'SD'
+						WHEN 'T' THEN 'TR'
+						WHEN 'O' THEN 'OT'
+						WHEN 'N' THEN 'NT'
+						WHEN 'E' THEN 'ET'
+						ELSE 'LT'
+					END AS ATTEND_CD
+				FROM
+					TBL_USERINFO usr
+					LEFT JOIN TBL_WORK_STATE a
+						ON
+							usr.NO = a.USER_NO
+							AND USE_AT = 'Y'
+							AND (
+									(
+									a.WS_TYP = 'O'
+									AND a.WS_BGN_DE = #attendDt#
+									AND (
+										SELECT CONCAT(DATE_FORMAT(#attendDt#, '%Y-%m-%d '), LPAD(CODE_DC,2,'0'), ':00:00')
+										FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'KMS014'
+									) > DATE_FORMAT(a.REG_DT, '%Y-%m-%d %H:%i:%s')
+								) OR (
+									a.WS_TYP = 'T'
+									AND DATEDIFF(#attendDt#, a.WS_BGN_DE) >= 0
+									AND DATEDIFF(a.WS_END_DE, #attendDt#) >= 0
+								) OR (
+									a.WS_TYP = 'N'
+									AND DATEDIFF(#attendDt#, a.WS_BGN_DE) = 1
+									AND (
+										SELECT CONCAT(DATE_FORMAT(#attendDt#, '%Y-%m-%d '), LPAD(CODE_DC,2,'0'), ':00:00')
+										FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'KMS014'
+									) > DATE_FORMAT(a.REG_DT, '%Y-%m-%d %H:%i:%s')
+								) OR (
+									a.WS_TYP IN ('S', 'V')
+									AND DATEDIFF(#attendDt#, a.WS_BGN_DE) >= 0
+									AND DATEDIFF(a.WS_END_DE, #attendDt#) >= 0
+								) OR (
+									a.WS_TYP = 'E'
+									AND a.WS_BGN_DE = #attendDt#
+								)
+							)
+				WHERE
+					usr.NO = #userNo#
+				ORDER BY
+					CASE ATTEND_CD
+						WHEN 'EA' THEN 1
+						WHEN 'AT' THEN 2
+						WHEN 'VC' THEN 3
+						WHEN 'SD' THEN 5
+						WHEN 'TR' THEN 4
+						WHEN 'OT' THEN 6
+						WHEN 'NT' THEN 7
+						WHEN 'ET' THEN 8
+						WHEN 'LT' THEN 9
+					END
+				LIMIT 1
+			)
+		WHERE
+			USER_NO = #userNo#
+			AND ATTEND_DT = #attendDt#
+			AND (
+				ATTEND_CD NOT IN ('EA' ,'AT' ,'HD')
+				OR ATTEND_CD IS NULL
+			)
+	</update>
+	
+	<select id="KmsLoginDAO.selectPastAttendData" resultClass="egovMap">
+		SELECT
+			CASE a.WS_TYP
+				WHEN 'V' THEN 'VC'
+				WHEN 'S' THEN 'SD'
+				WHEN 'T' THEN 'TR'
+				WHEN 'O' THEN 'OT'
+				WHEN 'N' THEN 'NT'
+				WHEN 'E' THEN 'ET'
+				ELSE IF( (SELECT LPAD(CODE_DC,2,'0') FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'KMS013') > SUBSTRING(AC.ATTEND_TM,1,2)
+				,'EA'
+					, IF((SELECT LPAD(CODE_DC,2,'0') FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'KMS014') > SUBSTRING(AC.ATTEND_TM,1,2)
+					, 'AT', 'LT')
+				)
+			END AS ATTEND_CD
+			, CASE a.WS_TYP
+				WHEN 'V' THEN 'VC'
+				WHEN 'S' THEN 'SD'
+				WHEN 'T' THEN 'TR'
+				WHEN 'O' THEN 'OT'
+				WHEN 'N' THEN 'NT'
+				WHEN 'E' THEN 'ET'
+				ELSE IF( (SELECT LPAD(CODE_DC,2,'0') FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'KMS013') > SUBSTRING(AC.ATTEND_TM,1,2)
+				,'EA'
+					, IF((SELECT LPAD(CODE_DC,2,'0') FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'KMS014') > SUBSTRING(AC.ATTEND_TM,1,2)
+					, 'AT', 'LT')
+				)
+			END AS ATTEND_CD_ORD
+		FROM
+			TBL_USERINFO usr
+			LEFT JOIN TBL_ATTEND_CHECK AC
+				ON USR.NO = AC.USER_NO
+				AND AC.ATTEND_DT = #attendDt#
+			LEFT JOIN TBL_WORK_STATE a
+				ON usr.NO = a.USER_NO
+				AND USE_AT = 'Y'
+				AND (
+						(
+						a.WS_TYP = 'O'
+						AND a.WS_BGN_DE = #attendDt#
+						AND (
+							SELECT CONCAT(DATE_FORMAT(#attendDt#, '%Y-%m-%d '), LPAD(CODE_DC,2,'0'), ':00:00')
+							FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'KMS014'
+						) > DATE_FORMAT(a.REG_DT, '%Y-%m-%d %H:%i:%s')
+					) OR (
+						a.WS_TYP = 'N'
+						AND DATEDIFF(#attendDt#, a.WS_BGN_DE) = 1
+						AND (
+							SELECT CONCAT(DATE_FORMAT(#attendDt#, '%Y-%m-%d '), LPAD(CODE_DC,2,'0'), ':00:00')
+							FROM COMTCCMMNDETAILCODE WHERE CODE_ID = 'KMS014'
+						) > DATE_FORMAT(a.REG_DT, '%Y-%m-%d %H:%i:%s')
+					) OR (
+						a.WS_TYP IN ('S', 'V', 'T')
+						AND DATEDIFF(#attendDt#, a.WS_BGN_DE) >= 0
+						AND DATEDIFF(a.WS_END_DE, #attendDt#) >= 0
+					) OR (
+						a.WS_TYP = 'E'
+						AND a.WS_BGN_DE = #attendDt#
+					)
+				)
+		WHERE
+			usr.NO = #userNo#
+		ORDER BY
+			CASE ATTEND_CD_ORD
+				WHEN 'EA' THEN 1
+				WHEN 'AT' THEN 2
+				WHEN 'VC' THEN 3
+				WHEN 'TR' THEN 4
+				WHEN 'SD' THEN 5				
+				WHEN 'OT' THEN 6
+				WHEN 'NT' THEN 7
+				WHEN 'ET' THEN 8
+				WHEN 'LT' THEN 9
+			END
+		LIMIT 1
+	</select>
+	
+	<update id="KmsLoginDAO.updatePastAttendData">
+		UPDATE
+			TBL_ATTEND_CHECK
+		SET
+			ATTEND_CD = #attendCd# 
+		WHERE
+			USER_NO = #userNo#
+			AND ATTEND_DT = #attendDt#
+			AND (
+				IF(#attendCd# = 'VC', ATTEND_CD NOT IN ('HD')
+					,ATTEND_CD NOT IN ('EA', 'AT', 'HD') )
+				OR ATTEND_CD IS NULL
+			)
+	</update>
+		
+	<select id="KmsLoginDAO.isHoliday" resultClass="java.lang.Integer">
+		<include refid="SQL_isHoliday"/>
+	</select>	
+
+	<select id="KmsLoginDAO.selectLoginPageMember" resultMap="memInfo">
+		SELECT
+			a.NO
+			,a.USER_ID
+			,a.USER_NM
+			,a.USER_ENM
+			,a.SABUN
+			,a.ORGNZT_ID
+			,b.ORGNZT_NM
+			,a.RANK_ID
+			,c.CODE_NM AS RANK_NM
+			,a.ABUTME
+			,a.PIC_FILE_ID
+			,a.PIC_FILE_ID2
+		FROM (
+			SELECT
+				@RNUM := @RNUM + 1 AS ROWNUM
+				,S.NUM, T.*
+			FROM
+				(
+					SELECT
+						*
+					FROM
+						TBL_USERINFO
+					WHERE
+						WORK_ST = 'W'
+						AND GHOST = 0
+					ORDER BY NO ASC
+				) T
+				,(
+					SELECT
+						CEIL(RAND() * COUNT(*)) AS NUM
+					FROM
+						TBL_USERINFO
+					WHERE
+						WORK_ST = 'W'
+						AND GHOST = 0
+				) S
+				,(
+					SELECT @RNUM := 0
+				) R
+			) a
+			INNER JOIN TBL_ORGNZT b ON a.ORGNZT_ID = b.ORGNZT_ID
+			INNER JOIN COMTCCMMNDETAILCODE c ON a.RANK_ID = c.CODE AND c.CODE_ID = 'KMS003'
+		WHERE
+			ROWNUM = NUM
+	</select>
+	
+	<select id="KmsLoginDAO.selectOuterNetLoginLogList" resultClass="EgovMap">
+		SELECT
+			*
+		FROM
+			TBL_LOGIN_LOG
+		WHERE 0=0
+			AND USER_NO = #no#
+			AND INNERNET_YN = 'N'
+			AND CONFIRM_YN = 'N'
+		ORDER BY
+			tm DESC
+	</select>
+</sqlMap>

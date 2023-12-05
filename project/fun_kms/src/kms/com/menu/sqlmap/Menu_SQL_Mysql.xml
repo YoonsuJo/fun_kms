@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsMenuDAO">
+
+	<typeAlias alias="egovMap"				type="egovframework.rte.psl.dataaccess.util.EgovMap" 	/>
+	<typeAlias alias="MenuVO" 				type="kms.com.menu.vo.MenuVO" 							/>
+	<typeAlias alias="MenuFm" 				type="kms.com.menu.fm.MenuFm" 							/>
+
+	<!-- TENY_170514 메뉴 관련 resultMap -->
+	<resultMap id="mapMenuVO" 				class="MenuVO"			>
+		<result property="no" 						column="NO" 				/>
+		<result property="title" 					column="MENU_SJ" 		/>
+		<result property="url" 						column="LINK_URL" 		/>
+		<result property="order" 					column="MENU_ORD" 		/>
+		<result property="type" 					column="TYPE" 				/>
+		<result property="ownerNo" 				column="USER_NO" 		/>
+		<result property="orgnztId" 				column="ORGNZT_ID" 		/>
+	</resultMap>
+
+	<!-- 메뉴 관련 SQL문들 -->
+	<!-- INSERT 문들 -->
+	<!-- TENY_170514 메뉴를 등록하기위한 SQL문 -->
+ 	<insert id="KmsMenuDAO.insertMenu"					parameterClass="MenuVO">
+ 		<selectKey  resultClass="java.lang.Integer" keyProperty="order">
+			SELECT
+				IFNULL(MAX(MENU_ORD),0)+1 AS `ORDER`
+			FROM TBL_MYMENU
+				WHERE USER_NO = #ownerNo#
+		</selectKey>
+		INSERT INTO TBL_MYMENU
+		(
+			MENU_SJ, 
+			LINK_URL,
+			MENU_ORD,
+			TYPE,
+			USER_NO, 
+			ORGNZT_ID 
+		) VALUES (
+			#title#, 
+			#url#, 
+			#order#, 
+			#type#,
+			#ownerNo#, 
+			#orgnztId# 
+		)
+	</insert>
+	
+	<select id="KmsMenuDAO.getMenu" 			resultMap="mapMenuVO">
+		SELECT
+			NO, 
+			MENU_SJ, 
+			LINK_URL,
+			MENU_ORD, 
+			TYPE,
+			USER_NO, 
+			ORGNZT_ID 
+		FROM
+			TBL_MYMENU
+		WHERE
+			NO = #no#
+	</select>
+	
+	<update id="KmsMenuDAO.updateMenu"		>
+		UPDATE TBL_MYMENU
+		SET
+			NO = #no#
+			<isNotEmpty prepend="," property="title">
+				MENU_SJ = #title#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="url">
+				LINK_URL = #url#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="order">
+				MENU_ORD = #order#
+			</isNotEmpty>
+		WHERE
+			NO = #no#
+	</update>
+
+	<delete id="KmsMenuDAO.deleteMenu">
+ 		DELETE FROM TBL_MYMENU
+		WHERE
+			NO = #no#
+	</delete>
+
+ 	<select id="KmsMenuDAO.selectMenuList" 	resultMap="mapMenuVO">
+	 	SELECT
+			NO, 
+			MENU_SJ, 
+ 			LINK_URL,
+			MENU_ORD, 
+			TYPE,
+			USER_NO, 
+			ORGNZT_ID 
+		FROM
+			TBL_MYMENU
+	<isEqual property="type" compareValue="1">
+		WHERE USER_NO = #ownerNo#
+	</isEqual>
+	<isEqual property="type" compareValue="2">
+		WHERE ORGNZT_ID = #orgnztId#
+	</isEqual>
+		ORDER BY MENU_ORD ASC
+	</select>
+
+</sqlMap>

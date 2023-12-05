@@ -1,0 +1,208 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ include file="../../include/ajax_inc.jsp"%>
+
+ <script>
+
+ $(document).ready(function(){
+	 var data = ${specificVO};
+		$('#salesDocViewD').totalSales({
+			mode : "V",
+			globalData : data
+		});	
+ });
+ </script>
+<!-- 매출  -->
+<div id="salesDocViewD">
+	<div class="boardWrite02 mB20">
+	<p class="th_stitle2 mT10">매출</p>
+		<table id="salesDocWriteT" cellpadding="0" cellspacing="0"
+			summary="각 게시물의 상세 내용을 볼 수 있습니다.">
+			<caption>공지사항 보기</caption>
+			<colgroup>
+				<col class="col120" />
+				<col width="px" />
+				<col class="col120" />
+				<col width="px" />
+			</colgroup>
+			<tbody>
+				<tr>
+					<td class="title">구분</td>
+					<td class="pL10" colspan="3">
+						<span class="salesDoc.decideYn span_12"></span>
+					</td>
+				</tr>
+				<tr>
+					<td class="title">매출건명</td>
+					<td class="pL10" colspan="3">
+						<span class="salesDoc.salesSj span_12"></span>
+					</td>
+				</tr>
+				<tr>
+					<td class="title">프로젝트</td>
+					<td class="pL10" colspan="3">
+						<span class="span_12 salesDoc.sPrjNm"></span> 
+					</td>
+				</tr>
+				<tr>
+					<td class="title">계약금</td>
+					<td class="pL10">
+						<span class="span_9 salesDoc.cost" /></span></td>
+					<td class="title">계약기간</td>
+					<td class="pL10">
+						<span class="span_5 salesDoc.stDt"> </span>
+						 ~ 
+						<span class="span_5 salesDoc.edDt"> </span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<!-- 사외매입  -->
+	<div class="boardWrite02 mB20" id="purchaseOutD">
+	<p class="th_stitle2 mT10">사외매입 </p>
+		<br/>
+		<table cellpadding="0" cellspacing="0" summary="각 게시물의 상세 내용을 볼 수 있습니다." id="purchseOutT">
+			<caption>공지사항 보기</caption>
+			<colgroup><col class="col70" /><col class="col150" /><col class="col50" /><col width="px" /><col class="col50" /><col class="col120" /><col class="col50" /></colgroup>
+			<tbody>
+			</tbody>
+	  </table>
+	</div>
+	
+	<!-- 사내매입  -->
+	<div class="boardWrite02 mB20" id="purchaseInGeneralD">
+	<p class="th_stitle2 mT10">
+		사내매입 
+	</p>
+	<br />
+		<table cellpadding="0" cellspacing="0" summary="각 게시물의 상세 내용을 볼 수 있습니다.">
+	                <caption>공지사항 보기</caption>
+	                <colgroup><col class="col70" /><col class="col150" /><col class="col50" /><col width="px" /><col class="col50" /><col class="col70" /><col class="col50" /></colgroup>
+	                <tbody>
+	                	
+	                </tbody>
+	                </table>
+	</div>
+	
+	<!-- 선투입비용  -->
+	<div class="boardWrite02 mB20" id="purchaseInPreD">
+	<p class="th_stitle2 mT10">
+		선투입비용 
+	</p>
+	<br />
+		<table cellpadding="0" cellspacing="0" summary="각 게시물의 상세 내용을 볼 수 있습니다.">
+	                <caption>공지사항 보기</caption>
+	                <colgroup><col class="col70" /><col width="px" /><col class="col50" /><col class="col70" /><col class="col50" /></colgroup>
+	                <tbody>
+	                </tbody>
+	   </table>
+	</div>
+	
+	<!-- 향후투입비용  -->
+	<div class="boardWrite02 mB20" id="purchaseInAfterD">
+	<p class="th_stitle2 mT10">
+		향후투입비용 
+	</p>
+	<br />
+		<table cellpadding="0" cellspacing="0" summary="각 게시물의 상세 내용을 볼 수 있습니다.">
+	                <caption>공지사항 보기</caption>
+	                <colgroup><col class="col70" /><col class="col150" /><col class="col50" /><col width="px" /><col class="col50" /><col class="col70" /><col class="col50" /></colgroup>
+	                <tbody>
+	                	
+	                </tbody>
+	                </table>
+	</div>
+	
+	<!-- 사업관리 인건비/판관비 예산  -->
+	<p class="th_stitle2">
+		사업관리 인건비/판관비 예산
+	</p>
+		
+	<div class="boardList02 mB20" id="sPrjLaborD">
+	<p class="th_plus02 mB5">투입인력<span class="pL7"></span>
+	</p>
+	</div>
+	
+	<div class="boardList02 mB20" id="sPrjExpenseD">
+	<p class="th_plus02">단위 : 천원</p>
+	
+	</div>
+	
+	<!-- 수행 인건비/판관비 예산  -->
+	<p class="th_stitle2">수행 인건비/판관비 예산</p>
+	<div class="boardWrite02 mB20">
+		<table cellpadding="0" cellspacing="0" summary="각 게시물의 상세 내용을 볼 수 있습니다.">
+	                <caption>공지사항 보기</caption>
+	                <colgroup><col class="col120" /><col width="px" /></colgroup>
+	                <tbody>
+	                	<tr>
+	                 	<td class="title">프로젝트</td>
+	                 	<td class="pL10" >
+		                 		<span class="salesDoc.pPrjNm" class="span_12"></span>
+	                		</td>
+	                	</tr>
+	                </tbody>
+	                </table>
+	</div>
+	
+	<div class="boardList02 mB20" id="pPrjLaborD">
+	<p class="th_plus02 mB5">투입인력<span class="pL7"></span>
+	</p>
+	</div>
+	
+	
+	<div class="boardList02 mB20" id="pPrjExpenseD">
+	<p class="th_plus02">단위 : 천원</p>
+		
+	</div>
+		
+		<!-- 요약  -->
+	<div class="boardList02 mB20" id="summingUpD">
+	<p class="th_stitle2">요약 <span class="th_plus02">단위 : 천원</span></p>
+	
+		<table cellpadding="0" cellspacing="0" summary="각 게시물의 상세 내용을 볼 수 있습니다.">
+	                <caption>공지사항 보기</caption>
+	                <colgroup>
+	                 	<col class="col10" />
+	                	<col class="col10" />
+	                	<col class="col10" />
+	                	<col class="col10" />
+	                	<col class="col10" />
+	                	<col class="col10" />
+	                	<col class="col10" />
+	               	</colgroup>
+	                <thead>
+	                	<tr class="height_th">
+	                		<th>매출액</th>
+	                		<th>사외매입</th>
+	                		<th>사내매입</th>
+	                		<th>매출이익 <br/><span class="T11">(이익률)</span></th>
+	                		<th>인건비</th>
+	                		<th>판관비 </th>
+	                		<th class="td_last">영업이익 <br/><span class="T11">(이익률)</span></th>
+	                	</tr>
+	                </thead>
+	                <tbody>
+	                	<tr>
+	                 	<td class="txt_center salesSum">0</td>
+	                 	<td class="txt_center purchaseOutSum">0</td>
+	                 	<td class="txt_center purchaseInSum">0</td>
+	                 	<td class="txt_center bG profitOnSales">0</td>
+	                 	<td class="txt_center laborCostSum">0</td>
+	                 	<td class="txt_center expenseSum">0</td>
+	                 	<td class="td_last txt_center bG operatingProfit">0<br/>(0%)</td>
+	                	</tr>                 			                    			                    	
+	                </tbody>
+	        </table>
+	</div>
+		
+		
+		<!-- 종합  -->
+	<div class="boardList02 mB20" id="totalSummingUpD">
+		<p class="th_stitle2">종합 <span class="th_plus02">단위 : 천원</span></p>
+	
+		
+	</div>
+</div>

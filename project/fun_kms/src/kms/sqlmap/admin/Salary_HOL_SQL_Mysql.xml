@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="TblRankSalary">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="salaryVO" type="kms.com.salary.service.SalaryVO"/>
+	<typeAlias  alias="JSONObject" type="org.json.simple.JSONObject"/>
+	
+	
+	<select id="salaryHolDAO.selectRankSalaryList" parameterClass="salaryVO" resultClass="egovMap">
+			SELECT
+				DCO.CODE_NM RANK_NM
+				,DCO.USE_AT USE_AT
+				,DCO.CODE RANK_CODE
+				, #year# YEAR
+				, #month# MONTH
+				, IFNULL(SALARY,0) SALARY
+			FROM COMTCCMMNDETAILCODE DCO
+			LEFT OUTER JOIN TBL_RANK_HOL_SALARY SAL
+			ON SAL.RANK_CODE = DCO.CODE
+			<isNotEmpty property="year">
+				AND YEAR =#year#
+			</isNotEmpty>
+			<isNotEmpty property="month">
+				AND MONTH =#month#
+			</isNotEmpty>
+			
+			WHERE 1=1
+				AND DCO.CODE_ID = 'KMS003'
+			<isNotEmpty property="rankCode">
+				AND DCO.CODE =#rankCode#
+			</isNotEmpty>
+			ORDER BY DCO.ORD ASC
+	</select>	
+	
+	<select id="salaryHolDAO.selectPosSalaryList" parameterClass="salaryVO" resultClass="egovMap">
+			SELECT
+				DCO.CODE_NM POSITION_NM
+				,DCO.USE_AT USE_AT
+				,DCO.CODE POSITION_CODE
+				, #year# YEAR
+				, #month# MONTH
+				, IFNULL(SALARY,0) SALARY
+			FROM COMTCCMMNDETAILCODE DCO
+			LEFT OUTER JOIN TBL_POS_HOL_SALARY POS
+				ON POS.POSITION_CODE = DCO.CODE
+			<isNotEmpty property="year">
+				AND YEAR =#year#
+			</isNotEmpty>
+			<isNotEmpty property="month">
+				AND MONTH =#month#
+			</isNotEmpty>
+			WHERE 1=1
+				AND DCO.CODE_ID = 'KMS011'
+			<isNotEmpty property="positionCode">
+				AND DCO.CODE =#positionCode#
+			</isNotEmpty>
+			ORDER BY DCO.ORD ASC
+	</select>	
+	
+	<select id="salaryHolDAO.selectUserSalaryList" parameterClass="salaryVO" resultClass="egovMap">
+		SELECT
+				USR.USER_ID
+				,USR.SABUN
+				,USR.USER_NM
+				,USR.NO USER_NO
+				,USR.WORK_ST
+				,ORG.ORGNZT_NM
+				,ORG.ORGNZT_ID
+				, #year# YEAR
+				, #month# MONTH
+				, IFNULL(USS.SALARY,0) SALARY 
+				, IF(USS.SALARY IS NULL, "N", "Y") IS_REGISTERED
+			FROM
+				TBL_USERINFO USR
+				LEFT OUTER JOIN TBL_ORGNZT ORG
+					ON USR.ORGNZT_ID = ORG.ORGNZT_ID
+				LEFT OUTER JOIN TBL_USER_HOL_SALARY USS
+					ON (USR.NO = USS.USER_NO
+				<isNotEmpty property="year">
+					AND USS.YEAR =#year#
+				</isNotEmpty>
+				<isNotEmpty property="month">
+					AND USS.MONTH =#month#
+				</isNotEmpty>
+			)
+				
+			WHERE
+				USR.GHOST = '0'
+				AND USR.COMPIN_DT IS NOT NULL
+			<isNotEmpty property="userNo">
+				AND USR.NO =#userNo#
+			</isNotEmpty>
+			
+			ORDER BY
+			 USR.SABUN
+			, USS.MONTH
+	</select>	
+
+
+	<insert id="salaryHolDAO.insertPosSalary" parameterClass="salaryVO">
+		<![CDATA[
+		INSERT INTO TBL_POS_HOL_SALARY
+			(POSITION_CODE, YEAR, MONTH, SALARY)
+		VALUES
+			(#positionCode#,#year#, #month#, #salary#)
+		]]>
+	</insert>
+	
+	<insert id="salaryHolDAO.insertRankSalary" parameterClass="salaryVO">
+		<![CDATA[
+		INSERT INTO TBL_RANK_HOL_SALARY
+			(RANK_CODE, YEAR, MONTH, SALARY)
+		VALUES
+			(#rankCode#,#year#, #month#, #salary#)
+		]]>
+	</insert>
+	
+	<insert id="salaryHolDAO.insertUserSalary" parameterClass="salaryVO">
+		<![CDATA[
+		INSERT INTO TBL_USER_HOL_SALARY
+			(USER_NO, YEAR, MONTH, SALARY)
+		VALUES
+			(#userNo#,#year#, #month#, #salary#)
+		]]>
+	</insert>
+	
+	<delete id="salaryHolDAO.deleteRankSalary" parameterClass="salaryVO">
+		DELETE FROM TBL_RANK_HOL_SALARY
+		where RANK_CODE =#rankCode#
+		AND YEAR = #year#
+	</delete>
+	
+	<delete id="salaryHolDAO.deletePosSalary" parameterClass="salaryVO">
+		DELETE FROM TBL_POS_HOL_SALARY
+		where POSITION_CODE =#positionCode#
+		AND YEAR = #year#
+	</delete>
+	
+	<delete id="salaryHolDAO.deleteUserSalary" parameterClass="salaryVO">
+		DELETE FROM TBL_USER_HOL_SALARY
+		where USER_NO =#userNo#
+		AND YEAR = #year#
+	</delete>
+	
+	<select id="salaryHolDAO.selectUserHolSalaryInfo" resultClass="JSONObject">
+	SELECT 
+		a.NO userNo 
+		,a.USER_ID usrId
+		,a.USER_NM userNm
+		,FN_GET_RANKNM_HISTORY(a.NO, #stDt#) rankNm
+		,FN_GET_POSITIONNM_HISTORY(a.NO, #stDt#) posNm
+		,CAST(IFNULL(b.salary,0) * #period# AS UNSIGNED) userSalary 
+		,CAST(IFNULL(c.salary,0) * #period# AS UNSIGNED) rankSalary
+		,CAST(IFNULL(d.salary,0) * #period# AS UNSIGNED) posSalary
+		,CAST(GREATEST(IFNULL(b.salary,0), IFNULL(c.salary,0), IFNULL(d.salary,0)) * #period# AS UNSIGNED) maxSalary
+		,YEAR(#stDt#) year
+		,MONTH(#stDt#) month
+	FROM
+		TBL_USERINFO a
+		INNER JOIN TBL_ORGNZT g
+			ON a.ORGNZT_ID = g.ORGNZT_ID
+		LEFT JOIN TBL_USER_HOL_SALARY b
+			ON a.NO = b.USER_NO
+			AND b.year = YEAR(#stDt#)
+			AND b.month = MONTH(#stDt#)
+		LEFT JOIN TBL_RANK_HOL_SALARY c
+			ON FN_GET_RANKID_HISTORY(a.NO, #stDt#) = c.RANK_CODE
+			AND c.year = YEAR(#stDt#)
+			AND c.month = MONTH(#stDt#)
+		LEFT JOIN TBL_POS_HOL_SALARY d
+			ON FN_GET_POSITION_HISTORY(a.NO, #stDt#) = d.POSITION_CODE
+			AND d.year = YEAR(#stDt#)
+			AND d.month = MONTH(#stDt#)
+	WHERE
+		a.NO = #userNo#
+	
+	</select>
+</sqlMap>

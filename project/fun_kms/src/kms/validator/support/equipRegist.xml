@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC 
+	"-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1//EN" 
+	"http://jakarta.apache.org/commons/dtds/validator_1_1.dtd">
+
+<form-validation>
+	<formset>
+		<form name="equipReg">
+			<field property="serial_no" depends="required,maxlength">
+				<arg0 key="관리번호" />
+				<arg1 key="20" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>20</var-value>
+				</var>
+			</field>
+			<field property="model" depends="required,maxlength">
+				<arg0 key="모델명" />
+				<arg1 key="100" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+			</field>
+			<field property="cpu" depends="required,maxlength">
+				<arg0 key="CPU" />
+				<arg1 key="100" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+			</field>
+			<field property="memory" depends="required,maxlength">
+				<arg0 key="MEMORY" />
+				<arg1 key="100" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+			</field>
+			<field property="vga" depends="required,maxlength">
+				<arg0 key="VGA" />
+				<arg1 key="100" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+			</field>
+			<field property="hdd" depends="required,maxlength">
+				<arg0 key="HDD" />
+				<arg1 key="100" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+			</field>
+			<field property="odd" depends="required,maxlength">
+				<arg0 key="ODD" />
+				<arg1 key="100" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>100</var-value>
+				</var>
+			</field>
+			<field property="buy_price" depends="required">
+				<arg0 key="구입금액" />
+				<arg1 key="100" resource="false"/>
+			</field>
+		</form>
+	</formset>
+</form-validation>

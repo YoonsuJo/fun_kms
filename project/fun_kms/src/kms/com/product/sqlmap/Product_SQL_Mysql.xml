@@ -1,0 +1,643 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsProductDAO">
+	
+	<typeAlias  alias="egovMap" 					type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="ProductVO" 				type="kms.com.product.vo.ProductVO"/>
+	<typeAlias  alias="PartVO" 					type="kms.com.product.vo.PartVO"/>
+	<typeAlias  alias="VersionVO" 				type="kms.com.product.vo.VersionVO"/>
+	<typeAlias  alias="RelationVO" 				type="kms.com.product.vo.RelationVO"/>
+	<typeAlias  alias="PartFm" 					type="kms.com.product.fm.PartFm"/>
+
+	<resultMap id="mapProductVOList" 			class="ProductVO">
+		<result property="no"						column="NO"								/>
+		<result property="productCode"			column="PRODUCT_CODE"				/>
+		<result property="productNm"			column="PRODUCT_NM"					/>
+		<result property="writerNo"				column="WRITER_NO"						/>
+		<result property="writerId"				column="WRITER_ID"						/>
+		<result property="writerNm"				column="WRITER_NM"						/>
+		<result property="adminNo"				column="ADMIN_NO"						/>
+		<result property="adminId"				column="ADMIN_ID"						/>
+		<result property="adminNm"				column="ADMIN_NM"						/>
+		<result property="useAt"					column="USE_AT"							/>
+		<result property="sortNo"					column="SORT_NO"						/>
+		<result property="regDt"					column="REG_DT"							/>
+		<result property="modDt"					column="MOD_DT"							/>
+	</resultMap>
+	
+	<resultMap id="mapProductVO" 				class="ProductVO">
+		<result property="no"						column="NO"								/>
+		<result property="productCode"			column="PRODUCT_CODE"				/>
+		<result property="productNm"			column="PRODUCT_NM"					/>
+		<result property="productCn"			column="PRODUCT_CN"					/>
+		<result property="writerNo"				column="WRITER_NO"						/>
+		<result property="writerId"				column="WRITER_ID"						/>
+		<result property="writerNm"				column="WRITER_NM"						/>
+		<result property="adminNo"				column="ADMIN_NO"						/>
+		<result property="adminId"				column="ADMIN_ID"						/>
+		<result property="adminNm"				column="ADMIN_NM"						/>
+		<result property="useAt"					column="USE_AT"							/>
+		<result property="sortNo"					column="SORT_NO"						/>
+		<result property="regDt"					column="REG_DT"							/>
+		<result property="modDt"					column="MOD_DT"							/>
+	</resultMap>
+
+	<resultMap id="mapPartVOList" 				class="PartVO">
+		<result property="no"		 				column="NO"					/>
+		<result property="partNm"				column="PART_NM"			/>
+		<result property="nickName"				column="NICK_NAME"			/>
+		<result property="type"					column="TYPE"					/>
+	
+		<result property="adminNo"				column="ADMIN_NO"			/>
+		<result property="adminId"				column="ADMIN_ID"			/>
+		<result property="adminNm"				column="ADMIN_NM"			/>
+			
+		<result property="useAt"					column="USE_AT"				/>
+		<result property="sortNo"					column="SORT_NO"			/>
+		<result property="regDt"					column="REG_DT"				/>
+		<result property="modDt"					column="MOD_DT"				/>
+		
+		<result property="version"				column="VERSION"				/>
+		<result property="versionNo"				column="VERSION_NO"		/>
+	</resultMap>
+
+	<resultMap id="mapPartVO" 					class="PartVO">
+		<result property="no"		 				column="NO"					/>
+		<result property="partNm"				column="PART_NM"			/>
+		<result property="nickName"				column="NICK_NAME"			/>
+		<result property="partCn"					column="PART_CN"				/>
+		<result property="type"					column="TYPE"					/>
+
+		<result property="writerNo"				column="WRITER_NO"			/>
+		<result property="writerId"				column="WRITER_ID"			/>
+		<result property="writerNm"				column="WRITER_NM"			/>
+
+		<result property="adminNo"				column="ADMIN_NO"			/>
+		<result property="adminId"				column="ADMIN_ID"			/>
+		<result property="adminNm"				column="ADMIN_NM"			/>
+		
+		<result property="useAt"					column="USE_AT"				/>
+		<result property="sortNo"					column="SORT_NO"			/>
+		<result property="regDt"					column="REG_DT"				/>
+		<result property="modDt"					column="MOD_DT"				/>
+	</resultMap>
+			
+	<resultMap id="mapVersionVOList" 				class="VersionVO">
+		<result property="no"						column="NO"					/>
+		<result property="partNo"					column="PART_NO"			/>
+
+		<result property="version"				column="VERSION"				/>
+		<result property="versionName"			column="VERSION_NAME"	/>
+		
+		<result property="writerNo"				column="WRITER_NO"			/>
+		<result property="writerId"				column="WRITER_ID"			/>
+		<result property="writerName"			column="WRITER_NM"			/>
+
+		<result property="regDatetime"			column="REG_DATETIME"		/>
+		<result property="publishDate"			column="PUBLISH_DATE"		/>
+	</resultMap>
+
+	<resultMap id="mapVersionVO" 				class="VersionVO">
+		<result property="no"						column="NO"					/>
+		<result property="partNo"					column="PART_NO"			/>
+		<result property="partNm"				column="PART_NM"			/>
+
+		<result property="version"				column="VERSION"				/>
+		<result property="versionName"			column="VERSION_NAME"	/>
+
+		<result property="writerNo"				column="WRITER_NO"			/>
+		<result property="writerId"				column="WRITER_ID"			/>
+		<result property="writerName"			column="WRITER_NM"			/>
+
+		<result property="regDatetime"			column="REG_DATETIME"		/>
+		<result property="publishDate"			column="PUBLISH_DATE"		/>
+
+		<result property="upgradeNote"			column="UPGRADE_NOTE"	/>
+		<result property="interfaceNote"			column="INTERFACE_NOTE"	/>
+		<result property="sourceNote"			column="SOURCE_NOTE"		/>
+		<result property="documentNote"		column="DOCUMENT_NOTE"	/>
+		
+		<result property="interfaceChange"		column="INTERFACE_CHANGE"	/>
+	</resultMap>
+
+
+<!-- 
+	#####################################################
+	#####################################################
+	제품 관련 SQL
+ -->
+	<insert id="ProductDAO.insertProduct" 			parameterClass="ProductVO">
+		INSERT INTO hm_product
+		(
+			PRODUCT_CODE,
+			PRODUCT_NM,
+			PRODUCT_CN,
+			WRITER_NO,
+			ADMIN_NO,
+			USE_AT,
+			SORT_NO,
+			REG_DT
+		) VALUES (
+			#productCode#,
+			#productNm#,
+			#productCn#,
+			#writerNo#,
+			(SELECT NO FROM tbl_userinfo WHERE CONCAT(USER_NM,'(',USER_ID,')') LIKE CONCAT('%', #adminMixes#, '%')),  
+			'Y',
+			 #sortNo#,
+			NOW()
+		)
+	</insert>
+	
+	<select id="ProductDAO.selectProductMaxSortNo" resultClass="java.lang.Integer">
+	SELECT
+		IFNULL(MAX(SORT_NO), 0) + 1
+	FROM
+		hm_product
+	</select>
+	
+	<select id="ProductDAO.selectProduct" 			resultMap="mapProductVO">
+		SELECT
+			p.NO 
+			, p.PRODUCT_CODE
+			, p.PRODUCT_NM
+			, p.PRODUCT_CN
+			, p.WRITER_NO 
+			, wu.USER_ID 						AS WRITER_ID
+			, wu.USER_NM 						AS WRITER_NM
+			, IFNULL(p.ADMIN_NO, 0)			AS ADMIN_NO
+			, IFNULL(au.USER_ID, '') 			AS ADMIN_ID
+			, IFNULL(au.USER_NM, '') 			AS ADMIN_NM
+			, p.USE_AT 
+			, p.SORT_NO 
+			, p.REG_DT 
+			, p.MOD_DT 
+		FROM hm_product p
+			JOIN tbl_userinfo wu
+				ON p.WRITER_NO = wu.NO
+			LEFT JOIN tbl_userinfo au
+				ON p.ADMIN_NO = au.NO
+		WHERE p.NO =  #no#
+	</select>
+
+	<update id="ProductDAO.updateProduct" 				parameterClass="ProductVO">
+		UPDATE hm_product
+		SET
+			MOD_DT = NOW()
+		<isNotEmpty prepend="," property="productCode">
+			PRODUCT_CODE = #productCode#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="productNm">
+			PRODUCT_NM = #productNm#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="productCn">
+			PRODUCT_CN = #productCn#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="adminMixes">
+			ADMIN_NO = (SELECT NO FROM TBL_USERINFO WHERE CONCAT(USER_NM,'(',USER_ID,')') LIKE CONCAT('%', #adminMixes#, '%'))  
+		</isNotEmpty>		
+		<isNotEmpty prepend="," property="useAt">
+			USE_AT = #useAt#
+		</isNotEmpty>
+		WHERE
+			NO = #no#
+	</update>	
+
+	<select id="ProductDAO.selectProductList" 				resultMap="mapProductVOList">
+		SELECT
+			p.NO 
+			, p.PRODUCT_CODE
+			, p.PRODUCT_NM
+			, p.WRITER_NO 
+			, wu.USER_ID 						AS WRITER_ID
+			, wu.USER_NM 						AS WRITER_NM
+			, p.ADMIN_NO 
+			, au.USER_ID 						AS ADMIN_ID
+			, au.USER_NM 						AS ADMIN_NM
+			, p.USE_AT 
+			, p.SORT_NO 
+			, p.REG_DT 
+			, p.MOD_DT 
+		FROM hm_product p
+			JOIN tbl_userinfo wu
+				ON p.WRITER_NO = wu.NO
+			LEFT JOIN tbl_userinfo au
+				ON p.ADMIN_NO = au.NO
+		WHERE
+			TRUE
+		<isNotEmpty prepend="," property="useAt">
+			p.USE_AT = #useAt#
+		</isNotEmpty>
+		ORDER BY p.SORT_NO ASC	
+	</select>
+	
+	<update id="ProductDAO.updateProductSortNoUpStep1" parameterClass="ProductVO">
+		UPDATE hm_product 
+		SET	
+			SORT_NO = $sortNo$-1
+		WHERE NO = #no#
+	</update>
+
+	<update id="ProductDAO.updateProductSortNoUpStep2" parameterClass="ProductVO">
+		UPDATE hm_product 
+		SET 
+			SORT_NO = $sortNo$
+		WHERE NO NOT IN (#no#)	
+			AND SORT_NO = $sortNo$-1	
+	</update>
+	
+	<update id="ProductDAO.updateProductSortNoDnStep1" parameterClass="ProductVO">
+		UPDATE hm_product 
+		SET 
+			SORT_NO = $sortNo$+1
+		WHERE NO = #no#
+	</update>
+	<update id="ProductDAO.updateProductSortNoDnStep2" parameterClass="ProductVO">
+		UPDATE hm_product 
+		SET 
+			SORT_NO = $sortNo$
+		WHERE NO NOT IN (#no#)	
+			AND SORT_NO = $sortNo$+1		
+	</update>	
+
+
+<!-- 
+	#####################################################
+	#####################################################
+	구성품 관련 SQL
+ -->
+	<insert id="ProductDAO.insertPart" 					parameterClass="partVO">
+		INSERT INTO hm_product_part
+		(
+			PART_NM
+			,NICK_NAME
+			,PART_CN
+			,SORT_NO
+			,REG_DT
+			,MOD_DT
+			,WRITER_NO
+			,ADMIN_NO
+			,TYPE
+		) VALUES (
+			#partNm#
+			,#nickName#
+			,#partCn#
+			, #sortNo#
+			,NOW()
+			,NOW()
+			,#writerNo#
+			,(SELECT NO FROM TBL_USERINFO WHERE CONCAT(USER_NM,'(',USER_ID,')') LIKE CONCAT('%', #adminMixes#, '%'))
+			,#type#  
+		)
+	</insert>
+
+	<select id="ProductDAO.selectPartMaxSortNo" 		resultClass="java.lang.Integer">
+	SELECT
+		IFNULL(MAX(SORT_NO), 0) + 1
+	FROM
+		hm_product_part 
+	</select>
+
+	<select id="ProductDAO.selectPart" 		resultMap="mapPartVO">
+		SELECT
+			pp.NO 
+			, pp.PART_NM
+			, pp.NICK_NAME
+			, pp.PART_CN
+			, pp.WRITER_NO 
+			, wu.USER_ID 						AS WRITER_ID
+			, wu.USER_NM 						AS WRITER_NM
+			, pp.ADMIN_NO 
+			, au.USER_ID 						AS ADMIN_ID
+			, au.USER_NM 						AS ADMIN_NM
+			, pp.USE_AT 
+			, pp.SORT_NO 
+			, pp.REG_DT 
+			, pp.MOD_DT
+			, pp.TYPE 
+		FROM hm_product_part pp
+			JOIN tbl_userinfo wu
+				ON pp.WRITER_NO = wu.NO
+			LEFT JOIN tbl_userinfo au
+				ON pp.ADMIN_NO = au.NO
+		WHERE pp.NO =  #no#
+
+	</select>
+	
+	<update id="ProductDAO.updatePart" 					parameterClass="partVO">
+		UPDATE hm_product_part
+		SET
+			MOD_DT = NOW()
+		<isNotEmpty prepend="," property="partNm">
+			PART_NM = #partNm#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="nickName">
+			NICK_NAME = #nickName#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="type">
+			TYPE = #type#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="partCn">
+			PART_CN = #partCn#
+		</isNotEmpty>		
+		<isNotEmpty prepend="," property="useAt">
+			USE_AT = #useAt#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="adminMixes">
+			ADMIN_NO = (SELECT NO FROM TBL_USERINFO WHERE CONCAT(USER_NM,'(',USER_ID,')') LIKE CONCAT('%', #adminMixes#, '%'))  
+		</isNotEmpty>		
+		WHERE
+			NO = #no#
+	</update>	
+		
+	<select id="ProductDAO.selectPartList" 					resultMap="mapPartVOList">
+		SELECT
+			pp.NO 
+			, pp.PART_NM
+			, pp.NICK_NAME
+			, pp.ADMIN_NO 
+			, pp.USE_AT 
+			, pp.SORT_NO 
+			, pp.REG_DT 
+			, pp.MOD_DT
+			, pp.TYPE 
+			, au.USER_ID 						AS ADMIN_ID
+			, au.USER_NM 						AS ADMIN_NM
+			, ''										AS VERSION
+			, '0'									AS VERSION_NO
+		FROM hm_product_part pp
+			LEFT JOIN tbl_userinfo au
+				ON pp.ADMIN_NO = au.NO
+		WHERE 
+			TRUE
+		<isNotEmpty prepend="AND" property="searchName">
+			pp.PART_NM LIKE CONCAT('%', #searchName#, '%') 
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchNickName">
+			pp.NICK_NAME = #searchNickName#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchType">
+			pp.TYPE = #searchType# 
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchUseAt">
+			pp.USE_AT = #searchUseAt# 
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchAdminMixes">
+			CONCAT(au.USER_NM, '(', au.USER_ID, ')' ) = #searchAdminMixes#
+		</isNotEmpty>
+		ORDER BY pp.SORT_NO ASC	
+	</select>
+	
+	<select id="ProductDAO.selectPartListOfProduct" 					resultMap="mapPartVOList">
+		SELECT
+			pp.NO 
+			, pp.PART_NM
+			, pp.NICK_NAME
+			, pp.ADMIN_NO 
+			, pp.USE_AT 
+			, pp.SORT_NO 
+			, pp.REG_DT 
+			, pp.MOD_DT
+			, pp.TYPE 
+			, au.USER_ID 						AS ADMIN_ID
+			, au.USER_NM 						AS ADMIN_NM
+			, ''										AS VERSION
+			, '0'									AS VERSION_NO
+		FROM hm_product_part pp
+			LEFT JOIN tbl_userinfo au
+				ON pp.ADMIN_NO = au.NO
+			JOIN hm_product_relation r
+				ON pp.NO = r.SUB_NO AND r.TYPE = 'P'  
+		WHERE 
+			pp.USE_AT = 'Y' 
+			AND r.OWNER_NO = #productNo#
+		ORDER BY r.SORT_NO DESC	
+	</select>
+
+	<select id="ProductDAO.selectPartListForChoice" 			parameterClass="PartFm"		resultMap="mapPartVOList">
+		SELECT
+			pp.NO 
+			, pp.PART_NM
+			, pp.NICK_NAME
+			, pp.ADMIN_NO 
+			, pp.USE_AT 
+			, pp.SORT_NO 
+			, pp.REG_DT 
+			, pp.MOD_DT
+			, pp.TYPE 
+			, au.USER_ID 						AS ADMIN_ID
+			, au.USER_NM 						AS ADMIN_NM
+			, ''										AS VERSION
+			, '0'									AS VERSION_NO
+		FROM hm_product_part pp
+			LEFT JOIN tbl_userinfo au
+				ON pp.ADMIN_NO = au.NO
+		WHERE 
+			USE_AT = 'Y'
+			AND pp.NO NOT IN (SELECT r.SUB_NO
+				FROM hm_product_relation r
+				WHERE r.TYPE = 'M'
+				AND r.OWNER_NO = #searchNo#)
+			AND pp.NO != #searchNo#
+		ORDER BY pp.SORT_NO ASC	
+	</select>
+	
+	<select id="ProductDAO.selectSubPartList" 					resultMap="mapPartVOList">
+		SELECT
+			pp.NO 
+			, pp.PART_NM
+			, pp.NICK_NAME
+			, IFNULL(pp.ADMIN_NO, 0)		AS ADMIN_NO
+			, pp.USE_AT 
+			, pp.SORT_NO 
+			, pp.REG_DT 
+			, pp.MOD_DT
+			, pp.TYPE 
+			, IFNULL(au.USER_ID, 0)			AS ADMIN_ID
+			, IFNULL(au.USER_NM, 0)			AS ADMIN_NM
+			, IFNULL(t.VERSION, '')				AS VERSION
+			, IFNULL(t.NO, '0')					AS VERSION_NO
+		FROM hm_product_part pp
+			LEFT JOIN tbl_userinfo au
+				ON pp.ADMIN_NO = au.NO
+			JOIN hm_product_relation r
+				ON pp.NO = r.SUB_NO AND r.TYPE = 'M'AND r.OWNER_NO = #searchNo#
+			LEFT JOIN (			
+					SELECT rv.OWNER_NO, v.VERSION, v.NO, v.PART_NO
+					FROM	hm_product_relation rv
+						JOIN hm_product_version v
+							ON rv.SUB_NO = v.NO AND rv.OWNER_NO = #searchVersionNo#
+					WHERE rv.TYPE = 'V') t
+				ON t.PART_NO = pp.NO
+		ORDER BY r.SORT_NO ASC
+	</select>
+
+	<update id="ProductDAO.updatePartSortNo" parameterClass="PartVO">
+		UPDATE hm_product_part 
+		SET	
+			SORT_NO = #sortNo#
+		WHERE NO = #no#
+	</update>
+
+	<update id="ProductDAO.deletePart" parameterClass="PartVO">
+		UPDATE hm_product_part 
+		SET	
+			USE_AT = 'N'
+		WHERE NO = #no#
+	</update>
+
+<!-- 
+	#####################################################
+	#####################################################
+	버젼 관련 SQL
+ -->
+	<insert id="ProductDAO.insertVersion" 		parameterClass="VersionVO">
+		INSERT INTO hm_product_version
+		(
+			PART_NO
+			, VERSION
+			, VERSION_NAME
+			, REG_DATETIME
+			, PUBLISH_DATE
+			, WRITER_NO
+			, UPGRADE_NOTE
+			, INTERFACE_NOTE
+			, SOURCE_NOTE
+			, DOCUMENT_NOTE
+			, INTERFACE_CHANGE
+		) VALUES (
+			#partNo#
+			,#version#
+			,#versionName#
+			,NOW()
+			,#publishDate#
+			,#writerNo#
+			,#upgradeNote#
+			,#interfaceNote#
+			,#sourceNote#
+			,#documentNote#
+			,#interfaceChange#
+		)
+	</insert>
+	
+	<select id="ProductDAO.selectVersion" 				resultMap="mapVersionVO">
+		SELECT
+			pv.NO,
+			pv.PART_NO, 
+			pp.PART_NM 
+			, pv.VERSION
+			, pv.VERSION_NAME
+			, pv.WRITER_NO 
+			, wu.USER_ID 						AS WRITER_ID
+			, wu.USER_NM 						AS WRITER_NM
+			, pv.REG_DATETIME 
+			, pv.PUBLISH_DATE 
+			, pv.UPGRADE_NOTE
+			, pv.INTERFACE_NOTE
+			, pv.SOURCE_NOTE
+			, pv.DOCUMENT_NOTE
+			, pv.INTERFACE_CHANGE
+		FROM hm_product_version pv
+			JOIN hm_product_part pp
+				ON pv.PART_NO = pp.NO
+			JOIN tbl_userinfo wu
+				ON pv.WRITER_NO = wu.NO
+		WHERE pv.NO =  #no#
+	</select>
+	
+	<update id="ProductDAO.updateVersion" 			parameterClass="VersionVO">
+		UPDATE hm_product_version
+		SET
+			NO = #no#
+		<isNotEmpty prepend="," property="version">
+			VERSION = #version#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="versionName">
+			VERSION_NAME = #versionName#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="publishDate">
+			PUBLISH_DATE = #publishDate#
+		</isNotEmpty>		
+		<isNotEmpty prepend="," property="upgradeNote">
+			UPGRADE_NOTE = #upgradeNote#
+		</isNotEmpty>		
+		<isNotEmpty prepend="," property="interfaceNote">
+			INTERFACE_NOTE = #interfaceNote#
+		</isNotEmpty>		
+		<isNotEmpty prepend="," property="sourceNote">
+			SOURCE_NOTE = #sourceNote#
+		</isNotEmpty>		
+		<isNotEmpty prepend="," property="documentNote">
+			DOCUMENT_NOTE = #documentNote#
+		</isNotEmpty>		
+		<isNotEmpty prepend="," property="interfaceChange">
+			INTERFACE_CHANGE = #interfaceChange#
+		</isNotEmpty>		
+		WHERE
+			NO = #no#
+	</update>	
+
+	<delete id="ProductDAO.deleteVersion" 		parameterClass="VersionVO">
+		DELETE FROM hm_product_version
+		WHERE
+			NO = #no#
+	</delete>	
+
+	<!-- 특정 파트의 버전 목록을 제공하는 SQL -->
+	<select id="ProductDAO.selectVersionList" 		resultMap="mapVersionVOList">
+		SELECT
+			pv.NO, 
+			pv.PART_NO,
+			pv.VERSION,
+			pv.VERSION_NAME,
+			pv.WRITER_NO ,
+			wu.USER_ID 														AS WRITER_ID,
+			wu.USER_NM 													AS WRITER_NM,
+			DATE_FORMAT(pv.REG_DATETIME, '%y.%m.%d')			AS REG_DATETIME,
+			CONCAT(SUBSTR(pv.PUBLISH_DATE, 1, 4), '.', SUBSTR(pv.PUBLISH_DATE, 5, 2), '.', SUBSTR(pv.PUBLISH_DATE, 7, 2))		AS PUBLISH_DATE
+		FROM hm_product_version pv
+			JOIN tbl_userinfo wu
+				ON pv.WRITER_NO = wu.NO
+		WHERE pv.PART_NO =  #partNo#
+		ORDER BY pv.NO DESC
+	</select>
+	
+<!-- 
+	#####################################################
+	#####################################################
+	# 관계 설정/ 삭제 관련 SQL
+ -->
+	<insert id="ProductDAO.insertRelation" 					parameterClass="RelationVO">
+		INSERT INTO hm_product_relation
+		(
+			OWNER_NO,
+			SUB_NO,
+			TYPE,
+			SORT_NO
+		) VALUES (
+			#ownerNo#,
+			#subNo#,
+			#type#,
+			#sortNo#
+		)
+	</insert>
+
+	<!-- DELETE 문들 -->
+	<!-- TENY_170707 관계 정보를 삭제하기 위해 사용하는 위한 SQL문 -->
+	<!--  -->
+	<delete id="ProductDAO.deleteRelation" 					parameterClass="RelationVO">
+		DELETE FROM 
+			hm_product_relation
+		WHERE
+			TRUE
+		<isNotEqual prepend="AND" property="no" compareValue="0">
+			NO = #no#
+		</isNotEqual> 
+		<isEqual prepend="AND" property="no" compareValue="0">
+			OWNER_NO = #ownerNo#
+			AND SUB_NO = #subNo#
+			AND TYPE = #type#
+		</isEqual> 
+	</delete>
+</sqlMap>

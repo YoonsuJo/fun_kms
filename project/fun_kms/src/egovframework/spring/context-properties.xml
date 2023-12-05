@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+	
+	<!-- JEUS -->   
+	<bean name="propertiesService" class="egovframework.rte.fdl.property.impl.EgovPropertyServiceImpl" destroy-method="destroy">
+		<property name="properties">
+			<map>
+			<entry key="pageUnit" value="30"/>
+			<entry key="pageUnit_15" value="15"/>
+			<entry key="pageUnit_10" value="10"/>
+			<entry key="pageSize" value="10"/>
+			<entry key="topOrgId" value="ORGAN_TOP_ORGAN_CODE"/>
+			<entry key="retireOrgId" value="ORGAN_RET_ORGAN_CODE"/>
+			<entry key="standOrgId" value="ORGAN_STD_ORGAN_CODE"/>
+			<entry key="isHmServer" value="false"/>  <!-- 서버만 true 그 외 false -->
+			<entry key="smsSendHour" value="9"/>
+			<entry key="updateStatisticHour" value="2"/>
+			<!-- entry key="Globals.fileStorePath" value="/product/jeus/egovProps/upload/"/-->
+			<entry key="Globals.fileStorePath" value="C:/product/jeus/egovProps/upload/"/> <!-- 업로드 파일 경로 변경-->
+			
+			<!-- 푸시 -->
+			<!-- 알림톡 서비스 -->
+			<!-- 2014/06/16 변경 -->
+			<entry key="pushAuth" value="5F3650E4459303E0CD6B09CAE1BF58C4EB644DBA48881A2CE33A4C189CA27542"/>
+			<entry key="pushMsgMaxLength" value="512"/>
+			
+			<!-- 
+			<entry key="pushAuth_Android" value="36E959308A3D5152CA656F72E0737558B72C540613256E9DA6AF1B20AE2ED847"/>
+			<entry key="pushAuth_iOS" value="36E959308A3D5152CA656F72E0737558B72C540613256E9DA6AF1B20AE2ED847"/>
+			<entry key="pushAuth_Android" value="07B405AE29725D672D4E68B759A2CE9D64CB2100E710EDC15AE9348F502D6E64"/>
+			<entry key="pushAuth_iOS" value="07B405AE29725D672D4E68B759A2CE9D64CB2100E710EDC15AE9348F502D6E64"/>
+			 -->
+			<!-- 한마음앱 서비스 -->
+			<!-- <entry key="pushAuth_Android" value="56B6919F273843238F300BDB537B1DB6C693DB039062C55589F32FECD8962EFC"/>  --> 
+			<!-- <entry key="pushAuth_iOS" value="56B6919F273843238F300BDB537B1DB6C693DB039062C55589F32FECD8962EFC"/> -->
+			<!-- 		
+			<entry key="pushAuth_Android" value="3EEA64982077F040156B208A2272BEE15A2F65ACA99C03C4FD3A37EF2772DBDC"/> 
+			<entry key="pushAuth_iOS" value="F2B640EEF636EE43BEC8AF4CFEA5A884C9429B5FFB570272C44AEA0618B065C6"/>
+			-->
+				
+			<entry key="pushURI" value="121.78.149.162:17000"/>
+			<!-- <entry key="pushURI" value="sa.allimtalk.com:17000"/> -->
+			<!-- <entry key="pushURI" value="121.78.149.165:17000"/> -->
+			<!-- <entry key="pushURI" value="121.78.149.163:17000"/> -->
+			<!--  <entry key="pushURI" value="222.112.235.161:17000"/>  -->       
+
+			<entry key="pushAPI" value="req_at_msg_send_2_6"/>
+				<!-- <entry key="pushAPI" value="req_at_msg_send_2_5"/> -->        
+			</map>
+		</property>
+	</bean>
+	
+	<!-- JBOSS, WEBLOGIC --> 
+	<!-- 
+	<bean name="propertiesService" class="egovframework.rte.fdl.property.impl.EgovPropertyServiceImpl" destroy-method="destroy">
+		<property name="properties">
+			<map>
+				<entry key="pageUnit" value="10"/>
+				<entry key="pageSize" value="10"/>
+				<entry key="Globals.fileStorePath" value="/user/com/egovProps/upload/"/>
+			</map>
+		</property>
+	</bean>
+	-->
+</beans>	

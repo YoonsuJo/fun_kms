@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC 
+    "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1//EN" 
+    "http://jakarta.apache.org/commons/dtds/validator_1_1.dtd">
+
+<form-validation>
+
+    <formset>
+		<form name="Customer">
+			<field property="custNm" depends="required, maxlength">
+        		<arg0 key="업체명" />
+        		<arg1 key="200" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>200</var-value>
+				</var>
+			</field>
+			<field property="custBusiNo" depends="maxlength">
+        		<arg0 key="등록번호" />
+        		<arg1 key="14" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>14</var-value>
+				</var>
+			</field>
+		</form>
+    </formset>
+
+</form-validation>

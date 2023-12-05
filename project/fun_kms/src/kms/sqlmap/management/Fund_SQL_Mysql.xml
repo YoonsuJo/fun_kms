@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsFundDAO">
+
+	<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap" />
+	
+	<select id="KmsFundDAO.selectFund" resultClass="egovMap">
+	SELECT
+		fund.no AS fund_no
+		, fund.date
+		, fund.type
+		, fund.account
+		, fund.bank_book
+		, fund.expense
+		, fund.prj_id
+		, fund.note
+		, fund.doc_id
+		, fund.plan
+		, fund.company_cd
+		, fund.reg_date
+		, fund.use_at
+		, prj.prj_nm
+		, prj.prj_cd
+	FROM
+		tbl_fund fund
+		INNER JOIN tbl_prj prj
+		ON fund.prj_id = prj.prj_id
+	WHERE
+		fund.no = #fundNo#
+	</select>
+	
+	<insert id="KmsFundDAO.insertFund">
+	INSERT INTO
+	tbl_fund
+	(
+		date, type, account, bank_book, expense, prj_id, note, company_cd, reg_date
+		<isNotEmpty property="docId">
+			, doc_id
+		</isNotEmpty>
+		<isNotEmpty property="plan">
+			, plan
+		</isNotEmpty>
+	)
+	VALUES
+	(
+		#date#, #type#, #account#, #bankBook#, #expense#, #prjId#, #note#, #companyCd#, CURDATE()
+		<isNotEmpty property="docId">
+			, #docId#
+		</isNotEmpty>
+		<isNotEmpty property="plan">
+			, #plan#
+		</isNotEmpty>
+	)
+	</insert>
+	
+	<update id="KmsFundDAO.updateFund">
+	UPDATE
+		tbl_fund
+	SET
+		date = #date#
+		, type = #type#
+		, account = #account# 
+		, bank_book = #bankBook#
+		, expense = #expense#
+		, prj_id = #prjId#
+		, note = #note#
+		, company_cd = #companyCd#
+		<isNotEmpty property="plan">
+			, plan = #plan#
+		</isNotEmpty>
+	WHERE
+		no = #fundNo#
+	</update>
+	
+	<update id="KmsFundDAO.deleteFund">
+	UPDATE
+		tbl_fund
+	SET
+		use_at = 'N'
+	WHERE
+		no = #fundNo#
+	</update>
+	
+	<update id="KmsFundDAO.deleteFundByDocId">
+	UPDATE
+		TBL_FUND
+	SET
+		USE_AT = 'N'
+	WHERE
+		DOC_ID = #docId#
+	</update>
+	
+	<select id="KmsFundDAO.selectFundWeeklyDetail" resultClass="egovMap">	
+	SELECT
+		fund.no AS fund_no
+		, fund.date
+		, fund.type
+		, fund.account
+		, cod.code_nm AS account_nm
+		, fund.bank_book
+		, cod2.code_nm AS bank_book_nm
+		, fund.expense
+		, fund.prj_id
+		, fund.note
+		, fund.doc_id
+		, fund.plan
+		, fund.company_cd
+		, fund.reg_date
+		, fund.use_at
+		, prj.prj_nm
+		, prj.prj_cd
+		, doc.doc_id
+		, doc.doc_stat
+		, doc.new_at
+		, PRJ.PRJ_ID
+	FROM
+		tbl_fund fund
+		INNER JOIN tbl_prj prj
+			ON fund.prj_id = prj.prj_id
+		LEFT JOIN comtccmmndetailcode cod
+			ON fund.account = cod.code
+			AND cod.code_id = 'KMS022'
+		LEFT JOIN comtccmmndetailcode cod2
+			ON fund.bank_book = cod2.code
+			AND cod2.code_id = 'KMS023'
+		LEFT JOIN tbl_eapp_doc doc
+			ON fund.doc_id = doc.doc_id
+	WHERE
+		TRUE
+		AND fund.use_at = 'Y'
+		AND fund.type = #type#
+		<isNotEqual property="plan" compareValue="Y">		
+			AND fund.date >= #startDate# 
+			AND #endDate# >= fund.date 		
+		</isNotEqual>
+		<isNotEmpty property="plan" prepend="AND">
+			fund.plan = #plan#
+		</isNotEmpty>
+		<isNotEmpty property="companyCd" prepend="AND">
+			fund.company_cd = #companyCd#
+		</isNotEmpty>
+	ORDER BY
+		fund.date ASC
+	</select>
+	
+	<select id="KmsFundDAO.selectFundWeekly" resultClass="egovMap">	
+	SELECT
+		result.code_nm AS bank_book
+		, post.deposit_sum - post.withdraw_sum AS base
+		, result.deposit_sum
+		, result.withdraw_sum
+		, result.withdraw_plan_sum
+		, result.deposit_sum - result.withdraw_sum + post.deposit_sum - post.withdraw_sum AS result
+		, result.deposit_sum - result.withdraw_sum AS total
+	FROM (
+		SELECT
+			cod.code_nm
+			, cod.code
+			, SUM(IFNULL(IF(fund.type = 'D' OR fund.type = 'RD', fund.expense, 0), 0)) AS deposit_sum
+			, SUM(IFNULL(IF((fund.type = 'W' OR fund.type = 'RW') AND fund.plan = 'N', fund.expense, 0), 0)) AS withdraw_sum
+			, SUM(IFNULL(IF(fund.type = 'D' AND fund.plan = 'Y', fund.expense, 0), 0)) AS withdraw_plan_sum
+		FROM (
+				SELECT
+					*
+				FROM
+					comtccmmndetailcode
+				WHERE
+					code_id = 'KMS023'
+					AND code_dc = #companyCd#
+					AND USE_AT = 'Y'			
+					<isNotEmpty property="cash">
+						AND code = 'CASH'
+					</isNotEmpty>
+					<isEmpty property="cash">
+						AND code != 'CASH'
+					</isEmpty>					
+			) cod
+			LEFT JOIN tbl_fund fund
+			ON fund.bank_book = cod.code
+			AND fund.use_at = 'Y'
+			AND fund.date >= #startDate# 
+			AND #endDate# >= fund.date 
+		GROUP BY
+			cod.code
+	) result
+	INNER JOIN (
+		SELECT
+			cod.code_nm
+			, cod.code
+			, SUM(IFNULL(IF(fund.type = 'D' OR fund.type = 'RD', fund.expense, 0), 0)) AS deposit_sum
+			, SUM(IFNULL(IF((fund.type = 'W' OR fund.type = 'RW') AND fund.plan = 'N', fund.expense, 0), 0)) AS withdraw_sum
+		FROM
+			(
+				SELECT
+					*
+				FROM
+					comtccmmndetailcode
+				WHERE
+					code_id = 'KMS023'
+					AND USE_AT = 'Y'
+					<isNotEmpty property="cash">
+						AND code = 'CASH'
+					</isNotEmpty>
+					<isEmpty property="cash">
+						AND code != 'CASH'
+					</isEmpty>
+			) cod
+			LEFT JOIN tbl_fund fund
+			ON fund.bank_book = cod.code
+			AND fund.use_at = 'Y'
+			AND #startDate# > fund.date
+			AND fund.company_cd = #companyCd#
+		GROUP BY
+			cod.code
+	) post
+	ON
+		result.code = post.code
+	</select>
+	
+	<select id="KmsFundDAO.selectFundMonthly" resultClass="egovMap">
+	
+	SELECT
+		result.date
+		, result.base_deposit_sum - result.base_withdraw_sum AS base
+		, result.deposit_sum
+		, result.withdraw_sum
+		, result.withdraw_plan_sum
+		, result.deposit_sum - result.withdraw_sum + result.base_deposit_sum - result.base_withdraw_sum AS result
+		, result.deposit_sum - result.withdraw_sum AS total
+	FROM (
+		SELECT
+			a.*
+			, b.*
+		FROM (
+			SELECT
+				SUBSTR(fund.date, 7, 2) AS DATE
+				, SUM(IFNULL(IF(fund.type = 'D', IF(SUBSTR(fund.date, 1, 6) = #searchMonth#, fund.expense, 0), 0), 0)) AS deposit_sum
+				, SUM(IFNULL(IF(fund.type = 'W' AND fund.plan = 'N', IF(SUBSTR(fund.date, 1, 6) = #searchMonth#, fund.expense, 0), 0), 0)) AS withdraw_sum
+				, SUM(IFNULL(IF(fund.type = 'W' AND fund.plan = 'Y', IF(SUBSTR(fund.date, 1, 6) = #searchMonth#, fund.expense, 0), 0), 0)) AS withdraw_plan_sum
+			FROM
+				tbl_fund fund
+			WHERE
+				TRUE
+				AND fund.use_at = 'Y'
+				AND fund.company_cd = #companyCd#
+			GROUP BY
+				SUBSTR(fund.date, 7, 2)
+		) a
+		LEFT JOIN (
+			SELECT
+				SUM(IFNULL(
+					IF(fund.type = 'D'
+						, IF(#searchMonth# > SUBSTR(fund.date, 1, 6) 
+							, fund.expense, 0)
+						, 0)
+					, 0)
+				) AS base_deposit_sum
+				, SUM(IFNULL(
+					IF(fund.type = 'W' AND fund.plan = 'N'
+						, IF(#searchMonth# > SUBSTR(fund.date, 1, 6) 
+							, fund.expense, 0)
+						, 0)
+					, 0)
+				) AS base_withdraw_sum
+			FROM
+				tbl_fund fund
+			WHERE
+				TRUE
+				AND fund.use_at = 'Y'
+				AND fund.company_cd = #companyCd#
+		) b
+		ON TRUE
+	) result	
+	</select>
+	
+	<select id="KmsFundDAO.selectFundYearly" resultClass="egovMap">
+	
+	</select>
+	
+</sqlMap>

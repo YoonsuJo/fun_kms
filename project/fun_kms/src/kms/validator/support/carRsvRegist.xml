@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC 
+    "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1//EN" 
+    "http://jakarta.apache.org/commons/dtds/validator_1_1.dtd">
+
+<form-validation>
+
+    <formset>
+		<form name="carRsv">
+			<field property="carId" depends="required">
+        		<arg0 key="차량구분" />
+			</field>
+			<field property="userNm" depends="required">
+        		<arg0 key="사용자" />
+			</field>
+			<field property="stDt" depends="required">
+        		<arg0 key="사용기간" />
+			</field>
+			<field property="edDt" depends="required">
+        		<arg0 key="사용기간" />
+			</field>
+			<field property="purpose" depends="required">
+        		<arg0 key="사용목적" />
+			</field>
+			<field property="destination" depends="required">
+        		<arg0 key="행선지" />
+			</field>
+			<field property="runLength" depends="required, integer">
+        		<arg0 key="운행예정거리" />
+			</field>
+		</form>
+    </formset>
+
+</form-validation>

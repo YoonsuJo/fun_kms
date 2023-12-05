@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+    "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<sqlMap resource="kms/sqlmap/approval/approval_SQL_Mysql.xml"/>
+	<sqlMap resource="kms/sqlmap/approval/approval_type_SQL_Mysql.xml"/>
+	<sqlMap resource="kms/sqlmap/approval/approval_comment_SQL_Mysql.xml"/>
+	<sqlMap resource="kms/sqlmap/approval/account_SQL_Mysql.xml"/>
+	<sqlMap resource="kms/sqlmap/approval/preset_SQL_Mysql.xml"/>
+	<sqlMap resource="kms/sqlmap/approval/selfdev_SQL.xml"/>
+</sqlMapConfig>

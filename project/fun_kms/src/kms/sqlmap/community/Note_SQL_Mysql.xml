@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="TblMailsend">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="Note" type="kms.com.community.service.Note"/>
+	<typeAlias  alias="NoteVO" type="kms.com.community.service.NoteVO"/>
+	
+	<resultMap id="Noteinfo" class="kms.com.community.service.NoteVO">
+		<result property="noteId" column="NOTE_ID" columnIndex="1"/>
+		<result property="senderId" column="SENDER_ID" columnIndex="2"/>
+		<result property="senderNm" column="SENDER_NM" columnIndex="3"/>
+		<result property="senderNo" column="SENDER_NO" columnIndex="4"/>
+		<result property="noteCn" column="NOTE_CN" columnIndex="5"/>
+		<result property="sendDt" column="SEND_DT" columnIndex="6"/>
+		<result property="recieverId" column="RECIEVER_ID" columnIndex="7"/>
+		<result property="recieverNm" column="RECIEVER_NM" columnIndex="8"/>
+		<result property="recieverNo" column="RECIEVER_NO" columnIndex="9"/>
+		<result property="readDt" column="READ_DT" columnIndex="10"/>
+	</resultMap>
+	
+	<resultMap id="RecieveNoteList" class="kms.com.community.service.NoteVO">
+		<result property="noteId" column="NOTE_ID" columnIndex="1"/>
+		<result property="senderId" column="SENDER_ID" columnIndex="2"/>
+		<result property="senderNm" column="SENDER_NM" columnIndex="3"/>
+		<result property="senderNo" column="SENDER_NO" columnIndex="4"/>
+		<result property="noteCn" column="NOTE_CN" columnIndex="5"/>
+		<result property="sendDt" column="SEND_DT" columnIndex="6"/>
+		<result property="readDt" column="READ_DT" columnIndex="7"/>
+	</resultMap>
+	
+	<resultMap id="SendNoteList" class="kms.com.community.service.NoteVO">
+		<result property="noteId" column="NOTE_ID" columnIndex="1"/>
+		<result property="recieverId" column="RECIEVER_ID" columnIndex="2"/>
+		<result property="recieverNm" column="RECIEVER_NM" columnIndex="3"/>
+		<result property="recieverNo" column="RECIEVER_NO" columnIndex="4"/>
+		<result property="noteCn" column="NOTE_CN" columnIndex="5"/>
+		<result property="sendDt" column="SEND_DT" columnIndex="6"/>
+		<result property="readDt" column="READ_DT" columnIndex="7"/>
+	</resultMap>
+	
+	
+	<insert id="noteDAO.insertNotesend">
+		<![CDATA[
+			INSERT INTO TBL_NOTESEND 
+			(
+				NOTE_ID, SENDER_NO, NOTE_CN, SEND_DT
+			) VALUES (
+				#noteId#, #senderNo#, #noteCn#, SYSDATE()
+			)
+		]]>
+	</insert>
+	
+	<insert id="noteDAO.insertNoterecieve">
+		INSERT INTO TBL_NOTERECIEVE 
+		(
+			NOTE_ID, RECIEVE_NO, READ_DT
+		) (
+			SELECT
+				#noteId#, NO, NULL
+			FROM
+				TBL_USERINFO
+		<iterate prepend="WHERE USER_ID IN " property="recieverIdList" open="(" close=")" conjunction=",">
+			#recieverIdList[]#
+		</iterate>
+		)
+	</insert>
+	
+	<insert id="noteDAO.insertNoterecieveMobile">
+		INSERT INTO TBL_NOTERECIEVE 
+		(
+			NOTE_ID, RECIEVE_NO, READ_DT
+		) (
+			SELECT
+				#noteId#, NO, NULL
+			FROM
+				TBL_USERINFO
+		    WHERE USER_ID = #recieverId#
+		)
+	</insert>
+	
+	<select id="noteDAO.selectRecieveNoteList" parameterClass="NoteVO" resultMap="RecieveNoteList">
+		SELECT
+			a.NOTE_ID, c.USER_ID AS SENDER_ID, c.USER_NM AS SENDER_NM, b.SENDER_NO, b.NOTE_CN,
+			DATE_FORMAT(b.SEND_DT, '%Y.%m.%d %H:%i') AS SEND_DT,
+			DATE_FORMAT(a.READ_DT, '%Y.%m.%d %H:%i') AS READ_DT
+		FROM
+			TBL_NOTERECIEVE a
+			LEFT JOIN TBL_NOTESEND b ON a.NOTE_ID = b.NOTE_ID
+			LEFT JOIN TBL_USERINFO c ON b.SENDER_NO = c.NO
+		WHERE
+			a.RECIEVE_NO = #userNo#
+			AND a.DELETE_YN = 'N'
+		<isNotEmpty property="searchKeyword">
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				b.NOTE_CN LIKE CONCAT('%',#searchKeyword#,'%')
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				c.USER_NM LIKE CONCAT('%',#searchKeyword#,'%')
+			</isEqual>
+		</isNotEmpty>
+		ORDER BY a.NOTE_ID DESC
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<select id="noteDAO.selectSendNoteList" parameterClass="NoteVO" resultMap="SendNoteList">
+		SELECT
+			a.NOTE_ID, c.USER_ID AS RECIEVER_ID, c.USER_NM AS RECIEVER_NM, b.RECIEVE_NO AS RECIEVER_NO, a.NOTE_CN,
+			DATE_FORMAT(a.SEND_DT, '%Y.%m.%d %H:%i') AS SEND_DT,
+			DATE_FORMAT(b.READ_DT, '%Y.%m.%d %H:%i') AS READ_DT
+		FROM
+			TBL_NOTESEND a
+			LEFT JOIN TBL_NOTERECIEVE b ON a.NOTE_ID = b.NOTE_ID
+			LEFT JOIN TBL_USERINFO c ON b.RECIEVE_NO = c.NO
+		WHERE
+			a.SENDER_NO = #userNo#
+			AND a.DELETE_YN = 'N'
+		<isNotEmpty property="searchKeyword">
+		<isEqual prepend="AND" property="searchCondition" compareValue="0">
+			A.NOTE_CN LIKE CONCAT('%',#searchKeyword#,'%')
+		</isEqual>
+		<isEqual prepend="AND" property="searchCondition" compareValue="1">
+			c.USER_NM LIKE CONCAT('%',#searchKeyword#,'%')
+		</isEqual>
+		</isNotEmpty>
+		ORDER BY a.NOTE_ID DESC
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<select id="noteDAO.selectRecieveNoteListTotCnt" parameterClass="NoteVO" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			TBL_NOTERECIEVE a
+			LEFT JOIN TBL_NOTESEND b ON a.NOTE_ID = b.NOTE_ID
+			LEFT JOIN TBL_USERINFO c ON b.SENDER_NO = c.NO
+		WHERE
+			a.RECIEVE_NO = #userNo#
+			AND a.DELETE_YN = 'N'
+		<isNotEmpty property="searchKeyword">
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				b.NOTE_CN LIKE CONCAT('%',#searchKeyword#,'%')
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				c.USER_NM LIKE CONCAT('%',#searchKeyword#,'%')
+			</isEqual>
+		</isNotEmpty>
+	</select>
+	
+	<select id="noteDAO.selectSendNoteListTotCnt" parameterClass="NoteVO" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM (
+			SELECT
+				a.NOTE_ID
+			FROM
+				TBL_NOTESEND a
+				LEFT JOIN TBL_NOTERECIEVE b ON a.NOTE_ID = b.NOTE_ID
+				LEFT JOIN TBL_USERINFO c ON b.RECIEVE_NO = c.NO
+			WHERE
+				a.SENDER_NO = #userNo#
+				AND a.DELETE_YN = 'N'
+			<isNotEmpty property="searchKeyword">
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				A.NOTE_CN LIKE CONCAT('%',#searchKeyword#,'%')
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				c.USER_NM LIKE CONCAT('%',#searchKeyword#,'%')
+			</isEqual>
+			</isNotEmpty>
+		) K
+	</select>
+	
+	<select id="noteDAO.selectNote" resultMap="Noteinfo">
+		SELECT
+			a.NOTE_ID, c.USER_ID AS SENDER_ID, c.USER_NM AS SENDER_NM, a.SENDER_NO, a.NOTE_CN,
+			DATE_FORMAT(a.SEND_DT, '%Y.%m.%d %H:%i') AS SEND_DT,
+			d.USER_ID AS RECIEVER_ID, d.USER_NM AS RECIEVER_NM, b.RECIEVE_NO AS RECIEVER_NO,
+			DATE_FORMAT(b.READ_DT, '%Y.%m.%d %H:%i') AS READ_DT
+		FROM
+			TBL_NOTESEND a
+			LEFT JOIN TBL_NOTERECIEVE b ON a.NOTE_ID = b.NOTE_ID
+			LEFT JOIN TBL_USERINFO c ON a.SENDER_NO = c.NO
+			LEFT JOIN TBL_USERINFO d ON b.RECIEVE_NO = d.NO
+		WHERE
+			a.NOTE_ID = #noteId#
+		<isNotEqual prepend="AND" property="senderNo" compareValue="0">
+			A.SENDER_NO = #senderNo#
+		</isNotEqual>		
+		<isNotEmpty prepend="AND" property="recieverNo">
+			b.RECIEVE_NO = #recieverNo#
+		</isNotEmpty>
+	</select>
+	
+	<update id="noteDAO.setReadDt">
+		UPDATE TBL_NOTERECIEVE SET
+			READ_DT = SYSDATE()
+		WHERE
+			NOTE_ID = #noteId#
+			AND RECIEVE_NO = #recieverNo#
+			AND (READ_DT IS NULL OR READ_DT = '')
+	</update>
+	
+	
+	<update id="noteDAO.deleteSendNote">
+		UPDATE TBL_NOTESEND SET
+			DELETE_YN = 'Y'
+		WHERE
+		<iterate prepend=" NOTE_ID IN " property="noteIdList" open="(" close=")" conjunction=",">
+			#noteIdList[]#
+		</iterate>
+	</update>
+	
+	
+	<update id="noteDAO.deleteRecieveNote">
+		UPDATE TBL_NOTERECIEVE SET
+			DELETE_YN = 'Y'
+		WHERE
+			RECIEVE_NO = #userNo#
+		<iterate prepend="AND NOTE_ID IN " property="noteIdList" open="(" close=")" conjunction=",">
+			#noteIdList[]#
+		</iterate>
+	</update>
+	
+	<select id="noteDAO.getResendNote" resultClass="Note">
+		SELECT
+			NOTE_ID AS noteId, SENDER_NO AS senderNo, NOTE_CN AS noteCn
+		FROM
+			TBL_NOTESEND
+		WHERE
+			NOTE_ID = #noteId#
+	</select> 
+	
+	<select id="noteDAO.getNoteIdList" resultClass="java.lang.String">
+		SELECT
+			a.NOTE_ID
+		FROM
+			TBL_NOTESEND a
+			LEFT JOIN TBL_NOTERECIEVE b 
+				ON a.NOTE_ID = b.NOTE_ID
+		WHERE
+			b.RECIEVE_NO = #no#
+			AND b.READ_DT IS NULL
+			AND b.DELETE_YN = 'N'
+	</select>
+	
+	<select id="noteDAO.getTokenInfo" resultClass="java.lang.String">
+		SELECT token_info FROM TBL_USERINFO WHERE USER_ID = #user_id#
+	</select>
+	
+	<select id="noteDAO.getPhoneNo" resultClass="java.lang.String">
+		SELECT moblphon_no FROM TBL_USERINFO WHERE USER_ID = #user_id#
+	</select>
+	
+	<select id="noteDAO.getDeviceType" resultClass="java.lang.String">
+		SELECT IFNULL(device_type, '') AS device_type FROM TBL_USERINFO WHERE USER_ID = #user_id#
+	</select>
+
+	<select id="noteDAO.getUserNm" resultClass="java.lang.String">
+		SELECT IFNULL(user_nm, '') AS user_nm FROM TBL_USERINFO WHERE USER_ID = #user_id#
+	</select>
+		
+	<select id="noteDAO.selectFailPushLogList" resultClass="egovMap">
+		SELECT
+			push.*
+			, usr.no AS user_no
+			, usr.user_nm
+		FROM
+			tbl_push_log push
+			LEFT JOIN tbl_userinfo usr
+				ON push.from_user_id = usr.user_id
+		WHERE
+			push.success IS NULL
+			AND DATE_FORMAT(push.tm, '%Y%m%d') = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+			AND TIMEDIFF(TIME_FORMAT(NOW(), '%h:%i:%s'), TIME_FORMAT(push.tm, '%h:%i:%s')) > '00:01:00'
+	</select>
+	
+	<insert id="noteDAO.insertPushLog">
+		INSERT
+			tbl_push_log
+			(
+				from_user_id, to_user_id, note_no, message, tm, push_key, type, to_user_phone_no
+				<isNotEmpty property="success">, success </isNotEmpty>
+				<isNotEmpty property="test">, test</isNotEmpty>
+			)
+			VALUES
+			(
+				#fromUserId#, #toUserId#, #noteNo#, #message#, SYSDATE(), #pushKey#, #type#, #toUserPhoneNo#
+				<isNotEmpty property="success">, 'Y'</isNotEmpty>
+				<isNotEmpty property="test">, #test#</isNotEmpty>
+			)
+	</insert>
+	
+	<update id="noteDAO.updateTmPushLog">
+		UPDATE
+			tbl_push_log
+		SET
+			tm = SYSDATE()
+		WHERE
+			push_key = #pushKey#
+	</update>
+	
+	<update id="noteDAO.updateSuccessPushLog">
+		UPDATE
+			tbl_push_log
+		SET
+			success = 'Y'
+		WHERE
+			push_key = #pushKey#
+	</update>
+	
+</sqlMap>

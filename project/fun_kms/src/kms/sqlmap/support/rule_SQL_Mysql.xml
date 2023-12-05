@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsRuleDAO">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	<select id="KmsRuleDAO.searchTitleList" resultClass="egovMap">
+	<![CDATA[
+	SELECT
+		result.title_no
+		, result.ord
+		, result.sj
+		, result.atch_file_id
+		, result.use_at
+		, result.content_no
+		, SUBSTR(result.content, LOCATE(">", result.content) + 1, LOCATE("<", result.content) - LOCATE(">", result.content) - 1) AS content
+	FROM
+	(
+		SELECT
+			title.no AS title_no
+			, title.ord
+			, title.sj
+			, title.atch_file_id
+			, title.use_at
+			, content.no AS content_no
+			, REPLACE(SUBSTR(content.cn, LOCATE(#searchTxt#, content.cn) - 100, LENGTH(#searchTxt#) + 200), "><", "") AS content
+		FROM
+			tbl_rule_title title
+			LEFT JOIN tbl_rule_content content
+			ON (
+				title.no = content.title_no
+			)
+		WHERE
+			title.use_at = 'Y'
+			AND (
+				content.cn LIKE CONCAT('%', #searchTxt#, '%')
+				OR title.sj LIKE CONCAT('%', #searchTxt#, '%')
+			)
+		ORDER BY
+			ORD ASC
+	) result
+	]]>
+	</select>
+	
+	<select id="KmsRuleDAO.selectTitleList" resultClass="egovMap">
+	SELECT
+		no AS title_no
+		, ord
+		, sj
+		, atch_file_id
+		, use_at
+	FROM
+		tbl_rule_title
+		<isNotEmpty property="searchUseAt" prepend="WHERE">
+			use_at = #searchUseAt#
+		</isNotEmpty>
+	ORDER BY
+		ORD ASC
+	</select>
+
+	<select id="KmsRuleDAO.selectContent" resultClass="egovMap">
+	SELECT
+		content.no AS content_no
+		, content.sj
+		, content.cn
+		, title.no AS title_no
+		, title.use_at
+		, title.atch_file_id
+		, history.tm
+	FROM
+		tbl_rule_content content
+		INNER JOIN tbl_rule_title title
+		ON content.title_no = title.no
+		INNER JOIN tbl_rule_history history
+		ON content.no = history.content_no
+	WHERE
+		TRUE
+		<isNotEmpty property="titleNo" prepend="AND">
+			content.title_no = #titleNo#
+		</isNotEmpty>
+		<isNotEmpty property="contentNo" prepend="AND">
+			content.no = #contentNo#
+		</isNotEmpty>
+	ORDER BY
+		title.no ASC, content_no DESC
+	LIMIT 1
+	</select>
+	
+	<select id="KmsRuleDAO.selectHistoryList" resultClass="egovMap">
+	SELECT
+		no
+		, typ
+		, title_no
+		, content_no
+		, tm
+	FROM
+		tbl_rule_history
+	WHERE
+		title_no = #titleNo#
+	ORDER BY
+		tm DESC
+	</select>
+	
+	<select id="KmsRuleDAO.selectMaxTitleNo" resultClass="java.lang.Integer">
+	SELECT
+		IFNULL(MAX(no), 0) + 1
+	FROM
+		tbl_rule_title
+	</select>
+	
+	<select id="KmsRuleDAO.selectMaxContentNo" resultClass="java.lang.Integer">
+	SELECT
+		IFNULL(MAX(no), 0) + 1
+	FROM
+		tbl_rule_content
+		<isNotEmpty property="titleNo" prepend="WHERE">
+			title_no = #titleNo#
+		</isNotEmpty>
+	</select>
+	
+	<select id="KmsRuleDAO.selectMaxTitleOrd" resultClass="java.lang.Integer">
+	SELECT
+		IFNULL(MAX(IF(use_at = 'Y', ord, 0) ), 0) + 1
+	FROM
+		tbl_rule_title
+	</select>
+	
+	<insert id="KmsRuleDAO.insertTitle">
+	INSERT INTO
+		tbl_rule_title
+		(
+			no, ord, sj, atch_file_id
+		)
+		VALUES
+		(
+			#titleNo#, #ord#, #sj#, #atchFileId#
+		)
+	</insert>
+	
+	<insert id="KmsRuleDAO.insertContent">
+	INSERT INTO
+		tbl_rule_content
+		(
+			no, title_no, sj, cn
+		)
+		VALUES
+		(
+			#contentNo#, #titleNo#, #sj#, #cn#
+		)
+	</insert>
+	
+	<insert id="KmsRuleDAO.insertHistory">
+	INSERT INTO
+		tbl_rule_history
+		(
+			typ, title_no <isNotEmpty property="contentNo" prepend=",">content_no</isNotEmpty>, tm
+		)
+		VALUES
+		(
+			#typ#, #titleNo# <isNotEmpty property="contentNo" prepend=",">#contentNo#</isNotEmpty>, SYSDATE()
+		)
+	</insert>
+	
+	<update id="KmsRuleDAO.updateTitle">
+	UPDATE
+		tbl_rule_title
+	SET
+		use_at = use_at
+		<isNotEmpty property="sj" prepend=",">
+			sj = #sj#
+		</isNotEmpty>
+		<isNotEmpty property="useAt" prepend=",">
+			use_at = #useAt#
+		</isNotEmpty>
+		<isNotEmpty property="ord" prepend=",">
+			ord = #ord#
+		</isNotEmpty>		
+		<isNotEmpty property="atchFileId" prepend=",">
+			ATCH_FILE_ID = #atchFileId#
+		</isNotEmpty>
+	WHERE
+		no = #titleNo#
+	</update>
+	
+	<update id="KmsRuleDAO.updateContent">
+	UPDATE
+		tbl_rule_content
+	SET
+		use_at = #useAt#
+	WHERE
+		title_no = #titleNo#
+		<isNotEmpty property="contentNo" prepend="AND">
+			content_no = #contentNo#
+		</isNotEmpty>
+	</update>
+	
+</sqlMap>

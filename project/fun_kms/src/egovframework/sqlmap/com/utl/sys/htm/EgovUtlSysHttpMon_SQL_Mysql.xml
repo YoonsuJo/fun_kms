@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="HttpMon">
+
+	<typeAlias  alias="egovMap"      type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="HttpMonVO" 	 type="egovframework.com.utl.sys.htm.service.HttpMonVO"/>
+	<typeAlias  alias="HttpMon"   	 type="egovframework.com.utl.sys.htm.service.HttpMon"/>
+	<typeAlias  alias="HttpMonLogVO" type="egovframework.com.utl.sys.htm.service.HttpMonLogVO"/>	
+	<typeAlias  alias="HttpMonLog"   type="egovframework.com.utl.sys.htm.service.HttpMonLog"/>	
+	
+	<resultMap id="HttpMonList" class="egovframework.com.utl.sys.htm.service.HttpMonVO">
+		<result property="sysId" column="SYS_ID" columnIndex="1"/>	
+		<result property="webKind" column="WEB_KIND" columnIndex="2"/>
+		<result property="siteUrl" column="SITE_URL" columnIndex="3"/>
+		<result property="httpSttusCd" column="HTTP_STTUS_CD" columnIndex="4"/>
+		<result property="creatDt" column="CREAT_DT" columnIndex="5"/>
+		<result property="mngrNm" column="MNGR_NM" columnIndex="6"/>
+		<result property="mngrEmailAddr" column="MNGR_EMAIL_ADDR" columnIndex="7"/>
+	</resultMap>
+	
+	<resultMap id="HttpMonDetail" class="egovframework.com.utl.sys.htm.service.HttpMonVO">
+		<result property="sysId" column="SYS_ID" columnIndex="1"/>	
+		<result property="webKind" column="WEB_KIND" columnIndex="2"/>
+		<result property="siteUrl" column="SITE_URL" columnIndex="3"/>
+		<result property="creatDt" column="CREAT_DT" columnIndex="4"/>
+		<result property="mngrNm" column="MNGR_NM" columnIndex="5"/>
+		<result property="mngrEmailAddr" column="MNGR_EMAIL_ADDR" columnIndex="6"/>
+		<result property="frstRegisterId" column="FRST_REGISTER_ID" columnIndex="7"/>		
+		<result property="frstRegisterPnttm" column="FRST_REGISTER_PNTTM" columnIndex="8" />
+		<result property="lastUpdusrId" column="LAST_UPDUSR_ID" columnIndex="9" />			
+		<result property="lastUpdusrPnttm" column="LAST_UPDUSR_PNTTM" columnIndex="10"/>			
+	</resultMap>
+	
+	<resultMap id="HttpMonLogList" class="egovframework.com.utl.sys.htm.service.HttpMonLogVO">
+		<result property="logId" column="LOG_ID" columnIndex="1"/>				
+		<result property="sysId" column="SYS_ID" columnIndex="2"/>	
+		<result property="webKind" column="WEB_KIND" columnIndex="3"/>
+		<result property="siteUrl" column="SITE_URL" columnIndex="4"/>
+		<result property="httpSttusCd" column="HTTP_STTUS_CD" columnIndex="5"/>
+		<result property="creatDt" column="CREAT_DT" columnIndex="6"/>
+		<result property="logInfo" column="LOG_INFO" columnIndex="7"/>		
+		<result property="mngrNm" column="MNGR_NM" columnIndex="8"/>
+		<result property="mngrEmailAddr" column="MNGR_EMAIL_ADDR" columnIndex="9"/>
+	</resultMap>
+	
+	<resultMap id="HttpMonDetailLog" class="egovframework.com.utl.sys.htm.service.HttpMonLogVO">
+		<result property="logId" column="LOG_ID" columnIndex="1"/>		
+		<result property="sysId" column="SYS_ID" columnIndex="2"/>	
+		<result property="webKind" column="WEB_KIND" columnIndex="3"/>
+		<result property="siteUrl" column="SITE_URL" columnIndex="4"/>
+		<result property="httpSttusCd" column="HTTP_STTUS_CD" columnIndex="5"/>
+		<result property="creatDt" column="CREAT_DT" columnIndex="6"/>
+		<result property="logInfo" column="LOG_INFO" columnIndex="7"/>	
+		<result property="mngrNm" column="MNGR_NM" columnIndex="8"/>
+		<result property="mngrEmailAddr" column="MNGR_EMAIL_ADDR" columnIndex="9"/>
+		<result property="frstRegisterId" column="FRST_REGISTER_ID" columnIndex="10"/>		
+		<result property="frstRegisterPnttm" column="FRST_REGISTER_PNTTM" columnIndex="11" />
+		<result property="lastUpdusrId" column="LAST_UPDUSR_ID" columnIndex="12" />			
+		<result property="lastUpdusrPnttm" column="LAST_UPDUSR_PNTTM" columnIndex="13"/>			
+	</resultMap>	
+
+	<select id="HttpMonDAO.selectHttpMonList" parameterClass="HttpMonVO" resultMap="HttpMonList">
+		<![CDATA[
+			SELECT  A.SYS_ID
+			     ,  A.WEB_KIND
+				 ,  A.SITE_URL
+				 ,  B.CODE_NM HTTP_STTUS_CD
+				 ,  DATE_FORMAT(A.CREAT_DT,'%Y-%m-%d %H:%i:%s') CREAT_DT
+			     ,  A.MNGR_NM
+			     ,  A.MNGR_EMAIL_ADDR
+			FROM  COMTNHTTPMON A
+			LEFT OUTER JOIN COMTCCMMNDETAILCODE B
+				 ON B.CODE_ID = 'COM072' 
+				 AND A.HTTP_STTUS_CD = B.CODE			  
+			WHERE  1 = 1
+		]]>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				<![CDATA[binary(A.MNGR_NM) LIKE CONCAT('%', #searchKeyword#, '%')]]>
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="2">
+				<![CDATA[B.CODE_NM = #searchKeyword#]]>
+			</isEqual>
+			 LIMIT  #recordCountPerPage# OFFSET #firstIndex#
+	</select>	
+
+	<select id="HttpMonDAO.selectHttpMonTotCnt" parameterClass="HttpMonVO" resultClass="java.lang.Integer">
+		<![CDATA[
+			SELECT COUNT(A.SYS_ID) totcnt 
+			FROM   COMTNHTTPMON A
+			LEFT   OUTER JOIN COMTCCMMNDETAILCODE B
+				   ON B.CODE_ID = 'COM072' 
+				   AND A.HTTP_STTUS_CD = B.CODE		  
+			WHERE  1 = 1
+		]]>
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				<![CDATA[binary(A.MNGR_NM) LIKE CONCAT('%', #searchKeyword#, '%')]]>
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="2">
+				<![CDATA[B.CODE_NM = #searchKeyword#]]>
+			</isEqual>
+	</select>
+
+	<select id="HttpMonDAO.selectHttpMonDetail" parameterClass="HttpMon" resultMap="HttpMonDetail">
+		<![CDATA[
+            SELECT  SYS_ID
+            	 ,  WEB_KIND
+            	 ,  SITE_URL
+				 ,  CREAT_DT				           	 
+			     ,  MNGR_NM
+                 ,  MNGR_EMAIL_ADDR
+            	 ,  FRST_REGISTER_ID
+			     ,  FRST_REGISTER_PNTTM
+            	 ,  LAST_UPDUSR_ID
+			     ,  LAST_UPDUSR_PNTTM
+            FROM  COMTNHTTPMON
+            WHERE SYS_ID = #sysId#
+		]]>
+	</select>
+
+	<insert id="HttpMonDAO.insertHttpMon">
+		<![CDATA[
+		    INSERT 
+		      INTO  COMTNHTTPMON
+		         (  SYS_ID
+		         ,  WEB_KIND
+		         ,  SITE_URL
+		         ,  HTTP_STTUS_CD
+		         ,  CREAT_DT		         
+		         ,  MNGR_NM
+		         ,  MNGR_EMAIL_ADDR
+			     ,	FRST_REGISTER_ID
+			     ,	FRST_REGISTER_PNTTM
+		         ,  LAST_UPDUSR_ID			     	         
+		         ,  LAST_UPDUSR_PNTTM
+		         ) 
+		    VALUES  
+		         (  #sysId#
+		         ,  #webKind#
+		         ,  #siteUrl#
+		         ,  #httpSttusCd#
+		         ,  #creatDt#		         
+		         ,  #mngrNm#
+		         ,  #mngrEmailAddr#
+		         ,  #frstRegisterId#
+		         ,  sysdate()		         		         
+		         ,  #lastUpdusrId#
+		         ,  sysdate()
+		         ) 
+		]]>
+	</insert>
+
+	<update id="HttpMonDAO.updateHttpMon">
+		<![CDATA[
+            UPDATE  COMTNHTTPMON 
+               SET  WEB_KIND          = #webKind#
+                 ,  SITE_URL          = #siteUrl#
+               	 ,  MNGR_NM        	  = #mngrNm#
+                 ,  MNGR_EMAIL_ADDR   = #mngrEmailAddr#
+                 ,  LAST_UPDUSR_PNTTM = sysdate()
+                 ,  LAST_UPDUSR_ID    = #lastUpdusrId#
+             WHERE  SYS_ID            = #sysId# 
+		]]>
+	</update>
+
+	<delete id="HttpMonDAO.deleteHttpMon">
+		<![CDATA[
+            DELETE  FROM COMTNHTTPMON 
+            WHERE   SYS_ID = #sysId# 
+		]]>
+	</delete>	
+	
+	<select id="HttpMonDAO.selectHttpMonLogList" parameterClass="HttpMonLogVO" resultMap="HttpMonLogList">
+		<![CDATA[
+			SELECT  A.LOG_ID
+			     ,  A.SYS_ID
+				 ,  A.WEB_KIND	 
+				 ,  B.SITE_URL
+				 ,  C.CODE_NM HTTP_STTUS_CD
+				 ,  DATE_FORMAT(A.CREAT_DT,'%Y-%m-%d %H:%i:%s') CREAT_DT
+				 ,  A.LOG_INFO
+			     ,  A.MNGR_NM
+			     ,  A.MNGR_EMAIL_ADDR		     
+			FROM  COMTHHTTPMONLOGINFO A, COMTNHTTPMON B, COMTCCMMNDETAILCODE C
+			WHERE A.SYS_ID = B.SYS_ID
+			AND   A.HTTP_STTUS_CD = C.CODE
+			AND   C.CODE_ID = 'COM072' 
+			AND   1 = 1
+		]]>
+			<isNotEmpty property="searchBgnDt" >
+			 	<isNotEmpty prepend="AND" property="searchEndDt" >
+	 				A.CREAT_DT BETWEEN #searchBgnDt# AND #searchEndDt#		
+			 	</isNotEmpty>
+			</isNotEmpty>		
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				<![CDATA[binary(A.WEB_KIND) LIKE CONCAT('%', #searchKeyword#, '%')]]>
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="2">
+				<![CDATA[C.CODE_NM = #searchKeyword#]]>
+			</isEqual>
+			ORDER BY A.FRST_REGISTER_PNTTM DESC					
+			LIMIT  #recordCountPerPage# OFFSET #firstIndex#
+	</select>	
+
+	<select id="HttpMonDAO.selectHttpMonLogTotCnt" parameterClass="HttpMonLogVO" resultClass="java.lang.Integer">
+		<![CDATA[
+			SELECT COUNT(A.SYS_ID) totcnt 
+			FROM  COMTHHTTPMONLOGINFO A, COMTNHTTPMON B, COMTCCMMNDETAILCODE C
+			WHERE A.SYS_ID = B.SYS_ID
+			AND   A.HTTP_STTUS_CD = C.CODE
+			AND   C.CODE_ID = 'COM072' 
+			AND   1 = 1
+		]]>
+			<isNotEmpty property="searchBgnDt" >
+			 	<isNotEmpty prepend="AND" property="searchEndDt" >
+	 				A.CREAT_DT BETWEEN #searchBgnDt# AND #searchEndDt#		
+			 	</isNotEmpty>
+			</isNotEmpty>		
+			<isEqual prepend="AND" property="searchCondition" compareValue="1">
+				<![CDATA[binary(A.WEB_KIND) LIKE CONCAT('%', #searchKeyword#, '%')]]>
+			</isEqual>
+			<isEqual prepend="AND" property="searchCondition" compareValue="2">
+				<![CDATA[C.CODE_NM = #searchKeyword#]]>
+			</isEqual>
+	</select>
+	
+	<select id="HttpMonDAO.selectHttpMonDetailLog" parameterClass="HttpMonLog" resultMap="HttpMonDetailLog">
+		<![CDATA[
+            SELECT  A.LOG_ID
+                 ,  A.SYS_ID
+            	 ,  A.WEB_KIND
+            	 ,  A.SITE_URL
+				 ,  B.CODE_NM HTTP_STTUS_CD
+				 ,  A.CREAT_DT
+				 ,  A.LOG_INFO				           	 
+			     ,  A.MNGR_NM
+                 ,  A.MNGR_EMAIL_ADDR
+            	 ,  A.FRST_REGISTER_ID
+			     ,  A.FRST_REGISTER_PNTTM
+            	 ,  A.LAST_UPDUSR_ID
+			     ,  A.LAST_UPDUSR_PNTTM
+            FROM  COMTHHTTPMONLOGINFO A
+			LEFT  OUTER JOIN COMTCCMMNDETAILCODE B
+				  ON B.CODE_ID    = 'COM072' 
+			AND   A.HTTP_STTUS_CD = B.CODE               
+            WHERE A.WEB_KIND      = #webKind#
+			AND   A.LOG_ID        = #logId#              
+		]]>
+	</select>
+	
+	<insert id="HttpMonDAO.insertHttpMonLog"  parameterClass="HttpMonLog">
+		<![CDATA[
+		    INSERT 
+		      INTO  COMTHHTTPMONLOGINFO
+		         (  LOG_ID
+		         ,  SYS_ID
+		         ,  WEB_KIND
+		         ,  SITE_URL
+		         ,  HTTP_STTUS_CD		         
+		         ,  CREAT_DT
+		         ,  LOG_INFO		         
+		         ,  MNGR_NM
+		         ,  MNGR_EMAIL_ADDR
+			     ,	FRST_REGISTER_ID
+			     ,	FRST_REGISTER_PNTTM
+		         ,  LAST_UPDUSR_ID			     	         
+		         ,  LAST_UPDUSR_PNTTM
+		         ) 
+		    VALUES  
+		         (  #logId#
+		         ,  #sysId#
+		         ,  #webKind#
+		         ,  #siteUrl#
+		         ,  #httpSttusCd#		         
+		         ,  #creatDt#
+		         ,  #logInfo#		         
+		         ,  #mngrNm#
+		         ,  #mngrEmailAddr#
+		         ,  #frstRegisterId#
+		         ,  #frstRegisterPnttm#		         		         
+		         ,  #lastUpdusrId#
+		         ,  sysdate()
+		         ) 
+		]]>
+	</insert>
+	
+	<update id="HttpMonDAO.updateHttpMonSttus" parameterClass="HttpMon">
+		<![CDATA[
+            UPDATE  COMTNHTTPMON 
+               SET  HTTP_STTUS_CD     = #httpSttusCd#
+                 ,  CREAT_DT          = #creatDt#
+                 ,  LAST_UPDUSR_PNTTM = sysdate()
+                 ,  LAST_UPDUSR_ID    = #lastUpdusrId#
+             WHERE  SYS_ID            = #sysId#
+		]]>
+	</update>	
+
+</sqlMap>            

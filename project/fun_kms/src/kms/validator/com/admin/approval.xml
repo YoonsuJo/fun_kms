@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC 
+    "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1//EN" 
+    "http://jakarta.apache.org/commons/dtds/validator_1_1.dtd">
+
+<form-validation>
+
+    <formset>
+        <form name="adminApproval">
+			<field property="docSj" depends="required, maxlength">
+        		<arg0 key="양식명" resource="false"></arg0>
+        		<arg1 key="200" resource="false"/>
+				<var>
+				<var-name>maxlength</var-name>
+				<var-value>100</var-value>
+				</var>
+			</field> 
+			<field property="docCt" depends="required, maxlength">
+        		<arg0 key="양식설명" resource="false"></arg0>
+        		<arg1 key="2000" resource="false"/>
+				<var>
+				<var-name>maxlength</var-name>
+				<var-value>1000</var-value>
+				</var>
+			</field> 
+			<field property="decideLineDesc" depends="required, maxlength">
+        		<arg0 key="결재선 기준 설명" resource="false"></arg0>
+        		<arg1 key="2000" resource="false"/>
+				<var>
+				<var-name>maxlength</var-name>
+				<var-value>1000</var-value>
+				</var>
+			</field> 
+			<field property="readerAutoCmt" depends="required">
+        		<arg0 key="결재선 자동입력" resource="false"></arg0>
+			</field> 
+			<field property="coopMixs" depends="maxlength">
+				<arg0 key="협조자" resource="false"></arg0>
+        		<arg1 key="200" resource="false"/>
+				<var>
+				<var-name>maxlength</var-name>
+				<var-value>200</var-value>
+				</var>
+			</field> 
+			<field property="referMixs" depends="maxlength">
+				<arg0 key="참조자" resource="false"></arg0>
+        		<arg1 key="200" resource="false"/>
+				<var>
+				<var-name>maxlength</var-name>
+				<var-value>200</var-value>
+				</var>
+			</field> 											
+			<field property="handlerMixs" depends="maxlength">
+				<arg0 key="처리담당자" resource="false"></arg0>
+        		<arg1 key="200" resource="false"/>
+				<var>
+				<var-name>maxlength</var-name>
+				<var-value>200</var-value>
+				</var>
+			</field> 											
+		</form>
+    </formset>
+
+</form-validation>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC 
+    "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1//EN" 
+    "http://jakarta.apache.org/commons/dtds/validator_1_1.dtd">
+
+<form-validation>
+
+    <formset>
+		<form name="KmsMember">
+			<field property="userNm" depends="required">
+        		<arg0 key="이름" />
+			</field>			
+			<field property="userId" depends="required">
+        		<arg0 key="아이디" />
+			</field> 
+			<field property="ihidNumFront" depends="integer">
+        		<arg0 key="주민등록번호" />
+			</field> 
+			<field property="ihidNumBack" depends="integer">
+        		<arg0 key="주민등록번호" />
+			</field>
+			<field property="promotionYear" depends="integer">
+        		<arg0 key="진급년도" />
+			</field> 
+			<field property="careerMonthYear" depends="integer">
+        		<arg0 key="인정경력 년도" />
+			</field>
+			<field property="careerMonthMonth" depends="integer">
+        		<arg0 key="인정경력 개월" />
+			</field>
+			<field property="brth" depends="integer">
+        		<arg0 key="생일" />
+			</field>					
+		</form>
+    </formset>
+
+</form-validation>

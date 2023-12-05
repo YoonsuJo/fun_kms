@@ -1,0 +1,1469 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsInputResultDAO">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="inputResultPerson" type="kms.com.management.service.InputResultPerson"/>
+	<typeAlias  alias="inputResultProject" type="kms.com.management.service.InputResultProject"/>
+	<typeAlias  alias="inputResultProjectDetail" type="kms.com.management.service.InputResultProjectDetail"/>
+	<typeAlias  alias="inputResultDept" type="kms.com.management.service.InputResultDept"/>
+	
+	<resultMap id="inputResultPersonList" class="kms.com.management.service.InputResultPerson">
+		<result property="userNo"		column="USER_NO"		columnIndex="1"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="2"/>
+		<result property="userId"		column="USER_ID"		columnIndex="3"/>
+		<result property="orgnztId"		column="ORGNZT_ID"		columnIndex="4"/>
+		<result property="orgnztNm"		column="ORGNZT_NM"		columnIndex="5"/>
+		<result property="prjId"		column="PRJ_ID"			columnIndex="6"/>
+		<result property="prjCd"		column="PRJ_CD"			columnIndex="7"/>
+		<result property="prjNm"		column="PRJ_NM"			columnIndex="8"/>
+		<result property="tm"			column="TM"				columnIndex="9"/>
+		<result property="pn"			column="PN"				columnIndex="10"/>
+	</resultMap>
+	
+	<resultMap id="inputResultPersonListStatus" class="kms.com.management.service.InputResultPerson">
+		<result property="userNo"		column="USER_NO"		columnIndex="1"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="2"/>
+		<result property="userId"		column="USER_ID"		columnIndex="3"/>
+		<result property="orgnztId"		column="ORGNZT_ID"		columnIndex="4"/>
+		<result property="orgnztNm"		column="ORGNZT_NM"		columnIndex="5"/>
+		<result property="prjId"		column="PRJ_ID"			columnIndex="6"/>
+		<result property="prjCd"		column="PRJ_CD"			columnIndex="7"/>
+		<result property="prjNm"		column="PRJ_NM"			columnIndex="8"/>		
+		<result property="pn"			column="PN"				columnIndex="9"/>
+		<result property="laborDt"		column="LABOR_DT"		columnIndex="10"/>
+		<result property="stDt"			column="ST_DT"			columnIndex="11"/>
+		<result property="edDt"			column="ED_DT"			columnIndex="12"/>
+		<result property="inputPercent"	column="INPUT_PERCENT"	columnIndex="13"/>
+		<result property="docId"		column="DOC_ID"			columnIndex="14"/>
+	</resultMap>
+	
+	<resultMap id="inputResultProjectList" class="kms.com.management.service.InputResultProject">
+		<result property="orgnztId"		column="ORGNZT_ID"	columnIndex="1"/>
+		<result property="orgnztNm"		column="ORGNZT_NM"	columnIndex="2"/>
+		<result property="prjId"		column="PRJ_ID"		columnIndex="3"/>
+		<result property="prjCd"		column="PRJ_CD"		columnIndex="4"/>
+		<result property="prjNm"		column="PRJ_NM"		columnIndex="5"/>
+		<result property="prjLvl"		column="PRJ_LVL"	columnIndex="6"/>
+		<result property="drTm"			column="DR_TM"		columnIndex="7"/>
+		<result property="drSalary"		column="DR_SALARY"	columnIndex="8"/>
+		<result property="holTm"		column="HOL_TM"		columnIndex="9"/>
+		<result property="holSalary"	column="HOL_SALARY"	columnIndex="10"/>
+		<result property="orgnztUpNm"	column="ORGNZT_UP_NM"	columnIndex="11"/>
+	</resultMap>
+	
+	<resultMap id="inputResultProjectDetailList" class="kms.com.management.service.InputResultProjectDetail">
+		<result property="prjId"		column="PRJ_ID"		columnIndex="1"/>
+		<result property="prjCd"		column="PRJ_CD"		columnIndex="2"/>
+		<result property="prjNm"		column="PRJ_NM"		columnIndex="3"/>
+		<result property="userNo"		column="USER_NO"	columnIndex="4"/>
+		<result property="userNm"		column="USER_NM"	columnIndex="5"/>
+		<result property="userId"		column="USER_ID"	columnIndex="6"/>
+		<result property="drTm"			column="DR_TM"		columnIndex="7"/>
+		<result property="drSumTm"		column="DR_SUM_TM"	columnIndex="8"/>
+		<result property="drSalary"		column="DR_SALARY"	columnIndex="9"/>
+		<result property="holTm"		column="HOL_TM"		columnIndex="10"/>
+		<result property="holSalary"	column="HOL_SALARY"	columnIndex="11"/>
+	</resultMap>
+	
+	<resultMap id="inputResultDeptList" class="kms.com.management.service.InputResultDept">
+		<result property="prjOrgId"		column="PRJ_ORG_ID"		columnIndex="1"/>
+		<result property="prjOrgFnm"	column="PRJ_ORG_FNM"	columnIndex="2"/>
+		<result property="prjId"		column="PRJ_ID"			columnIndex="3"/>
+		<result property="prjCd"		column="PRJ_CD"			columnIndex="4"/>
+		<result property="prjNm"		column="PRJ_NM"			columnIndex="5"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="6"/>
+		<result property="userId"		column="USER_ID"		columnIndex="7"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="8"/>
+		<result property="userOrgId"	column="USER_ORG_ID"	columnIndex="9"/>
+		<result property="userOrgFnm"	column="USER_ORG_FNM"	columnIndex="10"/>
+		<result property="drTm"			column="DR_TM"			columnIndex="11"/>
+	</resultMap>
+
+	<resultMap id="projectInputPlanManagementList" class="kms.com.management.service.ProjectInputPlanManagementVO">
+		<result property="no"			column="NO"				columnIndex="1"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="2"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="3"/>
+		<result property="userId"		column="USER_ID"		columnIndex="4"/>
+		<result property="prjId"		column="PRJ_ID"			columnIndex="5"/>
+		<result property="prjCd"		column="PRJ_CD"			columnIndex="6"/>
+		<result property="prjNm"		column="PRJ_NM"			columnIndex="7"/>
+		<result property="orgnztId"		column="ORGNZT_ID"		columnIndex="8"/>
+		<result property="orgnztNm"		column="ORGNZT_NM"		columnIndex="9"/>
+		<result property="inputPercent"	column="INPUT_PERCENT"	columnIndex="10"/>
+		<result property="inputSdt"		column="INPUT_SDT"		columnIndex="11"/>
+		<result property="inputEdt"		column="INPUT_EDT"		columnIndex="12"/>
+	</resultMap>
+	
+	<resultMap id="projectInputPlanDailyList" class="kms.com.management.service.ProjectInputPlanDaily">
+		<result property="inputDt"		column="INPUT_DT"		columnIndex="1"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="2"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="3"/>
+		<result property="userId"		column="USER_ID"		columnIndex="4"/>
+		<result property="orgnztId"		column="ORGNZT_ID"		columnIndex="5"/>
+		<result property="orgnztNm"		column="ORGNZT_NM"		columnIndex="6"/>
+		<result property="inputPercent"	column="INPUT_PERCENT"	columnIndex="7"/>
+		<result property="noInput"		column="NO_INPUT"		columnIndex="8"/>
+	</resultMap>
+	
+	
+	<resultMap id="notInputMemberList" class="kms.com.member.service.MemberVO">
+		<result property="no"		column="NO"			columnIndex="1"/>
+		<result property="userId"	column="USER_ID"	columnIndex="2"/>
+		<result property="userNm"	column="USER_NM"	columnIndex="3"/>
+	</resultMap>
+	
+	
+	<resultMap id="notInputMemberList2" class="kms.com.member.service.MemberVO">
+		<result property="no"		column="NO"			columnIndex="1"/>
+		<result property="userId"	column="USER_ID"	columnIndex="2"/>
+		<result property="userNm"	column="USER_NM"	columnIndex="3"/>
+		<result property="moblphonNo"	column="MOBLPHON_NO"	columnIndex="4"/>
+	</resultMap>
+	
+	
+	
+	<select id="InputResultDAO.selectInputResultPerson" resultMap="inputResultPersonList">
+	SELECT
+		userInfo.NO AS USER_NO
+		,userInfo.USER_NM AS USER_NM
+		,userInfo.USER_ID AS USER_ID
+		,org.ORGNZT_ID AS ORGNZT_ID
+		,org.ORGNZT_NM AS ORGNZT_NM
+		,prj.PRJ_ID AS PRJ_ID
+		,prj.PRJ_CD AS PRJ_CD
+		,prj.PRJ_NM AS PRJ_NM
+		,prjInput.TM AS TM
+		,IFNULL((SELECT ROUND(LAB.RATIO,2)
+				FROM TBL_PLAN_LABOR LAB
+				INNER JOIN TBL_EAPP_DOC DOC 
+					ON LAB.DOC_ID = DOC.DOC_ID
+					AND DOC.DOC_STAT IN ('APP004', 'APP005')
+					AND DOC.NEW_AT = 1
+				WHERE LAB.PRJ_ID = prj.PRJ_ID
+					AND LAB.USER_NO = userInfo.NO
+					AND SUBSTRING(LAB.LABOR_DT,1,6) = SUBSTRING(#searchDate#,1,6)
+				LIMIT 1)
+		,0.00) AS PN		     
+	FROM (
+			SELECT
+				A.USER_NO AS USER_NO, 
+				A.DAY_REPORT_TM - IFNULL(B.DAY_REPORT_TM, 0) AS TM,
+				A.PRJ_ID AS PRJ_ID
+			FROM (
+					SELECT
+						usr.NO AS USER_NO,
+						IFNULL(SUM(a.DAY_REPORT_TM),0) AS DAY_REPORT_TM,
+						c.PRJ_ID AS PRJ_ID
+					FROM
+						TBL_USERINFO usr
+						INNER JOIN TBL_DAY_REPORT a
+							ON usr.NO = a.USER_NO
+							AND SUBSTRING(a.DAY_REPORT_DT,1,6) = SUBSTRING(#searchDate#,1,6)
+							AND DAYOFWEEK(a.DAY_REPORT_DT ) IN (2,3,4,5,6) 
+							AND DATEDIFF(SYSDATE(), a.DAY_REPORT_DT ) >= 0
+							AND a.DAY_REPORT_TM > 0
+<!--						INNER JOIN TBL_ATTEND_CHECK chk-->
+<!--							ON usr.NO = chk.USER_NO-->
+<!--							AND a.DAY_REPORT_DT = chk.ATTEND_DT-->
+						INNER JOIN TBL_TASK c ON a.TASK_ID = c.TASK_ID
+						INNER JOIN TBL_PRJ d ON c.PRJ_ID = d.PRJ_ID
+					GROUP BY USER_NO, PRJ_ID
+				) A
+				LEFT JOIN (
+					SELECT
+						usr.NO AS USER_NO,
+						IFNULL(SUM(a.DAY_REPORT_TM),0) AS DAY_REPORT_TM,
+						c.PRJ_ID AS PRJ_ID
+					FROM
+						TBL_USERINFO usr
+						INNER JOIN TBL_DAY_REPORT a
+							ON usr.NO = a.USER_NO
+							AND SUBSTRING(a.DAY_REPORT_DT, 1, 6) = SUBSTRING(#searchDate#, 1, 6)
+							AND DAYOFWEEK(a.DAY_REPORT_DT ) IN (2,3,4,5,6) 
+							AND DATEDIFF(SYSDATE(), a.DAY_REPORT_DT ) >= 0
+							AND a.DAY_REPORT_TM > 0
+<!--						INNER JOIN TBL_ATTEND_CHECK chk-->
+<!--							ON usr.NO = chk.USER_NO-->
+<!--							AND a.DAY_REPORT_DT = chk.ATTEND_DT-->
+						INNER JOIN TBL_SCHEDULE b 
+							ON a.DAY_REPORT_DT = b.SCHE_DATE_ALL
+							AND b.SCHE_TYP IN ('H','I','J') 
+							AND b.DELETE_YN = 'N'
+						INNER JOIN TBL_TASK c ON a.TASK_ID = c.TASK_ID
+						INNER JOIN TBL_PRJ d ON c.PRJ_ID = d.PRJ_ID
+					GROUP BY USER_NO, PRJ_ID
+				) B ON A.USER_NO = B.USER_NO AND A.PRJ_ID = B.PRJ_ID
+			GROUP BY USER_NO, PRJ_ID
+		) prjInput
+		INNER JOIN TBL_USERINFO userInfo 
+			ON prjInput.USER_NO = userInfo.NO
+		INNER JOIN TBL_ORGNZT org 
+			ON userInfo.ORGNZT_ID = org.ORGNZT_ID
+		INNER JOIN TBL_PRJ prj 
+			ON prjInput.PRJ_ID = prj.PRJ_ID
+		<dynamic prepend="WHERE">
+			<isEqual property="searchCondition" compareValue="0">
+				<isNotEmpty prepend="AND" property="searchUserMix">
+					<iterate open="(" close=")" conjunction="OR" property="searchUserMixList">
+						CONCAT(userInfo.USER_NM, '(', userInfo.USER_ID, ')') LIKE CONCAT('%', #searchUserMixList[]#, '%')
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="searchCondition" compareValue="1">
+				<isNotEmpty prepend="AND" property="searchOrgId">
+					<iterate prepend="org.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+						#searchOrgIdList[]#
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+		</dynamic>
+	<isEqual property="searchAllInputPrj" compareValue="Y">
+		UNION ALL	
+		SELECT
+			userInfo.NO AS USER_NO
+			,userInfo.USER_NM AS USER_NM
+			,userInfo.USER_ID AS USER_ID
+			,org.ORGNZT_ID AS ORGNZT_ID
+			,org.ORGNZT_NM AS ORGNZT_NM
+			,prj.PRJ_ID AS PRJ_ID
+			,prj.PRJ_CD AS PRJ_CD
+			,prj.PRJ_NM AS PRJ_NM
+			,0 AS TM
+			,0 AS PN
+		FROM
+			TBL_PRJ_INPUT prjInput
+			INNER JOIN TBL_USERINFO userInfo 
+				ON prjInput.USER_NO = userInfo.NO
+			INNER JOIN TBL_ORGNZT org 
+				ON userInfo.ORGNZT_ID = org.ORGNZT_ID
+			INNER JOIN TBL_PRJ prj 
+				ON prjInput.PRJ_ID = prj.PRJ_ID
+		WHERE
+			1=1		
+			AND YEAR =  SUBSTRING(#searchDate#, 1, 4)
+			AND MONTH =  CAST(SUBSTRING(#searchDate#, 5, 2) AS SIGNED)
+			<isEqual property="searchCondition" compareValue="0">
+				<isNotEmpty prepend="AND" property="searchUserMix">
+					<iterate open="(" close=")" conjunction="OR" property="searchUserMixList">
+						CONCAT(userInfo.USER_NM, '(', userInfo.USER_ID, ')') LIKE CONCAT('%', #searchUserMixList[]#, '%')
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="searchCondition" compareValue="1">
+				<isNotEmpty prepend="AND" property="searchOrgId">
+					<iterate prepend="org.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+						#searchOrgIdList[]#
+					</iterate>
+				</isNotEmpty>
+			</isEqual>					
+		</isEqual>
+		ORDER BY USER_NM, PRJ_CD
+	</select>
+	
+	<select id="InputResultDAO.selectInputResultPersonBackup" resultMap="inputResultPersonList">
+	SELECT
+		userInfo.NO AS USER_NO
+		,userInfo.USER_NM AS USER_NM
+		,userInfo.USER_ID AS USER_ID
+		,org.ORGNZT_ID AS ORGNZT_ID
+		,org.ORGNZT_NM AS ORGNZT_NM
+		,prj.PRJ_ID AS PRJ_ID
+		,prj.PRJ_CD AS PRJ_CD
+		,prj.PRJ_NM AS PRJ_NM
+		,prjInput.TM AS TM
+		,IFNULL((SELECT ROUND(LAB.RATIO,2)
+				FROM TBL_PLAN_LABOR LAB
+				INNER JOIN TBL_EAPP_DOC DOC 
+					ON LAB.DOC_ID = DOC.DOC_ID
+					AND DOC.DOC_STAT IN ('APP004', 'APP005')
+					AND DOC.NEW_AT = 1
+				WHERE LAB.PRJ_ID = prj.PRJ_ID
+					AND LAB.USER_NO = userInfo.NO
+					AND SUBSTRING(LAB.LABOR_DT,1,6) = SUBSTRING(#searchDate#,1,6)
+				LIMIT 1)
+		,0.00) AS PN		     
+	FROM (
+			SELECT
+				A.USER_NO AS USER_NO, 
+				A.DAY_REPORT_TM - IFNULL(B.DAY_REPORT_TM, 0) AS TM,
+				A.PRJ_ID AS PRJ_ID
+			FROM (
+					SELECT
+						usr.NO AS USER_NO,
+						IFNULL(SUM(a.DAY_REPORT_TM),0) AS DAY_REPORT_TM,
+						c.PRJ_ID AS PRJ_ID
+					FROM
+						TBL_USERINFO usr
+						INNER JOIN TBL_DAY_REPORT a
+							ON usr.NO = a.USER_NO
+							AND SUBSTRING(a.DAY_REPORT_DT,1,6) = SUBSTRING(#searchDate#,1,6)
+							AND DAYOFWEEK(a.DAY_REPORT_DT ) IN (2,3,4,5,6) 
+							AND DATEDIFF(SYSDATE(), a.DAY_REPORT_DT ) >= 0
+							AND a.DAY_REPORT_TM > 0
+<!--						INNER JOIN TBL_ATTEND_CHECK chk-->
+<!--							ON usr.NO = chk.USER_NO-->
+<!--							AND a.DAY_REPORT_DT = chk.ATTEND_DT-->
+						INNER JOIN TBL_TASK c ON a.TASK_ID = c.TASK_ID
+						INNER JOIN TBL_PRJ d ON c.PRJ_ID = d.PRJ_ID
+					GROUP BY USER_NO, PRJ_ID
+				) A
+				LEFT JOIN (
+					SELECT
+						usr.NO AS USER_NO,
+						IFNULL(SUM(a.DAY_REPORT_TM),0) AS DAY_REPORT_TM,
+						c.PRJ_ID AS PRJ_ID
+					FROM
+						TBL_USERINFO usr
+						INNER JOIN TBL_DAY_REPORT a
+							ON usr.NO = a.USER_NO
+							AND SUBSTRING(a.DAY_REPORT_DT, 1, 6) = SUBSTRING(#searchDate#, 1, 6)
+							AND DAYOFWEEK(a.DAY_REPORT_DT ) IN (2,3,4,5,6) 
+							AND DATEDIFF(SYSDATE(), a.DAY_REPORT_DT ) >= 0
+							AND a.DAY_REPORT_TM > 0
+<!--						INNER JOIN TBL_ATTEND_CHECK chk-->
+<!--							ON usr.NO = chk.USER_NO-->
+<!--							AND a.DAY_REPORT_DT = chk.ATTEND_DT-->
+						INNER JOIN TBL_SCHEDULE b 
+							ON a.DAY_REPORT_DT = b.SCHE_DATE_ALL
+							AND b.SCHE_TYP IN ('H','I','J') 
+							AND b.DELETE_YN = 'N'
+						INNER JOIN TBL_TASK c ON a.TASK_ID = c.TASK_ID
+						INNER JOIN TBL_PRJ d ON c.PRJ_ID = d.PRJ_ID
+					GROUP BY USER_NO, PRJ_ID
+				) B ON A.USER_NO = B.USER_NO AND A.PRJ_ID = B.PRJ_ID
+			GROUP BY USER_NO, PRJ_ID
+		) prjInput
+		INNER JOIN TBL_USERINFO userInfo 
+			ON prjInput.USER_NO = userInfo.NO
+		INNER JOIN TBL_ORGNZT org 
+			ON userInfo.ORGNZT_ID = org.ORGNZT_ID
+		INNER JOIN TBL_PRJ prj 
+			ON prjInput.PRJ_ID = prj.PRJ_ID
+		<dynamic prepend="WHERE">
+			<isEqual property="searchCondition" compareValue="0">
+				<isNotEmpty prepend="AND" property="searchUserMix">
+					<iterate open="(" close=")" conjunction="OR" property="searchUserMixList">
+						CONCAT(userInfo.USER_NM, '(', userInfo.USER_ID, ')') LIKE CONCAT('%', #searchUserMixList[]#, '%')
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="searchCondition" compareValue="1">
+				<isNotEmpty prepend="AND" property="searchOrgId">
+					<iterate prepend="org.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+						#searchOrgIdList[]#
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+		</dynamic>
+		ORDER BY USER_NM, PRJ_CD
+	</select>
+	
+	<select id="InputResultDAO.selectInputResultPlanPerson" resultMap="inputResultPersonList">
+	SELECT
+		userInfo.NO AS USER_NO
+		,userInfo.USER_NM AS USER_NM
+		,userInfo.USER_ID AS USER_ID
+		,org.ORGNZT_ID AS ORGNZT_ID
+		,org.ORGNZT_NM AS ORGNZT_NM
+		,prj.PRJ_ID AS PRJ_ID
+		,prj.PRJ_CD AS PRJ_CD
+		,prj.PRJ_NM AS PRJ_NM
+		,prjInput.TM AS TM
+		,prjInput.pn AS PN
+	FROM
+		(
+			SELECT USER_NO, PRJ_ID, SUM(TM) AS TM, ROUND(SUM(PN), 1) AS PN
+			  FROM (
+					SELECT
+						A.USER_NO AS USER_NO, 
+						A.PRJ_ID AS PRJ_ID,
+						A.DAY_REPORT_TM - IFNULL(B.DAY_REPORT_TM, 0) AS TM,
+						0.000 AS PN
+					FROM 
+						(
+							SELECT
+								usr.NO AS USER_NO,
+								IFNULL(SUM(a.DAY_REPORT_TM),0) AS DAY_REPORT_TM,
+								c.PRJ_ID AS PRJ_ID
+							FROM
+								TBL_USERINFO usr
+								INNER JOIN TBL_DAY_REPORT a
+									ON usr.NO = a.USER_NO
+									AND SUBSTRING(a.DAY_REPORT_DT,1,6) = SUBSTRING(#searchDate#,1,6)
+									AND DAYOFWEEK(a.DAY_REPORT_DT ) IN (2,3,4,5,6) 
+									AND DATEDIFF(SYSDATE(), a.DAY_REPORT_DT ) >= 0
+									AND a.DAY_REPORT_TM > 0
+		<!--						INNER JOIN TBL_ATTEND_CHECK chk-->
+		<!--							ON usr.NO = chk.USER_NO-->
+		<!--							AND a.DAY_REPORT_DT = chk.ATTEND_DT-->
+								INNER JOIN TBL_TASK c ON a.TASK_ID = c.TASK_ID
+								INNER JOIN TBL_PRJ d ON c.PRJ_ID = d.PRJ_ID
+							GROUP BY USER_NO, PRJ_ID
+						) A
+						LEFT JOIN (
+							SELECT
+								usr.NO AS USER_NO,
+								IFNULL(SUM(a.DAY_REPORT_TM),0) AS DAY_REPORT_TM,
+								c.PRJ_ID AS PRJ_ID
+							FROM
+								TBL_USERINFO usr
+								INNER JOIN TBL_DAY_REPORT a
+									ON usr.NO = a.USER_NO
+									AND SUBSTRING(a.DAY_REPORT_DT,1,6) = SUBSTRING(#searchDate#,1,6)
+									AND DAYOFWEEK(a.DAY_REPORT_DT ) IN (2,3,4,5,6) 
+									AND DATEDIFF(SYSDATE(), a.DAY_REPORT_DT ) >= 0
+									AND a.DAY_REPORT_TM > 0
+		<!--						INNER JOIN TBL_ATTEND_CHECK chk-->
+		<!--							ON usr.NO = chk.USER_NO-->
+		<!--							AND a.DAY_REPORT_DT = chk.ATTEND_DT-->
+								INNER JOIN TBL_SCHEDULE b 
+									ON a.DAY_REPORT_DT = b.SCHE_DATE_ALL
+									AND b.SCHE_TYP IN ('H','I','J') 
+									AND b.DELETE_YN = 'N'
+								INNER JOIN TBL_TASK c ON a.TASK_ID = c.TASK_ID
+								INNER JOIN TBL_PRJ d ON c.PRJ_ID = d.PRJ_ID
+							GROUP BY USER_NO, PRJ_ID
+						) B ON A.USER_NO = B.USER_NO AND A.PRJ_ID = B.PRJ_ID
+					GROUP BY USER_NO, PRJ_ID
+					
+					UNION
+					
+					<!-- /* 계획 MM */ -->
+					SELECT  LAB.USER_NO,
+							LAB.PRJ_ID,
+							0 AS TM,
+							SUM(ROUND(LAB.RATIO, 3)) * 100 AS PN
+					FROM TBL_PLAN_LABOR LAB
+					INNER JOIN TBL_EAPP_DOC DOC 
+						ON LAB.DOC_ID = DOC.DOC_ID
+						AND DOC.DOC_STAT IN ('APP004', 'APP005')
+						AND DOC.NEW_AT = 1
+					WHERE SUBSTRING(LAB.LABOR_DT,1,6) = SUBSTRING(#searchDate#,1,6)
+					  AND RATIO > 0
+					GROUP BY LAB.USER_NO, LAB.PRJ_ID		
+				) a
+			GROUP BY USER_NO, PRJ_ID
+		) prjInput
+		INNER JOIN TBL_USERINFO userInfo 
+			ON prjInput.USER_NO = userInfo.NO
+		INNER JOIN TBL_ORGNZT org 
+			ON userInfo.ORGNZT_ID = org.ORGNZT_ID
+		INNER JOIN TBL_PRJ prj 
+			ON prjInput.PRJ_ID = prj.PRJ_ID
+		<dynamic prepend="WHERE">
+			<isEqual property="searchCondition" compareValue="0">
+				<isNotEmpty prepend="AND" property="searchUserMix">
+					<iterate open="(" close=")" conjunction="OR" property="searchUserMixList">
+						CONCAT(userInfo.USER_NM, '(', userInfo.USER_ID, ')') LIKE CONCAT('%', #searchUserMixList[]#, '%')
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="searchCondition" compareValue="1">
+				<isNotEmpty prepend="AND" property="searchOrgId">
+					<iterate prepend="org.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+						#searchOrgIdList[]#
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+		</dynamic>
+		ORDER BY USER_NM, PRJ_CD
+	</select>
+
+	<select id="InputResultDAO.selectInputResultPlanPersonStatus" resultMap="inputResultPersonListStatus">
+		SELECT
+			A.USER_NO
+			, A.USER_NM
+			, A.USER_ID
+			, A.ORGNZT_ID
+			, A.ORGNZT_NM 
+			, A.PRJ_ID
+			, A.PRJ_CD 
+			, A.PRJ_NM 
+			, A.PN
+			, A.LABOR_DT 
+			, A.ST_DT
+			, A.ED_DT 
+			, A.INPUT_PERCENT 
+			, A.DOC_ID
+			, A.COMPIN_DT
+			, A.ACCEPT_COMPIN_DT
+			, A.COMPOT_DT
+		FROM (
+			SELECT
+				USR.NO AS USER_NO
+				, USR.USER_NM
+				, USR.USER_ID
+				, ORG.ORGNZT_ID
+				, ORG.ORGNZT_NM 
+				, PRJ.PRJ_ID
+				, PRJ.PRJ_CD 
+				, PRJ.PRJ_NM 
+				, ROUND(LAB.RATIO, 2) AS PN
+				, LAB.LABOR_DT 
+				, INPUT.ST_DT
+				, INPUT.ED_DT 
+				, INPUT.INPUT_PERCENT 
+				, LAB.DOC_ID
+				, USR.COMPIN_DT
+				, IFNULL(USR.ACCEPT_COMPIN_DT,USR.COMPIN_DT) AS ACCEPT_COMPIN_DT
+				, USR.COMPOT_DT
+			FROM 
+				
+				TBL_PLAN_LABOR LAB
+				INNER JOIN TBL_EAPP_USER_INPUT INPUT
+					ON INPUT.USER_NO = LAB.USER_NO
+					AND INPUT.DOC_ID = LAB.DOC_ID
+					AND LAB.LABOR_DT >= INPUT.ST_DT
+					AND INPUT.ED_DT >= LAB.LABOR_DT
+				INNER JOIN TBL_EAPP_DOC DOC 
+					ON LAB.DOC_ID = DOC.DOC_ID
+					AND DOC.DOC_STAT IN ('APP004', 'APP005')
+					AND DOC.NEW_AT = 1
+					AND INPUT.DOC_ID = DOC.DOC_ID
+				INNER JOIN TBL_USERINFO USR
+					ON USR.NO = LAB.USER_NO 
+				INNER JOIN TBL_ORGNZT ORG 
+					ON ORG.ORGNZT_ID = USR.ORGNZT_ID		
+				INNER JOIN TBL_PRJ PRJ
+					ON PRJ.PRJ_ID = LAB.PRJ_ID
+			WHERE 
+				LAB.RATIO > 0
+				AND LAB.LABOR_DT = CONCAT(SUBSTRING(#searchDate#,1,6), '01')
+				AND USR.WORK_ST IN ('W', 'L')
+				AND USR.NO != 2
+				<isEqual property="searchCondition" compareValue="0">
+					<isNotEmpty prepend="AND" property="searchUserMix">
+						<iterate open="(" close=")" conjunction="OR" property="searchUserMixList">
+							CONCAT(USR.USER_NM, '(', USR.USER_ID, ')') LIKE CONCAT('%', #searchUserMixList[]#, '%')
+						</iterate>
+					</isNotEmpty>
+				</isEqual>
+				<isEqual property="searchCondition" compareValue="1">
+					<isNotEmpty prepend="AND" property="searchOrgId">
+						<iterate prepend="ORG.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+							#searchOrgIdList[]#
+						</iterate>
+					</isNotEmpty>
+				</isEqual>
+			) A 
+			INNER JOIN (
+			SELECT
+				USR.NO AS USER_NO
+				, USR.USER_NM
+				, SUM(ROUND(LAB.RATIO, 2)) AS PN	
+			FROM 
+				
+				TBL_PLAN_LABOR LAB
+				INNER JOIN TBL_EAPP_USER_INPUT INPUT
+					ON INPUT.USER_NO = LAB.USER_NO
+					AND INPUT.DOC_ID = LAB.DOC_ID
+					AND LAB.LABOR_DT >= INPUT.ST_DT
+					AND INPUT.ED_DT >= LAB.LABOR_DT
+				INNER JOIN TBL_EAPP_DOC DOC 
+					ON LAB.DOC_ID = DOC.DOC_ID
+					AND DOC.DOC_STAT IN ('APP004', 'APP005')
+					AND DOC.NEW_AT = 1
+					AND INPUT.DOC_ID = DOC.DOC_ID
+				INNER JOIN TBL_USERINFO USR
+					ON USR.NO = LAB.USER_NO
+			WHERE 
+				LAB.RATIO > 0
+				AND LAB.LABOR_DT = CONCAT(SUBSTRING(#searchDate#,1,6), '01')
+			GROUP BY USR.NO
+		<isEqual property="searchUnder100" compareValue="Y">
+<![CDATA[
+			HAVING 1 > PN
+]]>			
+
+		</isEqual>
+			) B
+			ON A.USER_NO = B.USER_NO	
+		ORDER BY
+			A.USER_NM, A.PRJ_CD	
+			
+	</select>
+	
+	<select id="InputResultDAO.selectInputResultPlanProject" resultMap="inputResultPersonList">
+	SELECT
+		 prj.PRJ_ID AS PRJ_ID
+		,prj.PRJ_CD AS PRJ_CD
+		,prj.PRJ_NM AS PRJ_NM
+		,userInfo.NO AS USER_NO
+		,userInfo.USER_NM AS USER_NM
+		,userInfo.USER_ID AS USER_ID
+		,org.ORGNZT_ID AS ORGNZT_ID
+		,org.ORGNZT_NM AS ORGNZT_NM
+		,IFNULL(prjInput.TM,0) AS TM
+		,IFNULL((SELECT ROUND(LAB.RATIO,2)
+				   FROM TBL_PLAN_LABOR LAB
+				        INNER JOIN TBL_EAPP_DOC DOC 
+				        ON LAB.DOC_ID = DOC.DOC_ID
+				        AND DOC.DOC_STAT IN ('APP004', 'APP005')
+				        AND DOC.NEW_AT = 1
+				  WHERE LAB.PRJ_ID = prj.PRJ_ID
+				    AND LAB.USER_NO = userInfo.NO
+				    AND SUBSTRING(LAB.LABOR_DT,1,6) = SUBSTRING(#searchDate#,1,6)
+				    LIMIT 1),0.00) AS PN		     
+	FROM (
+			SELECT
+				A.USER_NO AS USER_NO, 
+				A.DAY_REPORT_TM - IFNULL(B.DAY_REPORT_TM, 0) AS TM,
+				A.PRJ_ID AS PRJ_ID
+			FROM (
+					SELECT PRJ.PRJ_ID AS PRJ_ID,
+					       USR.NO AS USER_NO,
+					       (SELECT IFNULL(SUM(RPT.DAY_REPORT_TM),0)
+							FROM TBL_DAY_REPORT RPT
+<!--								INNER JOIN TBL_ATTEND_CHECK CHK -->
+<!--									ON RPT.DAY_REPORT_DT = CHK.ATTEND_DT-->
+								INNER JOIN TBL_TASK TSK 
+							 		ON RPT.TASK_ID = TSK.TASK_ID 
+						   WHERE USR.NO = RPT.USER_NO						     
+<!--						     AND USR.NO = CHK.USER_NO-->
+						     AND PRJ.PRJ_ID = TSK.PRJ_ID
+						     AND SUBSTRING(RPT.DAY_REPORT_DT,1,6) = SUBSTRING(#searchDate#,1,6)
+						     AND DAYOFWEEK(RPT.DAY_REPORT_DT ) IN (2,3,4,5,6) 
+						     AND DATEDIFF(SYSDATE(), RPT.DAY_REPORT_DT ) >= 0
+						     AND RPT.DAY_REPORT_TM > 0) AS DAY_REPORT_TM					       					       					      
+					  FROM TBL_USERINFO USR
+					       INNER JOIN TBL_PRJ_INPUT PRJ 
+					               ON USR.NO = PRJ.USER_NO 
+					              AND YEAR = SUBSTRING(#searchDate#,1,4) 
+					              AND MONTH = REPLACE(SUBSTRING(#searchDate#,5,2),'0','')
+					       INNER JOIN TBL_PRJ PJ ON PJ.PRJ_ID = PRJ.PRJ_ID AND PJ.STAT = 'P' AND PJ.PRJ_TYPE NOT IN ('E')      
+					 WHERE USR.WORK_ST = 'W'             					       
+					 GROUP BY USER_NO, PRJ_ID
+					 ORDER BY PRJ_ID, USER_NO
+				) A
+				LEFT JOIN (
+					SELECT
+						usr.NO AS USER_NO,
+						IFNULL(SUM(a.DAY_REPORT_TM),0) AS DAY_REPORT_TM,
+						c.PRJ_ID AS PRJ_ID
+					FROM
+						TBL_USERINFO usr
+						INNER JOIN TBL_DAY_REPORT a
+							ON usr.NO = a.USER_NO
+							AND SUBSTRING(a.DAY_REPORT_DT,1,6) = SUBSTRING(#searchDate#,1,6)
+							AND DAYOFWEEK(a.DAY_REPORT_DT ) IN (2,3,4,5,6) 
+<![CDATA[
+							AND DATEDIFF(SYSDATE(), a.DAY_REPORT_DT ) >= 0
+							AND a.DAY_REPORT_TM > 0
+]]>
+<!--						INNER JOIN TBL_ATTEND_CHECK chk-->
+<!--							ON usr.NO = chk.USER_NO-->
+<!--							AND a.DAY_REPORT_DT = chk.ATTEND_DT-->
+						INNER JOIN TBL_SCHEDULE b 
+							ON a.DAY_REPORT_DT = b.SCHE_DATE_ALL
+							AND b.SCHE_TYP IN ('H','I','J') 
+							AND b.DELETE_YN = 'N'
+						INNER JOIN TBL_TASK c ON a.TASK_ID = c.TASK_ID
+						INNER JOIN TBL_PRJ d ON c.PRJ_ID = d.PRJ_ID
+					GROUP BY USER_NO, PRJ_ID
+				) B ON A.USER_NO = B.USER_NO AND A.PRJ_ID = B.PRJ_ID
+			GROUP BY PRJ_ID, USER_NO
+		) prjInput
+		INNER JOIN TBL_USERINFO userInfo 
+			ON prjInput.USER_NO = userInfo.NO
+		INNER JOIN TBL_PRJ prj 
+			ON prjInput.PRJ_ID = prj.PRJ_ID
+		INNER JOIN TBL_ORGNZT org 
+			ON prj.ORGNZT_ID = org.ORGNZT_ID
+		<dynamic prepend="WHERE">
+			<isEqual property="searchCondition" compareValue="0">
+				<isNotEmpty prepend="AND" property="searchUserMix">
+					<iterate open="(" close=")" conjunction="OR" property="searchUserMixList">
+						CONCAT(userInfo.USER_NM, '(', userInfo.USER_ID, ')') LIKE CONCAT('%', #searchUserMixList[]#, '%')
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="searchCondition" compareValue="1">
+				<isNotEmpty prepend="AND" property="searchOrgId">
+					<iterate prepend="org.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+						#searchOrgIdList[]#
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+		</dynamic>
+		ORDER BY prj.ORG_PRJ_TREE_ORD, USER_NM
+	</select>
+	
+	<!-- 검색월 기준으로  -->
+	<select id="InputResultDAO.selectInputResultPersonNotInput" resultMap="notInputMemberList2">
+		SELECT
+			u.NO 							AS NO,
+			u.USER_NM 					AS USER_NM,
+			u.USER_ID 					AS USER_ID,
+			u.MOBLPHON_NO 			AS MOBLPHON_NO
+		FROM TBL_USERINFO u
+		WHERE
+<![CDATA[ 
+			SUBSTRING(u.COMPIN_DT, 1, 6)  <= SUBSTRING(#searchDate#, 1, 6) 
+			AND ((u.COMPOT_DT IS NULL) OR (u.COMPOT_DT = '') OR (SUBSTRING(u.COMPOT_DT, 1, 6)  >= SUBSTRING(#searchDate#, 1, 6))) 
+]]>
+			AND u.NO 	NOT IN (
+				SELECT DISTINCT dr.WRITER_NO
+				FROM hm_daily_result dr
+				WHERE SUBSTRING(dr.WRITE_DATE, 1, 6) = SUBSTRING(#searchDate#, 1, 6) )  
+		ORDER BY USER_NM	
+	</select>
+
+	<select id="InputResultDAO.selectInputResultPersonNotInputStatus" resultMap="notInputMemberList2">				
+		SELECT
+			USR.NO
+			, USR.USER_NM
+			, USR.USER_ID
+			, USR.MOBLPHON_NO
+		FROM
+			TBL_USERINFO USR
+			INNER JOIN TBL_ORGNZT ORG 
+				ON USR.ORGNZT_ID = ORG.ORGNZT_ID
+			LEFT JOIN (
+			SELECT 
+				LAB.PRJ_ID AS PRJ_ID
+				, LAB.USER_NO AS USER_NO
+				, LAB.RATIO AS RATIO
+				, LAB.LABOR_DT AS LABOR_DT
+				, INPUT.ST_DT AS ST_DT
+				, INPUT.ED_DT AS ED_DT
+				, INPUT.INPUT_PERCENT AS INPUT_PERCENT
+				, LAB.DOC_ID
+			FROM 
+				
+				TBL_PLAN_LABOR LAB
+				INNER JOIN TBL_EAPP_USER_INPUT INPUT
+					ON INPUT.USER_NO = LAB.USER_NO
+					AND INPUT.DOC_ID = LAB.DOC_ID
+<![CDATA[
+					AND LAB.LABOR_DT >= INPUT.ST_DT
+					AND INPUT.ED_DT >= LAB.LABOR_DT
+]]>
+				INNER JOIN TBL_EAPP_DOC DOC 
+					ON LAB.DOC_ID = DOC.DOC_ID
+					AND DOC.DOC_STAT IN ('APP004', 'APP005')
+					AND DOC.NEW_AT = 1
+				AND INPUT.DOC_ID = DOC.DOC_ID
+			WHERE 
+<![CDATA[
+				LAB.RATIO > 0
+				AND LAB.LABOR_DT = CONCAT(SUBSTRING(#searchDate#,1,6), '01')
+]]>
+			) LAB
+			ON LAB.USER_NO = USR.NO
+			LEFT JOIN TBL_PRJ PRJ
+				ON LAB.PRJ_ID = PRJ.PRJ_ID
+		WHERE
+<![CDATA[
+			1=1
+			AND CONCAT(SUBSTRING(#searchDate#,1,6), '31') >= USR.COMPIN_DT 
+			AND (USR.COMPOT_DT IS NULL OR USR.COMPOT_DT >= CONCAT(SUBSTRING(#searchDate#,1,6), '31'))
+]]>
+			AND LAB.USER_NO IS NULL
+			
+			<isEqual property="searchCondition" compareValue="0">
+				<isNotEmpty prepend="AND" property="searchUserMix">
+					<iterate open="(" close=")" conjunction="OR" property="searchUserMixList">
+						CONCAT(USR.USER_NM, '(', USR.USER_ID, ')') LIKE CONCAT('%', #searchUserMixList[]#, '%')
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="searchCondition" compareValue="1">
+				<isNotEmpty prepend="AND" property="searchOrgId">
+					<iterate prepend="ORG.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+						#searchOrgIdList[]#
+					</iterate>
+				</isNotEmpty>
+			</isEqual>			
+		ORDER BY
+			USR.USER_NM		
+	</select>
+
+	<select id="InputResultDAO.selectInputResultProject" resultMap="inputResultProjectList">
+		SELECT
+			org.ORGNZT_ID, org.ORGNZT_NM, prj.PRJ_ID
+			,prj.PRJ_CD, prj.PRJ_NM
+			,FN_STR_COUNT(prj.PRJ_TREE,'/') AS PRJ_LVL
+			,SUM(IFNULL(drData.TM,0)) AS DR_TM
+			,SUM(IFNULL(drData.SALARY,0)) AS DR_SALARY
+			,IFNULL(holData.HOL_TM,0) AS HOL_TM
+			,IFNULL(holData.HOL_SALARY,0) AS HOL_SALARY
+			,'' AS ORGNZT_UP_NM
+		FROM
+			TBL_PRJ prj
+			INNER JOIN 
+				TBL_ORGNZT org 
+				ON prj.ORGNZT_ID = org.ORGNZT_ID
+			LEFT JOIN (
+				SELECT
+					prjInput.PRJ_ID, 
+					prjInput.USER_NO,
+					IFNULL(SUM(IFNULL(prjInput.TM,0)), 0) AS TM,
+					IFNULL(SUM(IFNULL(prjInput.TM,0)) / totalInput.TM, 0) 
+<!-- 					* IFNULL(userWorkDay.DT_CNT / totalWorkDay.ALL_DT_CNT, 0)  20140723, 근태비율 계산하지 않도록.. 삭제--> 
+					* IFNULL(userSalary.SALARY, IFNULL(rankSalary.SALARY, 0)) AS SALARY
+				FROM (
+						SELECT
+							USR.NO AS USER_NO
+							,IFNULL(SUM(DR.DAY_REPORT_TM),0) AS TM
+							,PRJ.PRJ_ID AS PRJ_ID
+						FROM 
+							TBL_USERINFO USR
+							INNER JOIN TBL_DAY_REPORT DR
+								ON DR.USER_NO = USR.NO
+								AND DR.DAY_REPORT_YM = SUBSTRING(#searchDate#, 1, 6)
+								AND IS_HOLIDAY = 0
+<!--							INNER JOIN TBL_ATTEND_CHECK CHK-->
+<!--								ON CHK.USER_NO = USR.NO-->
+<!--								AND CHK.ATTEND_DT =  DR.DAY_REPORT_DT-->
+							INNER JOIN TBL_TASK TSK
+								ON TSK.TASK_ID =  DR.TASK_ID
+							INNER JOIN TBL_PRJ PRJ
+								ON TSK.PRJ_ID = PRJ.PRJ_ID
+						GROUP BY
+							USR.NO, PRJ.PRJ_ID
+					) prjInput
+					LEFT JOIN (
+						SELECT
+							a.NO AS USER_NO
+							, IF(IFNULL(B.SALARY2, 0) = 0, IFNULL(B.SALARY1, 0), B.SALARY2) AS SALARY
+<!--							,b.SALARY1 + (b.SALARY2*2) + (b.SALARY3*3) AS SALARY-->
+						FROM
+							TBL_USERINFO a
+							INNER JOIN TBL_USER_SALARY b
+								ON a.NO = b.USER_NO
+								AND SUBSTRING(#searchDate#,1,6) = CONCAT(b.YEAR, LPAD(b.MONTH, 2, '0'))
+					) userSalary ON prjInput.USER_NO = userSalary.USER_NO
+					LEFT JOIN (
+						SELECT
+							a.NO AS USER_NO
+							,b.SALARY AS SALARY
+						FROM
+							TBL_USERINFO a
+							INNER JOIN TBL_RANK_SALARY b
+								ON a.RANK_ID = b.RANK_CODE
+								AND SUBSTRING(#searchDate#,1,6) = CONCAT(b.YEAR, LPAD(b.MONTH, 2, '0'))
+					) rankSalary ON prjInput.USER_NO = rankSalary.USER_NO
+					LEFT JOIN (
+						SELECT
+							dr.USER_NO AS USER_NO
+							,DAY_REPORT_YM AS YM
+							,IFNULL(SUM(IFNULL(dr.DAY_REPORT_TM, 0)), 0) AS TM
+						FROM
+							TBL_DAY_REPORT dr					
+						WHERE
+							dr.DAY_REPORT_TM > 0
+							AND DR.IS_HOLIDAY = 0
+							AND DR.DAY_REPORT_YM = SUBSTRING(#searchDate#,1,6) 
+						GROUP BY
+							DAY_REPORT_YM, USER_NO
+					) totalInput ON prjInput.USER_NO = totalInput.USER_NO
+<!--  
+					LEFT JOIN (
+						SELECT
+							ATTEND_YM AS YM,
+							COUNT(DISTINCT ATTEND_DT) AS ALL_DT_CNT
+						FROM
+							TBL_ATTEND_CHECK
+						WHERE
+							IS_HOLIDAY = 0
+							AND ATTEND_YM = SUBSTRING(#searchDate#,1,6)
+						GROUP BY
+							ATTEND_YM
+					) totalWorkDay ON TRUE
+					LEFT JOIN (
+						SELECT
+							USER_NO AS USER_NO,
+							ATTEND_YM AS YM,
+							COUNT(DISTINCT NO) AS DT_CNT
+						FROM
+							TBL_ATTEND_CHECK						
+						WHERE
+							IS_HOLIDAY = 0	
+							AND ATTEND_YM = SUBSTRING(#searchDate#,1,6)
+						GROUP BY
+							ATTEND_YM, USER_NO
+					) userWorkDay ON prjInput.USER_NO = userWorkDay.USER_NO
+-->
+				GROUP BY PRJ_ID, USER_NO
+			) drData ON prj.PRJ_ID = drData.PRJ_ID
+			LEFT JOIN (
+				SELECT
+					a.PRJ_ID as PRJ_ID, 
+					SUM(a.PERIOD) AS HOL_TM,
+					SUM(a.COST) AS HOL_SALARY
+				FROM
+					TBL_EAPP_HOL a
+					INNER JOIN TBL_EAPP_DOC b
+						ON a.DOC_ID = b.DOC_ID
+						AND b.DOC_STAT IN ('APP004', 'APP005')
+						AND b.NEW_AT = '1'
+				WHERE
+					LEFT(a.ST_DT,6) = LEFT(#searchDate#,6)
+				GROUP BY a.PRJ_ID
+			) holData 
+				ON prj.PRJ_ID = holData.PRJ_ID
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="searchOrgIdList">
+				<iterate prepend="prj.ORGNZT_ID IN" open="(" close=")" conjunction="," property="searchOrgIdList">
+					#searchOrgIdList[]#
+				</iterate>
+			</isNotEmpty>
+		</dynamic>
+		GROUP BY 
+			prj.PRJ_ID
+		ORDER BY 
+			org.ORG_TREE_ORD, prj.PRJ_TREE
+	</select>	
+	
+	<select id="InputResultDAO.selectInputResultSum" resultMap="inputResultProjectList">
+		SELECT
+			org.ORGNZT_ID, '' AS PRJ_ID
+			,'' AS PRJ_CD, '' AS PRJ_NM
+			,'' AS PRJ_LVL
+			,SUM(IFNULL(drData.TM,0)) AS DR_TM
+			,SUM(IFNULL(drData.SALARY,0)) AS DR_SALARY
+			,SUM(IFNULL(holData.HOL_TM,0)) AS HOL_TM
+			,SUM(IFNULL(holData.HOL_SALARY,0)) AS HOL_SALARY
+<![CDATA[
+			,CASE 
+				WHEN tree.LV<=2 THEN CONCAT(org.ORGNZT_NM,' 공통')
+				WHEN tree.LV>2 THEN org.ORGNZT_NM END           AS ORGNZT_NM
+			,CASE 
+				WHEN tree.LV<=2 THEN org.ORGNZT_NM
+				WHEN tree.LV>2 THEN up.ORGNZT_NM END           AS ORGNZT_UP_NM
+]]>
+		FROM
+			TBL_PRJ prj
+			INNER JOIN 
+				TBL_ORGNZT org 
+				ON prj.ORGNZT_ID = org.ORGNZT_ID
+			LEFT JOIN (
+				SELECT prjSum.PRJ_ID
+						, SUM(prjSum.TM) AS TM
+						, SUM(prjSum.SALARY) AS SALARY
+				FROM (
+					SELECT
+						prjInput.PRJ_ID, 
+						prjInput.USER_NO,
+						IFNULL(SUM(IFNULL(prjInput.TM,0)), 0) AS TM,
+						IFNULL(SUM(IFNULL(prjInput.TM,0)) / totalInput.TM, 0) 
+	<!-- 				* IFNULL(userWorkDay.DT_CNT / totalWorkDay.ALL_DT_CNT, 0)  20140723, 근태비율 계산하지 않도록.. 삭제-->
+						* IFNULL(userSalary.SALARY, IFNULL(rankSalary.SALARY, 0)) AS SALARY
+					FROM (
+							SELECT
+								USR.NO AS USER_NO
+								,IFNULL(SUM(DR.DAY_REPORT_TM),0) AS TM
+								,PRJ.PRJ_ID AS PRJ_ID
+							FROM 
+								TBL_USERINFO USR
+								INNER JOIN TBL_DAY_REPORT DR
+									ON DR.USER_NO = USR.NO
+									AND DR.DAY_REPORT_YM = SUBSTRING(#searchDate#, 1, 6)
+									AND IS_HOLIDAY = 0
+	<!--							INNER JOIN TBL_ATTEND_CHECK CHK-->
+	<!--								ON CHK.USER_NO = USR.NO-->
+	<!--								AND CHK.ATTEND_DT =  DR.DAY_REPORT_DT-->
+								INNER JOIN TBL_TASK TSK
+									ON TSK.TASK_ID =  DR.TASK_ID
+								INNER JOIN TBL_PRJ PRJ
+									ON TSK.PRJ_ID = PRJ.PRJ_ID
+							GROUP BY
+								USR.NO, PRJ.PRJ_ID
+						) prjInput
+						LEFT JOIN (
+							SELECT
+								a.NO AS USER_NO
+								, IF(IFNULL(B.SALARY2, 0) = 0, IFNULL(B.SALARY1, 0), B.SALARY2) AS SALARY
+	<!--							,b.SALARY1 + (b.SALARY2*2) + (b.SALARY3*3) AS SALARY-->
+							FROM
+								TBL_USERINFO a
+								INNER JOIN TBL_USER_SALARY b
+									ON a.NO = b.USER_NO
+									AND SUBSTRING(#searchDate#,1,6) = CONCAT(b.YEAR, LPAD(b.MONTH, 2, '0'))
+						) userSalary ON prjInput.USER_NO = userSalary.USER_NO
+						LEFT JOIN (
+							SELECT
+								a.NO AS USER_NO
+								,b.SALARY AS SALARY
+							FROM
+								TBL_USERINFO a
+								INNER JOIN TBL_RANK_SALARY b
+									ON a.RANK_ID = b.RANK_CODE
+									AND SUBSTRING(#searchDate#,1,6) = CONCAT(b.YEAR, LPAD(b.MONTH, 2, '0'))
+						) rankSalary ON prjInput.USER_NO = rankSalary.USER_NO
+						LEFT JOIN (
+							SELECT
+								dr.USER_NO AS USER_NO
+								,DAY_REPORT_YM AS YM
+								,IFNULL(SUM(IFNULL(dr.DAY_REPORT_TM, 0)), 0) AS TM
+							FROM
+								TBL_DAY_REPORT dr					
+							WHERE
+								dr.DAY_REPORT_TM > 0
+								AND DR.IS_HOLIDAY = 0
+								AND DR.DAY_REPORT_YM = SUBSTRING(#searchDate#,1,6) 
+							GROUP BY
+								DAY_REPORT_YM, USER_NO
+						) totalInput ON prjInput.USER_NO = totalInput.USER_NO
+	<!--  
+						LEFT JOIN (
+							SELECT
+								ATTEND_YM AS YM,
+								COUNT(DISTINCT ATTEND_DT) AS ALL_DT_CNT
+							FROM
+								TBL_ATTEND_CHECK
+							WHERE
+								IS_HOLIDAY = 0
+								AND ATTEND_YM = SUBSTRING(#searchDate#,1,6)
+							GROUP BY
+								ATTEND_YM
+						) totalWorkDay ON TRUE
+						LEFT JOIN (
+							SELECT
+								USER_NO AS USER_NO,
+								ATTEND_YM AS YM,
+								COUNT(DISTINCT NO) AS DT_CNT
+							FROM
+								TBL_ATTEND_CHECK						
+							WHERE
+								IS_HOLIDAY = 0	
+								AND ATTEND_YM = SUBSTRING(#searchDate#,1,6)
+							GROUP BY
+								ATTEND_YM, USER_NO
+						) userWorkDay ON prjInput.USER_NO = userWorkDay.USER_NO
+	-->
+					GROUP BY PRJ_ID, USER_NO
+				) prjSum
+				GROUP BY PRJ_ID
+			) drData ON prj.PRJ_ID = drData.PRJ_ID
+			LEFT JOIN (
+				SELECT
+					a.PRJ_ID as PRJ_ID, 
+					SUM(a.PERIOD) AS HOL_TM,
+					SUM(a.COST) AS HOL_SALARY
+				FROM
+					TBL_EAPP_HOL a
+					INNER JOIN TBL_EAPP_DOC b
+						ON a.DOC_ID = b.DOC_ID
+						AND b.DOC_STAT IN ('APP004', 'APP005')
+						AND b.NEW_AT = '1'
+				WHERE
+					LEFT(a.ST_DT,6) = LEFT(#searchDate#,6)
+				GROUP BY a.PRJ_ID
+			) holData 
+				ON prj.PRJ_ID = holData.PRJ_ID
+			LEFT JOIN tbl_orgnzt up
+				ON org.ORG_UP = up.ORGNZT_ID
+			LEFT JOIN v_prj_tree tree
+				ON org.ORGNZT_ID = tree.ID
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="searchOrgIdList">
+				<iterate prepend="prj.ORGNZT_ID IN" open="(" close=")" conjunction="," property="searchOrgIdList">
+					#searchOrgIdList[]#
+				</iterate>
+			</isNotEmpty>
+		</dynamic>
+<![CDATA[
+		GROUP BY 
+			prj.ORGNZT_ID
+		HAVING	DR_TM > 0
+			 OR DR_SALARY > 0
+			 OR HOL_TM > 0
+			 OR HOL_SALARY > 0
+]]>
+		ORDER BY 
+			org.ORG_TREE_ORD
+	</select>	
+	
+	<select id="InputResultDAO.selectInputResultProjectDetail" resultMap="inputResultProjectDetailList">
+		SELECT
+			prj.PRJ_ID, prj.PRJ_CD, prj.PRJ_NM
+			,usr.NO AS USER_NO
+			,usr.USER_ID
+			,usr.USER_NM
+			,FN_STR_COUNT(prj.PRJ_TREE,'/') AS PRJ_LVL
+			,SUM(IFNULL(drData.TM,0)) AS DR_TM
+			,SUM(IFNULL(drData.SUM_TM,0)) AS DR_SUM_TM
+			,SUM(IFNULL(drData.SALARY,0)) AS DR_SALARY
+			,IFNULL(holData.HOL_TM,0) AS HOL_TM
+			,IFNULL(holData.HOL_SALARY,0) AS HOL_SALARY	
+		FROM
+			(
+				TBL_PRJ prj
+				,TBL_USERINFO usr
+			) LEFT JOIN (
+				
+			SELECT
+				TASK.PRJ_ID AS PRJ_ID					
+				, DR.MONTH
+				, DR.USER_NO AS USER_NO
+				, IF(IFNULL(SAL_USER.SALARY2, 0) = 0, IFNULL(SAL_USER.SALARY1, IFNULL(SAL_RANK.SALARY, 0))	, SAL_USER.SALARY2) AS USER_SALARY
+<!--				, IFNULL(SAL_USER.SALARY1 + (SAL_USER.SALARY2 * 2) + (SAL_USER.SALARY3 * 3), IFNULL(SAL_RANK.SALARY, 0)) AS USER_SALARY-->						
+				, IFNULL(SUM(IFNULL(DR.DAY_REPORT_TM, 0)), 0) AS TM
+				, IFNULL(DR.MONTH_TOTAL_TM, 0) AS SUM_TM
+				, IFNULL(IFNULL(SUM(IFNULL(DR.DAY_REPORT_TM, 0)), 0) / DR.MONTH_TOTAL_TM, 0)
+				* IF(IFNULL(SAL_USER.SALARY2, 0) = 0, IFNULL(SAL_USER.SALARY1, IFNULL(SAL_RANK.SALARY, 0))	, SAL_USER.SALARY2) AS SALARY
+<!--				* IFNULL(SAL_USER.SALARY1 + (SAL_USER.SALARY2 * 2) + (SAL_USER.SALARY3 * 3), IFNULL(SAL_RANK.SALARY, 0)) AS SALARY-->
+			FROM
+				TBL_DAY_REPORT DR
+				INNER JOIN TBL_TASK TASK
+					ON DR.TASK_ID = TASK.TASK_ID
+					AND DR.IS_HOLIDAY = 0
+				INNER JOIN TBL_PRJ PRJ
+					ON PRJ.PRJ_ID = TASK.PRJ_ID
+				<isNotEmpty prepend="AND" property="searchPrjId">
+					(
+						prj.PRJ_ID = #searchPrjId#
+						<isEqual prepend="OR" property="includeUnderPrj" compareValue="Y">
+							CONCAT('/', prj.PRJ_TREE, '/') LIKE CONCAT('%/', #searchPrjId#, '/%')
+						</isEqual>
+					)
+				</isNotEmpty>
+				INNER JOIN TBL_USERINFO USR
+					ON DR.USER_NO = USR.NO
+				LEFT JOIN TBL_USER_SALARY SAL_USER
+					ON DR.USER_NO = SAL_USER.USER_NO
+					AND SAL_USER.YEAR = SUBSTRING(#searchDate#, 1, 4)
+					AND SAL_USER.MONTH = SUBSTRING(#searchDate#, 5, 2)
+					AND SAL_USER.MONTH = DR.MONTH				
+				LEFT JOIN TBL_RANK_SALARY SAL_RANK
+					ON USR.RANK_ID = SAL_RANK.RANK_CODE
+					AND SAL_RANK.YEAR = SUBSTRING(#searchDate#, 1, 4)	
+					AND SAL_RANK.MONTH = SUBSTRING(#searchDate#, 5, 2)
+					AND SAL_RANK.MONTH = DR.MONTH	
+			WHERE
+<![CDATA[
+				DR.DAY_REPORT_TM > 0
+				AND DR.DAY_REPORT_DT >= CONCAT(LEFT(#searchDate#,6), '01')
+				AND CONCAT(LEFT(#searchDate#,6), '31') >= DR.DAY_REPORT_DT 
+]]>
+			GROUP BY
+				DR.USER_NO, MONTH, PRJ_ID	
+			) drData 
+			ON prj.PRJ_ID = drData.PRJ_ID 
+				AND usr.NO = drData.USER_NO
+			LEFT JOIN (
+				SELECT
+					a.PRJ_ID AS PRJ_ID,
+					b.WRITER_NO AS USER_NO,
+					SUM(a.PERIOD) AS HOL_TM,
+					SUM(a.COST) AS HOL_SALARY
+				FROM
+					TBL_EAPP_HOL a
+					INNER JOIN TBL_EAPP_DOC b
+						ON a.DOC_ID = b.DOC_ID
+						AND b.DOC_STAT IN ('APP004', 'APP005')
+						AND b.NEW_AT = '1'
+				WHERE 
+<![CDATA[
+					a.ST_DT >= CONCAT(LEFT(#searchDate#,6), '01')
+					AND CONCAT(LEFT(#searchDate#,6), '31') >= A.ED_DT 
+]]>
+				GROUP BY a.PRJ_ID, b.WRITER_NO
+			) holData 
+			ON prj.PRJ_ID = holData.PRJ_ID 
+				AND usr.NO = holData.USER_NO			
+		WHERE
+			NOT (drData.TM = 0 AND holData.HOL_TM = 0)
+		<isNotEmpty prepend="AND" property="searchPrjId">
+			(
+				prj.PRJ_ID = #searchPrjId#
+				<isEqual prepend="OR" property="includeUnderPrj" compareValue="Y">
+					CONCAT('/', prj.PRJ_TREE, '/') LIKE CONCAT('%/', #searchPrjId#, '/%')
+				</isEqual>
+			)
+		</isNotEmpty>
+		GROUP BY 
+			prj.PRJ_ID, usr.NO
+		ORDER BY 
+			prj.PRJ_TREE ASC, USER_NM ASC
+		
+	</select>
+	
+	<select id="InputResultDAO.selectInputResultProjectDetailBackup" resultMap="inputResultProjectDetailList">
+		SELECT
+			prj.PRJ_ID, prj.PRJ_CD, prj.PRJ_NM
+			,usr.NO AS USER_NO, usr.USER_ID, usr.USER_NM
+			,FN_STR_COUNT(prj.PRJ_TREE,'/') AS PRJ_LVL
+			,SUM(IFNULL(drData.TM,0)) AS DR_TM
+			,SUM(IFNULL(drData.SUM_TM,0)) AS DR_SUM_TM
+			,SUM(IFNULL(drData.SALARY,0)) AS DR_SALARY
+			,IFNULL(holData.HOL_TM,0) AS HOL_TM
+			,IFNULL(holData.HOL_SALARY,0) AS HOL_SALARY
+		FROM (
+				TBL_PRJ prj
+				,TBL_USERINFO usr
+			) LEFT JOIN (
+				SELECT
+					prjInput.PRJ_ID, 
+					prjInput.USER_NO,
+					IFNULL(SUM(IFNULL(prjInput.TM,0)), 0) AS TM,
+					totalInput.TM AS SUM_TM,
+					IFNULL(SUM(IFNULL(prjInput.TM,0)) / totalInput.TM, 0) 
+					* IFNULL(userWorkDay.DT_CNT / totalWorkDay.ALL_DT_CNT, 0) 
+					* IFNULL(userSalary.SALARY, IFNULL(rankSalary.SALARY, 0)) AS SALARY
+				FROM (
+						SELECT
+							A.USER_NO AS USER_NO, 
+							A.DAY_REPORT_TM - IFNULL(B.DAY_REPORT_TM, 0) AS TM,
+							A.PRJ_ID AS PRJ_ID
+						FROM 
+							(
+								SELECT
+									usr.NO AS USER_NO,
+									IFNULL(SUM(a.DAY_REPORT_TM),0) AS DAY_REPORT_TM,
+									c.PRJ_ID AS PRJ_ID
+								FROM
+									TBL_USERINFO usr
+									INNER JOIN TBL_DAY_REPORT a
+<![CDATA[
+										ON usr.NO = a.USER_NO
+										AND SUBSTRING(a.DAY_REPORT_DT,1,6) = SUBSTRING(#searchDate#,1,6)
+										AND DAYOFWEEK(a.DAY_REPORT_DT ) IN (2,3,4,5,6) 
+										AND DATEDIFF(SYSDATE(), a.DAY_REPORT_DT ) >= 0
+										AND a.DAY_REPORT_TM > 0
+]]>
+<!--									INNER JOIN TBL_ATTEND_CHECK chk-->
+<!--										ON usr.NO = chk.USER_NO-->
+<!--										AND a.DAY_REPORT_DT = chk.ATTEND_DT-->
+									INNER JOIN TBL_TASK c ON a.TASK_ID = c.TASK_ID
+									INNER JOIN TBL_PRJ d ON c.PRJ_ID = d.PRJ_ID
+								GROUP BY USER_NO, PRJ_ID
+							) A
+							LEFT JOIN (
+								SELECT
+									usr.NO AS USER_NO,
+									IFNULL(SUM(a.DAY_REPORT_TM),0) AS DAY_REPORT_TM,
+									c.PRJ_ID AS PRJ_ID
+								FROM
+									TBL_USERINFO usr
+									INNER JOIN TBL_DAY_REPORT a
+<![CDATA[
+										ON usr.NO = a.USER_NO
+										AND SUBSTRING(a.DAY_REPORT_DT,1,6) = SUBSTRING(#searchDate#,1,6)
+										AND DAYOFWEEK(a.DAY_REPORT_DT ) IN (2,3,4,5,6) 
+										AND DATEDIFF(SYSDATE(), a.DAY_REPORT_DT ) >= 0
+										AND a.DAY_REPORT_TM > 0
+]]>
+<!--									INNER JOIN TBL_ATTEND_CHECK chk-->
+<!--										ON usr.NO = chk.USER_NO-->
+<!--										AND a.DAY_REPORT_DT = chk.ATTEND_DT-->
+									INNER JOIN TBL_SCHEDULE b 
+										ON a.DAY_REPORT_DT = b.SCHE_DATE_ALL
+										AND b.SCHE_TYP IN ('H','I','J') 
+										AND b.DELETE_YN = 'N'
+									INNER JOIN TBL_TASK c ON a.TASK_ID = c.TASK_ID
+									INNER JOIN TBL_PRJ d ON c.PRJ_ID = d.PRJ_ID
+								GROUP BY USER_NO, PRJ_ID
+							) B ON A.USER_NO = B.USER_NO
+						GROUP BY USER_NO, PRJ_ID
+					) prjInput
+					LEFT JOIN (
+						SELECT
+							a.NO AS USER_NO
+							, IF(IFNULL(B.SALARY2, 0) = 0, IFNULL(B.SALARY1, 0), B.SALARY2) AS SALARY
+<!--							,b.SALARY1 + (b.SALARY2*2) + (b.SALARY3*3) AS SALARY-->
+						FROM
+							TBL_USERINFO a
+							INNER JOIN TBL_USER_SALARY b
+								ON a.NO = b.USER_NO
+								AND SUBSTRING(#searchDate#,1,6) = CONCAT(b.YEAR, LPAD(b.MONTH, 2, '0'))
+					) userSalary ON prjInput.USER_NO = userSalary.USER_NO
+					LEFT JOIN (
+						SELECT
+							a.NO AS USER_NO
+							,b.SALARY AS SALARY
+						FROM
+							TBL_USERINFO a
+							INNER JOIN TBL_RANK_SALARY b
+								ON a.RANK_ID = b.RANK_CODE
+								AND SUBSTRING(#searchDate#,1,6) = CONCAT(b.YEAR, LPAD(b.MONTH, 2, '0'))
+					) rankSalary ON prjInput.USER_NO = rankSalary.USER_NO
+					LEFT JOIN (
+						SELECT
+							a.USER_NO AS USER_NO, 
+							a.DAY_REPORT_TM - IFNULL(b.DAY_REPORT_TM, 0) AS TM
+						FROM 
+							(
+								SELECT
+									usr.NO AS USER_NO,
+									IFNULL(SUM(a.DAY_REPORT_TM),0) AS DAY_REPORT_TM
+								FROM
+									TBL_USERINFO usr
+									INNER JOIN TBL_DAY_REPORT a
+										ON usr.NO = a.USER_NO
+										AND SUBSTRING(a.DAY_REPORT_DT,1,6) = SUBSTRING(#searchDate#,1,6)
+										AND DAYOFWEEK(a.DAY_REPORT_DT ) IN (2,3,4,5,6) 
+										AND DATEDIFF(SYSDATE(), a.DAY_REPORT_DT ) >= 0
+										AND a.DAY_REPORT_TM > 0
+<!--									INNER JOIN TBL_ATTEND_CHECK chk-->
+<!--										ON usr.NO = chk.USER_NO-->
+<!--										AND a.DAY_REPORT_DT = chk.ATTEND_DT-->
+								GROUP BY USER_NO
+							) a
+							LEFT JOIN (
+								SELECT
+									usr.NO AS USER_NO,
+									IFNULL(SUM(a.DAY_REPORT_TM),0) AS DAY_REPORT_TM
+								FROM
+									TBL_USERINFO usr
+									INNER JOIN TBL_DAY_REPORT a
+<![CDATA[
+										ON usr.NO = a.USER_NO
+										AND SUBSTRING(a.DAY_REPORT_DT,1,6) = SUBSTRING(#searchDate#,1,6) 
+										AND DAYOFWEEK(a.DAY_REPORT_DT ) IN (2,3,4,5,6) 
+										AND DATEDIFF(SYSDATE(), a.DAY_REPORT_DT ) >= 0
+										AND a.DAY_REPORT_TM > 0
+]]>
+<!--									INNER JOIN TBL_ATTEND_CHECK chk-->
+<!--										ON usr.NO = chk.USER_NO-->
+<!--										AND a.DAY_REPORT_DT = chk.ATTEND_DT-->
+									INNER JOIN TBL_SCHEDULE b 
+										ON a.DAY_REPORT_DT = b.SCHE_DATE_ALL
+										AND b.SCHE_TYP IN ('H','I','J') 
+										AND b.DELETE_YN = 'N'
+								GROUP BY USER_NO
+							) b ON a.USER_NO = b.USER_NO
+						GROUP BY USER_NO
+					) totalInput ON prjInput.USER_NO = totalInput.USER_NO
+					LEFT JOIN (
+						SELECT
+							usr.NO AS USER_NO,
+							COUNT(DISTINCT cal.CAL_DATE) AS ALL_DT_CNT
+						FROM
+							(
+								TBL_CALENDAR_DATA cal,
+								TBL_USERINFO usr
+							)
+							LEFT JOIN TBL_SCHEDULE b
+								ON b.SCHE_TYP IN ('H','I','J') 
+								AND b.DELETE_YN = 'N'
+								AND cal.CAL_YEAR = b.SCHE_YEAR 
+								AND cal.CAL_MONTH = b.SCHE_MONTH 
+								AND cal.CAL_DAY = b.SCHE_DATE
+						WHERE
+<![CDATA[
+							SUBSTRING(#searchDate#,1,6) = CONCAT(cal.CAL_YEAR, cal.CAL_MONTH)
+							AND DAYOFWEEK(cal.CAL_DATE) IN (2,3,4,5,6)
+							AND DATEDIFF(SYSDATE(), cal.CAL_DATE) >= 0
+							AND b.SCHE_ID IS NULL
+]]>
+						GROUP BY usr.NO
+					) totalWorkDay ON prjInput.USER_NO = totalWorkDay.USER_NO
+					LEFT JOIN (
+						SELECT
+							a.USER_NO AS USER_NO,
+							a.ATTEND_CNT - IFNULL(b.HOL_ATTEND_CNT, 0) AS DT_CNT
+						FROM
+							(
+								SELECT
+									usr.NO AS USER_NO,
+									COUNT(DISTINCT a.NO) AS ATTEND_CNT
+								FROM
+									TBL_USERINFO usr
+									INNER JOIN TBL_ATTEND_CHECK a 
+<![CDATA[
+										ON usr.NO = a.USER_NO 
+										AND SUBSTRING(a.ATTEND_DT,1,6) = SUBSTRING(#searchDate#,1,6) 
+										AND DAYOFWEEK(a.ATTEND_DT) IN (2,3,4,5,6) 
+										AND DATEDIFF(SYSDATE(), a.ATTEND_DT) >= 0
+								GROUP BY USER_NO
+]]>
+							) a
+							LEFT JOIN (
+								SELECT
+									usr.NO AS USER_NO,
+									COUNT(DISTINCT a.NO) AS HOL_ATTEND_CNT
+								FROM
+									TBL_USERINFO usr
+									INNER JOIN TBL_ATTEND_CHECK a 
+<![CDATA[
+										ON usr.NO = a.USER_NO 
+										AND SUBSTRING(a.ATTEND_DT,1,6) = SUBSTRING(#searchDate#,1,6) 
+										AND DAYOFWEEK(a.ATTEND_DT) IN (2,3,4,5,6) 
+										AND DATEDIFF(SYSDATE(), a.ATTEND_DT) >= 0
+]]>
+									INNER JOIN TBL_SCHEDULE b 
+										ON a.ATTEND_DT = b.SCHE_DATE_ALL
+										AND b.SCHE_TYP IN ('H','I','J') 
+										AND b.DELETE_YN = 'N'
+								GROUP BY USER_NO
+							) b ON a.USER_NO = b.USER_NO
+					) userWorkDay ON prjInput.USER_NO = userWorkDay.USER_NO
+				GROUP BY PRJ_ID, USER_NO
+			) drData ON prj.PRJ_ID = drData.PRJ_ID AND usr.NO = drData.USER_NO
+			LEFT JOIN (
+				SELECT
+					a.PRJ_ID AS PRJ_ID,
+					b.WRITER_NO AS USER_NO,
+					SUM(a.PERIOD) AS HOL_TM,
+					SUM(a.COST) AS HOL_SALARY
+				FROM
+					TBL_EAPP_HOL a
+					INNER JOIN TBL_EAPP_DOC b
+						ON a.DOC_ID = b.DOC_ID
+						AND b.DOC_STAT IN ('APP004', 'APP005')
+						AND b.NEW_AT = '1'
+				WHERE LEFT(a.ST_DT,6) = LEFT(#searchDate#,6)
+				GROUP BY a.PRJ_ID, b.WRITER_NO
+			) holData ON prj.PRJ_ID = holData.PRJ_ID AND usr.NO = holData.USER_NO
+		WHERE
+			NOT (drData.TM = 0 AND holData.HOL_TM = 0)
+			<isNotEmpty prepend="AND" property="searchPrjId">
+				(
+					prj.PRJ_ID = #searchPrjId#
+					<isEqual prepend="OR" property="includeUnderPrj" compareValue="Y">
+						CONCAT('/', prj.PRJ_TREE, '/') LIKE CONCAT('%/', #searchPrjId#, '/%')
+					</isEqual>
+				)
+			</isNotEmpty>
+		GROUP BY 
+			prj.PRJ_ID, usr.NO
+		ORDER BY 
+			prj.PRJ_TREE ASC, USER_NO ASC
+	</select>
+	
+	<select id="InputResultDAO.selectInputResultDept" resultMap="inputResultDeptList">
+		SELECT
+			d.ORGNZT_ID AS PRJ_ORG_ID,
+			FN_CREATE_ORGAN_FNM(d.ORGNZT_ID) AS PRJ_ORG_FNM,
+			d.PRJ_ID AS PRJ_ID,
+			d.PRJ_CD AS PRJ_CD,
+			d.PRJ_NM AS PRJ_NM,
+			a.NO AS USER_NO,
+			a.USER_ID AS USER_ID,
+			a.USER_NM AS USER_NM,
+			FN_GET_ORGID_HISTORY(a.NO, b.DAY_REPORT_DT) AS USER_ORG_ID,
+			FN_GET_ORGNM_HISTORY(a.NO, b.DAY_REPORT_DT) AS USER_ORG_FNM,
+			SUM(b.DAY_REPORT_TM) AS DR_TM
+		FROM
+			TBL_USERINFO a
+			INNER JOIN TBL_DAY_REPORT b
+<![CDATA[
+				ON a.NO = b.USER_NO
+				AND SUBSTRING(#searchDate#, 1, 6) = SUBSTRING(b.DAY_REPORT_DT, 1, 6)
+				AND b.DAY_REPORT_TM > 0
+]]>
+			<isNotEmpty prepend="AND" property="searchOrgIdList">
+				<iterate prepend="FN_GET_ORGID_HISTORY(a.NO, b.DAY_REPORT_DT) IN" open="(" close=")" conjunction="," property="searchOrgIdList">
+					#searchOrgIdList[]#
+				</iterate>
+			</isNotEmpty>
+			INNER JOIN TBL_TASK c
+				ON b.TASK_ID = c.TASK_ID
+			INNER JOIN TBL_PRJ d
+				ON c.PRJ_ID = d.PRJ_ID
+		GROUP BY
+			PRJ_ID,
+			USER_NO,
+			USER_ORG_ID
+		ORDER BY
+			PRJ_ORG_FNM,
+			PRJ_ID,
+			USER_NM,
+			USER_ORG_FNM
+	</select>	
+	
+</sqlMap>

@@ -1,0 +1,1178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="TblRankSalary">
+
+	<typeAlias alias="egovMap"
+		type="egovframework.rte.psl.dataaccess.util.EgovMap" />
+	<typeAlias alias="salaryVO"
+		type="kms.com.salary.service.SalaryVO" />
+	<typeAlias alias="memberEvaVO"
+		type="kms.com.salary.service.MemberEvaVO" />
+
+	<select id="salaryDAO.selectRankSalaryList"
+		parameterClass="salaryVO" resultClass="egovMap">
+		SELECT
+		DCO.CODE_NM RANK_NM
+		,DCO.USE_AT USE_AT
+		,DCO.CODE RANK_CODE
+		, #year# YEAR
+		, #month# MONTH
+		, IFNULL(SALARY,0) SALARY
+		FROM COMTCCMMNDETAILCODE DCO
+		LEFT OUTER JOIN TBL_RANK_SALARY SAL
+		ON SAL.RANK_CODE = DCO.CODE
+		<isNotEmpty property="year">
+			AND YEAR =#year#
+		</isNotEmpty>
+		<isNotEmpty property="month">
+			AND MONTH =#month#
+		</isNotEmpty>
+		WHERE 1=1
+		AND DCO.CODE_ID = 'KMS003'
+		<isNotEmpty property="rankCode">
+			AND DCO.CODE =#rankCode#
+		</isNotEmpty>
+		ORDER BY DCO.ORD ASC
+	</select>
+
+	<update id="salaryDAO.updateRankSalary"
+		parameterClass="salaryVO">
+		<![CDATA[
+			UPDATE TBL_RANK_SALARY
+			SET SALARY = #salary#
+			
+			WHERE RANK_CODE=#rankCode#
+			AND YEAR=#year#
+			AND MONTH = #month#
+		]]>
+	</update>
+
+	<select id="salaryDAO.selectUserSalaryList"
+		parameterClass="salaryVO" resultClass="egovMap">
+		SELECT
+		USR.USER_ID
+		,USR.SABUN
+		,USR.USER_NM
+		,USR.NO USER_NO
+		,USR.WORK_ST
+		,ORG.ORGNZT_NM
+		,ORG.ORGNZT_ID
+		, #year# YEAR
+		, #month# MONTH
+		, IFNULL(USS.SALARY1,0) SALARY1
+		, IFNULL(USS.SALARY2,0) SALARY2
+		, IFNULL(USS.SALARY3,0) SALARY3
+		, IF(USS.SALARY1 IS NULL || USS.SALARY2 IS NULL || USS.SALARY3 IS NULL,
+		"N",
+		"Y") IS_REGISTERED
+		FROM
+		TBL_USERINFO USR
+		LEFT OUTER JOIN TBL_ORGNZT ORG
+		ON USR.ORGNZT_ID = ORG.ORGNZT_ID
+		LEFT OUTER JOIN TBL_USER_SALARY USS
+		ON (USR.NO = USS.USER_NO
+		<isNotEmpty property="year">
+			AND USS.YEAR =#year#
+		</isNotEmpty>
+		<isNotEmpty property="month">
+			AND USS.MONTH =#month#
+		</isNotEmpty>
+		)
+
+		WHERE
+		USR.GHOST = '0'
+		AND USR.COMPIN_DT IS NOT NULL
+		<isNotEmpty property="userNo">
+			AND USR.NO =#userNo#
+		</isNotEmpty>
+
+		ORDER BY
+		CASE WHEN USR.WORK_ST IN ('W', 'L') THEN 0 ELSE 1 END
+		, CASE WHEN IS_REGISTERED ='N' then 0 else 1 end
+		, USR.SABUN
+		, USS.MONTH
+
+	</select>
+
+	<update id="salaryDAO.updateUserSalary"
+		parameterClass="salaryVO">
+		<![CDATA[
+			UPDATE TBL_USER_SALARY
+			SET SALARY1 = #salary1#
+				,SALARY2 = #salary2#
+				,SALARY3 = #salary3#
+				
+			WHERE USER_NO=#userNo#
+			AND YEAR=#year#
+			AND MONTH = #month#
+		]]>
+	</update>
+
+	<insert id="salaryDAO.insertRankSalary"
+		parameterClass="salaryVO">
+		<![CDATA[
+			INSERT INTO TBL_RANK_SALARY
+				(RANK_CODE, YEAR, MONTH, SALARY)
+			VALUES
+				(#rankCode#,#year#, #month#, #salary#)
+		]]>
+	</insert>
+
+	<insert id="salaryDAO.insertUserSalary"
+		parameterClass="salaryVO">
+		<![CDATA[
+			INSERT INTO TBL_USER_SALARY
+				(USER_NO, YEAR, MONTH, SALARY1
+				,SALARY2 ,SALARY3, YM)
+			VALUES
+				(#userNo#,#year#, #month#, #salary1#, #salary2#, #salary3#, CONCAT(#year#, LPAD(#month#, 2, '0')))
+		]]>
+	</insert>
+
+	<select id="salaryDAO.selectUserSalaryYearWeight"
+		resultClass="egovMap">
+		SELECT
+		NO USER_NO
+		,USER_ID
+		,USER_NM
+		,#year# YEAR
+		, FN_GET_SALARY(NO,#year#,1) AS SALARY1
+		, FN_GET_SALARY(NO,#year#,2) AS SALARY2
+		, FN_GET_SALARY(NO,#year#,3) AS SALARY3
+		, FN_GET_SALARY(NO,#year#,4) AS SALARY4
+		, FN_GET_SALARY(NO,#year#,5) AS SALARY5
+		, FN_GET_SALARY(NO,#year#,6) AS SALARY6
+		, FN_GET_SALARY(NO,#year#,7) AS SALARY7
+		, FN_GET_SALARY(NO,#year#,8) AS SALARY8
+		, FN_GET_SALARY(NO,#year#,9) AS SALARY9
+		, FN_GET_SALARY(NO,#year#,10) AS SALARY10
+		, FN_GET_SALARY(NO,#year#,11) AS SALARY11
+		, FN_GET_SALARY(NO,#year#,12) AS SALARY12
+		FROM
+		TBL_USERINFO
+		WHERE
+		GHOST = '0'
+		AND USER_ID IN
+		<iterate property="userIdList" open="(" close=")"
+			conjunction=",">
+			#userIdList[]#
+		</iterate>
+	</select>
+
+	<delete id="salaryDAO.deleteRankSalary">
+		DELETE
+		FROM TBL_RANK_SALARY
+		WHERE
+		RANK_CODE =#rankCode#
+		AND YEAR =#year#
+	</delete>
+
+	<delete id="salaryDAO.deleteUserSalary">
+		DELETE
+		FROM TBL_USER_SALARY
+		WHERE
+		USER_NO =#userNo#
+		AND YEAR =#year#
+	</delete>
+	<!-- 인건비 끝 -->
+
+
+	<!-- 연봉시작 -->
+
+
+	<sql id="SQL_salaryRealWhere">
+		<isNotEmpty property="exceptionUsersList">
+			AND USR.NO NOT IN
+			<iterate property="exceptionUsersList" open="(" close=")"
+				conjunction=",">
+				#exceptionUsersList[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty property="userNo">
+			AND USR.NO = #userNo#
+		</isNotEmpty>
+		<isNotEmpty property="status">
+			AND USS.STATUS = #status#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchNm">
+			(USR.USER_NM LIKE CONCAT('%', #searchNm#, '%') OR ORG.ORGNZT_NM LIKE CONCAT('%',
+			#searchNm#, '%'))
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="workStList">
+			<iterate prepend="USR.WORK_ST IN" property="workStList"
+				open="(" close=")" conjunction=",">
+				#workStList[]#
+			</iterate>
+		</isNotEmpty>
+		<isEqual property="searchCondition" compareValue="0">
+			<isNotEmpty prepend="AND" property="rankId">
+				USR.RANK_ID = #rankId#
+			</isNotEmpty>
+		</isEqual>
+		<isEqual prepend="AND" property="searchCondition"
+			compareValue="1">
+			CONCAT(USR.USER_NM, '(', USR.USER_ID, ')') LIKE
+			CONCAT('%', #searchUserNm#, '%')
+		</isEqual>
+		<isEqual property="searchCondition" compareValue="2">
+			<isNotEmpty prepend="AND" property="searchOrgIdList">
+				<iterate prepend="USR.ORGNZT_ID IN " open="(" close=")"
+					conjunction="," property="searchOrgIdList">
+					#searchOrgIdList[]#
+				</iterate>
+			</isNotEmpty>
+		</isEqual>
+	</sql>
+
+	<sql id="SQL_salaryRealOrderBy">
+		<isNotEmpty property="orderBy">
+			<isEqual property="orderBy" compareValue="org">
+				ORDER BY
+				ORGNZT_ID
+				,DCO.ORD
+				,USR.PROMOTION_YEAR
+				,USR.USER_NM
+				,CASE WHEN USR.WORK_ST = 'W' THEN 0 ELSE 1 END
+				,CASE WHEN USR.WORK_ST = 'L' THEN 0 ELSE 1 END
+				,USR.SABUN
+			</isEqual>
+			<isEqual property="orderBy" compareValue="rank">
+				ORDER BY
+				DCO.ORD
+				,USR.PROMOTION_YEAR
+				,ORGNZT_ID
+				,CASE WHEN USR.WORK_ST = 'W' THEN 0 ELSE 1 END
+				,CASE WHEN USR.WORK_ST = 'L' THEN 0 ELSE 1 END
+				,USR.SABUN
+			</isEqual>
+			<isEqual property="orderBy" compareValue="work">
+				ORDER BY
+				WORK_PERIOD DESC
+				,DCO.ORD
+				,USR.PROMOTION_YEAR
+				,ORGNZT_ID
+				,CASE WHEN USR.WORK_ST = 'W' THEN 0 ELSE 1 END
+				,CASE WHEN USR.WORK_ST = 'L' THEN 0 ELSE 1 END
+				,USR.SABUN
+			</isEqual>
+			<isEqual property="orderBy" compareValue="workIn">
+				ORDER BY
+				WORK_PERIOD_IN DESC
+				,DCO.ORD
+				,USR.PROMOTION_YEAR
+				,ORGNZT_ID
+				,CASE WHEN USR.WORK_ST = 'W' THEN 0 ELSE 1 END
+				,CASE WHEN USR.WORK_ST = 'L' THEN 0 ELSE 1 END
+				,USR.SABUN
+			</isEqual>
+			<isEqual property="orderBy" compareValue="age">
+				ORDER BY
+				AGE DESC
+				,DCO.ORD
+				,USR.PROMOTION_YEAR
+				,ORGNZT_ID
+				,CASE WHEN USR.WORK_ST = 'W' THEN 0 ELSE 1 END
+				,CASE WHEN USR.WORK_ST = 'L' THEN 0 ELSE 1 END
+				,USR.SABUN
+			</isEqual>
+			<isEqual property="orderBy" compareValue="name">
+				ORDER BY
+				USER_NM
+				,DCO.ORD
+				,USR.PROMOTION_YEAR
+				,ORGNZT_ID
+				,CASE WHEN USR.WORK_ST = 'W' THEN 0 ELSE 1 END
+				,CASE WHEN USR.WORK_ST = 'L' THEN 0 ELSE 1 END
+				,USR.SABUN
+			</isEqual>
+			<isEqual property="orderBy" compareValue="salary">
+				ORDER BY
+				SALARY_REAL DESC
+				,DCO.ORD
+				,USR.PROMOTION_YEAR
+				,ORGNZT_ID
+				,CASE WHEN USR.WORK_ST = 'W' THEN 0 ELSE 1 END
+				,CASE WHEN USR.WORK_ST = 'L' THEN 0 ELSE 1 END
+				,USR.SABUN
+			</isEqual>
+			<isEqual property="orderBy" compareValue="salaryHope">
+				ORDER BY
+				USS.SALARY_HOPE DESC
+				,DCO.ORD
+				,USR.PROMOTION_YEAR
+				,ORGNZT_ID
+				,CASE WHEN USR.WORK_ST = 'W' THEN 0 ELSE 1 END
+				,CASE WHEN USR.WORK_ST = 'L' THEN 0 ELSE 1 END
+				,USR.SABUN
+			</isEqual>
+			<isEqual property="orderBy" compareValue="salarySuggest">
+				ORDER BY
+				USS.SALARY_SUGGEST DESC
+				,DCO.ORD
+				,USR.PROMOTION_YEAR
+				,ORGNZT_ID
+				,CASE WHEN USR.WORK_ST = 'W' THEN 0 ELSE 1 END
+				,CASE WHEN USR.WORK_ST = 'L' THEN 0 ELSE 1 END
+				,USR.SABUN
+			</isEqual>
+			<isEqual property="orderBy" compareValue="rate">
+				ORDER BY
+				INCREASE_RATE DESC
+				,DCO.ORD
+				,USR.PROMOTION_YEAR
+				,ORGNZT_ID
+				,CASE WHEN USR.WORK_ST = 'W' THEN 0 ELSE 1 END
+				,CASE WHEN USR.WORK_ST = 'L' THEN 0 ELSE 1 END
+				,USR.SABUN
+			</isEqual>
+			<isEqual property="orderBy" compareValue="degree">
+				ORDER BY
+				DEGREE DESC
+				,DCO.ORD
+				,USR.PROMOTION_YEAR
+				,ORGNZT_ID
+				,CASE WHEN USR.WORK_ST = 'W' THEN 0 ELSE 1 END
+				,CASE WHEN USR.WORK_ST = 'L' THEN 0 ELSE 1 END
+				,USR.SABUN
+			</isEqual>
+			<isEqual property="orderBy" compareValue="increase">
+				ORDER BY
+				SALARY_SUGGEST - SALARY_REAL DESC
+				,DCO.ORD
+				,USR.PROMOTION_YEAR
+				,ORGNZT_ID
+				,CASE WHEN USR.WORK_ST = 'W' THEN 0 ELSE 1 END
+				,CASE WHEN USR.WORK_ST = 'L' THEN 0 ELSE 1 END
+				,USR.SABUN
+			</isEqual>
+			<isEqual property="orderBy" compareValue="status">
+				ORDER BY
+				STATUS
+				,DCO.ORD
+				,USR.PROMOTION_YEAR
+				,ORGNZT_ID
+				,CASE WHEN USR.WORK_ST = 'W' THEN 0 ELSE 1 END
+				,CASE WHEN USR.WORK_ST = 'L' THEN 0 ELSE 1 END
+				,USR.SABUN
+			</isEqual>
+			<isEqual property="orderBy" compareValue="sabun">
+				ORDER BY
+				USR.SABUN
+				,DCO.ORD
+				,USR.PROMOTION_YEAR
+				,ORGNZT_ID
+				,CASE WHEN USR.WORK_ST = 'W' THEN 0 ELSE 1 END
+				,CASE WHEN USR.WORK_ST = 'L' THEN 0 ELSE 1 END
+			</isEqual>
+			<isEqual property="orderBy" compareValue="promotionYear">
+				ORDER BY
+				USR.PROMOTION_YEAR
+				,DCO.ORD
+				,ORGNZT_ID
+				,CASE WHEN USR.WORK_ST = 'W' THEN 0 ELSE 1 END
+				,CASE WHEN USR.WORK_ST = 'L' THEN 0 ELSE 1 END
+				,USR.SABUN
+			</isEqual>
+			<isEqual property="orderBy" compareValue="careerMonth">
+				ORDER BY
+				USR.CAREER_MONTH
+				,DCO.ORD
+				,ORGNZT_ID
+				,CASE WHEN USR.WORK_ST = 'W' THEN 0 ELSE 1 END
+				,CASE WHEN USR.WORK_ST = 'L' THEN 0 ELSE 1 END
+				,USR.SABUN
+			</isEqual>
+			<isEqual property="orderBy" compareValue="carCost">
+				ORDER BY
+				USS.CAR_COST
+				,DCO.ORD
+				,ORGNZT_ID
+				,CASE WHEN USR.WORK_ST = 'W' THEN 0 ELSE 1 END
+				,CASE WHEN USR.WORK_ST = 'L' THEN 0 ELSE 1 END
+				,USR.SABUN
+			</isEqual>
+			<isEqual property="orderBy" compareValue="mealCost">
+				ORDER BY
+				USS.MEAL_COST
+				,DCO.ORD
+				,ORGNZT_ID
+				,CASE WHEN USR.WORK_ST = 'W' THEN 0 ELSE 1 END
+				,CASE WHEN USR.WORK_ST = 'L' THEN 0 ELSE 1 END
+				,USR.SABUN
+			</isEqual>
+			<isEqual property="orderBy" compareValue="babyCost">
+				ORDER BY
+				USS.BABY_COST
+				,DCO.ORD
+				,ORGNZT_ID
+				,CASE WHEN USR.WORK_ST = 'W' THEN 0 ELSE 1 END
+				,CASE WHEN USR.WORK_ST = 'L' THEN 0 ELSE 1 END
+				,USR.SABUN
+			</isEqual>
+			<isEqual property="orderBy" compareValue="communicationCost">
+				ORDER BY
+				USS.COMMUNICATION_COST
+				,DCO.ORD
+				,ORGNZT_ID
+				,CASE WHEN USR.WORK_ST = 'W' THEN 0 ELSE 1 END
+				,CASE WHEN USR.WORK_ST = 'L' THEN 0 ELSE 1 END
+				,USR.SABUN
+			</isEqual>
+			<isEqual property="orderBy" compareValue="score1">
+				ORDER BY
+				EVA.SCORE1 DESC
+				,DCO.ORD
+				,USR.PROMOTION_YEAR
+				,USR.USER_NM
+				,CASE WHEN USR.WORK_ST = 'W' THEN 0 ELSE 1 END
+				,CASE WHEN USR.WORK_ST = 'L' THEN 0 ELSE 1 END
+				,USR.SABUN
+			</isEqual>
+			<isEqual property="orderBy" compareValue="score2">
+				ORDER BY
+				EVA.SCORE2 DESC
+				,DCO.ORD
+				,USR.PROMOTION_YEAR
+				,USR.USER_NM
+				,CASE WHEN USR.WORK_ST = 'W' THEN 0 ELSE 1 END
+				,CASE WHEN USR.WORK_ST = 'L' THEN 0 ELSE 1 END
+				,USR.SABUN
+			</isEqual>
+		</isNotEmpty>
+		<isEmpty property="orderBy">
+			ORDER BY
+			ORGNZT_ID
+			,DCO.ORD
+			,USR.PROMOTION_YEAR
+			,USR.USER_NM
+			,CASE WHEN USR.WORK_ST = 'W' THEN 0 ELSE 1 END
+			,CASE WHEN USR.WORK_ST = 'L' THEN 0 ELSE 1 END
+			,USR.SABUN
+		</isEmpty>
+
+		<!-- ORDER BY -->
+		<!-- CASE WHEN USR.WORK_ST = 'W' THEN 0 ELSE 1 END -->
+		<!-- , CASE WHEN USR.WORK_ST = 'L' THEN 0 ELSE 1 END -->
+		<!-- <![CDATA[ -->
+		<!-- , CASE WHEN IFNULL(USS.SALARY_REAL, 0) < 500 THEN 0 ELSE 1 END -->
+		<!-- ]]> -->
+		<!-- , CASE WHEN IS_REGISTERED = 'N' THEN 0 ELSE 1 END -->
+		<!-- , USR.SABUN -->
+	</sql>
+
+	<select id="salaryDAO.selectRankSalaryRealList"
+		parameterClass="salaryVO" resultClass="egovMap">
+		SELECT
+		DCO.CODE_NM RANK_NM
+		,DCO.USE_AT USE_AT
+		,DCO.CODE RANK_CODE
+		, #year# YEAR
+		, IFNULL(SALARY,0) SALARY
+		, IFNULL(RAISE_RATE,0) RAISE_RATE
+		, IFNULL(YEAR_DIFF,0) YEAR_DIFF
+		, IFNULL(GRADE_DIFF,0) GRADE_DIFF
+		FROM COMTCCMMNDETAILCODE DCO
+		LEFT OUTER JOIN TBL_RANK_SALARY_REAL SAL
+		ON SAL.RANK_CODE = DCO.CODE
+		<isNotEmpty property="year">
+			AND YEAR =#year#
+		</isNotEmpty>
+		WHERE 1=1
+		AND DCO.CODE_ID = 'KMS003'
+		AND DCO.CODE NOT IN ('00', '01')
+		<isNotEmpty property="rankCode">
+			AND DCO.CODE =#rankCode#
+		</isNotEmpty>
+		ORDER BY DCO.ORD ASC
+	</select>
+
+	<update id="salaryDAO.updateRankSalaryReal"
+		parameterClass="salaryVO">
+		UPDATE
+		TBL_RANK_SALARY_REAL
+		SET SALARY = #salary#
+		,RAISE_RATE = #raiseRate#
+		WHERE RANK_CODE=#rankCode#
+		AND YEAR=#year#
+	</update>
+
+	<select id="salaryDAO.selectUserSalaryRealList"
+		parameterClass="salaryVO" resultClass="egovMap">
+		SELECT
+		USR.USER_ID
+		,USR.SABUN
+		,USR.USER_NM
+		,USR.NO USER_NO
+		,USR.WORK_ST
+		,ORG.ORGNZT_NM
+		,ORG.ORGNZT_ID
+		,DCO.CODE_NM AS RANK_NM
+		, #year# YEAR
+		, IFNULL(USS.SALARY_REAL,0) SALARY_REAL
+		, IFNULL(USS.SALARY_HOPE,0) SALARY_HOPE
+		, IFNULL(USS.SALARY_SUGGEST,0) SALARY_SUGGEST
+		, IF(USS.SALARY_REAL IS NULL || USS.SALARY_HOPE IS NULL ||
+		USS.SALARY_SUGGEST IS NULL,
+		"N",
+		"Y") IS_REGISTERED
+		,USR.PROMOTION_YEAR, USR.DEGREE
+		,CAST(FLOOR(USR.CAREER_MONTH / 12) AS SIGNED) WORK_YEAR
+		,CAST(USR.CAREER_MONTH % 12 AS SIGNED) WORK_MONTH
+		,FN_GET_MEMBER_AGE(USR.NO, '') AS AGE, FN_GET_MEMBER_AGE_KOR(USR.NO, '') AS AGE_KOR
+		,USS.CAR_COST ,USS.MEAL_COST,USS.BABY_COST ,USS.COMMUNICATION_COST ,USS.STATUS ,USS.NOTE
+		,IF(IFNULL(USS.NOTE,"") = "", "N", "Y") NOTE_YN
+		,USS.ADMIN_NOTE
+		FROM
+		TBL_USERINFO USR
+		INNER JOIN COMTCCMMNDETAILCODE DCO
+		ON DCO.CODE_ID = 'KMS003'
+		AND USR.RANK_ID = DCO.CODE
+		LEFT OUTER JOIN TBL_ORGNZT ORG
+		ON USR.ORGNZT_ID = ORG.ORGNZT_ID
+		LEFT OUTER JOIN TBL_USER_SALARY_REAL USS
+		ON USR.NO = USS.USER_NO
+		AND USS.YEAR = #year#
+
+		WHERE
+		USR.GHOST = '0'
+		AND USR.COMPIN_DT IS NOT NULL
+		<!-- AND WORK_ST NOT IN ('R') -->
+
+		<include refid="SQL_salaryRealWhere" />
+
+		<include refid="SQL_salaryRealOrderBy" />
+
+	</select>
+
+	<sql id="SQL_salaryRealCEO">
+		SELECT
+		USR.USER_ID
+		,USR.SABUN
+		,USR.USER_NM
+		,USR.NO USER_NO
+		,USR.WORK_ST
+		,USR.COMPIN_DT
+		,IFNULL(USR.ACCEPT_COMPIN_DT,USR.COMPIN_DT) AS ACCEPT_COMPIN_DT
+		,USR.RANK_ID, USR.BRTH
+		,ORG.ORGNZT_NM
+		,ORG.ORGNZT_ID
+		,DCO.CODE_NM AS RANK_NM
+		,DCO.ORD
+		, #year# YEAR
+		, IFNULL(USS.SALARY_REAL,0) SALARY_REAL
+		, IFNULL(USS.SALARY_HOPE,0) SALARY_HOPE
+		, IFNULL(USS.SALARY_SUGGEST,0) SALARY_SUGGEST
+		, IF(USS.SALARY_REAL IS NULL || USS.SALARY_HOPE IS NULL ||
+		USS.SALARY_SUGGEST IS NULL,
+		"N", "Y") IS_REGISTERED
+		, ROUND((IFNULL(USS.SALARY_SUGGEST,0) - IFNULL(USS.SALARY_REAL,0) ) /
+		IFNULL(USS.SALARY_REAL,1) * 100, 2) INCREASE_RATE
+		,USS.CAR_COST, USS.MEAL_COST, USS.BABY_COST, USS.COMMUNICATION_COST, USS.ACCEPT, USS.CEO_CONFIRM, USS.STATUS
+		, USS.NOTE
+		,IF(IFNULL(USS.NOTE,"") = "", "N", "Y") NOTE_YN
+
+		, (SELECT NOTE FROM TBL_USER_SALARY_REAL WHERE USER_NO = USR.NO AND
+		YEAR = $year$-1) AS LAST_NOTE
+		,IF(IFNULL((SELECT NOTE FROM TBL_USER_SALARY_REAL WHERE USER_NO = USR.NO AND YEAR =
+		$year$-1),"") = "", "N", "Y") LAST_NOTE_YN
+
+		, USS.HOPE_NOTE
+		,IF(IFNULL(USS.HOPE_NOTE,"") = "", "N", "Y") HOPE_NOTE_YN
+
+
+		,USR.DEGREE, USR.PROMOTION_YEAR, USR.CAREER_MONTH
+		,FN_GET_MEMBER_AGE(USR.NO, '') AS AGE, FN_GET_MEMBER_AGE_KOR(USR.NO, '') AGE_KOR
+		,CAST(FLOOR((USR.CAREER_MONTH + FN_GET_MEMBER_WORK_PERIOD(USR.NO))/12)
+		AS SIGNED) WORK_YEAR
+		,CAST((USR.CAREER_MONTH + FN_GET_MEMBER_WORK_PERIOD(USR.NO))%12 AS SIGNED) WORK_MONTH
+		,CAST(USR.CAREER_MONTH + FN_GET_MEMBER_WORK_PERIOD(USR.NO) AS SIGNED)
+		WORK_PERIOD
+		,CAST(FLOOR(FN_GET_MEMBER_WORK_PERIOD(USR.NO)/12) AS SIGNED) WORK_YEAR_IN
+		,CAST(FN_GET_MEMBER_WORK_PERIOD(USR.NO)%12 AS SIGNED) WORK_MONTH_IN
+		,CAST(FN_GET_MEMBER_WORK_PERIOD(USR.NO) AS SIGNED) WORK_PERIOD_IN
+		,EVA.EVA1
+		,(SELECT USER_NM FROM TBL_USERINFO WHERE NO = EVA.EVA1) AS EVA1_NM
+		,EVA.EVA2
+		,(SELECT USER_NM FROM TBL_USERINFO WHERE NO = EVA.EVA2) AS EVA2_NM
+		,EVA.EVA3
+		,(SELECT USER_NM FROM TBL_USERINFO WHERE NO = EVA.EVA3) AS EVA3_NM
+		,EVA.SCORE1
+		,EVA.SCORE2
+		,EVA.SCORE3
+		,EVA.GRADE
+		FROM
+		TBL_USERINFO USR
+		INNER JOIN COMTCCMMNDETAILCODE DCO
+		ON DCO.CODE_ID = 'KMS003'
+		AND USR.RANK_ID = DCO.CODE
+		LEFT OUTER JOIN TBL_USER_EVA EVA
+		ON USR.NO = EVA.USER_NO
+		AND EVA.YEAR = #year#
+		LEFT OUTER JOIN TBL_ORGNZT ORG
+		ON USR.ORGNZT_ID = ORG.ORGNZT_ID
+		LEFT OUTER JOIN TBL_USER_SALARY_REAL USS
+		ON USR.NO = USS.USER_NO
+		AND USS.YEAR = #year#
+		WHERE
+		USR.GHOST = '0'
+		AND USR.COMPIN_DT IS NOT NULL
+		AND EVA.WORK_ST NOT IN ('R')
+	</sql>
+
+	<select id="salaryDAO.selectUserSalaryRealListCEO"
+		parameterClass="salaryVO" resultClass="egovMap">
+		<include refid="SQL_salaryRealCEO" />
+		<include refid="SQL_salaryRealWhere" />
+		<include refid="SQL_salaryRealOrderBy" />
+		<!-- LIMIT #recordCountPerPage# OFFSET #firstIndex# -->
+	</select>
+
+	<select id="salaryDAO.selectUserSalaryRealListCEOSum"
+		parameterClass="salaryVO" resultClass="egovMap">
+		SELECT
+		IFNULL(ROUND(AVG(A.AGE), 2), 0) AS AGE,
+		IFNULL(ROUND(AVG(A.AGE_KOR), 2), 0) AS AGE_KOR,
+		IFNULL(ROUND( (AVG(A.WORK_YEAR) * 12 + AVG(A.WORK_MONTH) ) / 12, 0), 0) AS
+		WORK_YEAR,
+		IFNULL(ROUND( (AVG(A.WORK_YEAR) * 12 + AVG(A.WORK_MONTH) ) % 12, 0), 0) AS
+		WORK_MONTH,
+		IFNULL(ROUND( (AVG(A.WORK_YEAR_IN) * 12 + AVG(A.WORK_PERIOD_IN) ) / 12, 0), 0) AS
+		WORK_YEAR_IN,
+		IFNULL(ROUND( (AVG(A.WORK_YEAR_IN) * 12 + AVG(A.WORK_PERIOD_IN) ) % 12, 0), 0) AS
+		WORK_MONTH_IN,
+		IFNULL(ROUND(AVG(A.SALARY_REAL), 2), 0) AS SALARY_REAL_AVG,
+		IFNULL(SUM(A.SALARY_REAL), 0) AS SALARY_REAL,
+		IFNULL(ROUND(AVG(A.SALARY_HOPE), 2), 0) AS SALARY_HOPE_AVG,
+		IFNULL(SUM(A.SALARY_HOPE), 0) AS SALARY_HOPE,
+		IFNULL(ROUND(AVG(A.SALARY_SUGGEST), 2), 0) AS SALARY_SUGGEST_AVG,
+		IFNULL(SUM(A.SALARY_SUGGEST), 0) AS SALARY_SUGGEST,
+		IFNULL(ROUND( (AVG(A.SALARY_SUGGEST) - AVG(A.SALARY_REAL) ) / AVG(A.SALARY_REAL) *
+		100, 2), 0) AS INCREASE_RATE_AVG,
+		IFNULL(ROUND( (SUM(A.SALARY_SUGGEST) - SUM(A.SALARY_REAL) ) / SUM(A.SALARY_REAL) *
+		100, 2), 0) AS INCREASE_RATE,
+		IFNULL(ROUND(AVG(A.SCORE1), 2), 0) AS SCORE1_AVG,
+		IFNULL(SUM(A.SCORE1), 0) AS SCORE1,
+		IFNULL(ROUND(AVG(A.SCORE2), 2), 0) AS SCORE2_AVG,
+		IFNULL(SUM(A.SCORE2), 0) AS SCORE2,
+		IFNULL(ROUND(AVG(A.SCORE3), 2), 0) AS SCORE3_AVG,
+		IFNULL(SUM(A.SCORE3), 0) AS SCORE3,
+		IFNULL(ROUND(AVG(A.GRADE), 2), 0) AS GRADE_AVG,
+		IFNULL(SUM(A.GRADE), 0) AS GRADE
+		FROM (
+		<include refid="SQL_salaryRealCEO" />
+		<include refid="SQL_salaryRealWhere" />
+		) A
+		GROUP BY A.YEAR
+	</select>
+
+	<resultMap id="UserSalaryRealListCEOSum2" class="salaryVO">
+		<result property="age" column="AGE" columnIndex="1" />
+		<result property="ageKor" column="AGE_KOR" columnIndex="2" />
+		<result property="workYear" column="WORK_YEAR" columnIndex="3" />
+		<result property="workMonth" column="WORK_MONTH"
+			columnIndex="4" />
+		<result property="workYearIn" column="WORK_YEAR_IN"
+			columnIndex="5" />
+		<result property="workMonthIn" column="WORK_MONTH_IN"
+			columnIndex="6" />
+		<result property="salaryRealAvg" column="SALARY_REAL_AVG"
+			columnIndex="7" />
+		<result property="salaryReal" column="SALARY_REAL"
+			columnIndex="8" />
+		<result property="salaryHopeAvg" column="SALARY_HOPE_AVG"
+			columnIndex="9" />
+		<result property="salaryHope" column="SALARY_HOPE"
+			columnIndex="10" />
+		<result property="salarySuggestAvg" column="SALARY_SUGGEST_AVG"
+			columnIndex="11" />
+		<result property="salarySuggest" column="SALARY_SUGGEST"
+			columnIndex="12" />
+		<result property="increaseRateAvg" column="INCREASE_RATE_AVG"
+			columnIndex="13" />
+		<result property="increaseRate" column="INCREASE_RATE"
+			columnIndex="14" />
+		<result property="score1Avg" column="SCORE1_AVG"
+			columnIndex="15" />
+		<result property="score1" column="SCORE1" columnIndex="16" />
+		<result property="score2Avg" column="SCORE2_AVG"
+			columnIndex="17" />
+		<result property="score2" column="SCORE2" columnIndex="18" />
+		<result property="score3Avg" column="SCORE3_AVG"
+			columnIndex="19" />
+		<result property="score3" column="SCORE3" columnIndex="20" />
+		<result property="gradeAvg" column="GRADE_AVG" columnIndex="21" />
+		<result property="grade" column="GRADE" columnIndex="22" />
+	</resultMap>
+
+	<select id="salaryDAO.selectUserSalaryRealListCEOSum2"
+		parameterClass="salaryVO" resultMap="UserSalaryRealListCEOSum2">
+		SELECT
+		IFNULL(ROUND(AVG(A.AGE), 2), 0) AS AGE,
+		IFNULL(ROUND(AVG(A.AGE_KOR), 2), 0) AS AGE_KOR,
+		IFNULL(ROUND( (AVG(A.WORK_YEAR) * 12 + AVG(A.WORK_MONTH) ) / 12, 0), 0) AS
+		WORK_YEAR,
+		IFNULL(ROUND( (AVG(A.WORK_YEAR) * 12 + AVG(A.WORK_MONTH) ) % 12, 0), 0) AS
+		WORK_MONTH,
+		IFNULL(ROUND( (AVG(A.WORK_YEAR_IN) * 12 + AVG(A.WORK_PERIOD_IN) ) / 12, 0), 0) AS
+		WORK_YEAR_IN,
+		IFNULL(ROUND( (AVG(A.WORK_YEAR_IN) * 12 + AVG(A.WORK_PERIOD_IN) ) % 12, 0), 0) AS
+		WORK_MONTH_IN,
+		IFNULL(ROUND(AVG(A.SALARY_REAL), 2), 0) AS SALARY_REAL_AVG,
+		IFNULL(SUM(A.SALARY_REAL), 0) AS SALARY_REAL,
+		IFNULL(ROUND(AVG(A.SALARY_HOPE), 2), 0) AS SALARY_HOPE_AVG,
+		IFNULL(SUM(A.SALARY_HOPE), 0) AS SALARY_HOPE,
+		IFNULL(ROUND(AVG(A.SALARY_SUGGEST), 2), 0) AS SALARY_SUGGEST_AVG,
+		IFNULL(SUM(A.SALARY_SUGGEST), 0) AS SALARY_SUGGEST,
+		IFNULL(ROUND( (AVG(A.SALARY_SUGGEST) - AVG(A.SALARY_REAL) ) / AVG(A.SALARY_REAL) *
+		100, 2), 0) AS INCREASE_RATE_AVG,
+		IFNULL(ROUND( (SUM(A.SALARY_SUGGEST) - SUM(A.SALARY_REAL) ) / SUM(A.SALARY_REAL) *
+		100, 2), 0) AS INCREASE_RATE,
+		IFNULL(ROUND(AVG(A.SCORE1), 2), 0) AS SCORE1_AVG,
+		IFNULL(SUM(A.SCORE1), 0) AS SCORE1,
+		IFNULL(ROUND(AVG(A.SCORE2), 2), 0) AS SCORE2_AVG,
+		IFNULL(SUM(A.SCORE2), 0) AS SCORE2,
+		IFNULL(ROUND(AVG(A.SCORE3), 2), 0) AS SCORE3_AVG,
+		IFNULL(SUM(A.SCORE3), 0) AS SCORE3,
+		IFNULL(ROUND(AVG(A.GRADE), 2), 0) AS GRADE_AVG,
+		IFNULL(SUM(A.GRADE), 0) AS GRADE
+		FROM (
+		<include refid="SQL_salaryRealCEO" />
+		<include refid="SQL_salaryRealWhere" />
+		) A
+		GROUP BY A.YEAR
+	</select>
+
+	<select id="salaryDAO.selectUserSalaryRealListCEOStatusCnt"
+		parameterClass="salaryVO" resultClass="egovMap">
+		SELECT
+		STAT.CODE, SUM(IFNULL(COUNT, 0) ) COUNT
+		FROM
+		COMTCCMMNDETAILCODE STAT
+		LEFT OUTER JOIN (
+		SELECT
+		USS.STATUS, COUNT(*) COUNT
+		FROM
+		TBL_USERINFO USR
+		LEFT OUTER JOIN TBL_USER_SALARY_REAL USS
+		ON USR.NO = USS.USER_NO
+		AND USS.YEAR = #year#
+		LEFT OUTER JOIN TBL_USER_EVA EVA
+		ON USR.NO = EVA.USER_NO
+		AND EVA.YEAR = #year#
+		WHERE
+		USR.GHOST = '0'
+		AND USR.COMPIN_DT IS NOT NULL
+		AND EVA.WORK_ST NOT IN ('R')
+
+		<include refid="SQL_salaryRealWhere" />
+
+		GROUP BY USS.STATUS
+		) A
+		ON STAT.CODE = A.STATUS
+		WHERE STAT.CODE_ID = 'KMS034'
+		GROUP BY STAT.CODE
+		ORDER BY STAT.CODE
+
+	</select>
+
+	<select id="salaryDAO.selectUserSalaryRealListCEOTotCnt"
+		parameterClass="salaryVO" resultClass="java.lang.Integer">
+		SELECT
+		COUNT(*)
+		FROM
+		TBL_USERINFO USR
+		INNER JOIN COMTCCMMNDETAILCODE DCO
+		ON DCO.CODE_ID = 'KMS003'
+		AND USR.RANK_ID = DCO.CODE
+		LEFT OUTER JOIN TBL_USER_EVA EVA
+		ON USR.NO = EVA.USER_NO
+		AND EVA.YEAR = #year#
+		LEFT OUTER JOIN TBL_ORGNZT ORG
+		ON USR.ORGNZT_ID = ORG.ORGNZT_ID
+		LEFT OUTER JOIN TBL_USER_SALARY_REAL USS
+		ON USR.NO = USS.USER_NO
+		AND USS.YEAR = #year#
+		WHERE
+		USR.GHOST = '0'
+		AND USR.COMPIN_DT IS NOT NULL
+		AND EVA.WORK_ST NOT IN ('R')
+		<include refid="SQL_salaryRealWhere" />
+
+	</select>
+
+	<select id="salaryDAO.selectUserSalaryEva"
+		parameterClass="salaryVO" resultClass="egovMap">
+		SELECT
+		USR.USER_ID
+		,USR.SABUN
+		,USR.USER_NM
+		,USR.NO USER_NO
+		,USR.WORK_ST
+		,USR.COMPIN_DT, USR.RANK_ID, USR.COMPIN_DT, USR.BRTH
+		,ORG.ORGNZT_NM
+		,ORG.ORGNZT_ID
+		,DCO.CODE_NM AS RANK_NM
+		,DCO.ORD
+		,#year# YEAR
+		,USR.DEGREE, USR.PROMOTION_YEAR, USR.CAREER_MONTH
+		,FN_GET_MEMBER_AGE(USR.NO, '') AS AGE, FN_GET_MEMBER_AGE_KOR(USR.NO, '') AGE_KOR
+		,CAST(FLOOR((USR.CAREER_MONTH + FN_GET_MEMBER_WORK_PERIOD(USR.NO))/12)
+		AS SIGNED) WORK_YEAR
+		,CAST((USR.CAREER_MONTH + FN_GET_MEMBER_WORK_PERIOD(USR.NO))%12 AS SIGNED) WORK_MONTH
+		,CAST(USR.CAREER_MONTH + FN_GET_MEMBER_WORK_PERIOD(USR.NO) AS SIGNED)
+		WORK_PERIOD
+		,CAST(FLOOR(FN_GET_MEMBER_WORK_PERIOD(USR.NO)/12) AS SIGNED) WORK_YEAR_IN
+		,CAST(FN_GET_MEMBER_WORK_PERIOD(USR.NO)%12 AS SIGNED) WORK_MONTH_IN
+		,EVA.EVA1, CONCAT(EVA1.USER_NM,"(",EVA1.USER_ID,")") EVA1_NM
+		,EVA.EVA2, CONCAT(EVA2.USER_NM,"(",EVA2.USER_ID,")") EVA2_NM
+		,EVA.EVA3, CONCAT(EVA3.USER_NM,"(",EVA3.USER_ID,")") EVA3_NM
+		,EVA.SCORE1, EVA.SCORE2, EVA.SCORE3, EVA.GRADE
+		FROM
+		TBL_USERINFO USR
+		INNER JOIN COMTCCMMNDETAILCODE DCO
+		ON DCO.CODE_ID = 'KMS003'
+		AND USR.RANK_ID = DCO.CODE
+		LEFT OUTER JOIN TBL_USER_EVA EVA
+		ON USR.NO = EVA.USER_NO
+		AND EVA.YEAR = #year#
+		LEFT OUTER JOIN TBL_USERINFO EVA1
+		ON EVA.EVA1 = EVA1.NO
+		LEFT OUTER JOIN TBL_USERINFO EVA2
+		ON EVA.EVA2 = EVA2.NO
+		LEFT OUTER JOIN TBL_USERINFO EVA3
+		ON EVA.EVA3 = EVA3.NO
+		LEFT OUTER JOIN TBL_ORGNZT ORG
+		ON USR.ORGNZT_ID = ORG.ORGNZT_ID
+		LEFT OUTER JOIN TBL_USER_SALARY_REAL USS
+		ON USR.NO = USS.USER_NO
+		AND USS.YEAR = #year#
+		WHERE
+		USR.GHOST = '0'
+		AND USR.COMPIN_DT IS NOT NULL
+		AND EVA.WORK_ST NOT IN ('R')
+		<include refid="SQL_salaryRealWhere" />
+
+		<include refid="SQL_salaryRealOrderBy" />
+	</select>
+
+	<select id="salaryDAO.selectMemberSalaryNego"
+		parameterClass="salaryVO" resultClass="egovMap">
+		SELECT
+		USR.USER_ID
+		,USR.SABUN
+		,USR.USER_NM
+		,USR.NO USER_NO
+		,USR.WORK_ST
+		,USR.COMPIN_DT
+		,IFNULL(USR.ACCEPT_COMPIN_DT,USR.COMPIN_DT) AS ACCEPT_COMPIN_DT
+		,USR.RANK_ID, USR.COMPIN_DT, USR.BRTH
+		,ORG.ORGNZT_NM
+		,ORG.ORGNZT_ID
+		,DCO.CODE_NM AS RANK_NM
+		,DCO.ORD
+		,USS.YEAR AS YEAR
+		, IFNULL(USS.SALARY_REAL,0) SALARY_REAL
+		, IFNULL(USS.SALARY_HOPE,0) SALARY_HOPE
+		, IFNULL(USS.SALARY_SUGGEST,0) SALARY_SUGGEST
+		, IFNULL(USS2.SALARY_REAL, 0) SALARY_NEXT
+		, IF(USS.SALARY_REAL IS NULL || USS.SALARY_HOPE IS NULL ||
+		USS.SALARY_SUGGEST IS NULL,
+		"N",
+		"Y") IS_REGISTERED
+		,ROUND((IFNULL(USS2.SALARY_REAL, USS.SALARY_SUGGEST) - IFNULL(USS.SALARY_REAL,0)) /
+		IFNULL(USS.SALARY_REAL,0) * 100, 2) INCREASE_RATE
+		,ROUND( IFNULL(USS2.SALARY_REAL, USS.SALARY_SUGGEST) -
+		IFNULL(USS.SALARY_REAL,0), 2) INCREASE_AMOUNT
+		,ROUND((IFNULL(USS.SALARY_SUGGEST,0) - IFNULL(USS.SALARY_REAL,0)) /
+		IFNULL(USS.SALARY_REAL,0) * 100, 2) INCREASE_RATE_SUGGEST
+		,ROUND( IFNULL(USS.SALARY_SUGGEST,0) - IFNULL(USS.SALARY_REAL,0), 2)
+		INCREASE_AMOUNT_SUGGEST
+		,USS.CAR_COST, USS.MEAL_COST, USS.BABY_COST, USS.COMMUNICATION_COST, USS.ACCEPT, USS.CEO_CONFIRM, USS.STATUS
+		,USS.NOTE
+		,IF(IFNULL(USS.NOTE,"") = "", "N", "Y") NOTE_YN
+
+		,USS.HOPE_NOTE
+
+		,USR.DEGREE, USR.PROMOTION_YEAR, USR.CAREER_MONTH
+		,FN_GET_MEMBER_AGE(USR.NO, '') AS AGE, FN_GET_MEMBER_AGE_KOR(USR.NO, '') AGE_KOR
+		,CAST(FLOOR((USR.CAREER_MONTH + FN_GET_MEMBER_WORK_PERIOD(USR.NO))/12)
+		AS SIGNED) WORK_YEAR
+		,CAST((USR.CAREER_MONTH + FN_GET_MEMBER_WORK_PERIOD(USR.NO))%12 AS SIGNED) WORK_MONTH
+		,CAST(USR.CAREER_MONTH + FN_GET_MEMBER_WORK_PERIOD(USR.NO) AS SIGNED)
+		WORK_PERIOD
+		,CAST(FLOOR(FN_GET_MEMBER_WORK_PERIOD(USR.NO)/12) AS SIGNED) WORK_YEAR_IN
+		,CAST(FN_GET_MEMBER_WORK_PERIOD(USR.NO)%12 AS SIGNED) WORK_MONTH_IN
+		,CAST(FN_GET_MEMBER_WORK_PERIOD(USR.NO) AS SIGNED) WORK_PERIOD_IN
+		,EVA.EVA1 ,EVA.EVA2 ,EVA.EVA3 ,EVA.SCORE1 ,EVA.SCORE2 ,EVA.SCORE3 ,EVA.GRADE
+		FROM
+		TBL_USER_SALARY_REAL USS
+		INNER JOIN TBL_USERINFO USR
+		ON USR.NO = USS.USER_NO
+		INNER JOIN COMTCCMMNDETAILCODE DCO
+		ON DCO.CODE_ID = 'KMS003'
+		AND USR.RANK_ID = DCO.CODE
+		LEFT OUTER JOIN TBL_USER_SALARY_REAL USS2
+		ON USS.USER_NO = USS2.USER_NO
+		AND USS.YEAR = USS2.YEAR - 1
+		LEFT OUTER JOIN TBL_ORGNZT ORG
+		ON USR.ORGNZT_ID = ORG.ORGNZT_ID
+		LEFT OUTER JOIN TBL_USER_EVA EVA
+		ON USR.NO = EVA.USER_NO
+		AND EVA.YEAR = USS.YEAR
+		WHERE
+		USR.GHOST = '0'
+		AND USR.COMPIN_DT IS NOT NULL
+		AND USR.NO = #userNo#
+		AND USS.YEAR BETWEEN 0 AND #year#
+
+		ORDER BY YEAR DESC
+		LIMIT 5
+	</select>
+
+	<resultMap id="salaryRealMemberInfo" class="salaryVO">
+		<result property="userId" column="USER_ID" columnIndex="1" />
+		<result property="sabun" column="SABUN" columnIndex="2" />
+		<result property="userNm" column="USER_NM" columnIndex="3" />
+		<result property="userNo" column="USER_NO" columnIndex="4" />
+		<result property="workSt" column="WORK_ST" columnIndex="5" />
+		<result property="compinDt" column="COMPIN_DT" columnIndex="6" />
+		<result property="acceptCompinDt" column="ACCEPT_COMPIN_DT"
+			columnIndex="6" />
+		<result property="compotDt" column="COMPOT_DT" columnIndex="7" />
+		<result property="orgnztNm" column="ORGNZT_NM" columnIndex="8" />
+		<result property="orgnztId" column="ORGNZT_ID" columnIndex="9" />
+		<result property="rankNm" column="RANK_NM" columnIndex="10" />
+		<result property="year" column="YEAR" columnIndex="11" />
+		<result property="salaryReal" column="SALARY_REAL"
+			columnIndex="12" />
+		<result property="salaryHope" column="SALARY_HOPE"
+			columnIndex="13" />
+		<result property="salarySuggest" column="SALARY_SUGGEST"
+			columnIndex="14" />
+		<result property="isRegistered" column="IS_REGISTERED"
+			columnIndex="15" />
+		<result property="carCost" column="CAR_COST" columnIndex="16" />
+		<result property="mealCost" column="MEAL_COST" columnIndex="17" />
+		<result property="babyCost" column="BABY_COST" columnIndex="18" />
+		<result property="communicationCost" column="COMMUNICATION_COST" columnIndex="19" />
+		<result property="status" column="STATUS" columnIndex="20" />
+		<result property="note" column="NOTE" columnIndex="21" />
+		<result property="noteYn" column="NOTE_YN" columnIndex="22" />
+		<result property="hopeNote" column="HOPE_NOTE" columnIndex="23" />
+		<result property="hopeNoteYn" column="HOPE_NOTE_YN"
+			columnIndex="24" />
+	</resultMap>
+
+	<select id="salaryDAO.selectUserSalaryRealMember"
+		parameterClass="salaryVO" resultMap="salaryRealMemberInfo">
+		SELECT
+		USR.USER_ID
+		,USR.SABUN
+		,USR.USER_NM
+		,USR.NO USER_NO
+		,USR.WORK_ST
+		,USR.COMPIN_DT
+		,IFNULL(USR.ACCEPT_COMPIN_DT,USR.COMPIN_DT) AS ACCEPT_COMPIN_DT
+		,USR.COMPOT_DT
+		,ORG.ORGNZT_NM
+		,ORG.ORGNZT_ID
+		,DCO.CODE_NM AS RANK_NM
+		, #year# YEAR
+		, IFNULL(USS.SALARY_REAL,0) AS SALARY_REAL
+		, IFNULL(USS.SALARY_HOPE,0) AS SALARY_HOPE
+		, IFNULL(USS.SALARY_SUGGEST,0) AS SALARY_SUGGEST
+		, IF(USS.SALARY_REAL IS NULL || USS.SALARY_HOPE IS NULL ||
+		USS.SALARY_SUGGEST IS NULL,
+		"N",
+		"Y") AS IS_REGISTERED
+		, IFNULL(USS.CAR_COST, 0) AS CAR_COST
+		, IFNULL(USS.MEAL_COST, 0) AS MEAL_COST
+		, IFNULL(USS.BABY_COST, 0) AS BABY_COST
+		, IFNULL(USS.COMMUNICATION_COST, 0) AS COMMUNICATION_COST
+
+		, USS.STATUS
+		<!-- , USS.NOTE ,IF(IFNULL(USS.NOTE,"") = "", "N", "Y") NOTE_YN -->
+
+		, (SELECT NOTE FROM TBL_USER_SALARY_REAL WHERE USER_NO = USR.NO AND
+		YEAR = $year$-1) AS NOTE
+		,IF(IFNULL((SELECT NOTE FROM TBL_USER_SALARY_REAL WHERE USER_NO = USR.NO AND YEAR =
+		$year$-1),"") = "", "N", "Y") NOTE_YN
+
+
+		,USS.HOPE_NOTE
+		,IF(IFNULL(USS.HOPE_NOTE,"") = "", "N", "Y") HOPE_NOTE_YN
+
+		FROM
+		TBL_USERINFO USR
+		INNER JOIN COMTCCMMNDETAILCODE DCO
+		ON DCO.CODE_ID = 'KMS003'
+		AND USR.RANK_ID = DCO.CODE
+		LEFT OUTER JOIN TBL_ORGNZT ORG
+		ON USR.ORGNZT_ID = ORG.ORGNZT_ID
+		LEFT OUTER JOIN TBL_USER_SALARY_REAL USS
+		ON USR.NO = USS.USER_NO
+		<isNotEmpty property="year">
+			AND USS.YEAR =#year#
+		</isNotEmpty>
+		WHERE
+		USR.GHOST = '0'
+		AND USR.COMPIN_DT IS NOT NULL
+		AND WORK_ST NOT IN ('R')
+		<isNotEmpty property="userNo">
+			AND USR.NO = #userNo#
+		</isNotEmpty>
+	</select>
+
+	<resultMap id="userSalaryMemberEva" class="memberEvaVO">
+		<result property="userNo" column="USER_NO" columnIndex="1" />
+		<result property="year" column="YEAR" columnIndex="2" />
+		<result property="grade" column="GRADE" columnIndex="3" />
+		<result property="eva1" column="EVA1" columnIndex="4" />
+		<result property="score1" column="SCORE1" columnIndex="5" />
+		<result property="eva2" column="EVA2" columnIndex="6" />
+		<result property="score2" column="SCORE2" columnIndex="7" />
+		<result property="eva3" column="EVA3" columnIndex="8" />
+		<result property="score3" column="SCORE3" columnIndex="9" />
+		<result property="expCompId" column="EXP_COMP_ID"
+			columnIndex="10" />
+		<result property="compnyId" column="COMPNY_ID" columnIndex="11" />
+		<result property="orgnztId" column="ORGNZT_ID" columnIndex="12" />
+		<result property="rankId" column="RANK_ID" columnIndex="13" />
+		<result property="position" column="POSITION" columnIndex="14" />
+		<result property="workSt" column="WORK_ST" columnIndex="15" />
+		<result property="degree" column="DEGREE" columnIndex="16" />
+		<result property="promotionYear" column="PROMOTION_YEAR"
+			columnIndex="17" />
+		<result property="careerLength" column="CAREER_LENGTH"
+			columnIndex="18" />
+		<result property="scoreSelf" column="SCORE_SELF"
+			columnIndex="19" />
+	</resultMap>
+
+	<select id="salaryDAO.selectUserSalaryMemberEva"
+		parameterClass="memberEvaVO" resultMap="userSalaryMemberEva">
+		SELECT
+		USER_NO, YEAR, GRADE,
+		EVA1, SCORE1, EVA2, SCORE2, EVA3, SCORE3,
+		EXP_COMP_ID, COMPNY_ID, ORGNZT_ID, RANK_ID,
+		POSITION, WORK_ST, DEGREE, PROMOTION_YEAR,
+		CAREER_LENGTH, SCORE_SELF
+		FROM
+		TBL_USER_EVA
+		WHERE
+		USER_NO = #userNo#
+		AND YEAR = #year#
+	</select>
+
+	<update id="salaryDAO.updateUserSalaryReal"
+		parameterClass="salaryVO">
+		UPDATE TBL_USER_SALARY_REAL
+		SET SALARY_REAL = SALARY_REAL
+		<isNotEmpty property="salaryReal">
+			, SALARY_REAL = #salaryReal#
+		</isNotEmpty>
+		<isNotEmpty property="salaryHope">
+			, SALARY_HOPE = #salaryHope#
+		</isNotEmpty>
+		<isNotEmpty property="salarySuggest">
+			, SALARY_SUGGEST = #salarySuggest#
+		</isNotEmpty>
+		<isNotEmpty property="accept">
+			, ACCEPT = #accept#
+		</isNotEmpty>
+		<isNotEmpty property="ceoConfirm">
+			, CEO_CONFIRM = #ceoConfirm#
+		</isNotEmpty>
+		<isNotEmpty property="carCost">
+			, CAR_COST = #carCost#
+		</isNotEmpty>
+		<isNotEmpty property="mealCost">
+			, MEAL_COST = #mealCost#
+		</isNotEmpty>
+		<isNotEmpty property="babyCost">
+			, BABY_COST = #babyCost#
+		</isNotEmpty>
+		<isNotEmpty property="communicationCost">
+			, COMMUNICATION_COST = #communicationCost#
+		</isNotEmpty>
+		<isNotEmpty property="status">
+			, STATUS = #status#
+		</isNotEmpty>
+		<isNotEmpty property="note">
+			, NOTE = #note#
+		</isNotEmpty>
+		<isNotEmpty property="hopeNote">
+			, HOPE_NOTE = #hopeNote#
+		</isNotEmpty>
+		WHERE USER_NO=#userNo#
+		AND YEAR=#year#
+	</update>
+
+	<insert id="salaryDAO.insertRankSalaryReal"
+		parameterClass="salaryVO">
+		INSERT INTO TBL_RANK_SALARY_REAL
+		(RANK_CODE, YEAR, RAISE_RATE, SALARY, YEAR_DIFF, GRADE_DIFF)
+		VALUES
+		(#rankCode#, #year#, #raiseRate#, #salary#, #yearDiff#, #gradeDiff#)
+	</insert>
+
+	<insert id="salaryDAO.insertUserSalaryReal"
+		parameterClass="salaryVO">
+		<![CDATA[
+			INSERT INTO TBL_USER_SALARY_REAL
+				(USER_NO, YEAR, SALARY_REAL
+				,SALARY_HOPE ,SALARY_SUGGEST 
+				,ACCEPT ,CEO_CONFIRM
+				,CAR_COST ,MEAL_COST, BABY_COST , COMMUNICATION_COST, STATUS, NOTE, HOPE_NOTE, ADMIN_NOTE)
+			VALUES
+				(#userNo#, #year#, #salaryReal#
+				,#salaryHope#, #salarySuggest# 
+				,#accept#, #ceoConfirm#
+				,#carCost#, #mealCost#, #babyCost# , #communicationCost#, #status# ,#note# ,#hopeNote# ,#adminNote#
+				)
+		]]>
+	</insert>
+
+	<insert id="salaryDAO.insertUserSalaryMemberEva"
+		parameterClass="memberEvaVO">
+		INSERT INTO TBL_USER_EVA
+		(USER_NO, YEAR, GRADE, EVA1, SCORE1,
+		EVA2, SCORE2, EVA3, SCORE3,
+		EXP_COMP_ID, COMPNY_ID, ORGNZT_ID, RANK_ID,
+		POSITION, WORK_ST, DEGREE, PROMOTION_YEAR,
+		CAREER_LENGTH, SCORE_SELF)
+		VALUES
+		(#userNo#, #year#, #grade#, #eva1#, #score1#
+		,#eva2#, #score2#, #eva3#, #score3#
+		,#expCompId#, #compnyId#, #orgnztId#, #rankId#
+		,#position#, #workSt#, #degree#, #promotionYear#
+		,#careerLength#, #scoreSelf#
+		)
+	</insert>
+
+	<delete id="salaryDAO.deleteRankSalaryReal">
+		DELETE
+		FROM TBL_RANK_SALARY_REAL
+		WHERE
+		RANK_CODE = #rankCode#
+		AND YEAR = #year#
+	</delete>
+
+	<delete id="salaryDAO.deleteUserSalaryReal">
+		DELETE
+		FROM TBL_USER_SALARY_REAL
+		WHERE
+		USER_NO = #userNo#
+		AND YEAR = #year#
+	</delete>
+
+	<delete id="salaryDAO.deleteUserSalaryMemberEva">
+		DELETE
+		FROM TBL_USER_EVA
+		WHERE
+		USER_NO = #userNo#
+		AND YEAR = #year#
+	</delete>
+
+</sqlMap>

@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="approval">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="approvalPresetVO" type="kms.com.app.service.ApprovalPresetVO"/>	
+	<typeAlias  alias="JSONObject" type="org.json.simple.JSONObject"/>
+	
+	<resultMap id="approvalPresetVOALL" class="kms.com.app.service.ApprovalPresetVO">
+		<result property="presetId" column="PRESET_ID" columnIndex="1"/>
+		<result property="presetNm" column="PRESET_NM" columnIndex="2"/>
+		<result property="prjId" column="PRJ_ID" columnIndex="3"/>
+		<result property="accId" column="ACC_ID" columnIndex="4"/>
+		<result property="writerNo" column="WRITER_NO" columnIndex="5"/>
+		<result property="regDt" column="REG_DT" columnIndex="6"/>
+		<result property="presetTyp" column="PRESET_TYP" columnIndex="8"/>
+		<result property="prjFnm" column="PRJ_FNM" columnIndex="9"/>
+		<result property="accNm" column="ACC_NM" columnIndex="10"/>
+	</resultMap>	
+
+	
+	<insert id="presetDAO.insertPreset">
+		<![CDATA[
+			INSERT INTO TBL_EAPP_PRESET 
+				( PRESET_ID
+				  , PRESET_NM
+				  , PRESET_TYP
+				  , PRJ_ID
+				  , ACC_ID
+				  , WRITER_NO
+				  , REG_DT )
+			VALUES ( #presetId#
+				  , #presetNm#
+				  , #presetTyp#
+				  , #prjId#
+				  , #accId#
+				  , #writerNo#
+				  , SYSDATE())
+		]]>
+	</insert>
+	
+	<update id="presetDAO.updatePreset">
+		<![CDATA[
+			UPDATE TBL_EAPP_PRESET
+			SET 
+				 PRESET_NM=#presetNm#
+				, PRJ_ID=#prjId#
+				, ACC_ID=#accId#
+				, WRITER_NO=#writerNo#
+				, REG_DT=#regDt#
+			WHERE PRESET_ID=#presetId#
+		]]>
+	</update>
+	
+	<delete id="presetDAO.deletePreset">
+		<![CDATA[
+			DELETE FROM TBL_EAPP_PRESET 
+			WHERE PRESET_ID=#presetId#
+		]]>
+	</delete>
+	
+	<select id="presetDAO.selectPresetView" resultMap="approvalPresetVOALL">
+		<![CDATA[
+			SELECT
+				PRE.PRESET_ID
+				, PRE.PRESET_NM
+				, PRE.PRESET_TYP
+				, PRE.PRJ_ID
+				, CONCAT("[",PRJ.PRJ_CD,"] ",PRJ.PRJ_NM) PRJ_FNM
+				, PRE.ACC_ID
+				, ACC.ACC_NM
+				, PRE.WRITER_NO
+				, PRE.REG_DT
+			FROM TBL_EAPP_PRESET PRE
+			LEFT OUTER JOIN TBL_PRJ PRJ
+				ON PRE.PRJ_ID = PRJ.PRJ_ID
+			LEFT OUTER JOIN TBL_ACCOUNT ACC
+				ON PRE.ACC_ID = ACC.ACC_ID
+			WHERE PRESET_ID=#presetId#
+		]]>
+	</select>
+	
+	<select id="presetDAO.selectPresetList" parameterClass="approvalPresetVO" resultClass="egovMap">
+			SELECT
+				PRE.PRESET_ID
+				, PRE.PRESET_NM
+				, PRE.PRESET_TYP
+				, PRE.PRJ_ID
+				, CONCAT("[",PRJ.PRJ_CD,"] ",PRJ.PRJ_NM) PRJ_FNM
+				, IF(PRJ.STAT="P","Y","N") PRJ_USE_AT
+				, PRJ.MANAGE_COST_RULE
+				, PRE.ACC_ID
+				, ACC.ACC_NM
+				, ACC.PRNT_ACC_ID PRNT_ACC_ID
+				, ACC2.ACC_NM PRNT_ACC_NM
+				, PRE.WRITER_NO
+				, PRE.REG_DT
+			FROM TBL_EAPP_PRESET PRE
+			LEFT OUTER JOIN TBL_PRJ PRJ
+				ON PRE.PRJ_ID = PRJ.PRJ_ID
+			LEFT OUTER JOIN TBL_ACCOUNT ACC
+				ON PRE.ACC_ID = ACC.ACC_ID
+			LEFT OUTER JOIN TBL_ACCOUNT ACC2
+				ON ACC.PRNT_ACC_ID = ACC2.ACC_ID
+			WHERE 1=1
+			
+			<isNotEmpty prepend="AND" property="presetTyp" >
+				PRESET_TYP = #presetTyp#
+			</isNotEmpty>
+			GROUP BY PRE.PRESET_ID
+			ORDER BY
+				PRESET_ORD ASC
+	</select>	
+	
+	<select id="presetDAO.selectSpeicalPresetPrjList" parameterClass="approvalPresetVO" resultClass="JSONObject">
+			SELECT
+				PRE.PRESET_ID presetId
+				, PRE.PRESET_NM presetNm
+				, PRE.PRESET_TYP presetTyp
+				, PRE.PRJ_ID prjId
+				, CONCAT("[",PRJ.PRJ_CD,"] ",PRJ.PRJ_NM)prjFnm
+			FROM TBL_EAPP_PRESET PRE
+			INNER JOIN TBL_PRJ PRJ
+				ON PRE.PRJ_ID = PRJ.PRJ_ID
+			WHERE 1=1
+				AND PRESET_TYP = #presetTyp#
+			ORDER BY
+				PRESET_ORD ASC
+	</select>	
+	
+	<select id="presetDAO.selectSpeicalPresetPrjCnt" parameterClass="approvalPresetVO" resultClass="java.lang.Integer">
+			SELECT
+				COUNT(*)
+			FROM TBL_EAPP_PRESET PRE
+			INNER JOIN TBL_PRJ PRJ
+				ON PRE.PRJ_ID = PRJ.PRJ_ID
+			WHERE 1=1
+				AND PRESET_TYP = #presetTyp#
+			ORDER BY
+				PRESET_ORD ASC
+	</select>	
+	
+	<select id="presetDAO.selectAlreadyRegPrjCnt" parameterClass="approvalPresetVO" resultClass="java.lang.Integer">
+			SELECT
+				COUNT(*)
+			FROM TBL_EAPP_PRESET PRE
+			INNER JOIN TBL_PRJ PRJ
+				ON PRE.PRJ_ID = PRJ.PRJ_ID
+			WHERE 1=1
+				AND PRESET_TYP = #presetTyp#
+				AND PRE.PRJ_ID =  #prjId#
+	</select>	
+		
+</sqlMap>

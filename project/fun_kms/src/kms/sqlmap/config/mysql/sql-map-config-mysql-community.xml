@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+    "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<sqlMap resource="kms/sqlmap/community/BBS_SQL_Mysql.xml"/>
+	<sqlMap resource="kms/sqlmap/community/BBSMaster_SQL_Mysql.xml"/>
+	<sqlMap resource="kms/sqlmap/community/BBSComment_SQL_Mysql.xml"/>
+	
+	<sqlMap resource="kms/sqlmap/community/Schedule_SQL_Mysql.xml"/>
+	
+	<sqlMap resource="kms/sqlmap/community/Mail_SQL_Mysql.xml"/>
+	<sqlMap resource="kms/sqlmap/community/Note_SQL_Mysql.xml"/>
+</sqlMapConfig>

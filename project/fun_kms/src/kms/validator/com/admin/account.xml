@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC 
+    "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1//EN" 
+    "http://jakarta.apache.org/commons/dtds/validator_1_1.dtd">
+
+<form-validation>
+
+    <formset>
+        <form name="adminChildAccount">
+			<field property="accNm" depends="required, maxlength">
+        		<arg0 key="계정명" resource="false"></arg0>
+        		<arg1 key="50" resource="false"/>
+				<var>
+				<var-name>maxlength</var-name>
+				<var-value>50</var-value>
+				</var>
+			</field> 
+			<field property="prntAccIdSelector" depends="required">
+        		<arg0 key="상위계정" resource="false"></arg0>
+			</field> 
+			
+			<field property="accCt" depends="required, maxlength">
+        		<arg0 key="설명" resource="false"></arg0>
+        		<arg1 key="500" resource="false"/>
+				<var>
+				<var-name>maxlength</var-name>
+				<var-value>500</var-value>
+				</var>
+			</field> 
+			<field property="childTyp" depends="required">
+        		<arg0 key="지출타입" resource="false"></arg0>
+			</field> 
+			<field property="useAt" depends="required">
+				<arg0 key="사용여부" resource="false"></arg0>
+			</field> 
+		</form>
+		
+        <form name="adminPrntAccount">
+			<field property="accNm" depends="required, maxlength">
+        		<arg0 key="계정명" resource="false"></arg0>
+        		<arg1 key="50" resource="false"/>
+				<var>
+				<var-name>maxlength</var-name>
+				<var-value>50</var-value>
+				</var>
+			</field> 
+			
+			<field property="prntTyp" depends="required">
+        		<arg0 key="계정분류" resource="false"></arg0>
+			</field> 
+			<field property="useAt" depends="required">
+				<arg0 key="사용여부" resource="false"></arg0>
+			</field> 
+		</form>
+		
+		
+    </formset>
+
+</form-validation>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="statisticsHelpDAO">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	<sql id="SQL_getSalesOut">
+		(SELECT IFNULL(SUM(COST),0)
+			FROM
+			(
+				SELECT
+					 a.COST COST
+				FROM TBL_SALES a
+				INNER JOIN TBL_EAPP_DOC b
+				ON a.DOC_ID = b.DOC_ID
+				AND b.NEW_AT = 1
+				INNER JOIN TBL_PRJ c
+				ON a.PRJ_ID = c.PRJ_ID
+				WHERE 1=1
+				<isEqual property="isTotal" compareValue="Y">
+					AND SALES_DT LIKE CONCAT(#searchYear#,LPAD(#searchMonth#,2,'0'),'%')
+				</isEqual>
+				<isEqual property="isTotal" compareValue="N">
+					AND SALES_DT BETWEEN CONCAT(#searchYear#,'0000') AND CONCAT(#searchYear#,LPAD(#searchMonth#,2,'0'),31)
+				</isEqual>
+				<isEqual property="isSub" compareValue="Y">
+					AND (
+					<iterate conjunction=" OR " property="searchIdList">
+						c.ORG_PRJ_TREE LIKE CONCAT('%',#searchIdList[]#,'%')
+					</iterate>
+					)
+				</isEqual>
+				<isEqual property="isSub" compareValue="N" >
+					AND (
+					<iterate conjunction=" OR " property="searchIdList">
+						#searchIdList[]# in (c.PRJ_ID, c.ORGNZT_ID)
+					</iterate>
+					)
+				</isEqual>
+				<isEqual property="includeResult" compareValue="N">
+					AND DECIDE_YN  ='Y'
+				</isEqual>
+			)
+		)
+	</sql>
+</sqlMap>

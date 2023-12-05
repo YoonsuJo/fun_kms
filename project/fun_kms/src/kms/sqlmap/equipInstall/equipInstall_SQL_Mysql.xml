@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="equipInstall">
+	<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias alias="eiVO" type="kms.com.equipInstall.service.EquipInstallVO"/>
+	
+	<insert id="EquipInstallDAO.insertEquipInstall" parameterClass="eiVO">
+	<selectKey resultClass="java.lang.Integer" keyProperty="installNo">
+		SELECT IFNULL(MAX(INSTALL_NO),0)+1 AS INSTALL_NO  FROM TBL_EQUIP_INSTALL
+	</selectKey>
+		INSERT INTO TBL_EQUIP_INSTALL 
+		(
+			INSTALL_NO,
+			SUBJECT,
+			PROJECT_CODE,
+			SOLUTION_CODE,
+			CUSTOMER,
+			CONTENT,
+			INST_ID,
+			INST_DATE,
+			CHG_ID,
+			CHG_DATE,
+			ATCHFILEID,
+			GUBUN_CD,
+			DEL_YN
+		)
+		VALUES
+		(
+			#installNo#,
+			#subject#,
+			#prjId#,
+			#solutionCode#,
+			#customer#,
+			#content#,
+			#userId#,
+			SYSDATE(),
+			#userId#,
+			SYSDATE(),
+			#atchFileId#,
+			'0',
+			'N'
+		)
+	</insert>
+	 
+	<select id="EquipInstallDAO.getDetailView" parameterClass="eiVO" resultClass="eiVO">
+		SELECT A.INSTALL_NO as installNo,
+		       A.SUBJECT as subject,
+		       A.PROJECT_CODE as projectCode,
+		       B.PRJ_NM as prjNm,
+		       B.PRJ_CD as prjId,
+		       A.SOLUTION_CODE as solutionCode,
+		       SE.SOLUTION_NAME AS solutionNm,
+		       A.CUSTOMER as customer,
+		       A.CONTENT as content,
+		       A.INST_ID as instId,
+		       A.INST_DATE as instDate,
+		       A.ATCHFILEID AS atchFileId,
+		       IF(C.GUBUN_CD IS NULL, 0, C.GUBUN_CD) AS gubunCd,
+		       A.DEL_YN AS delYn,
+		       B.PRJ_NM as prjNm,
+               C.REG_DATE AS regDate,
+               C.COMPLETE_DATE AS completeDate,
+		       USERINFO1.USER_NM AS userId,
+		       USERINFO2.USER_NM AS mngId,
+		       USERINFO1.NO AS userNo,
+		       USERINFO2.NO AS mngNo,
+		       MAX(C.INSTALL_DETAIL_NO)
+		  FROM TBL_EQUIP_INSTALL A
+		  LEFT JOIN TBL_PRJ B ON A.PROJECT_CODE = B.PRJ_ID
+		  LEFT JOIN (SELECT DT2.INSTALL_NO, DT2.INSTALL_DETAIL_NO, DT1.REG_DATE, DT1.MNG_ID, DT1.GUBUN_CD, DT1.COMPLETE_DATE
+                       FROM TBL_EQUIP_INSTALL_DETAIL DT1
+                       LEFT JOIN (SELECT INSTALL_NO, MAX(INSTALL_DETAIL_NO) AS INSTALL_DETAIL_NO
+                                    FROM TBL_EQUIP_INSTALL_DETAIL
+                                   WHERE DEL_YN = 'N'
+                                   GROUP BY INSTALL_NO) DT2 ON DT1.INSTALL_DETAIL_NO = DT2.INSTALL_DETAIL_NO) C
+                                          ON A.INSTALL_NO = C.INSTALL_NO
+		  LEFT JOIN TBL_USERINFO USERINFO1 ON A.INST_ID = USERINFO1.USER_ID
+		  LEFT JOIN TBL_USERINFO USERINFO2 ON C.MNG_ID = USERINFO2.USER_ID
+		  LEFT JOIN TBL_SOLUTION_EQUIPMENT SE ON A.SOLUTION_CODE = SE.SOLUTION_NO
+		 WHERE A.INSTALL_NO = #installNo#
+	</select>
+	
+	<select id="EquipInstallDAO.getDetailList" parameterClass="eiVO" resultClass="eiVO">
+		SELECT A.INSTALL_DETAIL_NO as installDetailNo,
+			   B.USER_NM AS mngNm,
+			   B.NO AS mngNo,
+			   A.MNG_ID AS mngId,
+			   C.USER_NM AS regNm,
+			   C.NO AS regNo,
+			   A.REG_ID AS regId,
+			   A.REG_DATE as regDate,
+			   A.COMPLETE_DATE as completeDate,
+			   A.ATCHFILEID as atchFileId,
+			   A.CONTENT as content,
+			   A.GUBUN_CD as gubunCd
+		  FROM TBL_EQUIP_INSTALL_DETAIL A
+		  LEFT JOIN TBL_USERINFO B ON B.USER_ID = A.MNG_ID
+		  LEFT JOIN TBL_USERINFO C ON C.USER_ID = A.REG_ID
+		 WHERE INSTALL_NO = #installNo#
+		   AND DEL_YN = 'N'
+		 ORDER BY INSTALL_DETAIL_NO
+	</select>
+	
+	<select id="EquipInstallDAO.getMasterList" parameterClass="eiVO" resultClass="eiVO">
+		SELECT 
+			   A.INSTALL_NO as installNo,
+			   A.SUBJECT AS subject,
+			   B.PRJ_NM as prjNm,
+			   A.SOLUTION_CODE as solutionCode,
+			   A.CUSTOMER as customer,
+			   A.CONTENT as content,
+			   C.USER_NM as userId,
+			   A.ATCHFILEID as atchFileId,
+			   A.GUBUN_CD as gubunCd,
+			   A.DEL_YN as delYn
+		  FROM TBL_EQUIP_INSTALL A
+		  LEFT JOIN TBL_PRJ B ON A.PROJECT_CODE = B.PRJ_ID
+		  LEFT JOIN TBL_USERINFO C ON C.USER_ID = A.INST_ID
+		 WHERE REFERENCE_NO = #referenceNo#
+		 ORDER BY INSTALL_NO
+	</select>
+	
+	<resultMap id="equipInstallList" class="kms.com.equipInstall.service.EquipInstallVO">
+		<result property="listNum"		column="rn"				columnIndex="1"/>
+		<result property="installNo"	column="INSTALL_NO"		columnIndex="2"/>
+		<result property="prjNm"		column="PRJ_NM"			columnIndex="3"/>
+		<result property="prjId"		column="PRJ_ID"			columnIndex="4"/>
+		<result property="projectCode"	column="PROJECT_CODE"	columnIndex="5"/>
+		<result property="subject"		column="SUBJECT"		columnIndex="6"/>
+		<result property="mngNm"		column="MNG_NAME"		columnIndex="7"/>
+		<result property="gubunCd"		column="GUBUN_CD"		columnIndex="8"/>
+		<result property="regDate"		column="INST_DATE"		columnIndex="9"/>
+		<result property="readYn"		column="READ_YN"		columnIndex="10"/>
+		<result property="delYn"		column="DEL_YN"			columnIndex="11"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="12"/>
+	</resultMap>
+	<select id="EquipInstallDAO.getEquipInstallList" parameterClass="eiVO" resultMap="equipInstallList">
+		SELECT @RNUM := @RNUM + 1 AS rn, TB2.*
+		  FROM (
+		  		SELECT @RNUM:=0, TB.*
+		  		  FROM (
+						SELECT A.INSTALL_NO, A.PROJECT_CODE, A.SUBJECT, A.DEL_YN,
+							   B.PRJ_NM, B.PRJ_CD as PRJ_ID,
+							   IF(C.GUBUN_CD IS NULL, 0, C.GUBUN_CD) AS GUBUN_CD, 
+							   IF(C.REG_DATE IS NULL, A.CHG_DATE, C.REG_DATE) AS INST_DATE,
+							   IF(E.USER_NM IS NULL, F.USER_NM, E.USER_NM) AS MNG_NAME,
+							   IF(E.USER_ID IS NULL, F.USER_ID, E.USER_ID) AS SEARCH_ID,
+							   IF(D.READTIME IS NULL, 'N', 'Y') AS READ_YN,
+							   IF(E.NO IS NULL, F.NO, E.NO) AS USER_NO
+						  FROM TBL_EQUIP_INSTALL A
+						  LEFT JOIN TBL_PRJ B ON A.PROJECT_CODE = B.PRJ_ID
+						  LEFT JOIN (SELECT DT2.INSTALL_NO, DT2.INSTALL_DETAIL_NO,
+                                            DT1.REG_DATE, DT1.MNG_ID, DT1.GUBUN_CD
+                                       FROM TBL_EQUIP_INSTALL_DETAIL DT1
+                                       LEFT JOIN (SELECT INSTALL_NO, MAX(INSTALL_DETAIL_NO) AS INSTALL_DETAIL_NO
+                                                    FROM TBL_EQUIP_INSTALL_DETAIL
+                                                   WHERE DEL_YN = 'N'
+                                                   GROUP BY INSTALL_NO) DT2 ON DT1.INSTALL_DETAIL_NO = DT2.INSTALL_DETAIL_NO
+                                      WHERE DEL_YN = 'N'
+                                      ) C ON A.INSTALL_NO = C.INSTALL_NO
+						  LEFT JOIN (SELECT
+						  				 	READTIME, INSTALL_NO, USER_NO
+						  			   FROM TBL_EQUIP_INSTALL_READ
+						  			  WHERE USER_NO = #userId#) D ON A.INSTALL_NO = D.INSTALL_NO
+						  LEFT JOIN TBL_USERINFO E ON C.MNG_ID = E.USER_ID
+						  LEFT JOIN TBL_USERINFO F ON A.INST_ID = F.USER_ID
+						 WHERE 1=1
+						 <isEqual property="adminYn" compareValue="N">
+						   AND A.DEL_YN = 'N'
+						 </isEqual>
+						 <isNotEmpty property="searchPrjId" prepend="AND">
+						 	A.PROJECT_CODE = #searchPrjId#
+						 </isNotEmpty>
+						 <isNotEmpty property="searchSubject" prepend="AND">
+						 	A.SUBJECT LIKE CONCAT('%', #searchSubject#, '%')
+						 </isNotEmpty>
+						 ORDER BY READ_YN, CHG_DATE DESC
+					   ) TB, (SELECT @RNUM := 0) rnum
+					   WHERE 1 = 1
+					   	<isNotEmpty property="searchUserNm" prepend="AND">
+							TB.MNG_NAME LIKE CONCAT('%', #searchUserNm#, '%') 
+					   	</isNotEmpty>
+					   	<isNotEmpty property="searchGubun" prepend="AND">
+							<iterate property="arrGubun" open="GUBUN_CD IN( " close=")" conjunction=",">
+						 	#arrGubun[]#
+							</iterate>
+						</isNotEmpty>
+			   )TB2 LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<select id="EquipInstallDAO.getCountEquipInstallList" parameterClass="eiVO" resultClass="java.lang.Integer">
+		  		SELECT COUNT(TB.INSTALL_NO)
+		  		  FROM (
+						SELECT A.INSTALL_NO, A.PROJECT_CODE, A.SUBJECT, A.GUBUN_CD, A.DEL_YN,
+							   B.PRJ_NM,
+							   IF(C.REG_DATE IS NULL, A.INST_DATE, C.REG_DATE) AS INST_DATE,
+							   IF(E.USER_NM IS NULL, F.USER_NM, E.USER_NM) AS MNG_NAME,
+							   IF(E.USER_ID IS NULL, F.USER_ID, E.USER_ID) AS SEARCH_ID,
+							   IF(D.READTIME IS NULL, 'N', 'Y') AS READ_YN
+						  FROM TBL_EQUIP_INSTALL A
+						  LEFT JOIN TBL_PRJ B ON A.PROJECT_CODE = B.PRJ_ID
+						  LEFT JOIN TBL_EQUIP_INSTALL_DETAIL C
+									    ON A.INSTALL_NO = C.INSTALL_NO
+									   AND A.GUBUN_CD = C.GUBUN_CD
+									   AND C.DEL_YN = 'N'
+						  LEFT JOIN
+						  			(SELECT
+						  				 	READTIME, INSTALL_NO, USER_NO
+						  			   FROM TBL_EQUIP_INSTALL_READ
+						  			  WHERE USER_NO = #userId#) D ON A.INSTALL_NO = D.INSTALL_NO
+						  LEFT JOIN TBL_USERINFO E ON C.MNG_ID = E.USER_ID
+						  LEFT JOIN TBL_USERINFO F ON A.INST_ID = F.USER_ID
+						 WHERE 1=1
+						 <isEqual property="adminYn" compareValue="N">
+						   AND A.DEL_YN = 'N'
+						 </isEqual>
+						 <isNotEmpty property="searchPrjId" prepend="AND">
+						 	A.PROJECT_CODE = #searchPrjId#
+						 </isNotEmpty>
+						 <isNotEmpty property="searchSubject" prepend="AND">
+						 	A.SUBJECT LIKE CONCAT('%', #searchSubject#, '%')
+						 </isNotEmpty>
+						 <isNotEmpty property="arrGubun" prepend="AND">
+						 	<iterate property="arrGubun" open="A.GUBUN_CD IN( " close=")" conjunction=",">
+						 	#arrGubun[]#
+						 	</iterate>
+						 </isNotEmpty>
+						 ORDER BY READ_YN, INSTALL_NO DESC
+					   ) TB, (SELECT @RNUM := 0) rnum
+					   WHERE 1 = 1
+					   <isNotEmpty property="searchUserId" prepend="AND">
+						 TB.SEARCH_ID = #searchUserId# 
+					   </isNotEmpty>
+	</select>
+	
+	
+	
+	
+	<select id="EquipInstallDAO.getEquipInstallListCount" parameterClass="eiVO" resultClass="java.lang.Integer">
+	SELECT count(A.INSTALL_NO)
+	  FROM TBL_EQUIP_INSTALL A
+	  LEFT JOIN TBL_PRJ B ON A.PROJECT_CODE = B.PRJ_ID
+	  LEFT JOIN TBL_EQUIP_INSTALL_DETAIL C ON A.INSTALL_NO = C.INSTALL_NO
+	</select>
+	
+	<insert id="EquipInstallDAO.updateReadOk" parameterClass="eiVO">
+	<selectKey resultClass="java.lang.Integer" keyProperty="readNo">
+		SELECT IFNULL(MAX(NO),0)+1 AS NO  FROM TBL_EQUIP_INSTALL_READ
+	</selectKey>
+	INSERT INTO TBL_EQUIP_INSTALL_READ
+	(
+		NO,
+		INSTALL_NO,
+		READTIME,
+		USER_NO
+	)
+	VALUES
+	(
+		#readNo#,
+		#installNo#,
+		SYSDATE(),
+		#userId#
+	)
+	</insert>
+	
+	<select id="EquipInstallDAO.getReadCount" parameterClass="eiVO" resultClass="java.lang.Integer">
+		SELECT COUNT(NO)
+		  FROM TBL_EQUIP_INSTALL_READ
+		 WHERE INSTALL_NO = #installNo#
+		   AND USER_NO = #userId#
+	</select>
+	
+	<select id="EquipInstallDAO.getEquipInstallFileName" parameterClass="eiVO" resultClass="eiVO">
+		SELECT A.INSTALL_NO, A.ATCHFILEID, B.ORIGNL_FILE_NM as orignlFileName
+		  FROM TBL_EQUIP_INSTALL A
+		  LEFT JOIN (
+		            SELECT ORIGNL_FILE_NM, ATCH_FILE_ID
+		              FROM COMTNFILEDETAIL
+		             WHERE ATCH_FILE_ID = #atchFileId#
+		            ) B ON A.ATCHFILEID = B.ATCH_FILE_ID
+		WHERE A.INSTALL_NO = #installNo#
+	</select>
+	
+	<update id="EquipInstallDAO.updateEquipInstallReceive" parameterClass="eiVO">
+		UPDATE TBL_EQUIP_INSTALL SET
+			   GUBUN_CD = #gubunCd#
+		WHERE INSTALL_NO = #installNo#
+	</update>
+	<insert id="EquipInstallDAO.insertEquipInstallReceive1" parameterClass="eiVO">
+	<selectKey resultClass="java.lang.Integer" keyProperty="installDetailNo">
+		SELECT IFNULL(MAX(INSTALL_DETAIL_NO),0)+1 AS INSTALL_DETAIL_NO  FROM TBL_EQUIP_INSTALL_DETAIL
+	</selectKey>
+		INSERT INTO TBL_EQUIP_INSTALL_DETAIL
+		(
+			INSTALL_DETAIL_NO,
+			INSTALL_NO,
+			MNG_ID,
+			REG_ID,
+			REG_DATE,
+			COMPLETE_DATE,
+			ATCHFILEID,
+			CONTENT,
+			GUBUN_CD,
+			DEL_YN
+		)
+		VALUES
+		(
+			#installDetailNo#,
+			#installNo#,
+			#mngId#,
+			#userId#,
+			SYSDATE(),
+			<isNotEmpty property="completeDate">
+			#completeDate#,
+			</isNotEmpty>
+			<isEmpty property="completeDate">
+			DATE_FORMAT(SYSDATE(), '%Y%m%d'),
+			</isEmpty>
+			#atchFileId#,
+			#content#,
+			#gubunCd#,
+			'N'
+		)
+	</insert>
+	
+	
+	<!-- 설치요청 삭제 -->
+	<update id="EquipInstallDAO.deleteEquipInstall" parameterClass="eiVO">
+		UPDATE TBL_EQUIP_INSTALL SET
+			   DEL_YN = 'Y'
+		 WHERE INSTALL_NO = #installNo#
+	</update>
+	
+	
+	<select id="EquipInstallDAO.getModifyEquipInstall" parameterClass="eiVO" resultClass="eiVO">
+		SELECT INST_ID as instId, INST_DATE as instDate, ATCHFILEID AS atchFileId
+		  FROM TBL_EQUIP_INSTALL
+		 WHERE INSTALL_NO = #referenceNo#
+	</select>
+	
+	
+	
+	<select id="EquipInstallDAO.getHistoryData" parameterClass="eiVo" resultClass="eiVO">
+		SELECT INSTALL_NO AS installNo,
+			   SUBJECT AS subject,
+			   PROJECT_CODE as prjId,
+			   SOLUTION_CODE AS solutionCode,
+			   CUSTOMER AS customer,
+			   CONTENT AS content,
+			   CHG_ID AS chgId,
+			   CHG_DATE AS chgDate
+		  FROM TBL_EQUIP_INSTALL
+		 WHERE INSTALL_NO = #installNo#
+	</select>
+	<update id="EquipInstallDAO.modifyEquipInstall" parameterClass="eiVO">
+		UPDATE TBL_EQUIP_INSTALL SET
+			   SUBJECT = #subject#,
+			   PROJECT_CODE = #prjId#,
+			   SOLUTION_CODE = #solutionCode#,
+			   CUSTOMER = #customer#,
+			   CONTENT = #content#,
+			   ATCHFILEID = #atchFileId#,
+			   CHG_ID = #userId#,
+			   CHG_DATE = SYSDATE()
+		 WHERE INSTALL_NO = #installNo#
+	</update>
+	<!-- 설치요청 수정 -->
+	<insert id="EquipInstallDAO.modifyEquipInstallHistory" parameterClass="eiVO">
+	<selectKey resultClass="java.lang.Integer" keyProperty="historyNo">
+		SELECT IFNULL(MAX(HISTORY_NO),0)+1 AS HISTORY_NO  FROM TBL_EQUIP_INSTALL_HISTORY
+	</selectKey>
+		INSERT INTO TBL_EQUIP_INSTALL_HISTORY
+		(
+			HISTORY_NO,
+			INSTALL_NO,
+			CHG_ID,
+			CHG_DATE,
+			SUBJECT,
+			PROJECT_CODE,
+			SOLUTION_CODE,
+			CONTENT,
+			CUSTOMER
+		)
+		VALUES
+		(
+			#historyNo#,
+			#installNo#,
+			#chgId#,
+			#chgDate#,
+			#subject#,
+			#prjId#,
+			#solutionCode#,
+			#content#,
+			#customer#
+		)
+	</insert>
+	
+	<!-- 
+	<update id="EquipInstallDAO.modifyEquipInstallDetail" parameterClass="eiVO">
+		UPDATE TBL_EQUIP_INSTALL_DETAIL SET
+			   INSTALL_NO = #installNo#
+		 WHERE INSTALL_NO = #No#
+	</update>
+	 -->
+	 <insert id="EquipInstallDAO.insertEquipSolution" parameterClass="eiVO">
+	<selectKey resultClass="java.lang.Integer" keyProperty="solutionCode">
+		SELECT IFNULL(MAX(SOLUTION_NO),0)+1 AS SOLUTION_NO  FROM TBL_SOLUTION_EQUIPMENT
+	</selectKey>
+		INSERT INTO TBL_SOLUTION_EQUIPMENT
+		(
+			SOLUTION_NO,
+			SOLUTION_NAME
+		)
+		VALUES
+		(
+			#solutionCode#,
+			#solutionNm#
+		)
+	</insert>
+	<select id="EquipInstallDAO.getEquipSolution" resultClass="eiVO">
+	SELECT SOLUTION_NO AS solutionCode, SOLUTION_NAME as solutionNm FROM TBL_SOLUTION_EQUIPMENT
+	</select>
+	<select id="EquipInstallDAO.checkSameSolution" parameterClass="eiVO" resultClass="java.lang.Integer">
+		SELECT COUNT(SOLUTION_NO) FROM TBL_SOLUTION_EQUIPMENT WHERE SOLUTION_NAME = #solutionNm#
+	</select> 
+	
+	<select id="EquipInstallDAO.getChgInstallHistory" parameterClass="eiVO" resultClass="eiVO">
+		SELECT
+			'0' AS historyNo,
+			INSTALL_NO AS installNo,
+			SUBJECT AS subject,
+			A.PROJECT_CODE as projectCode,
+		    C.PRJ_NM as prjNm,
+		    C.PRJ_CD as prjId,
+            SE.SOLUTION_NAME AS solutionNm,
+			CONTENT AS content,
+			CUSTOMER AS customer,
+			B.USER_NM as chgId,
+			B.NO as chgNo,
+			CHG_DATE as chgDate
+		  FROM TBL_EQUIP_INSTALL A
+		  LEFT JOIN TBL_USERINFO B ON A.CHG_ID = B.USER_ID
+		  LEFT JOIN TBL_PRJ C ON A.PROJECT_CODE = C.PRJ_ID
+		  LEFT JOIN TBL_SOLUTION_EQUIPMENT SE ON A.SOLUTION_CODE = SE.SOLUTION_NO
+		 WHERE INSTALL_NO = #installNo#
+	 UNION ALL
+		SELECT
+			HISTORY_NO AS historyNo,
+			INSTALL_NO AS installNo,
+			SUBJECT AS subject,
+			A.PROJECT_CODE as projectCode,
+		    C.PRJ_NM as prjNm,
+		    C.PRJ_CD as prjId,
+            SE.SOLUTION_NAME AS solutionNm,
+			CONTENT AS content,
+			CUSTOMER AS customer,
+			B.USER_NM as chgId,
+			B.NO as chgNo,
+			CHG_DATE as chgDate
+		  FROM TBL_EQUIP_INSTALL_HISTORY A
+		  LEFT JOIN TBL_USERINFO B ON A.CHG_ID = B.USER_ID
+		  LEFT JOIN TBL_PRJ C ON A.PROJECT_CODE = C.PRJ_ID
+		  LEFT JOIN TBL_SOLUTION_EQUIPMENT SE ON A.SOLUTION_CODE = SE.SOLUTION_NO
+		 WHERE INSTALL_NO = #installNo#
+	     ORDER BY chgDate DESC
+	     LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<select id="EquipInstallDAO.getChgInstallHistoryCount" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM (
+			SELECT
+				'0' AS historyNo,
+				INSTALL_NO AS installNo,
+				SUBJECT AS subject,
+				A.PROJECT_CODE as projectCode,
+			    C.PRJ_NM as prjNm,
+			    C.PRJ_CD as prjId,
+	            SE.SOLUTION_NAME AS solutionNm,
+				CONTENT AS content,
+				CUSTOMER AS customer,
+				B.USER_NM as chgId,
+				B.NO as chgNo,
+				CHG_DATE as chgDate
+			  FROM TBL_EQUIP_INSTALL A
+			  LEFT JOIN TBL_USERINFO B ON A.CHG_ID = B.USER_ID
+			  LEFT JOIN TBL_PRJ C ON A.PROJECT_CODE = C.PRJ_ID
+			  LEFT JOIN TBL_SOLUTION_EQUIPMENT SE ON A.SOLUTION_CODE = SE.SOLUTION_NO
+			 WHERE INSTALL_NO = #installNo#
+		 UNION ALL
+			SELECT
+				HISTORY_NO AS historyNo,
+				INSTALL_NO AS installNo,
+				SUBJECT AS subject,
+				A.PROJECT_CODE as projectCode,
+			    C.PRJ_NM as prjNm,
+			    C.PRJ_CD as prjId,
+	            SE.SOLUTION_NAME AS solutionNm,
+				CONTENT AS content,
+				CUSTOMER AS customer,
+				B.USER_NM as chgId,
+				B.NO as chgNo,
+				CHG_DATE as chgDate
+			  FROM TBL_EQUIP_INSTALL_HISTORY A
+			  LEFT JOIN TBL_USERINFO B ON A.CHG_ID = B.USER_ID
+			  LEFT JOIN TBL_PRJ C ON A.PROJECT_CODE = C.PRJ_ID
+			  LEFT JOIN TBL_SOLUTION_EQUIPMENT SE ON A.SOLUTION_CODE = SE.SOLUTION_NO
+			 WHERE INSTALL_NO = #installNo#
+		 ) A
+	</select>
+	
+	<update id="EquipInstallDAO.updateEquipInstallDetail" parameterClass="eiVO">
+		UPDATE TBL_EQUIP_INSTALL_DETAIL SET
+			   DEL_YN = 'Y'
+		 WHERE INSTALL_DETAIL_NO = #installDetailNo#
+	</update>
+	<update id="EquipInstallDAO.updateEquipInstallMaster" parameterClass="eiVO">
+		UPDATE TBL_EQUIP_INSTALL SET
+			   GUBUN_CD = #gubunCd#
+		 WHERE INSTALL_NO = #installNo#
+	</update>
+	
+	
+	<select id="EquipInstallDAO.getModifyDetailData" parameterClass="eiVO" resultClass="eiVO">
+		SELECT INSTALL_DETAIL_NO as installDetailNo,
+			   INSTALL_NO as installNo,
+			   MNG_ID as mngId,
+			   B.USER_NM as mngNm,
+			   REG_ID AS regId,
+			   REG_DATE as regDate,
+			   COMPLETE_DATE as CompleteDate,
+			   ATCHFILEID as atchFileId,
+			   CONTENT as content,
+			   GUBUN_CD as gubunCd,
+			   DEL_YN as delYn
+		  FROM TBL_EQUIP_INSTALL_DETAIL A
+		  LEFT JOIN TBL_USERINFO B ON A.MNG_ID = B.USER_ID
+		 WHERE DEL_YN = 'N'
+		   AND INSTALL_DETAIL_NO = #installDetailNo#
+	</select>
+	
+	<select id="EquipInstallDAO.getDetailMngId" parameterClass="eiVO" resultClass="eiVO">
+		SELECT MNG_ID AS mngId, REG_DATE as regDate, INSTALL_DETAIL_NO AS installDetailNo FROM TBL_EQUIP_INSTALL_DETAIL WHERE INSTALL_DETAIL_NO = #installDetailNo#
+	</select>
+	
+	<insert id="EquipInstallDAO.insertDetailHistory" parameterClass="eiVO">
+		<selectKey resultClass="java.lang.Integer" keyProperty="historyNo">
+		SELECT IFNULL(MAX(HISTORY_NO),0)+1 AS HISTORY_NO  FROM TBL_EQUIP_INSTALL_DETAIL_HISTORY
+	</selectKey>
+		INSERT INTO TBL_EQUIP_INSTALL_DETAIL_HISTORY
+		(
+			HISTORY_NO,
+			INSTALL_DETAIL_NO,
+			CHG_ID,
+			CHG_DATE
+		)
+		VALUES
+		(
+			#historyNo#,
+			#installDetailNo#,
+			#mngId#,
+			#regDate#
+		)
+	</insert>
+	
+	<update id="EquipInstallDAO.updateEquipInstallDetailMP" parameterClass="eiVO">
+		UPDATE TBL_EQUIP_INSTALL_DETAIL SET
+			REG_ID = #userId#,
+			REG_DATE = SYSDATE(),
+			MNG_ID = #mngId#,
+			<isNotEmpty property="completeDate">
+			COMPLETE_DATE = #completeDate#,
+			</isNotEmpty>
+			ATCHFILEID = #atchFileId#,
+			CONTENT = #content#
+		 WHERE INSTALL_DETAIL_NO = #installDetailNo#
+	</update>
+	
+	<select id="EquipInstallDAO.getDetailHistory" parameterClass="eiVO" resultClass="eiVO">
+		SELECT
+			HISTORY_NO AS historyNo,
+			INSTALL_DETAIL_NO,
+			B.USER_NM as chgId,
+			CHG_DATE as chgDate
+		  FROM TBL_EQUIP_INSTALL_DETAIL_HISTORY A
+		  LEFT JOIN TBL_USERINFO B ON A.CHG_ID = B.USER_ID
+		 WHERE INSTALL_DETAIL_NO = #installDetailNo#
+		 ORDER BY HISTORY_NO
+	</select>
+	
+	
+	
+	<select id="EquipInstallDAO.getEquipSolutionPaging" parameterClass="eiVO" resultClass="eiVO">
+		SELECT @RNUM := @RNUM + 1 AS listNum, TB2.*
+		  FROM (
+		  		SELECT @RNUM:=0, TB.*
+		  		  FROM (
+						SELECT SOLUTION_NO AS solutionCode, SOLUTION_NAME AS solutionNm
+						  FROM TBL_SOLUTION_EQUIPMENT
+					   ) TB, (SELECT @RNUM := 0) rnum
+			   )TB2 LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	<select id="EquipInstallDAO.getEquipSolutionCount" resultClass="java.lang.Integer">
+		SELECT COUNT(SOLUTION_NO)
+		  FROM TBL_SOLUTION_EQUIPMENT
+	</select>
+	<select id="EquipInstallDAO.countUseSolution" parameterClass="eiVO" resultClass="java.lang.Integer">
+		SELECT COUNT(INSTALL_NO)
+		  FROM TBL_EQUIP_INSTALL
+		 WHERE SOLUTION_CODE = #solutionCode#
+	</select>
+	
+	<delete id="EquipInstallDAO.deleteSolution" parameterClass="eiVO">
+		DELETE FROM TBL_SOLUTION_EQUIPMENT
+		 WHERE SOLUTION_NO = #solutionCode#
+	</delete>
+	
+	<update id="EquipInstallDAO.updateSolution" parameterClass="eiVO">
+		UPDATE TBL_SOLUTION_EQUIPMENT SET
+			SOLUTION_NAME = #solutionNm#
+		 WHERE SOLUTION_NO = #solutionCode#
+	</update>
+</sqlMap>

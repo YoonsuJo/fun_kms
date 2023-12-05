@@ -1,0 +1,198 @@
+@CHARSET "UTF-8";
+
+
+
+/* 선택 UI */
+.ui_Top {background:url(../../images/inc/uiTopBg.gif) repeat-x; height:30px;width:100%;}
+.ui_Top span {float:right; margin:10px 10px 0 0;}
+
+.ui_layer {float:left;margin-right:20px;margin-bottom:10px;margin-bottom:10px;height:600px; width:412px; z-index:100; border-left:4px solid #0a5fca;border-right:4px solid #0a5fca; border-bottom:4px solid #0a5fca;  background-color:#fff;}
+.ui_layer.project{width:500px; height:630px;}
+.ui_layer.projectOld{width:492px; height:530px;}
+.ui_layer.customer{width:492px; height: 530px;}
+
+.ui_layer dl { background:#f1f1f1;}
+.ui_layer dd {padding:5px;border-bottom:1px solid #bababa;}
+.ui_layer .ui_List {height:93%; width:97%; overflow:auto; overflow-x:hidden; padding:5px;background:#fff;}
+.ui_layer .ui_List input{margin-top:1px;}
+.ui_layer .ui_List ul {border:0px solid red; margin-left:18px; padding:0;display:block;}
+.ui_layer .ui_List ul .Depth01 {margin:0; padding:5px;}
+.ui_layer .ui_List ul .Depth02 {margin-left:50px;}
+.ui_layer .ui_List ul .Depth02_proj {margin-left:35px;}
+.ui_layer .ui_List ul li {font-weight:normal;vertical-align:middle;padding-top:4px;}
+.ui_layer .ui_List ul li img {margin-top:4px;}
+:root .ui_layer .ui_List ul li img {margin-top:2px;}
+@media screen and (-webkit-min-device-pixel-ratio:0){ui_layer .ui_List ul li img {vertical-align:bottom;}}
+
+.ui_btn {border-top:1px solid #bababa; padding-top:10px;padding-bottom:10px;text-align:right;margin-right: 10px;}
+
+.ui_layer .ui_List02 {height:79%; overflow:auto; overflow-x:hidden; padding:5px;background:#fff;}
+.ui_layer .ui_List02 ul li {font-weight:normal;vertical-align:middle;padding-top:4px;}
+
+.ui_layer .ui_List03 {height:73%; .height:72%; overflow:auto; overflow-x:hidden; padding:5px;background:#fff;}
+.ui_layer .ui_List03 ul {margin:0; padding:0;}
+.ui_layer .ui_List03 ul li {font-weight:normal;vertical-align:middle;padding-top:4px;}
+.ui_layer .ui_List03 ul .Depth01 {margin:0; padding:5px;}
+.ui_layer .ui_List03 ul .Depth02 {margin-left:50px; margin-bottom:0;}
+.ui_layer .ui_List03 ul .Depth02_proj {margin-left:35px;}
+
+
+
+/* 사용자 및 부서 표시 */
+.tal_color{color: #2a74b7;line-height: 16px;}
+.mouseOver_User{position:absolute; border:1px solid #135698; font-weight:bold; width:260px; z-index: 9999; background-color: #FFFFFF;}
+
+.mouseOver_User dl {margin:0; padding:0;}
+.mouseOver_User dt {background:url(../../images/inc/mouseoverBg.gif) repeat-x; color:#fff; padding:7px 10px 5px 10px; text-align:center; border-bottom:1px solid #135698;}
+.mouseOver_User ul {margin:0; padding:0;}
+.mouseOver_User li {padding-top: 6px;padding-bottom: 6px;}
+.mouseOver_User ul.User_Info {float:left;}
+.mouseOver_User ul.User_Info li {background:url(../../images/inc/bullet_01.gif) no-repeat 5px 9px; padding-left:12px; padding-right:10px;}
+.mouseOver_User ul.option {float:right; border-left:1px solid #135698;}
+.mouseOver_User ul.option li {border-bottom:1px solid #135698;text-align:center; padding-left:20px; padding-right:20px;}
+.mouseOver_User ul.option li.Last_li {border:0;}
+.mouseOver_User ul.option li a:hover {color:#009ede;}
+
+.mouseOver_User02 {float:left; border:1px solid #444; font-weight:bold; width:250px;}
+.mouseOver_User02 dl {margin:0; padding:0;}
+.mouseOver_User02 dt {background:url(../../images/inc/mouseoverBg02.gif) repeat-x; color:#fff; padding:7px 10px 5px 10px; text-align:center; border-bottom:1px solid #444;}
+.mouseOver_User02 ul {margin:0; padding:0; width:49%;}
+.mouseOver_User02 li {padding:5px 10px 3px 10px; text-align:center;}
+.mouseOver_User02 ul.User_Info02 {float:left;}
+.mouseOver_User02 ul.option02 {float:right; border-left:1px solid #444;}
+
+
+.state-hover{background-color: #FBCB09;}
+.state-checked{background-color: #666;}
+.state-hover.state-checked{background-color: #100;}
+
+/*numGen box 
+.mouseOver_numGen{position:absolute; border:1px solid #135698; font-weight:bold; width:250px; z-index: 9999; background-color: #FFFFFF;}
+*/
+/* numberTable */
+.mouseOver_numGen {position:absolute; width:100px; z-index: 9999; margin:0; padding:5px; border:1px solid #e4e4e4; background-color: #FFFFFF;}
+.mouseOver_numGen table {width:100%; padding:0;}
+.mouseOver_numGen tbody td {text-align:center; font-size:12px; font-weight:bold;}
+
+.mouseOver_prjName {position:absolute; width:300px; z-index: 9999; margin:0; padding:5px; border:1px solid #e4e4e4; background-color: #FFFFFF;}
+.copy_recieveList {position:absolute; width:300px; z-index: 9999; margin:0; padding:5px; border:1px solid #e4e4e4; background-color: #FFFFFF;}
+.copy_chargedList {position:absolute; width:300px; z-index: 9999; margin:0; padding:5px; border:1px solid #e4e4e4; background-color: #FFFFFF;}
+.mouseOver_state {position:absolute; width:300px; z-index: 9999; margin:0; padding:5px; border:1px solid #e4e4e4; background-color: #FFFFFF;}
+.mouseOver_help {position:absolute; width:300px; z-index: 9999; margin:0; padding:5px; border:1px solid #e4e4e4; background-color: #FFFFFF;}
+
+.center_Message {position:absolute; z-index: 9999; margin:0; padding:5px; border:0px solid #e4e4e4;}
+
+
+/* 0830 추가 */
+.ms_layer {border:1px solid #787878; padding:16px; z-index: 100;}
+.ms_layer_con {margin:0; padding:0;}
+.ms_layer_con ul {width:100%;}
+.ms_layer_con ul li.m_tt {font-weight:bold; font-size:14px; text-align:left; padding-bottom:7px; border-bottom:1px solid #e4e4e4;}
+
+
+/* [2014/10/20, dwkim] 우측 네비게이션 메뉴 추가 (CSS was made by Sungwon) */
+#mainnav {
+	position: fixed;
+	left:954px;
+	top:160px;
+	opacity: 0.4;
+	cursor: pointer;
+	display: none;
+}
+#mainnav li {
+	float: none;
+}
+#nav_top {
+	width:23px;
+	height:23px;
+	display:block;
+	background: url('../../images/inc/btn_top.gif') no-repeat;
+}
+#nav_top span {display:block;}
+#nav_center {
+	width:23px;
+	height:23px;
+	display:block;
+	background: url('../../images/inc/btn_center.gif') no-repeat;
+}
+#nav_bottom {
+	width:23px;
+	height:23px;
+	display:block;
+	background: url('../../images/inc/btn_bottom.gif') no-repeat;
+}
+.new_fnc {
+	width:23px;
+	height:23px;
+	display:block;
+	background: url('../../images/inc/new_fnc.png') no-repeat;"
+}
+
+
+/* [2015/02/12, dwkim] 도움말 툴팁 (CSS was made by Sungwon) */
+.tooltip
+{
+	position: relative;
+	cursor: pointer;
+	display: inline-block;
+	text-decoration: none;
+	outline: none;
+	background:url('../../images/inc/icon_coment.gif') right center no-repeat;
+	padding-right: 14px;
+}
+
+.tooltip .tooltipContent
+{
+	font-size:11px;
+	visibility: hidden;
+	position: absolute; 
+	top: 30px;
+	z-index: 999;
+
+	padding:5px;
+	display:block;
+	border: 1px solid #ccc;
+	opacity: .9;
+	background-color: #f2f2f2;
+	background-image: -webkit-linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,0));
+	background-image: -moz-linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,0));
+	background-image: -ms-linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,0));
+	background-image: -o-linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,0));
+	background-image: linear-gradient(rgba(255,255,255,.5), rgba(255,255,255,0));
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.4), 0 1px 0 rgba(255,255,255,.5) inset;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.4), 0 1px 0 rgba(255,255,255,.5) inset;
+	box-shadow: 0 1px 2px #f2f2f2, 0 1px 0 #f2f2f2 inset;  
+}
+
+.tooltip:hover
+{
+	border: 0; /* IE6 fix */
+}
+
+.tooltip:hover .tooltipContent
+{
+	visibility: visible;
+	text-align: left;
+}
+
+.tooltip .tooltipContent:before,
+.tooltip .tooltipContent:after
+{
+	content: "";
+	position: absolute;
+	z-index: 1000;
+	top:-5px;
+	left: 30px;
+	margin-left: -8px;  
+	border-bottom: 4px solid #ddd;
+	border-left: 4px solid transparent;
+	border-right: 4px solid transparent;
+	border-top: 0;  
+}
+
+.tooltip .tooltipContent:before
+{
+	border-top-color: #ccc;
+}

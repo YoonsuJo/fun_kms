@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMapConfig PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN"
+    "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<sqlMap resource="kms/sqlmap/admin/Organ_SQL_Mysql.xml"/>
+	<sqlMap resource="kms/sqlmap/admin/Score_SQL_Mysql.xml"/>
+	<sqlMap resource="kms/sqlmap/admin/Salary_SQL_Mysql.xml"/>
+	<sqlMap resource="kms/sqlmap/admin/Salary_HOL_SQL_Mysql.xml"/>
+	<sqlMap resource="kms/sqlmap/admin/AUTH_SQL_Mysql.xml"/>
+	<sqlMap resource="kms/sqlmap/admin/Statistics_SQL_Mysql.xml"/>
+	<sqlMap resource="kms/sqlmap/admin/DbManage_SQL_Mysql.xml"/>
+</sqlMapConfig>

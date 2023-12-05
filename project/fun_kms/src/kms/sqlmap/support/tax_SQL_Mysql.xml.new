@@ -1,0 +1,624 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsTaxPublishDAO">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="taxPublishVO" type="kms.com.support.service.TaxPublishVO"/>
+	
+	<resultMap id="taxPublishVOListAll" class="kms.com.support.service.TaxPublishVO">
+		<result property="bondId"	column="BOND_ID" columnIndex="1"/>
+		<result property="bondSj"	column="BOND_SJ" columnIndex="2"/>
+		<result property="bondCn"	column="BOND_CN" columnIndex="3"/>
+		<result property="companyCd"	column="COMPANY_CD" columnIndex="4"/>
+		<result property="custNm"		column="CUST_NM" columnIndex="5"/>
+		<result property="custBusiNo"	column="CUST_BUSI_NO" columnIndex="6"/>
+		<result property="custAdres"	column="CUST_ADRES" columnIndex="7"/>
+		<result property="custRepNm"	column="CUST_REP_NM" columnIndex="8"/>
+		<result property="custBusiCond"	column="CUST_BUSI_COND" columnIndex="9"/>
+		<result property="custBusiTyp"	column="CUST_BUSI_TYP" columnIndex="10"/>
+		<result property="taxEmail1"	column="TAX_EMAIL_1" columnIndex="11"/>
+		<result property="taxUserNm1"	column="TAX_USER_NM_1" columnIndex="12"/>
+		<result property="taxUserTelNo1"	column="TAX_USER_TELNO_1" columnIndex="13"/>
+		<result property="taxEmail2"		column="TAX_EMAIL_2" columnIndex="14"/>
+		<result property="taxUserNm2"		column="TAX_USER_NM_2" columnIndex="15"/>
+		<result property="taxUserTelNo2"	column="TAX_USER_TELNO_2" columnIndex="16"/>
+		<result property="taxEmail3"		column="TAX_EMAIL_3" columnIndex="17"/>
+		<result property="taxUserNm3"		column="TAX_USER_NM_3" columnIndex="18"/>
+		<result property="taxUserTelNo3"	column="TAX_USER_TELNO_3" columnIndex="19"/>
+		<result property="taxEmail4"		column="TAX_EMAIL_4" columnIndex="20"/>
+		<result property="taxUserNm4"		column="TAX_USER_NM_4" columnIndex="21"/>
+		<result property="taxUserTelNo4"	column="TAX_USER_TELNO_4" columnIndex="22"/>
+		<result property="taxEmail5"		column="TAX_EMAIL_5" columnIndex="23"/>
+		<result property="taxUserNm5"		column="TAX_USER_NM_5" columnIndex="24"/>
+		<result property="taxUserTelNo5"	column="TAX_USER_TELNO_5" columnIndex="25"/>
+		<result property="publishDate"		column="PUBLISH_DATE" columnIndex="26"/>
+		<result property="bondTyp"			column="BOND_TYP" columnIndex="27"/>
+		<result property="writeDate"		column="WRITE_DATE" columnIndex="28"/>
+		<result property="bondStat"			column="BOND_STAT" columnIndex="29"/>
+		<result property="writerNo"			column="WRITER_NO" columnIndex="30"/>
+		<result property="fnshTime"			column="FNSH_TIME" columnIndex="31"/>
+		<result property="atchFileId"		column="ATCH_FILE_ID" columnIndex="32"/>
+	</resultMap>
+	
+	<resultMap id="taxPublishVOList" class="kms.com.support.service.TaxPublishVO">
+		<result property="bondId" column="BOND_ID" columnIndex="1"/>
+		<result property="bondSj" column="BOND_SJ" columnIndex="2"/>
+		<result property="custNm" column="CUST_NM" columnIndex="3"/>
+		<result property="expSum" column="EXP_SUM" columnIndex="4"/>
+		<result property="publishDate" column="PUBLISH_DATE" columnIndex="5"/>
+		<result property="userNo" column="USER_NO" columnIndex="6"/>
+		<result property="userNm" column="USER_NM" columnIndex="7"/>
+		<result property="userId" column="USER_ID" columnIndex="8"/>
+		<result property="writeDate" column="WRITE_DATE" columnIndex="9"/>
+		<result property="bondStat" column="BOND_STAT" columnIndex="10"/>
+		<result property="companyCd" column="COMP_CD" columnIndex="11"/>
+		<result property="companyNm" column="COMP_NM" columnIndex="11"/>
+	</resultMap>
+	
+	<resultMap id="taxPublishVOAll" class="kms.com.support.service.TaxPublishVO">
+		<result property="bondId"	column="BOND_ID" columnIndex="1"/>
+		<result property="bondSj"	column="BOND_SJ" columnIndex="2"/>
+		<result property="bondCn"	column="BOND_CN" columnIndex="3"/>
+		<result property="companyCd"	column="COMPANY_CD" columnIndex="4"/>
+		<result property="custNm"		column="CUST_NM" columnIndex="5"/>
+		<result property="custBusiNo"	column="CUST_BUSI_NO" columnIndex="6"/>
+		<result property="custAdres"	column="CUST_ADRES" columnIndex="7"/>
+		<result property="custRepNm"	column="CUST_REP_NM" columnIndex="8"/>
+		<result property="custBusiCond"	column="CUST_BUSI_COND" columnIndex="9"/>
+		<result property="custBusiTyp"	column="CUST_BUSI_TYP" columnIndex="10"/>
+		<result property="taxEmail1"	column="TAX_EMAIL_1" columnIndex="11"/>
+		<result property="taxUserNm1"	column="TAX_USER_NM_1" columnIndex="12"/>
+		<result property="taxUserTelNo1"	column="TAX_USER_TELNO_1" columnIndex="13"/>
+		<result property="taxEmail2"		column="TAX_EMAIL_2" columnIndex="14"/>
+		<result property="taxUserNm2"		column="TAX_USER_NM_2" columnIndex="15"/>
+		<result property="taxUserTelNo2"	column="TAX_USER_TELNO_2" columnIndex="16"/>
+		<result property="taxEmail3"		column="TAX_EMAIL_3" columnIndex="17"/>
+		<result property="taxUserNm3"		column="TAX_USER_NM_3" columnIndex="18"/>
+		<result property="taxUserTelNo3"	column="TAX_USER_TELNO_3" columnIndex="19"/>
+		<result property="taxEmail4"		column="TAX_EMAIL_4" columnIndex="20"/>
+		<result property="taxUserNm4"		column="TAX_USER_NM_4" columnIndex="21"/>
+		<result property="taxUserTelNo4"	column="TAX_USER_TELNO_4" columnIndex="22"/>
+		<result property="taxEmail5"		column="TAX_EMAIL_5" columnIndex="23"/>
+		<result property="taxUserNm5"		column="TAX_USER_NM_5" columnIndex="24"/>
+		<result property="taxUserTelNo5"	column="TAX_USER_TELNO_5" columnIndex="25"/>
+		<result property="publishDate"		column="PUBLISH_DATE" columnIndex="26"/>
+		<result property="bondTyp"			column="BOND_TYP" columnIndex="27"/>
+		<result property="writeDate"		column="WRITE_DATE" columnIndex="28"/>
+		<result property="bondStat"			column="BOND_STAT" columnIndex="29"/>
+		<result property="writerNo"			column="WRITER_NO" columnIndex="30"/>
+		<result property="userNm"			column="USER_NM" columnIndex="31"/>
+		<result property="userId"			column="USER_ID" columnIndex="32"/>
+		<result property="fnshTime"			column="FNSH_TIME" columnIndex="33"/>
+		<result property="fnshUserNo"		column="FNSH_USER_NO" columnIndex="34"/>
+		<result property="fnshUserNm"		column="FNSH_USER_NM" columnIndex="35"/>
+		<result property="fnshUserId"		column="FNSH_USER_ID" columnIndex="36"/>
+		<result property="companyNm"		column="COMPANY_NM" columnIndex="37"/>
+		<result property="atchFileId"		column="ATCH_FILE_ID" columnIndex="38"/>
+		<result property="zeroTaxRate"		column="ZERO_TAX_RATE" columnIndex="39"/>
+	</resultMap>
+	
+	<resultMap id="taxPublishVOExpense" class="kms.com.support.service.TaxPublishVO">
+		<result property="expenseNo" column="EXPENSE_NO" 				/>
+		<result property="price" column="PRICE" 						/>
+		<result property="surtax" column="SURTAX" 						/>
+		<result property="priceplussurtax" column="PRICE_PLUS_SURTAX" 	/>
+		<result property="note" column="NOTE" 							/>
+		<result property="zeroTaxRate" column="ZERO_TAX_RATE" 			/>
+	</resultMap>
+	
+	<resultMap id="taxPublishVOProject" class="kms.com.support.service.TaxPublishVO">
+		<result property="prjNo" column="PRJ_NO" columnIndex="1"/>
+		<result property="prjId" column="PRJ_ID" columnIndex="2"/>
+		<result property="prjExpense" column="PRJ_EXPENSE" columnIndex="3"/>
+		<result property="prjNm" column="PRJ_NM" columnIndex="4"/>
+		<result property="prjCd" column="PRJ_CD" columnIndex="5"/>
+	</resultMap>
+<!-- TENY_170206 구버젼의 조회문들 -->
+<!-- TENY_170206 구버젼의 조회문들 -->
+<!-- TENY_170206 구버젼의 조회문들 -->
+<!-- TENY_170206 구버젼의 조회문들 -->
+<!-- TENY_170206 구버젼의 조회문들 -->
+	<select id="KmsTaxPublishDAO.selectTaxPublishListAll" resultMap="taxPublishVOListAll">
+	<![CDATA[
+		SELECT
+			bond.bond_id
+			,bond.bond_sj
+			,bond.bond_cn
+			,bond.company_cd
+			,bond.cust_nm
+			,bond.cust_busi_no
+			,bond.cust_adres
+			,bond.cust_rep_nm
+			,bond.cust_busi_cond
+			,bond.cust_busi_typ
+			,bond.tax_email_1
+			,bond.tax_user_nm_1
+			,bond.tax_user_telno_1
+			,bond.tax_email_2
+			,bond.tax_user_nm_2
+			,bond.tax_user_telno_2
+			,bond.tax_email_3
+			,bond.tax_user_nm_3
+			,bond.tax_user_telno_3
+			,bond.tax_email_4
+			,bond.tax_user_nm_4
+			,bond.tax_user_telno_4
+			,bond.tax_email_5
+			,bond.tax_user_nm_5
+			,bond.tax_user_telno_5
+			,bond.publish_date
+			,bond.bond_typ
+			,bond.atch_file_id
+			,DATE_FORMAT(bond.write_date, '%Y.%m.%d %H:%i') AS write_date
+			,bond.bond_stat
+			,bond.writer_no
+			,DATE_FORMAT(bond.fnsh_time, '%Y.%m.%d %H:%i') AS fnsh_time
+		FROM
+			tbl_bond bond
+	]]>
+		WHERE
+			bond.use_at = 'Y'
+		<isNotEmpty prepend="AND" property="searchNm">
+			bond.cust_nm LIKE CONCAT('%',#searchNm#,'%')
+		</isNotEmpty>
+	</select>
+	
+	<select id="KmsTaxPublishDAO.selectTaxPublishList" resultMap="taxPublishVOList">
+		SELECT
+			bond.BOND_ID
+			,bond.BOND_SJ
+			,bond.CUST_NM
+			,SUM(expense.PRICE_PLUS_SURTAX) AS EXP_SUM
+			,bond.PUBLISH_DATE
+			,usr.NO AS USER_NO
+			,usr.USER_NM
+			,usr.USER_ID
+			,DATE_FORMAT(bond.WRITE_DATE, '%Y.%m.%d %H:%i') AS WRITE_DATE
+			,bond.BOND_STAT
+			,bond.COMPANY_CD AS COMP_CD
+			,code.CODE_NM AS COMP_NM
+		FROM
+			TBL_BOND bond
+			LEFT JOIN TBL_BOND_EXPENSE expense
+				ON bond.BOND_ID = expense.BOND_ID
+				AND expense.USE_AT = 'Y'
+			<isNotEmpty property="searchPrjId">
+				INNER JOIN (SELECT DISTINCT bond_id, prj_id 
+							 FROM tbl_bond_prj
+						    WHERE prj_id = #searchPrjId#
+						   ) bonprj
+					ON bond.bond_id = bonprj.bond_id 
+			</isNotEmpty>
+			INNER JOIN TBL_USERINFO usr
+				ON bond.WRITER_NO = usr.NO
+			LEFT JOIN COMTCCMMNDETAILCODE code
+				ON code.CODE_ID = 'KMS007'
+				AND bond.COMPANY_CD = code.CODE
+		WHERE
+			TRUE
+			<isNotEmpty prepend="AND" property="searchCompanyCd">
+				bond.COMPANY_CD = #searchCompanyCd#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="userNm">
+				usr.USER_NM LIKE CONCAT('%',#userNm#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchSj">
+				bond.BOND_SJ LIKE CONCAT('%',#searchSj#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchNm">
+				bond.CUST_NM LIKE CONCAT('%',#searchNm#,'%')
+			</isNotEmpty>
+			AND (
+				FALSE
+				<isEmpty property="bondStatN"><isEmpty property="bondStatY"><isEmpty property="bondStatC">
+					OR TRUE
+				</isEmpty></isEmpty></isEmpty>
+				<isNotEmpty prepend="OR" property="bondStatN">
+					bond.BOND_STAT = 'N'
+				</isNotEmpty>
+				<isNotEmpty prepend="OR" property="bondStatY">
+					bond.BOND_STAT = 'Y'
+				</isNotEmpty>
+				<isNotEmpty prepend="OR" property="bondStatC">
+					bond.BOND_STAT = 'C'
+				</isNotEmpty>
+			)
+			<isNotEmpty prepend="AND" property="searchDate">
+			<![CDATA[
+				bond.PUBLISH_DATE <= #searchDate#
+			]]>
+			</isNotEmpty>
+			AND bond.USE_AT = 'Y'
+		GROUP BY
+			bond.BOND_ID
+		ORDER BY
+			CASE
+				WHEN bond.BOND_STAT = 'N' THEN 1
+				WHEN bond.BOND_STAT = 'Y' THEN 2
+				WHEN bond.BOND_STAT = 'C' THEN 2
+			END ASC
+			, bond.PUBLISH_DATE DESC
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<select id="KmsTaxPublishDAO.selectTaxPublishListTotCnt" resultClass="java.lang.Integer" >
+		SELECT
+			COUNT(*)
+		FROM
+			tbl_bond bond
+			<isNotEmpty property="searchPrjId">
+				INNER JOIN (SELECT DISTINCT bond_id, prj_id 
+							 FROM tbl_bond_prj
+						    WHERE prj_id = #searchPrjId#
+						   ) bonprj
+					ON bond.bond_id = bonprj.bond_id 
+			</isNotEmpty>
+			INNER JOIN tbl_userinfo usr
+			ON bond.writer_no = usr.no
+		WHERE
+			TRUE
+			<isNotEmpty prepend="AND" property="searchCompanyCd">
+				bond.COMPANY_CD = #searchCompanyCd#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="userNm">
+				usr.user_nm LIKE CONCAT('%',#userNm#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchSj">
+				bond.bond_sj LIKE CONCAT('%',#searchSj#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchNm">
+				bond.cust_nm LIKE CONCAT('%',#searchNm#,'%')
+			</isNotEmpty>
+			AND (
+				FALSE
+				<isEmpty property="bondStatN"><isEmpty property="bondStatY"><isEmpty property="bondStatC">
+					OR TRUE
+				</isEmpty></isEmpty></isEmpty>
+				<isNotEmpty prepend="OR" property="bondStatN">
+					bond.bond_stat = 'N'
+				</isNotEmpty>
+				<isNotEmpty prepend="OR" property="bondStatY">
+					bond.bond_stat = 'Y'
+				</isNotEmpty>
+				<isNotEmpty prepend="OR" property="bondStatC">
+					bond.bond_stat = 'C'
+				</isNotEmpty>
+			)
+			<isNotEmpty prepend="AND" property="searchDate">
+			<![CDATA[
+				bond.publish_date <= #searchDate#
+			]]>
+			</isNotEmpty>
+			AND bond.use_at = 'Y'
+	</select>
+	
+	<select id="KmsTaxPublishDAO.selectMaxBondId" resultClass="java.lang.String">
+		SELECT MAX(bond_id) FROM tbl_bond
+	</select>
+	
+	<insert id="KmsTaxPublishDAO.insertTaxPublish" parameterClass="taxPublishVO" >
+	<![CDATA[
+		INSERT INTO tbl_bond
+		(
+			bond_id
+			,bond_sj
+			,bond_cn
+			,company_cd
+			,cust_nm
+			,cust_busi_no
+			,cust_adres
+			,cust_rep_nm
+			,cust_busi_cond
+			,cust_busi_typ
+			,tax_email_1
+			,tax_user_nm_1
+			,tax_user_telno_1
+			,tax_email_2
+			,tax_user_nm_2
+			,tax_user_telno_2
+			,tax_email_3
+			,tax_user_nm_3
+			,tax_user_telno_3
+			,tax_email_4
+			,tax_user_nm_4
+			,tax_user_telno_4
+			,tax_email_5
+			,tax_user_nm_5
+			,tax_user_telno_5
+			,publish_date
+			,bond_typ
+			,write_date
+			,bond_stat
+			,writer_no
+			,atch_file_id
+			,zero_tax_rate
+		)
+		VALUES
+		(
+			#bondId#
+			,#bondSj#
+			,#bondCn#
+			,#companyCd#
+			,#custNm#
+			,#custBusiNo#
+			,#custAdres#
+			,#custRepNm#
+			,#custBusiCond#
+			,#custBusiTyp#
+			,#taxEmail1#
+			,#taxUserNm1#
+			,#taxUserTelNo1#
+			,#taxEmail2#
+			,#taxUserNm2#
+			,#taxUserTelNo2#
+			,#taxEmail3#
+			,#taxUserNm3#
+			,#taxUserTelNo3#
+			,#taxEmail4#
+			,#taxUserNm4#
+			,#taxUserTelNo4#
+			,#taxEmail5#
+			,#taxUserNm5#
+			,#taxUserTelNo5#
+			,#publishDate#
+			,#bondTyp#
+			,SYSDATE()
+			,'N'
+			,#writerNo#
+			,#atchFileId#
+			,#zeroTaxRate#
+		)			
+	]]>
+	</insert>
+	
+	<insert id="KmsTaxPublishDAO.insertBondExpense">
+	<![CDATA[
+		INSERT INTO tbl_bond_expense
+		(
+			BOND_ID, PRICE, SURTAX, PRICE_PLUS_VAT, NOTE
+		)
+		VALUES
+		(
+			#bondId#, #price#, #surtax#, #priceplussurtax#, #note#
+		)
+	]]>
+	</insert>
+	
+	<insert id="KmsTaxPublishDAO.insertBondProject">
+	<![CDATA[
+		INSERT INTO tbl_bond_prj
+		(
+			BOND_ID, PRJ_ID, EXPENSE
+		)
+		VALUES
+		(
+			#bondId#, #prjId#, #prjExpense#
+		)
+	]]>
+	</insert>
+	
+	<select id="KmsTaxPublishDAO.selectTaxPublish" resultMap="taxPublishVOAll">
+	<![CDATA[
+		SELECT
+			bond.bond_id
+			,bond.bond_sj
+			,bond.bond_cn
+			,bond.company_cd
+			,bond.cust_nm
+			,bond.cust_busi_no
+			,bond.cust_adres
+			,bond.cust_rep_nm
+			,bond.cust_busi_cond
+			,bond.cust_busi_typ
+			,bond.tax_email_1
+			,bond.tax_user_nm_1
+			,bond.tax_user_telno_1
+			,bond.tax_email_2
+			,bond.tax_user_nm_2
+			,bond.tax_user_telno_2
+			,bond.tax_email_3
+			,bond.tax_user_nm_3
+			,bond.tax_user_telno_3
+			,bond.tax_email_4
+			,bond.tax_user_nm_4
+			,bond.tax_user_telno_4
+			,bond.tax_email_5
+			,bond.tax_user_nm_5
+			,bond.tax_user_telno_5
+			,bond.publish_date
+			,bond.bond_typ
+			,bond.atch_file_id
+			,DATE_FORMAT(bond.write_date, '%Y.%m.%d %H:%i') AS write_date
+			,bond.bond_stat
+			,bond.writer_no
+			,DATE_FORMAT(bond.fnsh_time, '%Y.%m.%d %H:%i') AS fnsh_time
+			,IFNULL(bond.fnsh_user_no, 0) AS fnsh_user_no
+			,usr.user_nm AS user_nm
+			,usr.user_id AS user_id
+			,usr2.user_nm AS fnsh_user_nm
+			,usr2.user_id AS fnsh_user_id
+			,code.code_nm AS company_nm
+			,bond.zero_tax_rate
+		FROM
+			tbl_bond bond
+			LEFT JOIN tbl_userinfo usr
+			ON bond.writer_no = usr.no
+			LEFT JOIN tbl_userinfo usr2
+			ON bond.fnsh_user_no = usr2.no
+			LEFT JOIN comtccmmndetailcode code
+			ON bond.company_cd = code.code
+		WHERE
+			bond_id = #bondId#
+	]]>
+	</select>
+	
+	<select id="KmsTaxPublishDAO.selectBondExpenseList" resultMap="taxPublishVOExpense">
+	<![CDATA[
+		SELECT
+			exp.no AS expense_no
+			, exp.price AS price
+			, exp.surtax AS surtax
+			, exp.price_plus_surtax AS price_plus_surtax
+			, exp.note
+			, bond.zero_tax_rate
+		FROM
+			tbl_bond_expense exp
+		INNER JOIN
+			tbl_bond bond
+		ON bond.bond_id = exp.bond_id
+		WHERE
+			exp.use_at = 'Y'
+			AND exp.bond_id = #bondId#
+	]]>
+	</select>
+	
+	<select id="KmsTaxPublishDAO.selectBondProjectList" resultMap="taxPublishVOProject">
+	<![CDATA[
+		SELECT
+			bond.no AS prj_no
+			, bond.prj_id
+			, IFNULL(bond.expense, 0) AS prj_expense
+			, prj.prj_nm
+			, prj.prj_cd
+		FROM
+			tbl_bond_prj bond
+			LEFT JOIN tbl_prj prj
+			ON bond.prj_id = prj.prj_id
+		WHERE
+			bond.use_at = 'Y'
+			AND bond_id = #bondId#
+	]]>
+	</select>
+	
+	<update id="KmsTaxPublishDAO.updateTaxPublish" parameterClass="taxPublishVO" >
+	<![CDATA[
+		UPDATE
+			tbl_bond
+		SET
+			bond_sj = #bondSj#
+			,bond_cn = #bondCn#
+			,company_cd = #companyCd#
+			,cust_nm = #custNm#
+			,cust_busi_no = #custBusiNo#
+			,cust_adres = #custAdres#
+			,cust_rep_nm = #custRepNm#
+			,cust_busi_cond = #custBusiCond#
+			,cust_busi_typ = #custBusiTyp#
+			,tax_email_1 = #taxEmail1#
+			,tax_user_nm_1 = #taxUserNm1#
+			,tax_user_telno_1 = #taxUserTelNo1# 
+			,tax_email_2 = #taxEmail2#
+			,tax_user_nm_2 = #taxUserNm2#
+			,tax_user_telno_2 = #taxUserTelNo2# 
+			,tax_email_3 = #taxEmail3#
+			,tax_user_nm_3 = #taxUserNm3#
+			,tax_user_telno_3 = #taxUserTelNo3# 
+			,tax_email_4 = #taxEmail4#
+			,tax_user_nm_4 = #taxUserNm4#
+			,tax_user_telno_4 = #taxUserTelNo4# 
+			,tax_email_5 = #taxEmail5#
+			,tax_user_nm_5 = #taxUserNm5#
+			,tax_user_telno_5 = #taxUserTelNo5# 
+			,publish_date = #publishDate#
+			,bond_typ = #bondTyp#
+			,atch_file_id = #atchFileId#
+			,zero_tax_rate = #zeroTaxRate#
+		WHERE
+			bond_id = #bondId#
+	]]>
+	</update>
+	
+	<update id="KmsTaxPublishDAO.updateBondExpense" >
+	<![CDATA[
+		UPDATE
+			tbl_bond_expense
+		SET
+			price = #price#
+			,surtax = #surtax#
+			,price_plus_surtax = #priceplussurtax#
+			,note = #note#
+			,use_at = #useAt#
+		WHERE
+			no = #expenseNo#
+	]]>
+	</update>
+	
+	<update id="KmsTaxPublishDAO.updateBondProject" >
+	<![CDATA[
+		UPDATE
+			tbl_bond_prj
+		SET
+			expense = #prjExpense#
+			,prj_id = #prjId#
+			,use_at = #useAt#
+		WHERE
+			no = #prjNo#
+	]]>
+	</update>
+	
+	<update id="KmsTaxPublishDAO.deleteTaxPublish" parameterClass="taxPublishVO" >
+	<![CDATA[
+		UPDATE
+			tbl_bond
+		SET
+			use_at = 'N'
+		WHERE
+			bond_id = #bondId#
+	]]>
+	</update>
+	
+	<update id="KmsTaxPublishDAO.updateTaxPublishState" parameterClass="taxPublishVO" >
+	<![CDATA[
+		UPDATE
+			tbl_bond
+		SET
+			bond_stat = #bondStat#
+			,fnsh_user_no = #fnshUserNo#
+			,fnsh_time = SYSDATE()
+		WHERE
+			bond_id = #bondId#
+	]]>
+	</update>
+	
+	<select id="KmsTaxPublishDAO.selectTaxProject" resultClass="taxPublishVO">
+	<![CDATA[
+		SELECT
+			bond_prj.no AS prjNo
+			, bond.publish_date AS publishDate
+			, bond.cust_nm AS custNm
+		FROM
+			tbl_bond_prj bond_prj
+			INNER JOIN tbl_bond bond
+			ON bond_prj.bond_id = bond.bond_id
+		WHERE
+			bond_prj.no = #bondPrjNo#
+	]]>
+	</select>
+	
+	<select id="KmsTaxPublishDAO.selectBondPrjNo" resultClass="egovMap">
+	<![CDATA[
+		SELECT
+			bond_prj.no AS prj_no
+			, bond.publish_date AS publish_date
+			, bond.cust_nm AS cust_nm
+			, prj.prj_id AS prj_id
+			, prj.prj_nm AS prj_nm
+			, prj.prj_cd AS prj_cd
+		FROM
+			tbl_bond_prj bond_prj
+			INNER JOIN tbl_bond bond
+			ON bond_prj.bond_id = bond.bond_id
+			INNER JOIN tbl_prj prj
+			ON bond_prj.prj_id = prj.prj_id
+		WHERE
+			bond_prj.use_at = 'Y'
+			AND bond.use_at = 'Y'
+			AND bond.bond_stat = 'Y'
+			AND bond.cust_nm LIKE CONCAT('%', #searchNm#, '%')
+		ORDER BY
+			bond_prj.no DESC
+	]]>
+	</select>
+	
+</sqlMap>

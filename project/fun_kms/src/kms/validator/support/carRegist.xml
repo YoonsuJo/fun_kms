@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC 
+    "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1//EN" 
+    "http://jakarta.apache.org/commons/dtds/validator_1_1.dtd">
+
+<form-validation>
+
+    <formset>
+		<form name="carReg">
+			<field property="carTyp" depends="required,maxlength">
+        		<arg0 key="차종" />
+        		<arg1 key="50" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>50</var-value>
+				</var>
+			</field>			
+			<field property="carId" depends="required,maxlength">
+        		<arg0 key="차량번호" />
+        		<arg1 key="50" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>50</var-value>
+				</var>
+			</field> 
+			<field property="userTyp" depends="required">
+        		<arg0 key="사용자" />
+			</field>
+			<field property="insComp" depends="required,maxlength">
+        		<arg0 key="보험회사" />
+        		<arg1 key="20" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>20</var-value>
+				</var>
+			</field>
+			<field property="insCallNo" depends="maxlength">
+        		<arg0 key="보험회사" />
+        		<arg1 key="40" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>40</var-value>
+				</var>
+			</field>
+			<field property="insEdate" depends="required">
+        		<arg0 key="보험만료일" />
+			</field>
+			<field property="insAge" depends="required, integer">
+        		<arg0 key="보험연령" />
+			</field>
+			<field property="insLicTyp" depends="required">
+        		<arg0 key="면허종류" />
+			</field>
+			<field property="compnyId" depends="required">
+        		<arg0 key="소유회사" />
+			</field>
+		</form>
+    </formset>
+
+</form-validation>

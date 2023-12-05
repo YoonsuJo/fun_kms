@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="BusiResultDAO">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	
+	<resultMap id="stepResultList" class="kms.com.management.service.StepResultVO">
+		<result property="id"				column="ID"					columnIndex="1"/>
+		<result property="nm"				column="NM"					columnIndex="2"/>
+		<result property="sn"				column="SN"					columnIndex="3"/>
+		<result property="lv"				column="LV"					columnIndex="4"/>
+		<result property="typ"				column="TYP"				columnIndex="5"/>
+		<result property="havingLeaf"		column="HAVING_LEAF"		columnIndex="6"/>
+		<result property="salesOut"			column="SALES_OUT"			columnIndex="7"/>
+		<result property="salesIn"			column="SALES_IN"			columnIndex="8"/>
+		<result property="purchaseOut"		column="PURCHASE_OUT"		columnIndex="9"/>
+		<result property="purchaseIn"		column="PURCHASE_IN"		columnIndex="10"/>
+		<result property="salaryPlan"		column="SALARY_PLAN"		columnIndex="11"/>
+		<result property="salary"			column="SALARY"				columnIndex="12"/>
+		<result property="expensePlan"		column="EXPENSE_PLAN"		columnIndex="13"/>
+		<result property="expense"			column="EXPENSE"			columnIndex="14"/>
+		<result property="salesOutAcc"		column="SALES_OUT_ACC"		columnIndex="15"/>
+		<result property="salesInAcc"		column="SALES_IN_ACC"		columnIndex="16"/>
+		<result property="purchaseOutAcc"	column="PURCHASE_OUT_ACC"	columnIndex="17"/>
+		<result property="purchaseInAcc"	column="PURCHASE_IN_ACC"	columnIndex="18"/>
+		<result property="salaryPlanAcc"	column="SALARY_PLAN_ACC"	columnIndex="19"/>
+		<result property="salaryAcc"		column="SALARY_ACC"			columnIndex="20"/>
+		<result property="expensePlanAcc"	column="EXPENSE_PLAN_ACC"	columnIndex="21"/>
+		<result property="expenseAcc"		column="EXPENSE_ACC"		columnIndex="22"/>
+		<result property="stat"             column="STAT"               columnIndex="23"/>
+		<result property="prjType"			column="PRJ_TYPE"			columnIndex="24"/>
+	</resultMap>
+
+
+	<select id="BusiResultDAO.selectStepResultStatistic" resultMap="stepResultList">
+		
+		SELECT
+			ID, NM, SN, LV, TYP, HAVING_LEAF, SALES_OUT, SALES_IN, PURCHASE_OUT, PURCHASE_IN, SALARY_PLAN
+			, SALARY, EXPENSE_PLAN, EXPENSE, SALES_OUT_ACC, SALES_IN_ACC, PURCHASE_OUT_ACC, PURCHASE_IN_ACC
+			, SALARY_PLAN_ACC, SALARY_ACC, EXPENSE_PLAN_ACC, EXPENSE_ACC
+			,  ST_DT, COMP_DUE_DT
+			, (SELECT STAT
+		       	 FROM TBL_PRJ
+		        WHERE PRJ_ID = TOP.ID
+		       ) AS STAT
+		    , (SELECT PRJ_TYPE
+		       	 FROM TBL_PRJ
+		        WHERE PRJ_ID = TOP.ID 
+		       ) AS PRJ_TYPE
+		FROM
+		(		
+		<isEqual property="typ" compareValue="PRJ">
+		(
+			SELECT 
+				tree.ID AS ID
+				,tree.ST_DT
+				,tree.COMP_DUE_DT
+				, tree.NM AS NM
+				, tree.SN AS SN
+				, tree.SN_ORD AS SN_ORD
+				, tree.LV AS LV
+				, tree.TYP AS TYP
+				, FALSE AS HAVING_LEAF
+				
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IF(#includeResult# = 'Y', IFNULL(total.SALES_OUT_EST, 0), IFNULL(total.SALES_OUT, 0)), 0)), 0) AS SALES_OUT
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IF(#includeResult# = 'Y', IFNULL(total.SALES_IN_EST, 0), IFNULL(total.SALES_IN, 0)), 0)), 0) AS SALES_IN
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IF(#includeResult# = 'Y', IFNULL(total.PURCHASE_OUT_EST, 0), IFNULL(total.PURCHASE_OUT, 0)), 0)), 0) AS PURCHASE_OUT
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IF(#includeResult# = 'Y', IFNULL(total.PURCHASE_IN_NORMAL_EST, 0), IFNULL(total.PURCHASE_IN_NORMAL, 0)), 0)), 0) + IFNULL(SUM(IF(total.MONTH = #searchMonth#, IFNULL(total.PURCHASE_IN_COMMON, 0), 0)), 0) AS PURCHASE_IN
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IF(#includeResult# = 'Y', IFNULL(total.PLAN_LABOR_EST, 0), IFNULL(total.PLAN_LABOR, 0)), 0)), 0) AS SALARY_PLAN
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IFNULL(total.LABOR, 0), 0)), 0) AS SALARY
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IF(#includeResult# = 'Y', IFNULL(total.PLAN_EXP_EST, 0), IFNULL(total.PLAN_EXP, 0)), 0)), 0) AS EXPENSE_PLAN
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IF(#includeResult# = 'Y', IFNULL(total.EXP_EST, 0), IFNULL(total.EXP, 0)), 0)), 0) AS EXPENSE
+
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IF(#includeResult# = 'Y', IFNULL(total.SALES_OUT_EST, 0), IFNULL(total.SALES_OUT, 0)), 0)), 0) AS SALES_OUT_ACC
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IF(#includeResult# = 'Y', IFNULL(total.SALES_IN_EST, 0), IFNULL(total.SALES_IN, 0)), 0)), 0) AS SALES_IN_ACC
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IF(#includeResult# = 'Y', IFNULL(total.PURCHASE_OUT_EST, 0), IFNULL(total.PURCHASE_OUT, 0)), 0)), 0) AS PURCHASE_OUT_ACC
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IF(#includeResult# = 'Y', IFNULL(total.PURCHASE_IN_NORMAL_EST, 0), IFNULL(total.PURCHASE_IN_NORMAL, 0)), 0)), 0) + IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IFNULL(total.PURCHASE_IN_COMMON, 0), 0)), 0) AS PURCHASE_IN_ACC
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IF(#includeResult# = 'Y', IFNULL(total.PLAN_LABOR_EST, 0), IFNULL(total.PLAN_LABOR, 0)), 0)), 0) AS SALARY_PLAN_ACC
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IFNULL(total.LABOR, 0), 0)), 0) AS SALARY_ACC
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IF(#includeResult# = 'Y', IFNULL(total.PLAN_EXP_EST, 0), IFNULL(total.PLAN_EXP, 0)), 0)), 0) AS EXPENSE_PLAN_ACC
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IF(#includeResult# = 'Y', IFNULL(total.EXP_EST, 0), IFNULL(total.EXP, 0)), 0)), 0) AS EXPENSE_ACC
+				
+			FROM
+				V_PRJ_TREE tree
+				LEFT JOIN TBL_PRJ_RESULT_TOTAL total
+					ON tree.ID = total.PRJ_ID
+					AND total.YEAR = #searchYear#
+					<isEqual property="includeAllDate" compareValue="N">						
+						AND #startDate# >= TOTAL.ST_DT
+						AND TOTAL.COMP_DUE_DT >= #endDate#						 
+					</isEqual>
+			WHERE
+				tree.ID = #searchId#
+				<isEqual property="includeAllDate" compareValue="N">
+						AND #startDate# >= tree.ST_DT
+						AND tree.COMP_DUE_DT >= #endDate#
+				</isEqual>
+			GROUP BY
+				ID
+			ORDER BY
+				SN
+		)
+		
+		UNION ALL
+		</isEqual>
+		
+		(
+			SELECT 
+				top.ID AS ID
+				,TOP.ST_DT
+				,TOP.COMP_DUE_DT
+				, top.NM AS NM
+				, top.SN AS SN
+				, top.SN_ORD AS SN_ORD
+				, top.LV AS LV
+				, top.TYP AS TYP
+				, IF(
+					IF(
+						top.TYP = 'PRJ'
+						, (SELECT COUNT(*) FROM TBL_PRJ prj 
+							WHERE prj.PRNT_PRJ_ID = top.ID 
+							AND prj.PRJ_ID != prj.PRNT_PRJ_ID
+						<isEqual property="includeAllDate" compareValue="N">						
+							AND #startDate# >= prj.ST_DT
+							AND prj.COMP_DUE_DT >= #endDate#						 
+						</isEqual>
+						)
+						, (SELECT COUNT(*) FROM TBL_ORGNZT org WHERE org.ORG_UP = top.ID) + (SELECT COUNT(*) FROM TBL_PRJ prj WHERE prj.ORGNZT_ID = top.ID)
+					) >= 1
+					, TRUE
+					, FALSE
+				) AS HAVING_LEAF
+				
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IF(#includeResult# = 'Y', IFNULL(total.SALES_OUT_EST, 0), IFNULL(total.SALES_OUT, 0)), 0)), 0) AS SALES_OUT
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IF(#includeResult# = 'Y', IFNULL(total.SALES_IN_EST, 0), IFNULL(total.SALES_IN, 0)), 0)), 0) AS SALES_IN
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IF(#includeResult# = 'Y', IFNULL(total.PURCHASE_OUT_EST, 0), IFNULL(total.PURCHASE_OUT, 0)), 0)), 0) AS PURCHASE_OUT
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IF(#includeResult# = 'Y', IFNULL(total.PURCHASE_IN_NORMAL_EST, 0), IFNULL(total.PURCHASE_IN_NORMAL, 0)), 0)), 0) + IFNULL(SUM(IF(total.MONTH = #searchMonth#, IFNULL(total.PURCHASE_IN_COMMON, 0), 0)), 0) AS PURCHASE_IN
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IF(#includeResult# = 'Y', IFNULL(total.PLAN_LABOR_EST, 0), IFNULL(total.PLAN_LABOR, 0)), 0)), 0) AS SALARY_PLAN
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IFNULL(total.LABOR, 0), 0)), 0) AS SALARY
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IF(#includeResult# = 'Y', IFNULL(total.PLAN_EXP_EST, 0), IFNULL(total.PLAN_EXP, 0)), 0)), 0) AS EXPENSE_PLAN
+				, IFNULL(SUM(IF(total.MONTH = #searchMonth#, IF(#includeResult# = 'Y', IFNULL(total.EXP_EST, 0), IFNULL(total.EXP, 0)), 0)), 0) AS EXPENSE
+
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IF(#includeResult# = 'Y', IFNULL(total.SALES_OUT_EST, 0), IFNULL(total.SALES_OUT, 0)), 0)), 0) AS SALES_OUT_ACC
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IF(#includeResult# = 'Y', IFNULL(total.SALES_IN_EST, 0), IFNULL(total.SALES_IN, 0)), 0)), 0) AS SALES_IN_ACC
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IF(#includeResult# = 'Y', IFNULL(total.PURCHASE_OUT_EST, 0), IFNULL(total.PURCHASE_OUT, 0)), 0)), 0) AS PURCHASE_OUT_ACC
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IF(#includeResult# = 'Y', IFNULL(total.PURCHASE_IN_NORMAL_EST, 0), IFNULL(total.PURCHASE_IN_NORMAL, 0)), 0)), 0) + IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IFNULL(total.PURCHASE_IN_COMMON, 0), 0)), 0) AS PURCHASE_IN_ACC
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IF(#includeResult# = 'Y', IFNULL(total.PLAN_LABOR_EST, 0), IFNULL(total.PLAN_LABOR, 0)), 0)), 0) AS SALARY_PLAN_ACC
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IFNULL(total.LABOR, 0), 0)), 0) AS SALARY_ACC
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IF(#includeResult# = 'Y', IFNULL(total.PLAN_EXP_EST, 0), IFNULL(total.PLAN_EXP, 0)), 0)), 0) AS EXPENSE_PLAN_ACC
+				, IFNULL(SUM(IF(#searchMonth# >= total.MONTH, IF(#includeResult# = 'Y', IFNULL(total.EXP_EST, 0), IFNULL(total.EXP, 0)), 0)), 0) AS EXPENSE_ACC
+				
+			FROM
+				V_PRJ_TREE top
+				INNER JOIN V_PRJ_TREE sub
+					ON sub.SN LIKE CONCAT('%', top.ID, '%')
+				LEFT JOIN TBL_PRJ_RESULT_TOTAL total
+					ON sub.ID = total.PRJ_ID
+					AND total.YEAR = #searchYear#
+					<isEqual property="includeAllDate" compareValue="N">						
+						AND #startDate# >= TOTAL.ST_DT
+						AND TOTAL.COMP_DUE_DT >= #endDate#
+					</isEqual>					
+			WHERE
+				top.PRNT = #searchId# 
+				OR top.ID = #searchId#
+				<isEqual property="includeAllDate" compareValue="N">						
+					AND #startDate# >= sub.ST_DT
+					AND sub.COMP_DUE_DT >= #endDate#
+				</isEqual>
+			GROUP BY
+				ID
+			ORDER BY
+				SN
+		)
+	) TOP
+		WHERE id NOT IN ('ORGAN_STD_ORGAN_CODE', 'ORGAN_RET_ORGAN_CODE')	<!-- [20140703]발령대기, 퇴직자그룹 제외 -->
+		<isEqual property="includeAllDate" compareValue="N">				
+			AND #startDate# >= top.ST_DT				
+			AND top.COMP_DUE_DT >= #endDate#
+		</isEqual>
+		ORDER BY
+			IF(TYP='PRJ', SUBSTRING(SN_ORD, 1, LENGTH(SN_ORD) - 25), SN_ORD)	<!-- [20140723] prj인 경우, 최하위 prj ord 고려안함 -->
+			, (CASE WHEN STAT = 'P' THEN 1 WHEN STAT = 'S' THEN 2 WHEN STAT = 'E' THEN 3 END)	<!-- [20140723] 진행:1, 중단:2, 종료:3 -->
+			, SN_ORD
+			, HAVING_LEAF DESC
+	</select>
+
+	
+	<select id="BusiResultDAO.selectStepResultStatisticPreview_reCalc" resultMap="stepResultList">	
+		SELECT
+			ID, NM, SN, LV, TYP, HAVING_LEAF, SALES_OUT, SALES_IN, PURCHASE_OUT, PURCHASE_IN, SALARY_PLAN
+			, SALARY, EXPENSE_PLAN, EXPENSE, SALES_OUT_ACC, SALES_IN_ACC, PURCHASE_OUT_ACC, PURCHASE_IN_ACC
+			, SALARY_PLAN_ACC, SALARY_ACC, EXPENSE_PLAN_ACC, EXPENSE_ACC
+			,  ST_DT, COMP_DUE_DT
+			, (SELECT STAT
+		       	 FROM TBL_PRJ
+		        WHERE TOP.ID = PRJ_ID
+	          ) AS STAT
+			, (SELECT PRJ_TYPE
+		       	 FROM TBL_PRJ
+		        WHERE PRJ_ID = TOP.ID 
+		       ) AS PRJ_TYPE
+		FROM
+	(
+	
+	<isEqual property="typ" compareValue="PRJ">
+		(
+		SELECT 
+			ID
+			,ST_DT
+			,COMP_DUE_DT
+			,NM
+			,SN
+			,SN_ORD
+			,LV
+			,TYP
+			,FALSE AS HAVING_LEAF
+			,FN_GET_SALES_OUT(ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N') SALES_OUT
+			,FN_GET_SALES_IN(ID,#searchYear#,#searchMonth#,#includeResult#,'A','N','N') SALES_IN
+			,FN_GET_PURCHASE_OUT(ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N') PURCHASE_OUT
+			,FN_GET_PURCHASE_IN(ID,#searchYear#,#searchMonth#,#includeResult#,'A','N','N') PURCHASE_IN
+			,FN_GET_PLAN_LABOR(ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N') SALARY_PLAN
+			,0 SALARY
+			,FN_GET_PLAN_EXP(ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N') EXPENSE_PLAN
+			,FN_GET_EXP(ID,#searchYear#,#searchMonth#,#includeResult#,'Y','N','N') EXPENSE
+			,0 SALES_OUT_ACC
+			,0 SALES_IN_ACC
+			,0 PURCHASE_OUT_ACC
+			,0 PURCHASE_IN_ACC
+			,0 SALARY_PLAN_ACC
+			,0 SALARY_ACC
+			,0 EXPENSE_PLAN_ACC
+			,0 EXPENSE_ACC
+		FROM V_PRJ_TREE a 
+		WHERE  
+			ID = #searchId# 
+		ORDER BY SN
+		)
+		
+		UNION ALL
+		</isEqual>
+		(
+		SELECT 
+			ID
+			,ST_DT
+			,COMP_DUE_DT
+			,NM
+			,SN
+			,SN_ORD
+			,LV
+			,TYP			
+			,IF(
+				IF(
+					a.TYP = 'PRJ'
+					, (SELECT COUNT(*) FROM TBL_PRJ WHERE PRNT_PRJ_ID = a.ID AND PRJ_ID != PRNT_PRJ_ID)
+					, (SELECT COUNT(*) FROM TBL_ORGNZT WHERE ORG_UP = a.ID) + (SELECT COUNT(*) FROM TBL_PRJ WHERE ORGNZT_ID = a.ID)
+				) >= 1
+				, TRUE
+				, FALSE
+			) AS HAVING_LEAF
+			,FN_GET_SALES_OUT(ID,#searchYear#,#searchMonth#,#includeResult#,'Y','Y','N') SALES_OUT
+			,0 SALES_IN
+			,FN_GET_PURCHASE_OUT(ID,#searchYear#,#searchMonth#,#includeResult#,'Y','Y','N') PURCHASE_OUT
+			,0 PURCHASE_IN
+			,0 SALARY_PLAN
+			,0 SALARY
+			,0 EXPENSE_PLAN
+			,0 EXPENSE
+			,0 SALES_OUT_ACC
+			,0 SALES_IN_ACC
+			,0 PURCHASE_OUT_ACC
+			,0 PURCHASE_IN_ACC
+			,0 SALARY_PLAN_ACC
+			,0 SALARY_ACC
+			,0 EXPENSE_PLAN_ACC
+			,0 EXPENSE_ACC
+			
+		FROM V_PRJ_TREE a 
+		WHERE
+			PRNT = #searchId# 
+			OR ID = #searchId#
+		ORDER BY SN
+		)
+				
+	) TOP
+		<isEqual property="includeAllDate" compareValue="N">
+			WHERE #startDate# >= top.ST_DT
+			AND top.COMP_DUE_DT >= #endDate#
+		</isEqual>
+
+		ORDER BY
+			SN_ORD, HAVING_LEAF DESC
+	</select>
+	
+	<select id="BusiResultDAO.selectStepResultStatisticRow_reCalc" resultMap="stepResultList">
+	SELECT 
+			ID
+			,NM
+			,SN
+			,LV
+			,TYP
+			<!-- ,IF((SELECT COUNT(*) FROM V_PRJ_TREE WHERE PRNT=a.ID)>=1 AND #isSub#='Y',TRUE,FALSE) AS HAVING_LEAF -->
+			,IF(
+				IF(
+					a.TYP = 'PRJ'
+					, (SELECT COUNT(*) FROM TBL_PRJ WHERE PRNT_PRJ_ID = a.ID AND PRJ_ID != PRNT_PRJ_ID)
+					, (SELECT COUNT(*) FROM TBL_ORGNZT WHERE ORG_UP = a.ID) + (SELECT COUNT(*) FROM TBL_PRJ WHERE ORGNZT_ID = a.ID)
+				) >= 1 AND #isSub#='Y'
+				, TRUE
+				, FALSE
+			) AS HAVING_LEAF
+			,FN_GET_SALES_OUT(ID,#searchYear#,#searchMonth#,#includeResult#,'Y',#isSub#,'N') SALES_OUT
+			,FN_GET_SALES_IN(ID,#searchYear#,#searchMonth#,#includeResult#,'A',#isSub#,'N') SALES_IN
+			,FN_GET_PURCHASE_OUT(ID,#searchYear#,#searchMonth#,#includeResult#,'Y',#isSub#,'N') PURCHASE_OUT
+			,FN_GET_PURCHASE_IN(ID,#searchYear#,#searchMonth#,#includeResult#,'A',#isSub#,'N') PURCHASE_IN
+			,FN_GET_PLAN_LABOR(ID,#searchYear#,#searchMonth#,#includeResult#,'Y',#isSub#,'N') SALARY_PLAN
+			,FN_GET_LABOR(ID,#searchYear#,#searchMonth#,#includeResult#,'Y',#isSub#,'N') SALARY
+			,FN_GET_PLAN_EXP(ID,#searchYear#,#searchMonth#,#includeResult#,'Y',#isSub#,'N') EXPENSE_PLAN
+			,FN_GET_EXP(ID,#searchYear#,#searchMonth#,#includeResult#,'Y',#isSub#,'N') EXPENSE
+			,FN_GET_SALES_OUT(ID,#searchYear#,#searchMonth#,#includeResult#,'Y',#isSub#,'Y') SALES_OUT_ACC
+			,FN_GET_SALES_IN(ID,#searchYear#,#searchMonth#,#includeResult#,'A',#isSub#,'Y') SALES_IN_ACC
+			,FN_GET_PURCHASE_OUT(ID,#searchYear#,#searchMonth#,#includeResult#,'Y',#isSub#,'Y') PURCHASE_OUT_ACC
+			,FN_GET_PURCHASE_IN(ID,#searchYear#,#searchMonth#,#includeResult#,'A',#isSub#,'Y') PURCHASE_IN_ACC
+			,FN_GET_PLAN_LABOR(ID,#searchYear#,#searchMonth#,#includeResult#,'Y',#isSub#,'Y') SALARY_PLAN_ACC
+			,FN_GET_LABOR(ID,#searchYear#,#searchMonth#,#includeResult#,'Y',#isSub#,'Y') SALARY_ACC
+			,FN_GET_PLAN_EXP(ID,#searchYear#,#searchMonth#,#includeResult#,'Y',#isSub#,'Y') EXPENSE_PLAN_ACC
+			,FN_GET_EXP(ID,#searchYear#,#searchMonth#,#includeResult#,'Y',#isSub#,'Y') EXPENSE_ACC			
+			,"" AS STAT
+			,"" AS PRJ_TYPE
+		FROM V_PRJ_TREE a 
+		WHERE  
+			ID = #id#
+		ORDER BY SN
+	</select>
+	
+</sqlMap>

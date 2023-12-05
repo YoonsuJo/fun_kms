@@ -1,0 +1,1448 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsDayReportDAO">
+	
+	<typeAlias  alias="egovMap" 			type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="dayReport" 		type="kms.com.cooperation.service.DayReport"/>
+	<typeAlias  alias="dayReportVO" 	type="kms.com.cooperation.service.DayReportVO"/>
+	<typeAlias  alias="task" 				type="kms.com.cooperation.service.Task"/>
+	<typeAlias  alias="taskContent" 		type="kms.com.cooperation.service.TaskContent"/>
+	<typeAlias  alias="DailyResultVO" 	type="kms.com.daily.vo.DailyResultVO"/>
+	
+	<resultMap id="taskList" class="kms.com.cooperation.service.TaskVO">
+		<result property="taskId"			column="TASK_ID"		columnIndex="1"/>
+		<result property="userNo"			column="USER_NO"		columnIndex="2"/>
+		<result property="userNm"			column="USER_NM"		columnIndex="3"/>
+		<result property="userId"			column="USER_ID"		columnIndex="4"/>
+		<result property="prjId"			column="PRJ_ID"			columnIndex="5"/>
+		<result property="prjCd"			column="PRJ_CD"			columnIndex="6"/>
+		<result property="prjNm"			column="PRJ_NM"			columnIndex="7"/>
+		<result property="taskSj"			column="TASK_SJ"		columnIndex="8"/>
+		<result property="taskCn"			column="TASK_CN"		columnIndex="9"/>
+		<result property="taskRegdate"		column="TASK_REGDATE"	columnIndex="10"/>
+		<result property="taskStartdate"	column="TASK_STARTDATE"	columnIndex="11"/>
+		<result property="taskStarttime"	column="TASK_STARTTIME"	columnIndex="11"/>
+		<result property="taskDuedate"		column="TASK_DUEDATE"	columnIndex="12"/>
+		<result property="taskDuetime"		column="TASK_DUETIME"	columnIndex="13"/>
+		<result property="taskEnddate"		column="TASK_ENDDATE"	columnIndex="14"/>
+		<result property="writerNo"			column="WRITER_NO"		columnIndex="15"/>
+		<result property="writerNm"			column="WRITER_NM"		columnIndex="16"/>
+		<result property="writerId"			column="WRITER_ID"		columnIndex="17"/>
+		<result property="taskState"		column="TASK_STATE"		columnIndex="18"/>
+		<result property="alwaysViewYn"		column="ALWAYS_VIEW_YN"		columnIndex="19"/>
+	</resultMap>
+	<resultMap id="taskSumList" class="kms.com.cooperation.service.TaskVO">
+		<result property="taskId"			column="TASK_ID"		columnIndex="1"/>
+		<result property="userNo"			column="USER_NO"		columnIndex="2"/>
+		<result property="userNm"			column="USER_NM"		columnIndex="3"/>
+		<result property="userId"			column="USER_ID"		columnIndex="4"/>
+		<result property="prjId"			column="PRJ_ID"			columnIndex="5"/>
+		<result property="prjCd"			column="PRJ_CD"			columnIndex="6"/>
+		<result property="prjNm"			column="PRJ_NM"			columnIndex="7"/>
+		<result property="taskSj"			column="TASK_SJ"		columnIndex="8"/>
+		<result property="taskCn"			column="TASK_CN"		columnIndex="9"/>
+		<result property="taskRegdate"		column="TASK_REGDATE"	columnIndex="10"/>
+		<result property="taskStartdate"	column="TASK_STARTDATE"	columnIndex="11"/>
+		<result property="taskStarttime"	column="TASK_STARTTIME"	columnIndex="11"/>
+		<result property="taskDuedate"		column="TASK_DUEDATE"	columnIndex="12"/>
+		<result property="taskDuetime"		column="TASK_DUETIME"	columnIndex="13"/>
+		<result property="taskEnddate"		column="TASK_ENDDATE"	columnIndex="14"/>
+		<result property="writerNo"			column="WRITER_NO"		columnIndex="15"/>
+		<result property="writerNm"			column="WRITER_NM"		columnIndex="16"/>
+		<result property="writerId"			column="WRITER_ID"		columnIndex="17"/>
+		<result property="taskState"		column="TASK_STATE"		columnIndex="18"/>
+		<result property="tmSum"			column="TM_SUM"			columnIndex="19"/>
+		<result property="attachFileId"		column="ATTACH_FILE_ID"	columnIndex="20"/>
+	</resultMap>
+	<resultMap id="dayReportList" class="kms.com.cooperation.service.DayReport">
+		<result property="no"			column="NO"				columnIndex="1"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="2"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="3"/>
+		<result property="userId"		column="USER_ID"		columnIndex="4"/>
+		<result property="taskId"		column="TASK_ID"		columnIndex="5"/>
+		<result property="dayReportDt"	column="DAY_REPORT_DT"	columnIndex="6"/>
+		<result property="dayReportTm"	column="DAY_REPORT_TM"	columnIndex="7"/>
+		<result property="dayReportCn"	column="DAY_REPORT_CN"	columnIndex="8"/>
+		<result property="attachFileId"	column="ATTACH_FILE_ID"	columnIndex="9"/>
+	</resultMap>
+	<resultMap id="taskInfo" class="kms.com.cooperation.service.TaskVO">
+		<result property="taskId"			column="TASK_ID"		columnIndex="1"/>
+		<result property="userNo"			column="USER_NO"		columnIndex="2"/>
+		<result property="userNm"			column="USER_NM"		columnIndex="3"/>
+		<result property="userId"			column="USER_ID"		columnIndex="4"/>
+		<result property="prjId"			column="PRJ_ID"			columnIndex="5"/>
+		<result property="prjCd"			column="PRJ_CD"			columnIndex="6"/>
+		<result property="prjNm"			column="PRJ_NM"			columnIndex="7"/>
+		<result property="taskSj"			column="TASK_SJ"		columnIndex="8"/>
+		<result property="taskCn"			column="TASK_CN"		columnIndex="9"/>
+		<result property="taskRegdate"		column="TASK_REGDATE"	columnIndex="10"/>
+		<result property="taskStartdate"	column="TASK_STARTDATE"	columnIndex="11"/>
+		<result property="taskStarttime"	column="TASK_STARTTIME"	columnIndex="11"/>		
+		<result property="taskDuedate"		column="TASK_DUEDATE"	columnIndex="12"/>
+		<result property="taskDuetime"		column="TASK_DUETIME"	columnIndex="13"/>
+		<result property="taskEnddate"		column="TASK_ENDDATE"	columnIndex="14"/>
+		<result property="writerNo"			column="WRITER_NO"		columnIndex="15"/>
+		<result property="writerNm"			column="WRITER_NM"		columnIndex="16"/>
+		<result property="writerId"			column="WRITER_ID"		columnIndex="17"/>
+		<result property="taskState"		column="TASK_STATE"		columnIndex="18"/>
+		<result property="leaderNo"			column="LEADER_NO"		columnIndex="19"/>
+		<result property="alwaysViewYn"		column="ALWAYS_VIEW_YN"		columnIndex="20"/>
+	</resultMap>
+	<resultMap id="taskContentList" class="kms.com.cooperation.service.TaskContent">
+		<result property="no"			column="NO"					columnIndex="1"/>
+		<result property="taskId"		column="TASK_ID"			columnIndex="2"/>
+		<result property="userNo"		column="USER_NO"			columnIndex="3"/>
+		<result property="userNm"		column="USER_NM"			columnIndex="4"/>
+		<result property="userId"		column="USER_ID"			columnIndex="5"/>
+		<result property="taskCntTyp"	column="TASK_CNT_TYP"		columnIndex="6"/>
+		<result property="taskCntSj"	column="TASK_CNT_SJ"		columnIndex="7"/>
+		<result property="linkUrl"		column="LINK_URL"			columnIndex="8"/>
+		<result property="taskCntRegDt"	column="TASK_CNT_REG_DT"	columnIndex="9"/>
+	</resultMap>
+	
+	<resultMap id="taskHistoryList" class="kms.com.cooperation.service.Task">
+		<result property="historyNo"			column="HISTORY_NO"					columnIndex="1"/>
+		<result property="taskId"		column="TASK_ID"			columnIndex="2"/>
+		<result property="writerNo"		column="WRITER_NO"			columnIndex="3"/>
+		<result property="writerNm"		column="WRITER_NM"			columnIndex="4"/>
+		<result property="writerId"		column="WRITER_ID"			columnIndex="5"/>
+		<result property="regDt"	column="REG_DT"		columnIndex="6"/>
+		<result property="historyStat"	column="HISTORY_STAT"		columnIndex="7"/>
+		<result property="historyCn"		column="HISTORY_CN"			columnIndex="8"/>
+	</resultMap>
+	
+	<resultMap id="dayReportInfo" class="kms.com.cooperation.service.DayReport">
+		<result property="no"			column="NO"				columnIndex="1"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="2"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="3"/>
+		<result property="userId"		column="USER_ID"		columnIndex="4"/>
+		<result property="taskId"		column="TASK_ID"		columnIndex="5"/>
+		<result property="dayReportDt"	column="DAY_REPORT_DT"	columnIndex="6"/>
+		<result property="dayReportTm"	column="DAY_REPORT_TM"	columnIndex="7"/>
+		<result property="dayReportCn"	column="DAY_REPORT_CN"	columnIndex="8"/>
+		<result property="attachFileId"	column="ATTACH_FILE_ID"	columnIndex="9"/>
+	</resultMap>
+	<resultMap id="dayReportSearch" class="kms.com.cooperation.service.DayReportVO">
+		<result property="no"			column="NO"				columnIndex="1"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="2"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="3"/>
+		<result property="userId"		column="USER_ID"		columnIndex="4"/>
+		<result property="dayReportDt"	column="DAY_REPORT_DT"	columnIndex="6"/>
+		<result property="dayReportTm"	column="DAY_REPORT_TM"	columnIndex="7"/>
+		<result property="dayReportCn"	column="DAY_REPORT_CN"	columnIndex="8"/>
+		<result property="prjNm"		column="PRJ_NM"			columnIndex="10"/>
+		<result property="prjCd"		column="PRJ_CD"			columnIndex="11"/>
+		<result property="prjId"		column="PRJ_Id"			columnIndex="12"/>
+		
+		<result property="taskId"		column="TASK_ID"		columnIndex="5"/>
+		<result property="taskSj"		column="TASK_SJ"		columnIndex="6"/>
+		<result property="taskCn"		column="TASK_CN"		columnIndex="7"/>	
+		<result property="taskRegdate"		column="TASK_REGDATE"		columnIndex="8"/>
+		<result property="taskStartdate"		column="TASK_STARTDATE"		columnIndex="10"/>
+		<result property="taskStarttime"	column="TASK_STARTTIME"	columnIndex="11"/>		
+		<result property="taskDuedate"		column="TASK_DUEDATE"		columnIndex="11"/>						
+		<result property="taskDuetime"		column="TASK_DUETIME"		columnIndex="12"/>
+		<result property="taskEnddate"		column="TASK_ENDDATE"		columnIndex="13"/>
+		<result property="taskState"		column="TASK_STATE"		columnIndex="14"/>
+		<result property="writerNo"		column="WRITER_NO"		columnIndex="15"/>
+		<result property="writerNm"		column="WRITER_NM"		columnIndex="16"/>
+		<result property="writerId"		column="WRITER_ID"		columnIndex="17"/>
+		<result property="attachFileId"	column="ATTACH_FILE_ID"	columnIndex="18"/>
+	</resultMap>
+	<!-- 나의 업무 S -->
+	<resultMap id="dayReportList2" class="kms.com.cooperation.service.DayReport">
+		<result property="prjNm"		column="PRJ_NM"			columnIndex="10"/>
+		<result property="prjCd"		column="PRJ_CD"			columnIndex="11"/>
+		<result property="prjId"		column="PRJ_Id"			columnIndex="12"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="2"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="3"/>
+		<result property="userId"		column="USER_ID"		columnIndex="4"/>
+		<result property="taskId"		column="TASK_ID"		columnIndex="5"/>
+		<result property="taskSj"		column="TASK_SJ"		columnIndex="6"/>
+		<result property="taskCn"		column="TASK_CN"		columnIndex="7"/>	
+		<result property="taskRegdate"		column="TASK_REGDATE"		columnIndex="8"/>
+		<result property="taskStartdate"		column="TASK_STARTDATE"		columnIndex="10"/>
+		<result property="taskStarttime"	column="TASK_STARTTIME"	columnIndex="11"/>		
+		<result property="taskDuedate"		column="TASK_DUEDATE"		columnIndex="11"/>						
+		<result property="taskDuetime"		column="TASK_DUETIME"		columnIndex="12"/>
+		<result property="taskEnddate"		column="TASK_ENDDATE"		columnIndex="13"/>
+		<result property="taskState"		column="TASK_STATE"		columnIndex="14"/>
+		<result property="writerNo"		column="WRITER_NO"		columnIndex="15"/>
+		<result property="writerNm"		column="WRITER_NM"		columnIndex="16"/>
+		<result property="writerId"		column="WRITER_ID"		columnIndex="17"/>		
+		<result property="dayReportTm"		column="DAY_REPORT_TM"		columnIndex="18"/>	
+		<result property="dayReportTodayTm"		column="DAY_REPORT_TODAY_TM"		columnIndex="19"/>		
+		<result property="dayReportCnt"		column="DAY_REPORT_CNT"		columnIndex="20"/>	
+		<result property="dayReportTodayCnt"		column="DAY_REPORT_TODAY_CNT"		columnIndex="21"/>	
+	</resultMap>
+	<!-- 나의 업무 E -->
+
+	<select id="DayReportDAO.selectDayReportUserList" parameterClass="DayReportVO" resultClass="egovMap">				
+		SELECT
+			USR.USER_NO, USR.USER_NM, USR.USER_ID
+			, USR.ORGNZT_ID, USR.ORGNZT_NM
+			, COUNT(USR.ATTEND_DT) AS DATE_CNT
+			, GROUP_CONCAT(USR.ATTEND_DT ORDER BY USR.ATTEND_DT ASC) AS ALL_DATE
+			, SUM(IFNULL(NORMAL, 0)) NORMAL
+			, GROUP_CONCAT(IF(NORMAL=1,DAY_REPORT_DT,NULL) ORDER BY USR.ATTEND_DT ASC) AS NORMAL_DATE
+			, SUM(IFNULL(OVER, 0)) OVER
+			, GROUP_CONCAT(IF(OVER=1,DAY_REPORT_DT,NULL) ORDER BY USR.ATTEND_DT ASC) AS OVER_DATE
+			, SUM(IFNULL(LATE, 0)) LATE
+			, GROUP_CONCAT(IF(LATE=1,DAY_REPORT_DT,NULL) ORDER BY USR.ATTEND_DT ASC) AS LATE_DATE
+			, COUNT(USR.ATTEND_DT) - SUM(IFNULL(LATE, 0)) - SUM(IFNULL(SAFE, 0)) AS NOINPUT
+			, GROUP_CONCAT(IF(DAY_REPORT_DT IS NULL, USR.ATTEND_DT ,NULL) ORDER BY USR.ATTEND_DT ASC) AS NOINPUT_DATE
+			, SUM(IFNULL(SAFE, 0)) SAFE
+			, IF( SUM(IFNULL(NORMAL, 0)) + SUM(IFNULL(OVER, 0)) = SUM(IFNULL(SAFE, 0)), 'GOOD', 'BAD') VALIDATOR
+		FROM (
+			SELECT
+				USR.NO AS USER_NO,USR.USER_NM, USR.USER_ID
+				, USR.ORGNZT_ID, ORG.ORGNZT_NM
+				, A.ATTEND_DT, A.ATTEND_CD	
+			FROM
+				TBL_USERINFO USR
+				LEFT JOIN TBL_ORGNZT ORG 
+					ON USR.ORGNZT_ID = ORG.ORGNZT_ID
+				LEFT JOIN TBL_ATTEND_CHECK A
+					ON
+						USR.NO = A.USER_NO
+						AND DATEDIFF(A.ATTEND_DT, #searchDateFrom#) >= 0
+						AND DATEDIFF(#searchDateTo#, A.ATTEND_DT) >= 0
+						AND A.ATTEND_CD NOT IN ('HD', 'VC')
+				LEFT JOIN (
+					SELECT
+						USR.NO AS USER_NO,
+						IF(CONCAT(',', GROUP_CONCAT(AUTH_CODE), ',') LIKE CONCAT('%,', 'executive', ',%'), 'Y', 'N') AS IS_LEADER
+					FROM
+						TBL_USERINFO USR
+						LEFT JOIN TBL_USER_AUTH AUTH
+						ON USR.NO = AUTH.USER_NO
+					GROUP BY USR.NO
+				) c ON USR.NO = c.USER_NO
+			WHERE
+				USR.GHOST = '0'
+				AND USR.COMPIN_DT IS NOT NULL
+				AND USR.ORGNZT_ID != 'ORGAN_RET_ORGAN_CODE'
+				
+			<isNotEmpty property="myOrgId">
+				<isEmpty prepend="AND" property="myOrgIdSec">
+					ORG.ORG_TREE LIKE CONCAT('%', #myOrgId#, '%')
+				</isEmpty>
+				<isNotEmpty prepend="AND" property="myOrgIdSec">
+					(ORG.ORG_TREE LIKE CONCAT('%', #myOrgId#, '%')
+				OR ORG.ORG_TREE LIKE CONCAT('%', #myOrgIdSec#, '%'))
+				</isNotEmpty>
+			</isNotEmpty>
+			
+			<isNotEmpty property="exceptionUsersList">
+				AND USR.NO NOT IN
+				<iterate property="exceptionUsersList" open="(" close=")" conjunction=",">
+	           		 #exceptionUsersList[]#
+				</iterate>				
+			</isNotEmpty>
+			<isEqual property="excludeLeader" compareValue="Y">
+				AND c.IS_LEADER = 'N'
+			</isEqual>
+			<isEqual property="searchCondition" compareValue="0">
+				<isNotEmpty prepend="AND" property="searchUserMix">
+<!--				CONCAT(usr.USER_NM, '(', usr.USER_ID, ')') LIKE CONCAT('%', #searchUserMix#, '%')					-->
+					<iterate open="(" close=")" conjunction="OR" property="searchUserMixList">
+						CONCAT(usr.USER_NM, '(', usr.USER_ID, ')') LIKE CONCAT('%', #searchUserMixList[]#, '%')
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="searchCondition" compareValue="1">
+				<isNotEmpty prepend="AND" property="searchOrgId">
+					<iterate prepend="usr.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+						#searchOrgIdList[]#
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="searchCondition" compareValue="2">
+				<isNotEmpty prepend="AND" property="searchUserNo">
+					USR.NO = #searchUserNo#
+				</isNotEmpty>
+			</isEqual>
+			
+			) USR
+		LEFT JOIN (
+			SELECT
+				USER_NO, DAY_REPORT_DT
+				, IF(SUM(IF(SAFE=0, 0, OVER))>0, TRUE, FALSE) OVER
+				, IF(SUM(IF(SAFE=0, 0, OVER))>0
+					, 0, IF(SUM(IF(SAFE=0, 0, NORAML))>0, TRUE, FALSE)) NORMAL
+				, IF(SUM(SAFE)>0, TRUE, FALSE) SAFE
+				, IF(SUM(SAFE)=0, TRUE, FALSE) LATE
+			FROM (
+				SELECT
+					DR.NO AS DAY_ID
+					, DR.USER_NO AS USER_NO
+					, IF(LENGTH(day_report_cn) >= 300, TRUE, FALSE) AS OVER
+					, IF(LENGTH(day_report_cn) >= 300, FALSE, TRUE) AS NORAML
+					, IF(CONCAT(DATE_FORMAT(ADDDATE(day_report_dt, 1), '%Y%m%d'), '06')
+						> DATE_FORMAT(REG_DT, '%Y%m%d%H')
+						,1, 0) AS SAFE
+					, DATE_FORMAT(REG_DT, '%Y%m%d%H')
+						- CONCAT(DATE_FORMAT(ADDDATE(day_report_dt, 1), '%Y%m%d'), '06') AS DIFF
+					, DATE_FORMAT(REG_DT, '%Y%m%d%H') AS REG_DT	
+					, CONCAT(DATE_FORMAT(ADDDATE(day_report_dt, 1), '%Y%m%d'), '06') AS DAY_REPORT_DT_LIMIT
+					, CAST(DAY_REPORT_DT AS UNSIGNED) AS DAY_REPORT_DT
+				FROM
+					TBL_DAY_REPORT DR
+					LEFT JOIN TBL_ATTEND_CHECK AC
+						ON DR.DAY_REPORT_DT = AC.ATTEND_DT
+						AND DR.USER_NO = AC.USER_NO
+				WHERE			
+					DATE_FORMAT(day_report_dt, '%Y%m%d') >= #searchDateFrom#
+					AND #searchDateTo# >= DATE_FORMAT(day_report_dt, '%Y%m%d')	
+					AND AC.ATTEND_CD != 'VC'
+				) A
+			GROUP BY A.USER_NO, DAY_REPORT_DT
+			) REPORT
+		ON USR.USER_NO = REPORT.USER_NO
+			AND USR.ATTEND_DT = REPORT.DAY_REPORT_DT
+			AND REPORT.USER_NO IS NOT NULL
+		GROUP BY 
+			USR.USER_NO, USR.USER_NM, USR.USER_ID, USR.ORGNZT_ID, USR.ORGNZT_NM
+		ORDER BY 
+			FN_ORGAN_TREE(USR.ORGNZT_ID) ASC, USR.USER_NM
+	</select>
+	
+	<select id="DayReportDAO.selectDayReportUserList1" parameterClass="DayReportVO" resultClass="egovMap">				
+		SELECT USR.NO AS USER_NO, 
+              USR.USER_NM, 
+              USR.USER_ID , 
+              USR.ORGNZT_ID, 
+              ORG.ORGNZT_NM 
+         FROM TBL_USERINFO USR 
+            LEFT JOIN TBL_ORGNZT ORG 
+                ON USR.ORGNZT_ID = ORG.ORGNZT_ID  
+        WHERE USR.GHOST = '0' 
+              AND USR.COMPIN_DT IS NOT NULL 
+              AND USR.ORGNZT_ID != 'ORGAN_RET_ORGAN_CODE'
+			<isNotEmpty prepend="AND" property="myOrgId">
+				ORG.ORG_TREE LIKE CONCAT('%', #myOrgId#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="userId">
+				USR.USER_ID != #userId#
+			</isNotEmpty>
+		ORDER BY USR.USER_NM
+	</select>
+	
+	<select id="DayReportDAO.selectDayReportUserList2" parameterClass="DayReportVO" resultClass="egovMap">				
+		SELECT USR.NO AS USER_NO, 
+              USR.USER_NM, 
+              USR.USER_ID , 
+              USR.ORGNZT_ID, 
+              ORG.ORGNZT_NM 
+         FROM TBL_USERINFO USR 
+            LEFT JOIN TBL_ORGNZT ORG 
+                ON USR.ORGNZT_ID = ORG.ORGNZT_ID  
+        WHERE USR.GHOST = '0' 
+              AND USR.COMPIN_DT IS NOT NULL 
+              AND USR.ORGNZT_ID != 'ORGAN_RET_ORGAN_CODE'
+			<isNotEmpty prepend="AND" property="myOrgId">
+				USR.ORGNZT_ID = #myOrgId#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="userId">
+				USR.USER_ID != #userId#
+			</isNotEmpty>
+		ORDER BY USR.USER_NM
+	</select>
+	
+	
+	
+	<select id="DayReportDAO.selectTaskList" resultMap="taskList">
+		SELECT
+			a.TASK_ID
+			,a.USER_NO, b.USER_NM, b.USER_ID
+			,a.PRJ_ID, e.PRJ_CD, e.PRJ_NM
+			,a.TASK_SJ
+			,a.TASK_CN
+			,a.TASK_REGDATE
+			,a.TASK_STARTDATE
+			,a.TASK_STARTTIME
+			,a.TASK_DUEDATE
+			,a.TASK_DUETIME
+			,a.TASK_ENDDATE
+			,a.WRITER_NO, c.USER_NM AS WRITER_NM, c.USER_ID AS WRITER_ID
+			,a.TASK_STATE
+			,IFNULL(a.ALWAYS_VIEW_YN,'N') AS ALWAYS_VIEW_YN
+		FROM
+			TBL_TASK a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+			LEFT JOIN TBL_USERINFO c ON a.WRITER_NO = c.NO
+			LEFT JOIN TBL_DAY_REPORT d ON a.TASK_ID = d.TASK_ID
+			LEFT JOIN TBL_PRJ e ON a.PRJ_ID = e.PRJ_ID
+		WHERE
+			<isNotEqual property="taskContentTyp" compareValue="TA">
+			a.USER_NO = #searchUserNo#
+			</isNotEqual>
+			<isEqual property="taskContentTyp" compareValue="TA">
+			a.WRITER_NO = #searchUserNo#
+			</isEqual>
+			<isNotEmpty property="taskId">
+			AND	a.TASK_ID NOT IN (#taskId#)
+			</isNotEmpty>
+			AND (
+				(
+					a.TASK_STATE = 'P'
+					AND (
+						DATEDIFF(IFNULL(#eDate#, SYSDATE()), IF(a.TASK_STARTDATE IS NULL OR a.TASK_STARTDATE = '', '10000101', a.TASK_STARTDATE)) >= 0
+						OR (
+							DATEDIFF(d.DAY_REPORT_DT, IFNULL(#sDate#, SYSDATE())) >= 0
+							AND DATEDIFF(IFNULL(#eDate#, SYSDATE()), d.DAY_REPORT_DT) >= 0
+						)
+					)
+				)
+		<isEmpty property="limitSize">
+				OR (
+					a.TASK_STATE = 'C'
+					AND DATEDIFF(d.DAY_REPORT_DT, #sDate#) >= 0
+					AND DATEDIFF(#eDate#, d.DAY_REPORT_DT) >= 0
+				)
+		</isEmpty>
+			)
+		GROUP BY a.TASK_ID
+		ORDER BY
+			CASE a.TASK_DUEDATE
+				WHEN '' THEN '99999999'
+				ELSE a.TASK_DUEDATE
+			END ASC
+		<isNotEmpty property="limitSize">
+		LIMIT #limitSize#
+		</isNotEmpty>
+	</select>
+
+	<select id="DayReportDAO.selectDayReportList" resultMap="dayReportList">
+		SELECT
+			a.NO, a.USER_NO, b.USER_NM, b.USER_ID, a.TASK_ID,
+			a.DAY_REPORT_DT, a.DAY_REPORT_TM, a.DAY_REPORT_CN, a.ATTACH_FILE_ID
+		FROM
+			TBL_DAY_REPORT A
+			LEFT JOIN TBL_USERINFO B 
+				ON A.USER_NO = B.NO
+			LEFT JOIN TBL_ORGNZT ORG 
+				ON B.ORGNZT_ID = ORG.ORGNZT_ID
+		<dynamic prepend="WHERE">
+			<isNotEmpty property="myOrgId">
+				<isEmpty prepend="AND" property="myOrgIdSec">
+					ORG.ORG_TREE LIKE CONCAT('%', #myOrgId#, '%')
+				</isEmpty>
+				<isNotEmpty prepend="AND" property="myOrgIdSec">
+					(ORG.ORG_TREE LIKE CONCAT('%', #myOrgId#, '%')
+				OR ORG.ORG_TREE LIKE CONCAT('%', #myOrgIdSec#, '%'))
+				</isNotEmpty>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="sDate">
+				DATEDIFF(a.DAY_REPORT_DT, #sDate#) >= 0
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="eDate">
+				DATEDIFF(#eDate#, a.DAY_REPORT_DT) >= 0
+			</isNotEmpty>
+			
+			<isNotEmpty property="mode">
+				<isNotEqual property="mode" compareValue="0">
+					<iterate prepend="AND A.DAY_REPORT_DT IN " property="dateList" open="(" close=")" conjunction=",">
+						#dateList[]#
+					</iterate>
+				</isNotEqual>
+			</isNotEmpty>
+			
+			<isNotEmpty prepend="AND" property="taskIdArray">
+				<iterate prepend="a.TASK_ID IN " property="taskIdArray" open="(" close=")" conjunction=",">
+					#taskIdArray[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="taskId">
+				a.TASK_ID = #taskId#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="userNo">
+				a.USER_NO = #userNo#
+			</isNotEmpty>
+			
+		</dynamic>
+<!--		ORDER BY a.DAY_REPORT_DT DESC-->
+		ORDER BY a.DAY_REPORT_DT ASC
+	</select>
+	
+	<select id="DayReportDAO.selectLeftTime" resultClass="java.lang.Integer">
+		SELECT
+			CASE
+				WHEN b.SCHE_ID IS NOT NULL THEN 0 <!-- 휴일 -->
+				WHEN DAYOFWEEK(cal.CAL_DATE) NOT IN (2,3,4,5,6) THEN 0 <!-- 주말 -->
+				WHEN
+					(
+						cal.CAL_DATE = c.ED_DT AND c.ED_AMPM = 1
+					) OR (
+						cal.CAL_DATE = c.ST_DT AND c.ST_AMPM = 2
+					)
+				THEN IF(SUM(IFNULL(a.DAY_REPORT_TM,0)) > 4, 0, 4-SUM(IFNULL(a.DAY_REPORT_TM,0))) <!-- 반일휴가 -->
+				WHEN c.USER_NO IS NOT NULL THEN 0 <!-- 전일휴가 -->
+				ELSE IF(SUM(IFNULL(a.DAY_REPORT_TM,0)) > 8, 0, 8-SUM(IFNULL(a.DAY_REPORT_TM,0))) <!-- 평일 -->
+			END AS LEFT_TM
+		FROM
+			TBL_CALENDAR_DATA cal
+			LEFT JOIN TBL_DAY_REPORT a ON cal.CAL_DATE = a.DAY_REPORT_DT AND a.USER_NO = #searchUserNo#
+			LEFT JOIN TBL_SCHEDULE b ON b.SCHE_TYP IN ('H','I','J') AND b.DELETE_YN = 'N' AND cal.CAL_YEAR = b.SCHE_YEAR AND cal.CAL_MONTH = b.SCHE_MONTH AND cal.CAL_DAY = b.SCHE_DATE
+			LEFT JOIN (
+				SELECT
+					a.*, b.WRITER_NO AS USER_NO
+				FROM
+					TBL_EAPP_VAC a
+					INNER JOIN TBL_EAPP_DOC b ON a.DOC_ID = b.DOC_ID
+			) c ON DATEDIFF(cal.CAL_DATE, c.ST_DT) >= 0 AND DATEDIFF(c.ED_DT, cal.CAL_DATE) >= 0 AND a.USER_NO = c.USER_NO
+		WHERE
+			DATEDIFF(cal.CAL_DATE, #sDate#) >= 0
+			AND DATEDIFF(#eDate#, cal.CAL_DATE) >= 0
+		GROUP BY cal.CAL_DATE
+	</select>
+	
+	<select id="DayReportDAO.selectTask" resultMap="taskInfo">
+		SELECT
+			a.TASK_ID
+			,a.USER_NO, b.USER_NM, b.USER_ID
+			,a.PRJ_ID, d.PRJ_CD, d.PRJ_NM
+			,a.TASK_SJ
+			,a.TASK_CN
+			,a.TASK_REGDATE
+			,a.TASK_STARTDATE
+			,a.TASK_STARTTIME
+			,a.TASK_DUEDATE
+			,a.TASK_DUETIME
+			,a.TASK_ENDDATE
+			,a.WRITER_NO, c.USER_NM AS WRITER_NM, c.USER_ID AS WRITER_ID
+			,a.TASK_STATE
+			,IFNULL(a.ALWAYS_VIEW_YN,'N') AS ALWAYS_VIEW_YN
+			,D.LEADER_NO
+		FROM
+			TBL_TASK a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+			LEFT JOIN TBL_USERINFO c ON a.WRITER_NO = c.NO
+			LEFT JOIN TBL_PRJ d ON a.PRJ_ID = d.PRJ_ID
+		WHERE
+			a.TASK_ID = #taskId#
+	</select>
+	
+		<select id="DayReportDAO.selectTaskHistoryList" resultMap="taskHistoryList">
+		SELECT
+			a.HISTORY_NO
+			, a.TASK_ID
+			, a.WRITER_NO
+			, b.USER_NM as WRITER_NM
+			, b.USER_ID AS WRITER_ID
+			, DATE_FORMAT(a.REG_DT, '%Y.%m.%d') AS REG_DT
+			,a.HISTORY_STAT, a.HISTORY_CN 
+		FROM
+			TBL_TASK_HISTORY a
+			LEFT JOIN TBL_USERINFO b ON a.WRITER_NO = b.NO
+		WHERE	
+			a.TASK_ID = #taskId#
+		ORDER BY a.REG_DT ASC
+			
+	</select>
+	
+
+	<select id="DayReportDAO.selectTaskContentList" resultMap="taskContentList">
+		SELECT
+			a.NO, a.TASK_ID, a.USER_NO, b.USER_NM, b.USER_ID,
+			a.TASK_CNT_TYP, a.TASK_CNT_SJ, a.LINK_URL, DATE_FORMAT(a.TASK_CNT_REG_DT, '%Y.%m.%d') AS TASK_CNT_REG_DT
+		FROM
+			TBL_TASK_CONTENT a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="taskId">
+				a.TASK_ID = #taskId#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="taskIdArray">
+				<iterate prepend="a.TASK_ID IN " property="taskIdArray" open="(" close=")" conjunction=",">
+					#taskIdArray[]#
+				</iterate>
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<insert id="DayReportDAO.insertTask">
+		INSERT INTO TBL_TASK
+		(
+			TASK_ID
+			,USER_NO
+			,PRJ_ID
+			,TASK_SJ
+			,TASK_CN
+			,TASK_REGDATE
+			,TASK_STARTDATE
+			,TASK_STARTTIME
+			,TASK_DUEDATE
+			,TASK_DUETIME
+			,WRITER_NO
+			,TASK_STATE
+			,ALWAYS_VIEW_YN
+		) (
+			SELECT
+				#taskId#
+				,NO
+				,#prjId#
+				,#taskSj#
+				,#taskCn#
+				,DATE_FORMAT(SYSDATE(), '%Y%m%d')
+				,#taskStartdate#
+				,#taskStarttime#
+				,#taskDuedate#
+				,#taskDuetime#
+				,#writerNo#
+				,#taskState#
+				,#alwaysViewYn#
+			FROM TBL_USERINFO
+			WHERE
+				CONCAT(USER_NM, '(', USER_ID, ')') = #userNm#
+		)
+	</insert>
+
+	<update id="DayReportDAO.updateTask">
+		UPDATE TBL_TASK
+		SET
+			PRJ_ID = #prjId#
+			,TASK_SJ = #taskSj#
+			,TASK_STARTDATE = #taskStartdate#
+			,TASK_STARTTIME = #taskStarttime#
+			,TASK_DUEDATE = #taskDuedate#
+			,TASK_DUETIME = #taskDuetime#
+			,TASK_CN = #taskCn#
+			,USER_NO = #userNo#
+			,ALWAYS_VIEW_YN = #alwaysViewYn#
+		WHERE
+			TASK_ID = #taskId#
+	</update>
+
+	<update id="DayReportDAO.updateTaskState">
+		UPDATE TBL_TASK
+		SET		
+		<isNotEmpty property="taskState">
+			TASK_STATE = #taskState#
+			<isEqual prepend="," property="taskState" compareValue="P">			
+				TASK_ENDDATE = NULL
+			</isEqual>
+			<isEqual prepend="," property="taskState" compareValue="C">			
+				TASK_ENDDATE = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+			</isEqual>
+		</isNotEmpty>
+		
+		<isNotEmpty property="userNo">
+			USER_NO = #userNo#
+		</isNotEmpty>
+		<isNotEmpty property="taskDuedate">
+			TASK_STARTDATE = #taskStartdate#
+			,TASK_DUEDATE = #taskDuedate#
+		</isNotEmpty>
+		WHERE
+			TASK_ID = #taskId#
+	</update>
+	
+	<insert id="DayReportDAO.insertTaskStateHistory">
+		INSERT INTO TBL_TASK_HISTORY
+		(
+			TASK_ID
+			,WRITER_NO
+			,REG_DT
+			,HISTORY_STAT
+			,HISTORY_CN
+		) VALUES (
+			#taskId#
+			,#writerNo#
+			,SYSDATE()
+			,#historyStat#
+			,#historyCn#
+		)
+	</insert>
+	
+	
+
+	<delete id="DayReportDAO.deleteTask">
+		DELETE FROM TBL_TASK
+		WHERE
+			TASK_ID = #taskId#
+	</delete>
+
+	<select id="DayReportDAO.selectDayReport" resultMap="dayReportInfo">
+		SELECT
+			a.NO, a.USER_NO, b.USER_NM, b.USER_ID, a.TASK_ID,
+			a.DAY_REPORT_DT, a.DAY_REPORT_TM, a.DAY_REPORT_CN, a.ATTACH_FILE_ID
+		FROM
+			TBL_DAY_REPORT a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+		WHERE
+			a.NO = #no#
+	</select>
+
+	<insert id="DayReportDAO.insertDayReport">
+		<selectKey  resultClass="java.lang.Integer" keyProperty="no" >
+			SELECT IFNULL(MAX(NO),-1) NO
+			FROM TBL_DAY_REPORT
+		</selectKey>
+		INSERT INTO TBL_DAY_REPORT
+		(
+			USER_NO, TASK_ID, DAY_REPORT_DT, DAY_REPORT_TM, DAY_REPORT_CN, REG_DT, MOD_DT
+			, IS_HOLIDAY, MONTH, DAY_REPORT_YM, ATTACH_FILE_ID
+		) VALUES (
+			#userNo#, #taskId#, #dayReportDt#, #dayReportTm#, #dayReportCn#, SYSDATE(), SYSDATE()
+			, FN_IS_HOLIDAY(#dayReportDt#), SUBSTRING(#dayReportDt#, 5, 2), SUBSTRING(#dayReportDt#, 1, 6), #attachFileId#
+		)
+	</insert>
+
+	<update id="DayReportDAO.updateDayReport">
+		UPDATE TBL_DAY_REPORT
+		SET
+			DAY_REPORT_DT = #dayReportDt#
+			, DAY_REPORT_TM = #dayReportTm#
+			, DAY_REPORT_CN = #dayReportCn#
+			, MOD_DT = SYSDATE()
+			, IS_HOLIDAY = FN_IS_HOLIDAY(#dayReportDt#)
+			, MONTH = SUBSTRING(#dayReportDt#, 5, 2)
+			, DAY_REPORT_YM = SUBSTRING(#dayReportDt#, 1, 6)
+			<isNotEmpty prepend="," property="attachFileId">
+				ATTACH_FILE_ID = #attachFileId#
+			</isNotEmpty>
+		WHERE
+			NO = #no#
+	</update>
+	
+	<update id="DayReportDAO.updateDayReportTotalTm">
+		UPDATE TBL_DAY_REPORT
+		SET MONTH_TOTAL_TM =
+			( SELECT TM 
+			FROM (SELECT IFNULL(SUM(IFNULL(dr.DAY_REPORT_TM, 0)), 0) AS TM
+				FROM 	TBL_DAY_REPORT dr					
+				WHERE	USER_NO = #userNo#
+					AND DAY_REPORT_YM = SUBSTRING(#dayReportDt#, 1, 6)	
+					AND DR.IS_HOLIDAY = 0
+				GROUP BY USER_NO ) A
+			)
+		WHERE USER_NO = #userNo#
+			AND DAY_REPORT_YM = SUBSTRING(#dayReportDt#, 1, 6)
+	</update>
+
+	<delete id="DayReportDAO.deleteDayReport">
+		DELETE FROM TBL_DAY_REPORT
+		WHERE TASK_ID = #taskId#
+		<isNotEmpty prepend="AND" property="no">
+			NO = #no#
+		</isNotEmpty>		
+	</delete>
+	
+	<insert id="DayReportDAO.insertTaskContent">
+		INSERT INTO TBL_TASK_CONTENT
+		(
+			TASK_ID, USER_NO, TASK_CNT_TYP, TASK_CNT_SJ, LINK_URL, TASK_CNT_REG_DT
+		) VALUES (
+			#taskId#, #userNo#, #taskCntTyp#, #taskCntSj#, #linkUrl#, SYSDATE()
+		)
+	</insert>
+
+	<update id="DayReportDAO.updateTaskContent">
+		UPDATE TBL_TASK_CONTENT
+		SET
+			TASK_ID = #taskId#
+		WHERE
+			NO = #no#
+	</update>
+
+	<delete id="DayReportDAO.deleteTaskContent">
+		DELETE FROM TBL_TASK_CONTENT
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="no">
+				NO = #no#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="taskId">
+				TASK_ID = #taskId#
+			</isNotEmpty>
+		</dynamic>
+	</delete>
+	
+	<sql id="SQL_searchDayReport">
+		FROM
+			TBL_DAY_REPORT a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+			LEFT JOIN TBL_TASK c ON a.TASK_ID = c.TASK_ID
+			LEFT JOIN TBL_PRJ d ON c.PRJ_ID = d.PRJ_ID
+		<dynamic prepend="WHERE">
+			<isNotEmpty property="searchKeyword">
+				<isEqual prepend="AND" property="searchCondition" compareValue="0">
+					CONCAT(b.USER_NM, '(', b.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+				</isEqual>
+				<isEqual property="searchCondition" compareValue="1">
+					<isNotEmpty prepend="AND" property="searchOrgId">
+						<iterate prepend="b.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+							#searchOrgIdList[]#
+						</iterate>
+					</isNotEmpty>
+				</isEqual>
+				<isEqual prepend="AND" property="searchCondition" compareValue="2">
+					(
+						c.PRJ_ID = #searchPrjId#
+					<isEqual prepend="OR" property="includeUnderProject" compareValue="Y">
+						CONCAT('/',FN_PRJ_TREE(c.PRJ_ID),'/') LIKE CONCAT('%/', #searchPrjId#, '/%')
+					</isEqual>
+					)
+				</isEqual>
+			</isNotEmpty>
+			<isEmpty property="searchKeyword">
+				<isNotEmpty prepend="AND" property="searchText">
+					(
+						c.TASK_SJ LIKE CONCAT('%', #searchText#, '%')
+						OR a.DAY_REPORT_CN LIKE CONCAT('%', #searchText#, '%')
+					)
+				</isNotEmpty>
+				<isEmpty prepend="AND" property="searchText">
+					1 = 0
+				</isEmpty>
+				<isNotEmpty prepend="AND" property="searchSdate">
+					DATEDIFF(a.DAY_REPORT_DT, #searchSdate#) >= 0
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="searchEdate">
+					DATEDIFF(#searchEdate#, a.DAY_REPORT_DT) >= 0
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="searchUserNm">
+					CONCAT(b.USER_NM, '(', b.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="searchPrjId">
+					(
+						d.PRJ_ID = #searchPrjId#
+					<isEqual prepend="OR" property="includeUnderProject" compareValue="Y">
+						CONCAT('/',d.PRJ_TREE,'/') LIKE CONCAT('%/', #searchPrjId#, '/%')
+					</isEqual>
+					)
+				</isNotEmpty>
+			</isEmpty>
+		</dynamic>
+	</sql>
+	
+	
+	<select id="DayReportDAO.searchDayReportList" resultMap="dayReportSearch">
+		SELECT
+			a.NO, a.USER_NO, b.USER_NM, b.USER_ID, a.TASK_ID,
+			a.DAY_REPORT_DT, a.DAY_REPORT_TM, a.DAY_REPORT_CN,
+			d.PRJ_NM, d.PRJ_CD, c.PRJ_ID
+			,c.TASK_SJ
+			,c.TASK_CN
+			,c.TASK_REGDATE
+			,c.TASK_STARTDATE
+			,c.TASK_STARTTIME
+			,c.TASK_DUEDATE
+			,c.TASK_DUETIME
+			,c.TASK_ENDDATE
+			,c.TASK_STATE
+			,c.WRITER_NO 
+			,(SELECT e.USER_NM FROM TBL_USERINFO e WHERE e.NO = c.WRITER_NO) AS WRITER_NM 
+			,(SELECT e.USER_ID FROM TBL_USERINFO e WHERE e.NO = c.WRITER_NO) AS WRITER_ID
+			,a.ATTACH_FILE_ID
+		<include refid="SQL_searchDayReport"/>
+		ORDER BY a.DAY_REPORT_DT DESC
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<select id="DayReportDAO.searchDayReportListTotCnt" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		<include refid="SQL_searchDayReport"/>
+	</select>
+
+	<select id="DayReportDAO.selectTaskListByPrjId" resultMap="taskSumList">
+		SELECT
+			a.TASK_ID
+			,a.USER_NO, b.USER_NM, b.USER_ID
+			,a.PRJ_ID, e.PRJ_CD, e.PRJ_NM
+			,a.TASK_SJ
+			,IFNULL(f.DAY_REPORT_CN, a.TASK_CN) AS TASK_CN
+			,IFNULL(f.DAY_REPORT_DT, a.TASK_REGDATE) AS TASK_REGDATE
+			,a.TASK_STARTDATE
+			,a.TASK_STARTTIME
+			,a.TASK_DUEDATE
+			,a.TASK_DUETIME
+			,a.TASK_ENDDATE
+			,a.WRITER_NO, c.USER_NM AS WRITER_NM, c.USER_ID AS WRITER_ID
+			,a.TASK_STATE
+			,SUM(IFNULL(f.DAY_REPORT_TM, 0)) AS TM_SUM
+			,f.ATTACH_FILE_ID
+		FROM
+			TBL_TASK a
+			INNER JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+			INNER JOIN TBL_USERINFO c ON a.WRITER_NO = c.NO
+			INNER JOIN TBL_PRJ e ON a.PRJ_ID = e.PRJ_ID
+			LEFT JOIN TBL_DAY_REPORT f ON a.TASK_ID = f.TASK_ID
+		WHERE (
+			a.PRJ_ID = #prjId#
+		<isEqual prepend="OR" property="includeUnderProject" compareValue="Y">
+			e.PRJ_TREE LIKE CONCAT('%', #prjId#, '%')
+		</isEqual>
+			)
+		<isNotEmpty prepend="AND" property="searchYear">
+			f.DAY_REPORT_DT LIKE CONCAT('%', #searchYear#, '%')
+		</isNotEmpty>
+		GROUP BY f.NO
+		ORDER BY f.DAY_REPORT_DT DESC
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<select id="DayReportDAO.selectTaskListByPrjIdTotCnt" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			TBL_TASK a
+			INNER JOIN TBL_PRJ e ON a.PRJ_ID = e.PRJ_ID
+			LEFT JOIN TBL_DAY_REPORT f ON a.TASK_ID = f.TASK_ID
+		WHERE (
+			a.PRJ_ID = #prjId#
+			<isEqual prepend="OR" property="includeUnderProject" compareValue="Y">
+				e.PRJ_TREE LIKE CONCAT('%', #prjId#, '%')
+			</isEqual>
+				)
+			<isNotEmpty prepend="AND" property="searchYear">
+				f.DAY_REPORT_DT LIKE CONCAT('%', #searchYear#, '%')
+			</isNotEmpty>
+	</select>
+
+
+	<select id="DayReportDAO.selectPostTaskList" resultMap="taskList">
+		SELECT
+			a.TASK_ID
+			,a.USER_NO, b.USER_NM, b.USER_ID
+			,a.PRJ_ID, e.PRJ_CD, e.PRJ_NM
+			,a.TASK_SJ
+			,a.TASK_CN
+			,a.TASK_REGDATE
+			,a.TASK_STARTDATE
+			,a.TASK_STARTTIME
+			,a.TASK_DUEDATE
+			,a.TASK_DUETIME
+			,a.TASK_ENDDATE
+			,a.WRITER_NO, c.USER_NM AS WRITER_NM, c.USER_ID AS WRITER_ID
+			,a.TASK_STATE
+			,IFNULL(a.ALWAYS_VIEW_YN,'N') AS ALWAYS_VIEW_YN
+		FROM
+			TBL_TASK a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+			LEFT JOIN TBL_USERINFO c ON a.WRITER_NO = c.NO
+			LEFT JOIN TBL_DAY_REPORT d ON a.TASK_ID = d.TASK_ID
+			LEFT JOIN TBL_PRJ e ON a.PRJ_ID = e.PRJ_ID
+		WHERE
+			a.USER_NO = #userNo#
+			AND a.TASK_STATE = 'P'
+			AND DATEDIFF(IF(a.TASK_STARTDATE IS NULL OR a.TASK_STARTDATE = '', '99991231', a.TASK_STARTDATE), #eDate#) > 0
+		GROUP BY a.TASK_ID
+		ORDER BY
+			CASE a.TASK_DUEDATE
+				WHEN '' THEN '99999999'
+				ELSE a.TASK_DUEDATE
+			END ASC
+	</select>
+	
+	<select id="DayReportDAO.selectDayReportTmSum" resultClass="egovMap">
+		SELECT
+			usr.USER_NM
+		<iterate prepend="," open="CONCAT(" close=") AS TM_LIST" conjunction=",','," property="dateList">
+			CONVERT(SUM(IF(rpt.DAY_REPORT_DT = #dateList[]#, IFNULL(rpt.DAY_REPORT_TM,0), 0)), CHAR)
+		</iterate>
+		FROM
+			(
+				TBL_CALENDAR_DATA cal
+				,TBL_USERINFO usr
+			)
+			LEFT JOIN TBL_DAY_REPORT rpt ON cal.CAL_DATE = rpt.DAY_REPORT_DT AND usr.NO = rpt.USER_NO
+		WHERE
+			DATEDIFF(cal.CAL_DATE, #sDate#) >= 0
+			AND DATEDIFF(#eDate#, cal.CAL_DATE) >= 0
+			AND usr.GHOST = '0'
+			AND usr.COMPIN_DT IS NOT NULL
+		GROUP BY usr.NO
+		ORDER BY usr.USER_NM
+	</select>
+
+<!-- 나의업무 S-->
+
+
+	<sql id="SQL_searchDayReportMy">
+		FROM
+			TBL_TASK a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+			LEFT JOIN TBL_USERINFO c ON a.WRITER_NO = c.NO
+			LEFT JOIN TBL_PRJ e ON a.PRJ_ID = e.PRJ_ID
+		WHERE 1=1
+		AND CONCAT(b.USER_NM, '(', b.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+		<isEqual property="includeEnd" compareValue="N" >
+		AND a.TASK_STATE = 'P'
+		</isEqual>
+		<isEqual property="searchType" compareValue="today">
+			AND DATE_FORMAT(a.TASK_DUEDATE, '%Y%m%d') = DATE_FORMAT(#searchDate#, '%Y%m%d')
+			OR (DATE_FORMAT(a.TASK_DUEDATE, '%Y%m%d') <![CDATA[<]]> DATE_FORMAT(#searchDate#, '%Y%m%d')
+			AND CONCAT(b.USER_NM, '(', b.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+			AND a.TASK_STATE = 'P'
+			)
+										
+			OR (a.ALWAYS_VIEW_YN = 'Y'
+			AND DATE_FORMAT(IFNULL(a.TASK_STARTDATE,#searchDate#), '%Y%m%d') <![CDATA[<=]]> DATE_FORMAT(#searchDate#, '%Y%m%d')
+			AND DATE_FORMAT(a.TASK_DUEDATE, '%Y%m%d') <![CDATA[>]]> DATE_FORMAT(#searchDate#, '%Y%m%d')
+			AND CONCAT(b.USER_NM, '(', b.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+			AND a.TASK_STATE = 'P'
+			)
+			OR (
+			IFNULL(a.TASK_DUEDATE,"") = ""
+			AND CONCAT(b.USER_NM, '(', b.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+			AND a.TASK_STATE = 'P'
+			)
+			
+			<isEqual property="includeEnd" compareValue="Y" >
+			OR (DATE_FORMAT(a.TASK_ENDDATE, '%Y%m%d') = DATE_FORMAT(#searchDate#, '%Y%m%d')
+			AND CONCAT(b.USER_NM, '(', b.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+			)
+			</isEqual>	
+		</isEqual>							
+		<isEqual property="searchType" compareValue="seven">
+		 	AND DATE_FORMAT(a.TASK_DUEDATE, '%Y%m%d') BETWEEN DATE_FORMAT(#searchDateFrom#, '%Y%m%d') AND  DATE_FORMAT(#searchDateTo#, '%Y%m%d')
+		</isEqual>	
+		<isEqual property="searchType" compareValue="thirty">
+			AND DATE_FORMAT(a.TASK_DUEDATE, '%Y%m%d') BETWEEN DATE_FORMAT(#searchDateFrom#, '%Y%m%d') AND  DATE_FORMAT(#searchDateTo#, '%Y%m%d')
+		</isEqual>	
+		<isEqual property="searchType" compareValue="next">			
+			AND DATE_FORMAT(a.TASK_DUEDATE, '%Y%m%d') <![CDATA[>]]> DATE_FORMAT(#searchDateTo#, '%Y%m%d')				
+		</isEqual>
+	</sql>
+	
+	<select id="DayReportDAO.selectDayReportMyList" resultMap="dayReportList2">
+		SELECT
+			a.TASK_ID
+			,a.USER_NO, b.USER_NM, b.USER_ID
+			,a.PRJ_ID, e.PRJ_CD, e.PRJ_NM
+			,a.TASK_SJ
+			,a.TASK_CN
+			,a.TASK_REGDATE
+			,a.TASK_STARTDATE
+			,a.TASK_STARTTIME
+			,a.TASK_DUEDATE			
+			,a.TASK_DUETIME
+			,a.TASK_ENDDATE
+			,a.WRITER_NO ,c.USER_NM AS WRITER_NM ,c.USER_ID AS WRITER_ID
+			<!-- ,a.TASK_STATE  -->  
+			,IF(IFNULL(a.TASK_ENDDATE,"") = "", IF(DATE_FORMAT(a.TASK_DUEDATE, '%Y%m%d') <![CDATA[<]]> DATE_FORMAT(SYSDATE(), '%Y%m%d'), "D","P"), "C") AS 'TASK_STATE' 	<!--완료-C 미완료-P 지연-D  -->							
+			,IFNULL((SELECT SUM(d.DAY_REPORT_TM) FROM TBL_DAY_REPORT d WHERE a.TASK_ID = d.TASK_ID),0) AS DAY_REPORT_TM
+			,IFNULL((SELECT SUM(d.DAY_REPORT_TM) FROM TBL_DAY_REPORT d WHERE a.TASK_ID = d.TASK_ID AND DATE_FORMAT(d.DAY_REPORT_DT, '%Y%m%d') = DATE_FORMAT(#searchDate#, '%Y%m%d')),0) AS DAY_REPORT_TODAY_TM
+			,IFNULL((SELECT COUNT(d.DAY_REPORT_CN) FROM TBL_DAY_REPORT d WHERE a.TASK_ID = d.TASK_ID AND d.DAY_REPORT_CN IS NOT NULL),0) AS DAY_REPORT_CNT
+			,IFNULL((SELECT COUNT(d.DAY_REPORT_CN) FROM TBL_DAY_REPORT d WHERE a.TASK_ID = d.TASK_ID AND d.DAY_REPORT_CN IS NOT NULL AND DATE_FORMAT(d.DAY_REPORT_DT, '%Y%m%d') = DATE_FORMAT(SYSDATE(), '%Y%m%d')),0) AS DAY_REPORT_TODAY_CNT
+		<include refid="SQL_searchDayReportMy"/>
+		ORDER BY
+			CASE IF(IFNULL(a.TASK_ENDDATE,"") = "", IF(DATE_FORMAT(a.TASK_DUEDATE, '%Y%m%d') <![CDATA[<]]> DATE_FORMAT(SYSDATE(), '%Y%m%d'), "D","P"), "C")
+			WHEN "D" THEN 0
+			WHEN "P" THEN 1
+			WHEN "C" THEN 2
+			END ASC
+			,IF(IFNULL(a.TASK_DUEDATE,"") = "", "99991231", a.TASK_DUEDATE) ASC 
+		<isEqual property="pageYn" compareValue="Y"> 
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#	
+		</isEqual>
+	</select>
+	
+	
+	<select id="DayReportDAO.selectDayReportMyListTotCnt" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+			<include refid="SQL_searchDayReportMy"/>
+	</select>
+
+	<select id="DayReportDAO.selectDayReportMyListCompleteTotCnt" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			TBL_TASK a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+			LEFT JOIN TBL_USERINFO c ON a.WRITER_NO = c.NO
+			LEFT JOIN TBL_PRJ e ON a.PRJ_ID = e.PRJ_ID
+		WHERE 1=1
+		AND CONCAT(b.USER_NM, '(', b.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+		AND a.TASK_STATE = #taskState#
+		<isEqual property="searchType" compareValue="today">
+			AND DATE_FORMAT(a.TASK_DUEDATE, '%Y%m%d') <![CDATA[=]]> DATE_FORMAT(SYSDATE(), '%Y%m%d')
+			<isEqual property="taskState" compareValue="P">
+			OR (DATE_FORMAT(a.TASK_DUEDATE, '%Y%m%d') <![CDATA[<]]> DATE_FORMAT(SYSDATE(), '%Y%m%d')
+			AND CONCAT(b.USER_NM, '(', b.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+			AND a.TASK_STATE = #taskState#
+			)
+			OR (a.ALWAYS_VIEW_YN = 'Y'
+			AND DATE_FORMAT(IFNULL(a.TASK_STARTDATE,#searchDate#), '%Y%m%d') <![CDATA[<=]]> DATE_FORMAT(SYSDATE(), '%Y%m%d')
+			AND DATE_FORMAT(a.TASK_DUEDATE, '%Y%m%d') <![CDATA[>]]> DATE_FORMAT(SYSDATE(), '%Y%m%d')
+			AND CONCAT(b.USER_NM, '(', b.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+			AND a.TASK_STATE = 'P'
+			)			
+			OR (
+			IFNULL(a.TASK_DUEDATE,"") = ""
+			AND CONCAT(b.USER_NM, '(', b.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+			AND a.TASK_STATE = 'P'
+			)
+			</isEqual>	
+			<isEqual property="includeEnd" compareValue="Y" >
+				<isEqual property="taskState" compareValue="C">
+				OR (DATE_FORMAT(a.TASK_ENDDATE, '%Y%m%d') = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+				AND CONCAT(b.USER_NM, '(', b.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+				)
+				</isEqual>
+			</isEqual>
+		</isEqual>								
+		<isEqual property="searchType" compareValue="seven">
+			AND DATE_FORMAT(a.TASK_DUEDATE, '%Y%m%d') BETWEEN DATE_FORMAT(#searchDateFrom#, '%Y%m%d') AND  DATE_FORMAT(#searchDateTo#, '%Y%m%d')
+		</isEqual>	
+		<isEqual property="searchType" compareValue="thirty">
+			AND DATE_FORMAT(a.TASK_DUEDATE, '%Y%m%d') BETWEEN DATE_FORMAT(#searchDateFrom#, '%Y%m%d') AND  DATE_FORMAT(#searchDateTo#, '%Y%m%d')			
+		</isEqual>	
+		<isEqual property="searchType" compareValue="next">			
+			AND DATE_FORMAT(a.TASK_DUEDATE, '%Y%m%d') <![CDATA[>]]> DATE_FORMAT(#searchDateTo#, '%Y%m%d')				
+		</isEqual>
+	</select>	
+		
+	
+		
+		<sql id="SQL_searchDayReportOrder">
+		FROM
+			TBL_TASK a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+			LEFT JOIN TBL_USERINFO c ON a.WRITER_NO = c.NO
+			LEFT JOIN TBL_PRJ e ON a.PRJ_ID = e.PRJ_ID
+		WHERE 1=1
+			AND a.USER_NO NOT IN (#userNo#)
+			<![CDATA[ 
+			AND a.USER_NO <> a.WRITER_NO 
+			]]>
+		<isNotEmpty prepend="AND" property="searchSdate">
+			DATEDIFF(a.TASK_DUEDATE, #searchSdate#) >= 0
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchEdate">
+			DATEDIFF(#searchEdate#, a.TASK_DUEDATE) >= 0
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchWriterNm">
+		CONCAT(c.USER_NM, '(', c.USER_ID, ')') LIKE CONCAT('%', #searchWriterNm#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchUserIdList">
+			<iterate prepend="b.USER_ID IN " property="searchUserIdList" open="(" close=")" conjunction=",">
+			#searchUserIdList[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchText">
+			a.TASK_SJ LIKE CONCAT('%', #searchText#, '%')
+		</isNotEmpty>
+		AND (1=1 	
+		<isEqual property="statePYn" compareValue="Y" >
+				<isEqual property="stateCYn" compareValue="Y" >
+				</isEqual>
+				<isEqual property="stateCYn" compareValue="N" >
+				AND a.TASK_STATE NOT IN ('C')
+				</isEqual>
+		</isEqual>
+		<isEqual property="statePYn" compareValue="N" >
+				AND a.TASK_STATE NOT IN ('P')
+				<isEqual property="stateCYn" compareValue="Y" >
+				</isEqual>
+				<isEqual property="stateCYn" compareValue="N" >
+				AND a.TASK_STATE NOT IN ('C')
+				</isEqual>
+		</isEqual>
+			<isEqual property="stateDYn" compareValue="N" >
+			AND DATE_FORMAT(a.TASK_DUEDATE, '%Y%m%d') <![CDATA[>=]]> DATE_FORMAT(SYSDATE(), '%Y%m%d')
+			</isEqual>
+		<isEqual property="stateDYn" compareValue="Y" >
+			OR (a.TASK_STATE = 'P'
+			AND a.USER_NO NOT IN (#userNo#)
+			AND DATE_FORMAT(a.TASK_DUEDATE, '%Y%m%d') <![CDATA[<]]> DATE_FORMAT(SYSDATE(), '%Y%m%d')
+			<isNotEmpty prepend="AND" property="searchSdate">
+				DATEDIFF(a.TASK_DUEDATE, #searchSdate#) >= 0
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchEdate">
+				DATEDIFF(#searchEdate#, a.TASK_DUEDATE) >= 0
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchWriterNm">
+			CONCAT(c.USER_NM, '(', c.USER_ID, ')') LIKE CONCAT('%', #searchWriterNm#, '%')
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchUserIdList">
+			<iterate prepend="b.USER_ID IN " property="searchUserIdList" open="(" close=")" conjunction=",">
+			#searchUserIdList[]#
+			</iterate>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchText">
+			a.TASK_SJ LIKE CONCAT('%', #searchText#, '%')
+			</isNotEmpty>)
+		</isEqual>
+		)
+	</sql>
+	
+	<select id="DayReportDAO.selectDayReportOrderList" resultMap="dayReportList2">
+		SELECT
+			a.TASK_ID
+			,a.USER_NO, b.USER_NM, b.USER_ID
+			,a.PRJ_ID, e.PRJ_CD, e.PRJ_NM
+			,a.TASK_SJ
+			,a.TASK_CN
+			,a.TASK_REGDATE
+			,a.TASK_STARTDATE
+			,a.TASK_STARTTIME
+			,a.TASK_DUEDATE
+			,a.TASK_DUETIME
+			,a.TASK_ENDDATE
+			,a.WRITER_NO ,c.USER_NM AS WRITER_NM ,c.USER_ID AS WRITER_ID
+			,IF(IFNULL(a.TASK_ENDDATE,"") = "", IF(DATE_FORMAT(a.TASK_DUEDATE, '%Y%m%d') <![CDATA[<]]> DATE_FORMAT(SYSDATE(), '%Y%m%d'), "D","P"), "C") AS 'TASK_STATE' 	<!--완료-C 미완료-P 지연-D  -->							
+			,IFNULL((SELECT SUM(d.DAY_REPORT_TM) FROM TBL_DAY_REPORT d WHERE a.TASK_ID = d.TASK_ID),0) AS DAY_REPORT_TM
+			,IFNULL((SELECT SUM(d.DAY_REPORT_TM) FROM TBL_DAY_REPORT d WHERE a.TASK_ID = d.TASK_ID AND DATE_FORMAT(d.DAY_REPORT_DT, '%Y%m%d') = DATE_FORMAT(#searchDate#, '%Y%m%d')),0) AS DAY_REPORT_TODAY_TM
+			,(SELECT COUNT(d.DAY_REPORT_CN) FROM TBL_DAY_REPORT d WHERE a.TASK_ID = d.TASK_ID AND d.DAY_REPORT_CN IS NOT NULL) AS DAY_REPORT_CNT
+			,(SELECT COUNT(d.DAY_REPORT_CN) FROM TBL_DAY_REPORT d WHERE a.TASK_ID = d.TASK_ID AND d.DAY_REPORT_CN IS NOT NULL  AND DATE_FORMAT(d.DAY_REPORT_DT, '%Y%m%d') = DATE_FORMAT(SYSDATE(), '%Y%m%d')) AS DAY_REPORT_TODAY_CNT
+		<include refid="SQL_searchDayReportOrder"/>
+		ORDER BY
+			CASE IF(IFNULL(a.TASK_ENDDATE,"") = "", IF(DATE_FORMAT(a.TASK_DUEDATE, '%Y%m%d') <![CDATA[<]]> DATE_FORMAT(SYSDATE(), '%Y%m%d'), "D","P"), "C")
+			WHEN "C" THEN 0
+			END ASC
+			,a.TASK_DUEDATE ASC
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#	
+	</select>
+	
+	
+	<select id="DayReportDAO.selectDayReportOrderListTotCnt" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		<include refid="SQL_searchDayReportOrder"/>
+	</select>
+	
+
+
+
+<sql id="SQL_searchDayReportMyT">
+		FROM (
+		SELECT
+			a.USER_NO, e.USER_NM, e.USER_ID
+			,c.TASK_ID
+			,c.TASK_SJ
+			,c.TASK_CN
+			,c.TASK_REGDATE
+			,c.TASK_STARTDATE
+			,c.TASK_STARTTIME
+			,c.TASK_DUEDATE
+			,c.TASK_DUETIME
+			,c.TASK_ENDDATE
+			,c.TASK_STATE
+			,IFNULL(c.ALWAYS_VIEW_YN,'N') AS ALWAYS_VIEW_YN
+			,d.PRJ_NM, d.PRJ_CD, c.PRJ_ID
+			,d.LEADER_NO
+			,c.USER_NO AS WRITER_NO 
+			,b.USER_NM AS WRITER_NM 
+			,b.USER_ID AS WRITER_ID
+		FROM
+			TBL_DAY_REPORT a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+			LEFT JOIN TBL_TASK c ON a.TASK_ID = c.TASK_ID
+			LEFT JOIN TBL_PRJ d ON c.PRJ_ID = d.PRJ_ID
+			LEFT JOIN TBL_USERINFO e ON c.USER_NO = e.NO
+		<dynamic prepend="WHERE">
+				<isNotEmpty prepend="AND" property="searchText">
+					(
+						c.TASK_SJ LIKE CONCAT('%', #searchText#, '%')
+						OR a.DAY_REPORT_CN LIKE CONCAT('%', #searchText#, '%')
+					)
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="searchSdate">
+					DATEDIFF(a.DAY_REPORT_DT, #searchSdate#) >= 0
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="searchEdate">
+					DATEDIFF(#searchEdate#, a.DAY_REPORT_DT) >= 0
+				</isNotEmpty>
+				
+			<isNotEmpty prepend="AND" property="searchUserIdList">
+				<iterate prepend="e.USER_ID IN " property="searchUserIdList" open="(" close=")" conjunction=",">
+					#searchUserIdList[]#
+				</iterate>
+			</isNotEmpty>
+				<isNotEmpty prepend="AND" property="searchPrjId">
+					(
+						d.PRJ_ID = #searchPrjId#
+					<isEqual prepend="OR" property="includeUnderProject" compareValue="Y">
+						CONCAT('/',d.PRJ_TREE,'/') LIKE CONCAT('%/', #searchPrjId#, '/%')
+					</isEqual>
+					)
+				</isNotEmpty>
+		</dynamic>
+		GROUP BY
+				a.USER_NO
+				, e.USER_NM
+				, e.USER_ID	
+				, c.TASK_ID 
+				, c.TASK_SJ 
+				, c.TASK_CN 
+				, c.TASK_REGDATE 
+				, c.TASK_STARTDATE
+				, c.TASK_STARTTIME 
+				, c.TASK_DUEDATE 
+				, c.TASK_DUETIME
+				, c.TASK_ENDDATE 
+				, c.TASK_STATE 
+				, d.PRJ_NM
+				, d.PRJ_CD
+				, c.PRJ_ID 
+				, d.LEADER_NO
+				, c.USER_NO 
+				, b.USER_NM 
+				, b.USER_ID 
+		) sql1
+	</sql>
+	 
+	 	<select id="DayReportDAO.selectDayReportMyTList" resultMap="taskInfo">
+		SELECT
+			TASK_ID 
+			,TASK_SJ
+			,TASK_CN
+			,TASK_REGDATE
+			,TASK_STARTDATE
+			,TASK_STARTTIME
+			,TASK_DUEDATE
+			,TASK_DUETIME
+			,TASK_ENDDATE
+			,TASK_STATE
+			,PRJ_NM, PRJ_CD, PRJ_ID
+			,LEADER_NO
+			,USER_NO, USER_NM, USER_ID
+			,WRITER_NO ,WRITER_NM ,WRITER_ID
+			,ALWAYS_VIEW_YN
+		<include refid="SQL_searchDayReportMyT"/>
+		ORDER BY USER_NO ASC, PRJ_ID ASC, TASK_ID ASC, TASK_ENDDATE ASC
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>		
+	
+	<select id="DayReportDAO.selectDayReportMyTListTotCnt" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		<include refid="SQL_searchDayReportMyT"/>
+	</select>
+	
+	 
+	<sql id="SQL_searchDayReportMyD">
+		FROM
+			TBL_DAY_REPORT a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+			LEFT JOIN TBL_TASK c ON a.TASK_ID = c.TASK_ID
+			LEFT JOIN TBL_PRJ d ON c.PRJ_ID = d.PRJ_ID
+			LEFT JOIN TBL_USERINFO e ON c.USER_NO = e.NO
+		<dynamic prepend="WHERE">
+				<isNotEmpty prepend="AND" property="searchText">
+					(
+						c.TASK_SJ LIKE CONCAT('%', #searchText#, '%')
+						OR a.DAY_REPORT_CN LIKE CONCAT('%', #searchText#, '%')
+					)
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="searchSdate">
+					DATEDIFF(a.DAY_REPORT_DT, #searchSdate#) >= 0
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="searchEdate">
+					DATEDIFF(#searchEdate#, a.DAY_REPORT_DT) >= 0
+				</isNotEmpty>
+				
+			<isNotEmpty prepend="AND" property="searchUserIdList">
+				<iterate prepend="e.USER_ID IN " property="searchUserIdList" open="(" close=")" conjunction=",">
+					#searchUserIdList[]#
+				</iterate>
+			</isNotEmpty>
+				<isNotEmpty prepend="AND" property="searchPrjId">
+					(
+						d.PRJ_ID = #searchPrjId#
+					<isEqual prepend="OR" property="includeUnderProject" compareValue="Y">
+						CONCAT('/',d.PRJ_TREE,'/') LIKE CONCAT('%/', #searchPrjId#, '/%')
+					</isEqual>
+					)
+				</isNotEmpty>
+		</dynamic>
+	</sql>
+	 
+
+	<select id="DayReportDAO.selectDayReportMyDList" resultMap="dayReportSearch">
+		SELECT
+			a.NO, 
+			e.NO AS USER_NO, e.USER_NM, e.USER_ID, 
+			a.TASK_ID,
+			a.DAY_REPORT_DT, a.DAY_REPORT_TM, a.DAY_REPORT_CN,
+			d.PRJ_NM, d.PRJ_CD, c.PRJ_ID
+			,c.TASK_SJ
+			,c.TASK_CN
+			,c.TASK_REGDATE
+			,c.TASK_STARTDATE
+			,c.TASK_STARTTIME
+			,c.TASK_DUEDATE
+			,c.TASK_DUETIME
+			,c.TASK_ENDDATE
+			,c.TASK_STATE
+			,b.NO AS WRITER_NO 
+			,b.USER_NM AS WRITER_NM 
+			,b.USER_ID AS WRITER_ID
+			,a.ATTACH_FILE_ID
+		<include refid="SQL_searchDayReportMyD"/>
+		ORDER BY  a.USER_NO ASC, c.TASK_ENDDATE ASC
+		
+	</select>		
+		
+<!-- 나의업무  E-->	
+
+	<select id="DayReportDAO.selectNoInputList" resultClass="egovMap">
+		SELECT A.NO AS HEADER_NO
+				, A.USER_ID AS HEADER_ID
+				, GROUP_CONCAT(B.NO) AS NO_INPUT_LIST
+		  FROM
+			<!-- # A : 수신자 명단 (2레벨 이하 부서팀장 권한 사용자) -->
+			(
+			<!-- # 팀장 리스트 -->
+			SELECT USR.NO
+				, USR.USER_ID
+				, FN_ORGAN_LOW_TREE(USR.ORGNZT_ID) AS ORGLIST
+			  FROM TBL_USERINFO AS USR
+			  INNER JOIN v_prj_tree AS TREE
+				ON USR.ORGNZT_ID = TREE.ID
+			 WHERE TREE.LV > 1
+			   AND USR.POSITION IN ('H', 'S')
+			UNION
+			<!-- # 팀장 리스트 (겸직) -->
+			SELECT USR.NO
+				, USR.USER_ID
+				, FN_ORGAN_LOW_TREE(USR.ORGNZT_ID_SEC) AS ORGLIST
+			  FROM TBL_USERINFO AS USR
+			  INNER JOIN v_prj_tree AS TREE
+				ON USR.ORGNZT_ID_SEC = TREE.ID
+			 WHERE TREE.LV > 1
+			   AND USR.POSITION IN ('H', 'S')
+			   <![CDATA[
+			   AND IFNULL(USR.ORGNZT_ID_SEC,'') <> ''
+			   ]]>
+			) AS A
+			LEFT JOIN
+			<!-- # B : 업무연락 미작성 명단 -->
+			(
+			SELECT DISTINCT USR.NO, USR.ORGNZT_ID
+			  FROM TBL_USERINFO USR
+			  LEFT JOIN TBL_ATTEND_CHECK ATT
+			    ON USR.NO = ATT.USER_NO
+			  LEFT JOIN
+				(SELECT DISTINCT USER_NO, DAY_REPORT_DT
+				   FROM TBL_DAY_REPORT) DRPT
+			    ON USR.NO = DRPT.USER_NO
+			   AND ATT.ATTEND_DT = DRPT.DAY_REPORT_DT
+			 WHERE USR.GHOST = '0' <!-- # ADMIN 제외 -->
+			   AND USR.COMPIN_DT IS NOT NULL <!-- # 입사일 -->
+			   AND USR.ORGNZT_ID != 'ORGAN_RET_ORGAN_CODE' <!-- # 퇴직자그룹 제외 -->
+			   AND USR.NO NOT IN ( '2' ) <!-- # 사장님 제외 -->
+			   AND ATT.ATTEND_CD NOT IN ( 'HD', 'VC', 'ET' ) <!-- # 특근,휴가,면제 제외 -->
+				<isNotEmpty prepend="AND" property="stDt">
+					<![CDATA[
+					ATT.ATTEND_DT >= #stDt#
+					]]>
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="enDt">
+					<![CDATA[
+					ATT.ATTEND_DT <= #enDt#
+					]]>
+				</isNotEmpty>
+			   AND DRPT.DAY_REPORT_DT IS NULL
+			) AS B
+			ON INSTR(A.ORGLIST, B.ORGNZT_ID) > 0
+			<!-- #ON A.ORGLIST LIKE '%'||B.ORGNZT_ID||'%'  #안먹힘.. -->
+		GROUP BY A.NO, A.USER_ID
+	</select>
+	
+</sqlMap>

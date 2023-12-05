@@ -1,0 +1,53 @@
+@charset "utf-8";
+/* reset */
+@font-face{font-family:'na';src:url('./fonts/nanum.gothic.eot');src:local('☺'), url('./fonts/nanum.gothic.woff') format('woff'), url('./fonts/nanum.gothic.ttf') format('truetype');font-style:normal;font-weight:normal;}
+@font-face{font-family:'nabold';src:url('./fonts/nanum.gothic.bold.eot');src:local('☺'), url('./fonts/nanum.gothic.bold.woff') format('woff'), url('./fonts/nanum.gothic.bold.ttf') format('truetype');font-style:normal;font-weight:normal;}
+body {margin:0 auto; padding:0; width:100%; height:100%; font-size:12px; font-family:'na';color:#606060;}
+div, p, ul, li, table, td, textarea, input, span, form, h1, h2, h3, h4, dt, dl, dd {margin:0;padding:0;font-size:12px;font-family:'na';}
+ul, li, ol, dt, dl, dd {list-style:none; line-height:14px;}
+table {border-collapse:collapse; word-break:break-all;}
+.clear { clear:both;}
+.fl {float:left;}
+.fr {float:right;}
+img {border:none;}
+a {color:#666666;text-decoration:none; outline:none; select-dummy: expression(this.hideFocus=true); cursor:pointer;} 
+a:hover {text-decoration:none; cursor:pointer;}
+input,select,img { vertical-align:middle;}
+.no_background {background:none;}
+.input {width:150px; height:21px; line-height:21px;position:relative;margin:0;padding:0px 4px;border:1px solid #d7d7d7;background:transparent;}
+
+
+/* style */
+.morning {margin:0; padding:0; width:100%;}	
+.morning .top{background:url(../../images/goodmorning/top_bg.gif) 0 0 repeat-x; color:#ffe400; font-family:'nabold' !important; font-size:16px; height:24px; padding-left:25px; padding-top:7px; border:1px solid #575d74; line-height:14px;}
+.morning_con {background:#f2f2f2; padding:21px 23px; overflow:hidden;}
+.greeting {margin:0; overflow:hidden; width:100%;}
+.greeting .greeting_tl{float:left; font-size:20px; color:#1a45a2; margin-bottom:10px; font-family:'nabold' !important;}
+.greeting .greeting_tl .modify a{display:inline-block; position:relative; top:-1px;}
+
+.regist textarea {background:#fff; width:100%; min-height:110px; padding:10px; border:1px solid #ccc;}
+
+.greeting .greeting_date {float:right; font-size:11px; color#:656565;}
+.greeting .greeting_ment {clear:both; padding:15px;color:#666; min-height:110px; line-height:20px; background:#fff; position:relative;}
+.greeting .greeting_ment .area{width:80%; float:left;font-size: 15px; color:#444 !important}
+.greeting .greeting_ment .people {background:url(../../images/goodmorning/img.gif) center no-repeat; position:absolute; right:15px; width:90px; height:110px;}
+
+.checklist{position:relative; margin-top:20px;}
+.checklist_box {border:2px solid #616571;}
+.checklist_tl {font-weight:bold; margin-bottom:10px; background:url(../../images/goodmorning/arw.gif) 0 3px no-repeat; padding-left:15px; font-size:14px;}
+.checklist_tl .delay_date{ font-size:14px; color:#ff5f10;}
+
+.noread {font-size:14px; font-family:'nabold' !important;line-height:20px; background:url(../../images/goodmorning/arw.gif) 0 5px no-repeat; padding-left:15px; }
+
+.read {margin:0; padding:13px; }
+.read .read_list ul {overflow:hidden; margin: 0 15px;}
+.read .read_list ul li {float:left; display:inline-block; margin-right:20px; line-height:20px; color:#444; font-size:14px;}
+.read .read_list ul li a{ display:block; text-decoration:none;}
+
+.read .read_list ul li span{display:inline-block; margin-left:2px; }
+.read .read_list ul li a{ display:inline-block; text-decoration:none; color:#c50000; padding:0 1px;}
+.read .read_list ul li a:hover{text-decoration:none; color:#c50000;}
+.btn_area {margin-top:10px; overflow:hidden;}
+a.btn {float:right; display:block;}
+
+.fc_redB{color:#c50000; font-weight:bold;}

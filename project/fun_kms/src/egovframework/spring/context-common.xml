@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-2.5.xsd">
+	
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>classpath:/egovframework/message/message-common</value>
+				<value>classpath:/egovframework/rte/fdl/idgnr/messages/idgnr</value>
+				<value>classpath:/egovframework/rte/fdl/property/messages/properties</value>
+				<value>classpath:/egovframework/egovProps/globals</value>
+			</list>
+		</property>
+		<property name="cacheSeconds">
+			<value>60</value>
+		</property>
+	</bean>
+
+    <bean id="egovMessageSource" class="egovframework.com.cmm.EgovMessageSource">
+        <property name="reloadableResourceBundleMessageSource">
+            <ref bean="messageSource" />
+        </property> 
+    </bean>
+
+	<bean id="updateTask" class="kms.com.common.timer.UpdateTimerTask">
+		<property name="fixedRate" value="true" />
+		<property name="period" value="86400000" />
+		<property name="timerTask" ref="updateTimer"/>
+	</bean>
+	<bean id="smsTask" class="kms.com.common.timer.SmsTimerTask">
+		<property name="fixedRate" value="true" />
+		<property name="period" value="86400000" />
+		<property name="timerTask" ref="smsTimer"/>
+	</bean>
+	<!--  
+	<bean id="messageTask" class="kms.com.common.timer.MessageTimerTask">
+		<property name="fixedRate" value="true" />
+		<property name="period" value="60000" />
+		<property name="timerTask" ref="messageTimer"/>
+	</bean>
+	-->
+	
+<!-- 쿼츠 크론 트리거로 바꾸면서 주석처리 시작 -->
+<!-- 	<bean id="dayReportTask" class="kms.com.common.timer.DayReportTask"> -->
+<!-- 		<property name="fixedRate" value="true" /> -->
+<!-- 		<property name="period" value="86400000" />	의미없음(DayReportTask.java에서 세팅) -->
+<!-- 		<property name="timerTask" ref="dayReportTimer"/> -->
+<!-- 	</bean> -->
+<!-- 쿼츠 크론 트리거로 바꾸면서 주석처리 종료 -->
+
+<!-- 쿼츠 크론 트리거로 변경하면서 추가 시작 -->
+	<bean id="dayReportTask1"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="dayReportTimer" />
+		<property name="targetMethod" value="run" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="cronTrigger1" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="dayReportTask1" />
+		<property name="cronExpression" value="1 0 20 ? * 2-6" />		<!-- 1초 20시 월~금 -->
+										  <!--  s m  h dd MM SUN yyyy -->
+	</bean>
+	
+	<bean id="dayReportTask2"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="dayReportTimer" />
+		<property name="targetMethod" value="sendNoInputPush" />
+		<property name="concurrent" value="false" />
+	</bean>
+	
+	<bean id="cronTrigger2" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="dayReportTask2" />
+		<property name="cronExpression" value="1 0 10 ? * 7" />		<!-- 1초 10시 토요일(6) -->
+										  <!--  s m  h dd MM SUN yyyy -->
+	</bean>
+	
+	<bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="cronTrigger1" />
+				<ref bean="cronTrigger2" />
+			</list>
+		</property>
+	</bean>
+<!-- 쿼츠 크론 트리거로 변경하면서 추가 종료 -->
+	
+	<bean id="timerFactory" class="org.springframework.scheduling.timer.TimerFactoryBean">
+		<property name="scheduledTimerTasks">
+			<list>
+				<ref bean="updateTask" />
+				<ref bean="smsTask" />
+				<!-- <ref bean="messageTask" /> -->
+				<!-- <ref bean="dayReportTask" /> --> <!-- 쿼츠 크론 트리거로 바꾸면서 제외 -->
+			</list>
+		</property>
+	</bean>
+
+	<bean id="leaveaTrace" class="egovframework.rte.fdl.cmmn.trace.LeaveaTrace">
+		<property name="traceHandlerServices">
+			<list>
+				<ref bean="traceHandlerService" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="traceHandlerService"
+		class="egovframework.rte.fdl.cmmn.trace.manager.DefaultTraceHandleManager">
+		<property name="reqExpMatcher">
+			<ref bean="antPathMater" />
+		</property>
+		<property name="patterns">
+			<list>
+				<value>*</value>
+			</list>
+		</property>
+		<property name="handlers">
+			<list>
+				<ref bean="defaultTraceHandler" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="antPathMater" class="org.springframework.util.AntPathMatcher" />
+
+	<bean id="defaultTraceHandler" class="egovframework.rte.fdl.cmmn.trace.handler.DefaultTraceHandler" />
+	
+	<!-- For Pagination Tag -->
+	<bean id="imageRenderer" class="egovframework.com.cmm.ImagePaginationRenderer"/>
+
+	<bean id="textRenderer" class="egovframework.rte.ptl.mvc.tags.ui.pagination.DefaultPaginationRenderer"/>
+	
+
+	<bean id="paginationManager" class="egovframework.rte.ptl.mvc.tags.ui.pagination.DefaultPaginationManager">
+		<property name="rendererType">
+			<map>
+				<entry key="image" value-ref="imageRenderer"/>
+				<entry key="text" value-ref="textRenderer"/>
+			</map>
+		</property>
+	</bean>
+	
+    <!-- MULTIPART RESOLVERS -->
+    <!-- regular spring resolver -->    
+    <bean id="spring.RegularCommonsMultipartResolver"
+     class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="100000000" />
+        <property name="maxInMemorySize" value="100000000" />
+    </bean>
+    
+    <!-- custom multi file resolver -->    
+    <bean id="local.MultiCommonsMultipartResolver"
+      class="egovframework.com.cmm.web.EgovMultipartResolver">
+        <property name="maxUploadSize" value="100000000" />
+        <property name="maxInMemorySize" value="100000000" />
+    </bean>
+    
+    <!-- choose one from above and alias it to the name Spring expects -->
+    <!-- alias name="local.MultiCommonsMultipartResolver" alias="multipartResolver" /-->
+    <alias name="spring.RegularCommonsMultipartResolver" alias="multipartResolver" />
+	
+	<bean id="selectAnnotationMapper" class="egovframework.rte.ptl.mvc.handler.SimpleUrlAnnotationHandlerMapping" p:order="1">
+		<property name="interceptors">
+			<list>
+				<ref local="commonInterceptor"/>
+			</list>
+		</property>
+		<property name="urls">
+			<set>
+				<value>/login.do</value>
+				<value>/actionLogin.do</value>
+				<value>/logout.do</value>
+				<value>/ajax/*.do</value>
+				<value>/ajax/*/*.do</value>
+				<value>/ajax/*/*/*.do</value>
+				<value>/common/*.do</value>
+				<value>/selectImageFileInfs.do</value>
+				<value>/cmm/fms/getImage.do</value>
+				<value>/mobile/*.do</value>
+				<value>/mobile/file/*.do</value>
+				<value>/mobile/community/*.do</value>
+				<value>/mobile/support/*.do</value>
+				<value>/cooperation/withoutLogin/*.do</value>
+			</set>
+		</property>
+	</bean>
+ 
+	<bean id="communityMapper" class="egovframework.rte.ptl.mvc.handler.SimpleUrlAnnotationHandlerMapping" p:order="2">
+		<property name="interceptors">
+			<list>
+				<ref local="baseInterceptor"/>
+				<ref local="commonInterceptor"/>
+				<ref local="communityInterceptor"/>
+			</list>
+		</property>
+		<property name="urls">
+			<set>
+				<value>/community/*.do</value>
+				<value>/support/*.do</value>
+				<value>/fund/*.do</value>
+			</set>
+		</property>
+	</bean>
+ 
+	<bean id="adminMapper" class="egovframework.rte.ptl.mvc.handler.SimpleUrlAnnotationHandlerMapping" p:order="3">
+		<property name="interceptors">
+			<list>
+				<ref local="commonInterceptor"/>
+				<ref local="adminInterceptor"/>
+			</list>
+		</property>
+		<property name="urls">
+			<set>
+				<value>/admin/*.do</value>
+				<value>/admin/*/*.do</value>
+				<value>/admin/*/*/*.do</value>
+			</set>
+		</property>
+	</bean>
+	
+	<bean id="annotationMapper" class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" p:order="4">
+		<property name="interceptors">
+			<list>
+				<ref local="baseInterceptor"/>
+				<ref local="commonInterceptor"/>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="adminInterceptor" class="kms.com.common.interceptor.AdminInterceptor" /> <!-- 관리자 -->
+	<bean id="baseInterceptor" class="kms.com.common.interceptor.BaseInterceptor" /> <!-- 로그인 -->
+	<bean id="commonInterceptor" class="kms.com.common.interceptor.CommonInterceptor" /> <!-- Path -->
+	<bean id="communityInterceptor" class="kms.com.common.interceptor.CommunityInterceptor" />
+	
+	
+	<context:component-scan base-package="egovframework,kms"/>
+</beans>

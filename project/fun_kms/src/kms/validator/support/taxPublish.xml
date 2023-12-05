@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC 
+    "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1//EN" 
+    "http://jakarta.apache.org/commons/dtds/validator_1_1.dtd">
+
+<form-validation>
+
+    <formset>
+		<form name="taxPublish">
+			<field property="bondSj" depends="required,  maxlength">
+        		<arg0 key="제목" />
+        		<arg1 key="19" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>200</var-value>
+				</var>
+			</field>
+			<field property="custNm" depends="required">
+        		<arg0 key="상호" />
+			</field>
+			<field property="taxEmail1" depends="required">
+        		<arg0 key="수신자1" />
+			</field>
+			<field property="custBusiNo" depends="maxlength">
+        		<arg0 key="등록번호" />
+        		<arg1 key="14" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>14</var-value>
+				</var>
+			</field>
+			<field property="publishDate" depends="required,  maxlength, minlength">
+        		<arg0 key="발행일" />
+        		<arg1 key="8" resource="false"/>
+				<var>
+					<var-name>maxlength</var-name>
+					<var-value>8</var-value>
+				</var>
+				<arg2 key="8" resource="false"/>
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>8</var-value>
+				</var>
+			</field>
+		</form>
+    </formset>
+
+</form-validation>

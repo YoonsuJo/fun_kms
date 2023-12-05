@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsExpansion">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="ExpansionVO" type="kms.com.common.service.ExpansionVO"/>
+
+	<resultMap id="expList" class="kms.com.common.service.ExpansionVO">
+		<result property="expId"		column="EXP_ID"			columnIndex="1"/>
+		<result property="expSj"		column="EXP_SJ"			columnIndex="2"/>
+		<result property="expCn"		column="EXP_CN"			columnIndex="3"/>
+		<result property="expFileId"	column="EXP_FILE_ID"	columnIndex="4"/>
+		<result property="popYn"		column="POP_YN"			columnIndex="5"/>
+		<result property="useAt"		column="USE_AT"			columnIndex="6"/>
+		<result property="sort"			column="SORT"			columnIndex="7"/>
+	</resultMap>
+	<resultMap id="exp" class="kms.com.common.service.ExpansionVO">
+		<result property="expId"		column="EXP_ID"			columnIndex="1"/>
+		<result property="expSj"		column="EXP_SJ"			columnIndex="2"/>
+		<result property="expCn"		column="EXP_CN"			columnIndex="3"/>
+		<result property="expFileId"	column="EXP_FILE_ID"	columnIndex="4"/>
+		<result property="popYn"		column="POP_YN"			columnIndex="5"/>
+		<result property="useAt"		column="USE_AT"			columnIndex="6"/>
+		<result property="sort"			column="SORT"			columnIndex="7"/>
+		<result property="linkUrl"		column="LINK_URL"		columnIndex="8"/>
+		<result property="access"		column="ACCESS"			columnIndex="9"/>
+		<result property="accessUserNo"	column="ACCESS_USER_NO"	columnIndex="10"/>
+		<result property="popWidth"		column="POP_WIDTH"		columnIndex="11"/>
+		<result property="popHeight"	column="POP_HEIGHT"		columnIndex="12"/>
+	</resultMap>
+	
+	<select id="ExpansionDAO.selectExpansionList" resultMap="expList">
+		SELECT
+			EXP_ID, EXP_SJ, EXP_CN, EXP_FILE_ID, POP_YN, USE_AT, SORT
+		FROM
+			TBL_EXPANSION
+		<dynamic prepend="WHERE ">
+			<isNotEmpty prepend="AND" property="useAt">
+				USE_AT = #useAt#
+			</isNotEmpty>
+		</dynamic>
+		ORDER BY SORT ASC
+	</select>	
+	<select id="ExpansionDAO.selectExpansionListTotCnt" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			TBL_EXPANSION
+		<dynamic prepend="WHERE ">
+			<isNotEmpty prepend="AND" property="useAt">
+				USE_AT = #useAt#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="ExpansionDAO.selectExpansion" resultMap="exp">
+		SELECT
+			EXP_ID, EXP_SJ, EXP_CN, EXP_FILE_ID,
+			POP_YN, USE_AT, SORT,
+			LINK_URL, ACCESS, ACCESS_USER_NO, POP_WIDTH, POP_HEIGHT
+		FROM
+			TBL_EXPANSION
+		WHERE
+			EXP_ID = #expId#
+		ORDER BY SORT ASC
+	</select>
+	<select id="ExpansionDAO.selectExpansionAccessUserList" resultClass="egovMap">
+		SELECT
+			b.NO AS USER_NO
+			,b.USER_ID
+			,b.USER_NM
+		FROM
+			TBL_EXPANSION a
+			INNER JOIN TBL_USERINFO b ON CONCAT(',', a.ACCESS_USER_NO, ',') LIKE CONCAT('%,', b.NO, ',%') 
+		WHERE
+			EXP_ID = #expId#
+	</select>
+	
+	<insert id="ExpansionDAO.insertExpansion">
+		<selectKey resultClass="java.lang.Integer" keyProperty="sort">
+			SELECT IFNULL(MAX(SORT),0)+1 AS SORT  FROM TBL_EXPANSION
+		</selectKey>	
+		INSERT INTO TBL_EXPANSION
+		(
+			EXP_ID, EXP_SJ, EXP_CN, EXP_FILE_ID,
+			POP_YN, USE_AT, SORT,
+			LINK_URL, ACCESS, ACCESS_USER_NO, POP_WIDTH, POP_HEIGHT
+		) VALUES (
+			#expId#, #expSj#, #expCn#, #expFileId#,
+			#popYn#, #useAt#, #sort#,
+			#linkUrl#, #access#, #accessUserNo#, #popWidth#, #popHeight#
+		)
+	</insert>
+	
+	<update id="ExpansionDAO.updateExpansion">
+		UPDATE TBL_EXPANSION
+		SET
+			EXP_SJ = #expSj#,
+			EXP_CN = #expCn#,
+			EXP_FILE_ID = #expFileId#,
+			POP_YN = #popYn#,
+			USE_AT = #useAt#,
+			LINK_URL = #linkUrl#,
+			ACCESS = #access#,
+			ACCESS_USER_NO = #accessUserNo#,
+			POP_WIDTH = #popWidth#,
+			POP_HEIGHT = #popHeight#
+		WHERE
+			EXP_ID = #expId#
+	</update>
+	
+	<update id="ExpansionDAO.updateExpansionSort">
+		UPDATE TBL_EXPANSION
+		SET
+			SORT = #sort#
+		WHERE
+			EXP_ID = #expId#
+	</update>
+	
+	<select id="ExpansionDAO.getUserNo" resultClass="java.lang.Integer">
+		SELECT
+			NO
+		FROM
+			TBL_USERINFO
+		<isNotEmpty prepend="WHERE" property="accessUserList">
+			<iterate prepend="CONCAT(USER_NM, '(', USER_ID, ')') IN " open="(" close=")" conjunction="," property="accessUserList">
+				#accessUserList[]#
+			</iterate>
+		</isNotEmpty>
+	</select>
+	
+</sqlMap>

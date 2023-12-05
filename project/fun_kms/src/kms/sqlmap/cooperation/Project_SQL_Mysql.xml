@@ -1,0 +1,2155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsProjectDAO">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="projectVO" type="kms.com.cooperation.service.ProjectVO"/>
+	<typeAlias  alias="projectInputVO" type="kms.com.cooperation.service.ProjectInputVO"/>
+	<typeAlias  alias="JSONObject" type="org.json.simple.JSONObject"/>	
+	
+	
+	<resultMap id="projectView" class="kms.com.cooperation.service.ProjectVO">
+		<result property="type" column="TYPE" columnIndex="1"/>
+		<result property="prjId" column="PRJ_ID" columnIndex="2"/>
+		<result property="prjNm" column="PRJ_NM" columnIndex="3"/>
+		<result property="prjCd" column="PRJ_CD" columnIndex="4"/>
+		<result property="prntPrjId" column="PRNT_PRJ_ID" columnIndex="5"/>
+		<result property="prntPrjNm" column="PRNT_PRJ_NM" columnIndex="6"/>
+		<result property="prntPrjCd" column="PRNT_PRJ_CD" columnIndex="7"/>
+		<result property="prjLv" column="PRJ_LV" columnIndex="8"/>
+		<result property="orgnztId" column="ORGNZT_ID" columnIndex="9"/>
+		<result property="orgnztNm" column="ORGNZT_NM" columnIndex="10"/>
+		<result property="leaderNo" column="LEADER_NO" columnIndex="11"/>
+		<result property="leaderNm" column="LEADER_NM" columnIndex="12"/>
+		<result property="leaderId" column="LEADER_ID" columnIndex="13"/>
+		<result property="leaderMix" column="LEADER_MIX" columnIndex="14"/>
+		<result property="stat" column="STAT" columnIndex="15"/>
+		<result property="dayReportRule" column="DAY_REPORT_RULE" columnIndex="16"/>
+		<result property="manageCostRule" column="MANAGE_COST_RULE" columnIndex="17"/>
+		<result property="purchasePrjId" column="PURCHASE_PRJ_ID" columnIndex="18"/>
+		<result property="purchasePrjNm" column="PURCHASE_PRJ_NM" columnIndex="19"/>
+		<result property="purchasePrjCd" column="PURCHASE_PRJ_CD" columnIndex="20"/>
+		<result property="regDt" column="REG_DT" columnIndex="21"/>
+		<result property="stDt" column="ST_DT" columnIndex="22"/>
+		<result property="writerNo" column="WRITER_NO" columnIndex="23"/>
+		<result property="sn" column="SN" columnIndex="24"/>
+		<result property="budgetExceedRule" column="BUDGET_EXCEED_RULE" columnIndex="25"/>
+		<result property="compDt" column="COMP_DT" columnIndex="26"/>
+		<result property="compDueDt" column="COMP_DUE_DT" columnIndex="27"/>
+		<result property="prjCn" column="PRJ_CN" columnIndex="28"/>
+		<result property="prjType" column="PRJ_TYPE" columnIndex="29"/>
+		<result property="ord" column="ORD" columnIndex="30"/>
+		<result property="bondYn" column="BOND_YN" columnIndex="31"/>
+		<result property="proposal" column="PROPOSAL" columnIndex="32"/>
+		<result property="custId" column="CUST_ID" columnIndex="33"/>
+		<result property="custNm" column="CUST_NM" columnIndex="34"/>
+		<result property="planSales" column="PLAN_SALES" columnIndex="35"/>
+		<result property="planProfit" column="PLAN_PROFIT" columnIndex="36"/>
+		<result property="planDate" column="PLAN_DATE" columnIndex="37"/>
+	</resultMap>
+	
+	<resultMap id="tblPrjInput" class="kms.com.cooperation.service.ProjectInputVO">
+		<result property="prjId" column="PRJ_ID" columnIndex="1"/>
+		<result property="userNo" column="USER_NO" columnIndex="2"/>
+		<result property="year" column="YEAR" columnIndex="3"/>
+		<result property="month" column="MONTH" columnIndex="4"/>
+		<result property="regDt" column="REG_DT" columnIndex="5"/>
+		<result property="writerNo" column="WRITER_NO" columnIndex="6"/>
+	</resultMap>
+	
+	<resultMap id="projectMonthlyReport" class="kms.com.management.service.StepResultVO">
+		<result property="searchMonth"		column="MNTH"				columnIndex="6"/>
+		<result property="salesOut"			column="SALES_OUT"			columnIndex="7"/>
+		<result property="salesIn"			column="SALES_IN"			columnIndex="8"/>
+		<result property="purchaseOut"		column="PURCHASE_OUT"		columnIndex="9"/>
+		<result property="purchaseIn"		column="PURCHASE_IN"		columnIndex="10"/>
+		<result property="salaryPlan"		column="SALARY_PLAN"		columnIndex="11"/>
+		<result property="salary"			column="SALARY"				columnIndex="12"/>
+		<result property="expensePlan"		column="EXPENSE_PLAN"		columnIndex="13"/>
+		<result property="expense"			column="EXPENSE"			columnIndex="14"/>
+	</resultMap>
+	
+	<resultMap id="salesProjectView" class="kms.com.cooperation.service.ProjectVO">
+		<result property="prjId" column="PRJ_ID" columnIndex="1"/>
+		<result property="prjNm" column="PRJ_NM" columnIndex="2"/>
+		<result property="prjCd" column="PRJ_CD" columnIndex="3"/>
+		<result property="custId" column="CUST_ID" columnIndex="4"/>
+		<result property="custNm" column="CUST_NM" columnIndex="5"/>
+		<result property="leaderNo" column="LEADER_NO" columnIndex="6"/>
+		<result property="leaderId" column="LEADER_ID" columnIndex="7"/>
+		<result property="leaderNm" column="LEADER_NM" columnIndex="8"/>
+		<result property="regDt" column="REG_DT" columnIndex="9"/>
+	</resultMap>
+	
+	<insert id="KmsProjectDAO.insertProject" parameterClass="projectVO">
+		INSERT INTO TBL_PRJ 
+			( PRJ_ID
+			, PRJ_NM
+			, PRJ_CD
+			, PRJ_CN
+			, PRNT_PRJ_ID
+			, PRJ_LV
+			, ORGNZT_ID
+			, LEADER_NO
+			, STAT
+			, DAY_REPORT_RULE
+			, MANAGE_COST_RULE
+			, BUDGET_EXCEED_RULE
+			, PURCHASE_PRJ_ID
+			, REG_DT
+			, ST_DT
+			, COMP_DT
+			, COMP_DUE_DT
+			, WRITER_NO
+			, CUR_MAX_PRJ_CD 
+			, PRJ_TYPE
+			, UPD_DT
+			, UPDATER_NO
+			, CUST_ID
+			, PLAN_SALES
+			, PLAN_PROFIT
+			, PLAN_DATE
+			<isNotEmpty property="ord" >
+				, ord
+			</isNotEmpty>
+			)
+		VALUES ( #prjId#
+				, #prjNm#
+				, #prjCd#
+				, #prjCn#
+				, #prntPrjId#
+				, #prjLv#   
+				, #orgnztId#
+				, (SELECT NO FROM TBL_USERINFO WHERE USER_ID = #leaderId#)  
+				, #stat#
+				, #dayReportRule#
+				, #manageCostRule#
+				, #budgetExceedRule#
+				, #purchasePrjId#
+				, SYSDATE()
+				, #stDt#
+				, SYSDATE()
+				, #compDueDt#
+				, #writerNo#
+				, 0 
+				, #prjType#
+				, SYSDATE()
+				, #writerNo#
+				, #custId#
+				, #planSales#
+				, #planProfit#
+				, #planDate#
+				<isNotEmpty property="ord" >
+					, #ord#
+				</isNotEmpty>
+			  )
+	</insert>
+	
+	<update id="KmsProjectDAO.updateProject" parameterClass="projectVO">		
+		UPDATE TBL_PRJ
+		SET 
+			 PRJ_NM=#prjNm#
+			, PRJ_CN = #prjCn#
+			, LEADER_NO= (SELECT NO FROM TBL_USERINFO WHERE USER_ID = #leaderId#)  
+			, STAT=#stat#
+			, COMP_DT = CASE
+							WHEN STAT = #stat# THEN COMP_DT
+							WHEN #stat# = 'P' THEN COMP_DT
+							ELSE SYSDATE()
+						END 
+			, COMP_DUE_DT=#compDueDt#
+			, DAY_REPORT_RULE=#dayReportRule#
+			, MANAGE_COST_RULE=#manageCostRule#
+			, BUDGET_EXCEED_RULE=#budgetExceedRule#
+			, ST_DT = #stDt#
+			, PRJ_TYPE = #prjType#
+			, UPD_DT = SYSDATE()
+			, UPDATER_NO = #writerNo#
+			<isNotEmpty property="prjCd" >
+				, PRJ_CD = #prjCd#
+			</isNotEmpty>
+			<isNotEmpty property="ord" >
+				, ORD = #ord#
+			</isNotEmpty>
+			<isNotEmpty property="bondYn" >
+				, BOND_YN = #bondYn#
+			</isNotEmpty>
+			<isNotEmpty property="proposal" >
+				, PROPOSAL = #proposal#
+			</isNotEmpty>
+			, CUST_ID = #custId#
+			, PLAN_SALES = #planSales#
+			, PLAN_PROFIT = #planProfit#
+			, PLAN_DATE = #planDate#
+		WHERE PRJ_ID = #prjId#
+	</update>
+	
+	<update id="KmsProjectDAO.updateProjectEnd" parameterClass="projectVO">
+		<![CDATA[
+			UPDATE TBL_PRJ
+			SET
+				STAT=#stat#,
+				UPD_DT = SYSDATE(),
+				UPDATER_NO = #writerNo#
+			WHERE PRJ_ID=#prjId#
+		]]>
+	</update>
+	
+	<!-- 2013.07.30 김대현
+	update 후에 BUDGET_PRJ 예산관리 프로젝트 업데이트 -->
+	<update id="KmsProjectDAO.updateBudgetPrj" parameterClass="projectVO">
+		<![CDATA[	
+			UPDATE
+			TBL_EAPP_EXP
+			SET BUDGET_PRJ = FN_GET_BUDGET_PRJ(#prjId#)
+			WHERE
+			PRJ_ID = #prjId#
+		]]>
+	</update>
+	
+	
+	
+	<select id="KmsProjectDAO.selectProjectView" resultMap="projectView">
+		SELECT
+			IF(PRJ.PRJ_ID = PRJ.PRNT_PRJ_ID, 'M', 'S') TYPE
+			, PRJ.PRJ_ID
+			, PRJ.PRJ_NM
+			, PRJ.PRJ_CD
+			, PRJ.PRJ_CN
+			, IF(PRJ.PRNT_PRJ_ID=PRJ.PRJ_ID,NULL,PRJ.PRNT_PRJ_ID) PRNT_PRJ_ID
+			, IF(PRJ.PRNT_PRJ_ID=PRJ.PRJ_ID,NULL,PRJ2.PRJ_NM) PRNT_PRJ_NM
+			, IF(PRJ.PRNT_PRJ_ID=PRJ.PRJ_ID,NULL,PRJ2.PRJ_CD) PRNT_PRJ_CD
+			, PRJ.PRJ_LV
+			, PRJ.ORGNZT_ID
+			, ORG.ORGNZT_NM
+			, PRJ.LEADER_NO
+			, USR.USER_NM LEADER_NM
+			, USR.USER_ID LEADER_ID 
+			, CONCAT(USR.USER_NM,"(",USR.USER_ID,")") LEADER_MIX 
+			, PRJ.STAT
+			, PRJ.DAY_REPORT_RULE
+			, PRJ.MANAGE_COST_RULE
+			, PRJ.BUDGET_EXCEED_RULE
+			, PRJ.PURCHASE_PRJ_ID
+			, PRJ3.PRJ_NM PURCHASE_PRJ_NM 
+			, PRJ3.PRJ_CD PURCHASE_PRJ_CD
+			, PRJ.REG_DT
+			, PRJ.ST_DT
+			, PRJ.WRITER_NO
+			, PRJ.COMP_DUE_DT
+			, PRJ.COMP_DT
+			, PRJ.PRJ_TREE SN
+			, PRJ.PRJ_TYPE
+			, PRJ.ORD
+			, PRJ.BOND_YN
+			, PRJ.PROPOSAL
+			, PRJ.CUST_ID
+			, CUST.CUST_NM
+			, PRJ.PLAN_SALES
+			, PRJ.PLAN_PROFIT
+			, PRJ.PLAN_DATE
+		FROM TBL_PRJ PRJ
+			LEFT OUTER JOIN TBL_USERINFO USR
+				ON PRJ.LEADER_NO = USR.NO
+			LEFT OUTER JOIN TBL_ORGNZT ORG
+				ON PRJ.ORGNZT_ID = ORG.ORGNZT_ID
+			INNER JOIN TBL_PRJ PRJ2
+				ON PRJ.PRNT_PRJ_ID = PRJ2.PRJ_ID
+			LEFT OUTER JOIN TBL_PRJ PRJ3
+				ON PRJ.PURCHASE_PRJ_ID = PRJ3.PRJ_ID
+			LEFT OUTER JOIN TBL_PRJ_INTEREST INTR     
+				ON PRJ.PRJ_ID = INTR.PRJ_ID
+				AND INTR.USER_NO = #searchUserNo#
+			LEFT OUTER JOIN TBL_CUSTOMER CUST
+				ON PRJ.CUST_ID = CUST.CUST_ID
+		WHERE 
+			PRJ.PRJ_ID = #prjId#
+	</select>
+	
+	<select id="KmsProjectDAO.selectProjectList" parameterClass="projectVO" resultClass="egovMap">
+	SELECT A.*,FN_STR_COUNT(A.PRJ_SN,"/") PRJ_LV
+	  FROM ( SELECT IF(PRJ.PRJ_ID = PRNT_PRJ_ID, 'M', 'S') TYPE
+				   ,PRJ.PRJ_ID
+				   ,PRJ.PRJ_NM
+				   ,PRJ.PRJ_CD
+				   ,PRJ.PRNT_PRJ_ID
+				   ,PRJ.ORGNZT_ID PRJ_ORG_ID
+				   ,ORG.ORGNZT_NM
+				   ,PRJ.LEADER_NO
+				   ,USR.USER_NM LEADER_NM
+				   ,USR.USER_ID LEADER_ID
+				   ,PRJ.STAT
+				   ,COD1.CODE_NM STAT_NM
+				   ,PRJ.DAY_REPORT_RULE
+				   ,PRJ.MANAGE_COST_RULE
+				   ,PRJ.BUDGET_EXCEED_RULE
+				   ,PRJ.PURCHASE_PRJ_ID
+				   ,PRJ.REG_DT
+				   ,PRJ.WRITER_NO
+				   ,PRJ.PRJ_TREE PRJ_SN
+				   ,FN_ORGAN_TREE(PRJ.ORGNZT_ID) ORG_SN
+				   ,SRCHUSR.ORGNZT_ID SRCHUSR_ORG_ID
+				   ,FN_ORGAN_TREE(SRCHUSR.ORGNZT_ID) SRCHUSR_ORG_SN
+				   ,PRJ.PRJ_TYPE
+				   ,PRJ.ST_DT
+				   ,PRJ.UPD_DT
+				   ,PRJ.COMP_DUE_DT
+				   ,PRJ.ORG_PRJ_TREE_ORD
+				   ,FORMAT(IFNULL((SELECT IFNULL(SUM(B.sales_out),0) + 
+										  IFNULL(SUM(B.sales_in),0) - 
+										  IFNULL(SUM(B.purchase_out),0) - 
+										  IFNULL(SUM(B.purchase_in_normal),0) - 
+										  IFNULL(SUM(B.purchase_in_common),0) - 
+										  IFNULL(SUM(B.labor),0) - 
+										  IFNULL(SUM(B.exp),0)
+									FROM TBL_PRJ_RESULT_TOTAL B			               	   	 	
+									WHERE DATE_FORMAT(SYSDATE(),'%Y%m') >= CONCAT(B.YEAR,B.MONTH)
+										AND CONCAT(B.YEAR,B.MONTH) >= DATE_FORMAT(SYSDATE(),'%Y01') 
+										AND B.PRJ_ID = PRJ.PRJ_ID),'0'),0) AS BUSI_PROF_ACC
+			   FROM TBL_PRJ PRJ
+					LEFT OUTER JOIN TBL_USERINFO USR ON PRJ.LEADER_NO = USR.NO
+					LEFT OUTER JOIN TBL_ORGNZT ORG ON PRJ.ORGNZT_ID = ORG.ORGNZT_ID
+					INNER JOIN COMTCCMMNDETAILCODE COD1 ON PRJ.STAT=COD1.CODE AND COD1.CODE_ID ='KMS010'
+					LEFT OUTER JOIN TBL_USERINFO SRCHUSR ON SRCHUSR.NO = #searchUserNo#
+			<isNotEmpty property="searchUserInputNm" >
+			INNER JOIN TBL_PRJ_INPUT PIN
+				ON PRJ.PRJ_ID = PIN.PRJ_ID
+				AND PIN.YEAR = YEAR(CURDATE())
+				AND PIN.MONTH = MONTH(CURDATE())
+			INNER JOIN TBL_USERINFO USR2
+				ON PIN.USER_NO  = USR2.NO
+				AND USR2.USER_NM like CONCAT('%',#searchUserInputNm#,'%')
+			</isNotEmpty>	
+			<isNotEmpty property="searchUserInputId" >
+			INNER JOIN TBL_PRJ_INPUT PIN
+				ON PRJ.PRJ_ID = PIN.PRJ_ID
+				AND PIN.YEAR = YEAR(CURDATE())
+				AND PIN.MONTH = MONTH(CURDATE())
+			INNER JOIN TBL_USERINFO USR2
+				ON PIN.USER_NO  = USR2.NO
+				AND USR2.USER_ID = #searchUserInputId#
+			</isNotEmpty>
+			LEFT OUTER JOIN TBL_PRJ_INTEREST INTR     
+				ON PRJ.PRJ_ID = INTR.PRJ_ID
+				AND INTR.USER_NO = #searchUserNo#
+			 ) a
+			  <!-- 회사 -->
+			WHERE 1=1
+			<isNotEmpty prepend="AND" property="searchPrntPrjId">
+			PRNT_PRJ_ID = #searchPrntPrjId#
+			AND PRJ_ID !=#searchPrntPrjId#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchStatL">
+			STAT IN
+				<iterate property="searchStatL" open="(" close=")" conjunction=",">
+						 #searchStatL[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchMSPrntStatL">
+			(SELECT STAT FROM TBL_PRJ WHERE SUBSTR(PRJ_SN,1,20)=PRJ_ID) IN
+				<iterate property="searchMSPrntStatL" open="(" close=")" conjunction=",">
+						 #searchMSPrntStatL[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchOrgnztIdList">
+			PRJ_ORG_ID IN
+				<iterate property="searchOrgnztIdList" open="(" close=")" conjunction=",">
+						#searchOrgnztIdList[]#
+				</iterate> 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchPrjNm">
+			(
+				PRJ_NM like CONCAT('%',#searchPrjNm#,'%')
+				OR
+				PRJ_CD like CONCAT('%',#searchPrjNm#,'%')
+			)
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchLeaderId">
+			LEADER_ID = #searchLeaderId#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchLeaderNm">
+			LEADER_NM LIKE CONCAT('%',#searchLeaderNm#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="includeEndPrj" >
+			STAT = 'P' 	
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchRegStDt" >
+				<![CDATA[
+				(
+					DATE_FORMAT(REG_DT, '%Y%m%d') > #searchRegStDt#
+				OR  DATE_FORMAT(UPD_DT, '%Y%m%d') > #searchRegStDt#
+				)
+				]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchRegEnDt" >
+				<![CDATA[
+				(
+					DATE_FORMAT(REG_DT, '%Y%m%d') <= #searchRegEnDt#
+				OR	DATE_FORMAT(UPD_DT, '%Y%m%d') <= #searchRegEnDt#
+				)
+				]]>
+			</isNotEmpty>
+		GROUP BY PRJ_ID	
+		ORDER BY 
+			CASE
+				WHEN a.PRJ_ORG_ID = a.SRCHUSR_ORG_ID THEN 1
+				WHEN a.ORG_SN LIKE CONCAT('%', a.SRCHUSR_ORG_SN, '%') THEN 2
+				WHEN a.SRCHUSR_ORG_SN LIKE CONCAT('%', a.ORG_SN, '%') THEN 3
+				ELSE 9
+			END ASC
+			, ORG_PRJ_TREE_ORD
+			, SUBSTRING_INDEX(a.PRJ_CD, '-', 1)
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '-', 1)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 1)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '-', 1)) - 1), 4, '0')
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 1)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 2)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 1)) - 1), 4, '0')
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 2)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 3)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 2)) - 1), 4, '0')
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 3)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 4)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 3)) - 1), 4, '0')
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 4)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 5)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 4)) - 1), 4, '0')
+			, CONCAT(a.PRJ_ORG_ID,PRJ_SN)
+			, a.PRJ_ORG_ID
+	</select>
+	
+	<select id="KmsProjectDAO.selectProjectListPaging" resultClass="egovMap">
+			SELECT *,FN_STR_COUNT(PRJ_SN,"/") PRJ_LV FROM (SELECT
+				IF(PRJ.PRJ_ID = PRNT_PRJ_ID, 'M', 'S') TYPE
+				,PRJ.PRJ_ID
+				, PRJ.PRJ_NM
+				, PRJ.PRJ_CD
+				, PRJ.PRNT_PRJ_ID
+				, PRJ.ORGNZT_ID PRJ_ORG_ID
+				, ORG.ORGNZT_NM
+				, PRJ.LEADER_NO
+				, USR.USER_NM LEADER_NM
+				, USR.USER_ID LEADER_ID
+				, PRJ.STAT
+				, COD1.CODE_NM STAT_NM
+				, PRJ.DAY_REPORT_RULE
+				, PRJ.MANAGE_COST_RULE
+				, PRJ.BUDGET_EXCEED_RULE
+				, PRJ.PURCHASE_PRJ_ID
+				, PRJ.REG_DT
+				, PRJ.WRITER_NO
+				, PRJ.PRJ_TREE PRJ_SN
+				, FN_ORGAN_TREE(PRJ.ORGNZT_ID) ORG_SN
+				, SRCHUSR.ORGNZT_ID SRCHUSR_ORG_ID
+				, FN_ORGAN_TREE(SRCHUSR.ORGNZT_ID) SRCHUSR_ORG_SN
+				<!-- , IFNULL(INTR.NO, -1) AS PRJ_INTEREST  -->
+
+			FROM TBL_PRJ PRJ
+			LEFT OUTER JOIN TBL_USERINFO USR
+				ON PRJ.LEADER_NO = USR.NO
+			LEFT OUTER JOIN TBL_ORGNZT ORG
+				ON PRJ.ORGNZT_ID = ORG.ORGNZT_ID
+			INNER JOIN COMTCCMMNDETAILCODE COD1
+				ON PRJ.STAT=COD1.CODE 
+				AND COD1.CODE_ID ='KMS010'
+			LEFT OUTER JOIN TBL_USERINFO SRCHUSR
+				ON SRCHUSR.NO = #searchUserNo#
+			<isNotEmpty property="searchUserInputNm" >
+			INNER JOIN TBL_PRJ_INPUT PIN
+				ON PRJ.PRJ_ID = PIN.PRJ_ID
+				AND PIN.YEAR = YEAR(CURDATE())
+				AND PIN.MONTH = MONTH(CURDATE())
+			INNER JOIN TBL_USERINFO USR2
+				ON PIN.USER_NO  = USR2.NO
+				AND USR2.USER_NM like CONCAT('%',#searchUserInputNm#,'%')
+			</isNotEmpty>	
+			<isNotEmpty property="searchUserInputId" >
+			INNER JOIN TBL_PRJ_INPUT PIN
+				ON PRJ.PRJ_ID = PIN.PRJ_ID
+				AND PIN.YEAR = YEAR(CURDATE())
+				AND PIN.MONTH = MONTH(CURDATE())
+			INNER JOIN TBL_USERINFO USR2
+				ON PIN.USER_NO  = USR2.NO
+				AND USR2.USER_ID = #searchUserInputId#
+			</isNotEmpty>
+			<isEmpty property="interestPrjOnly">
+			LEFT OUTER JOIN TBL_PRJ_INTEREST INTR     
+				ON PRJ.PRJ_ID = INTR.PRJ_ID
+				AND INTR.USER_NO = #searchUserNo#
+			</isEmpty>
+			<isNotEmpty property="searchUserInputNo">
+			INNER JOIN (
+				SELECT
+					PRJ_ID
+				FROM
+					TBL_PRJ_INPUT PIN
+				WHERE
+					PIN.YEAR = YEAR(CURDATE())
+					AND PIN.MONTH = MONTH(CURDATE())
+					AND PIN.USER_NO = #searchUserInputNo#
+				UNION
+				(
+					SELECT
+						PRJ_ID
+					FROM
+						TBL_PLAN_LABOR PLN
+						INNER JOIN TBL_EAPP_DOC DOC
+						ON DOC.DOC_ID = PLN.DOC_ID
+						AND DOC.DOC_STAT IN ('APP004', 'APP005')
+						AND DOC.NEW_AT = '1'
+					WHERE
+						SUBSTR(PLN.LABOR_DT, 1, 6) = SUBSTR(REPLACE(CURDATE(), '-', ''), 1, 6)
+						AND PLN.RATIO != 0
+						AND PLN.USER_NO = #searchUserInputNo#
+				)
+			) INPUT
+				ON PRJ.PRJ_ID = INPUT.PRJ_ID
+				AND PRJ.DAY_REPORT_RULE = 'Y'
+			</isNotEmpty>
+			 ) a
+			  <!-- 회사 -->
+			WHERE 1=1
+			<isNotEmpty prepend="AND" property="searchStat">
+			a.STAT = #searchStat#
+			</isNotEmpty>
+			<isEmpty prepend="AND" property="searchStat">
+			a.STAT = 'P'
+			</isEmpty>
+			
+			<isNotEmpty prepend="AND" property="searchPrntPrjId">
+			PRNT_PRJ_ID = #searchPrntPrjId#
+			AND PRJ_ID !=#searchPrntPrjId#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchStatL">
+			STAT IN
+				<iterate property="searchStatL" open="(" close=")" conjunction=",">
+						 #searchStatL[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchMSPrntStatL">
+			(SELECT STAT FROM TBL_PRJ WHERE SUBSTR(PRJ_SN,1,20)=PRJ_ID) IN
+				<iterate property="searchMSPrntStatL" open="(" close=")" conjunction=",">
+						 #searchMSPrntStatL[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchOrgnztIdList">
+			PRJ_ORG_ID IN
+				<iterate property="searchOrgnztIdList" open="(" close=")" conjunction=",">
+						#searchOrgnztIdList[]#
+				</iterate> 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchPrjNm">
+			(
+				PRJ_NM like CONCAT('%',#searchPrjNm#,'%')
+				OR
+				PRJ_CD like CONCAT('%',#searchPrjNm#,'%')
+			)
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchLeaderId">
+			LEADER_ID = #searchLeaderId#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchLeaderNm">
+			LEADER_NM LIKE CONCAT('%',#searchLeaderNm#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="includeEndPrj" >
+			STAT = 'P' 	
+			</isNotEmpty>
+		GROUP BY PRJ_ID	
+		ORDER BY
+			CASE
+				WHEN a.STAT = 'P' THEN 1
+				WHEN a.STAT = 'S' THEN 2
+				WHEN a.STAT = 'E' THEN 3
+			END ASC
+			, CASE
+				WHEN a.PRJ_ORG_ID = a.SRCHUSR_ORG_ID THEN 1
+				WHEN a.ORG_SN LIKE CONCAT('%', a.SRCHUSR_ORG_SN, '%') THEN 2
+				WHEN a.SRCHUSR_ORG_SN LIKE CONCAT('%', a.ORG_SN, '%') THEN 3
+				ELSE 9
+			END ASC
+			, SUBSTRING_INDEX(a.PRJ_CD, '-', 1)
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '-', 1)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 1)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '-', 1)) - 1), 4, '0')
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 1)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 2)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 1)) - 1), 4, '0')
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 2)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 3)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 2)) - 1), 4, '0')
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 3)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 4)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 3)) - 1), 4, '0')
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 4)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 5)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 4)) - 1), 4, '0')
+			, CONCAT(a.PRJ_ORG_ID,PRJ_SN)
+			, a.PRJ_ORG_ID
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<select id="KmsProjectDAO.selectProjectListPagingCnt" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(PRJ_ID) AS CNT
+			FROM
+				(
+			SELECT
+				IF(PRJ.PRJ_ID = PRNT_PRJ_ID, 'M', 'S') TYPE
+				,PRJ.PRJ_ID
+				, PRJ.PRJ_NM
+				, PRJ.PRJ_CD
+				, PRJ.PRNT_PRJ_ID
+				, PRJ.ORGNZT_ID PRJ_ORG_ID
+				, ORG.ORGNZT_NM
+				, PRJ.LEADER_NO
+				, USR.USER_NM LEADER_NM
+				, USR.USER_ID LEADER_ID
+				, PRJ.STAT
+				, COD1.CODE_NM STAT_NM
+				, PRJ.DAY_REPORT_RULE
+				, PRJ.MANAGE_COST_RULE
+				, PRJ.BUDGET_EXCEED_RULE
+				, PRJ.PURCHASE_PRJ_ID
+				, PRJ.REG_DT
+				, PRJ.WRITER_NO
+				, PRJ.PRJ_TREE PRJ_SN
+				, FN_ORGAN_TREE(PRJ.ORGNZT_ID) ORG_SN
+				, SRCHUSR.ORGNZT_ID SRCHUSR_ORG_ID
+				, FN_ORGAN_TREE(SRCHUSR.ORGNZT_ID) SRCHUSR_ORG_SN
+			FROM
+				TBL_PRJ PRJ
+			LEFT OUTER JOIN TBL_USERINFO USR
+				ON PRJ.LEADER_NO = USR.NO
+			LEFT OUTER JOIN TBL_ORGNZT ORG
+				ON PRJ.ORGNZT_ID = ORG.ORGNZT_ID
+			INNER JOIN COMTCCMMNDETAILCODE COD1
+				ON PRJ.STAT=COD1.CODE 
+				AND COD1.CODE_ID ='KMS010'
+			LEFT OUTER JOIN TBL_USERINFO SRCHUSR
+				ON SRCHUSR.NO = #searchUserNo#
+			<isNotEmpty property="searchUserInputNm" >
+			INNER JOIN TBL_PRJ_INPUT PIN
+				ON PRJ.PRJ_ID = PIN.PRJ_ID
+				AND PIN.YEAR = YEAR(CURDATE())
+				AND PIN.MONTH = MONTH(CURDATE())
+			INNER JOIN TBL_USERINFO USR2
+				ON PIN.USER_NO  = USR2.NO
+				AND USR2.USER_NM like CONCAT('%',#searchUserInputNm#,'%')
+			</isNotEmpty>	
+			<isNotEmpty property="searchUserInputId" >
+			INNER JOIN TBL_PRJ_INPUT PIN
+				ON PRJ.PRJ_ID = PIN.PRJ_ID
+				AND PIN.YEAR = YEAR(CURDATE())
+				AND PIN.MONTH = MONTH(CURDATE())
+			INNER JOIN TBL_USERINFO USR2
+				ON PIN.USER_NO  = USR2.NO
+				AND USR2.USER_ID = #searchUserInputId#
+			</isNotEmpty>
+			<isNotEmpty property="interestPrjOnly">
+			INNER JOIN TBL_PRJ_INTEREST INTR
+				ON PRJ.PRJ_ID = INTR.PRJ_ID
+				AND INTR.USER_NO = #searchUserNo#
+			</isNotEmpty>
+			<isNotEmpty property="searchUserInputNo">
+			INNER JOIN (
+				SELECT
+					PRJ_ID
+				FROM
+					TBL_PRJ_INPUT PIN
+				WHERE
+					PIN.YEAR = YEAR(CURDATE())
+					AND PIN.MONTH = MONTH(CURDATE())
+					AND PIN.USER_NO = #searchUserInputNo#
+				UNION
+				(
+					SELECT
+						PRJ_ID
+					FROM
+						TBL_PLAN_LABOR PLN
+						INNER JOIN TBL_EAPP_DOC DOC
+						ON DOC.DOC_ID = PLN.DOC_ID
+						AND DOC.DOC_STAT IN ('APP004', 'APP005')
+						AND DOC.NEW_AT = '1'
+					WHERE
+						SUBSTR(PLN.LABOR_DT, 1, 6) = SUBSTR(REPLACE(CURDATE(), '-', ''), 1, 6)
+						AND PLN.RATIO != 0
+						AND PLN.USER_NO = #searchUserInputNo#
+				)
+			) INPUT
+				ON PRJ.PRJ_ID = INPUT.PRJ_ID
+				AND PRJ.DAY_REPORT_RULE = 'Y'
+			</isNotEmpty>
+			 ) a
+			  <!-- 회사 -->
+			WHERE 1=1
+			<isNotEmpty prepend="AND" property="searchStat">
+			AND a.STAT = #searchStat#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchPrntPrjId">
+			PRNT_PRJ_ID = #searchPrntPrjId#
+			AND PRJ_ID !=#searchPrntPrjId#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchStatL">
+			STAT IN
+				<iterate property="searchStatL" open="(" close=")" conjunction=",">
+						 #searchStatL[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchMSPrntStatL">
+			(SELECT STAT FROM TBL_PRJ WHERE SUBSTR(PRJ_SN,1,20)=PRJ_ID) IN
+				<iterate property="searchMSPrntStatL" open="(" close=")" conjunction=",">
+						 #searchMSPrntStatL[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchOrgnztIdList">
+			PRJ_ORG_ID IN
+				<iterate property="searchOrgnztIdList" open="(" close=")" conjunction=",">
+						#searchOrgnztIdList[]#
+				</iterate> 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchPrjNm">
+			(
+				PRJ_NM like CONCAT('%',#searchPrjNm#,'%')
+				OR
+				PRJ_CD like CONCAT('%',#searchPrjNm#,'%')
+			)
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchLeaderId">
+			LEADER_ID = #searchLeaderId#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchLeaderNm">
+			LEADER_NM LIKE CONCAT('%',#searchLeaderNm#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="includeEndPrj" >
+			STAT = 'P' 	
+			</isNotEmpty>
+		ORDER BY 
+			CASE
+				WHEN a.PRJ_ORG_ID = a.SRCHUSR_ORG_ID THEN 1
+				WHEN a.ORG_SN LIKE CONCAT('%', a.SRCHUSR_ORG_SN, '%') THEN 2
+				WHEN a.SRCHUSR_ORG_SN LIKE CONCAT('%', a.ORG_SN, '%') THEN 3
+				ELSE 9
+			END ASC
+			, SUBSTRING_INDEX(a.PRJ_CD, '-', 1)
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '-', 1)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 1)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '-', 1)) - 1), 4, '0')
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 1)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 2)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 1)) - 1), 4, '0')
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 2)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 3)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 2)) - 1), 4, '0')
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 3)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 4)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 3)) - 1), 4, '0')
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 4)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 5)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 4)) - 1), 4, '0')
+			, CONCAT(a.PRJ_ORG_ID,PRJ_SN)
+			, a.PRJ_ORG_ID
+	</select>	
+	
+	<select id="KmsProjectDAO.selectProjectUserIncluded" parameterClass="projectVO" resultClass="egovMap">
+			SELECT
+				IF(PRJ.PRJ_ID = PRNT_PRJ_ID, 'M', 'S') TYPE
+				,PRJ.PRJ_ID
+				, PRJ.PRJ_NM
+				, PRJ.PRJ_CD
+				, PRJ.PRNT_PRJ_ID
+				, PRJ.ORGNZT_ID
+				, ORG.ORGNZT_NM
+				, PRJ.LEADER_NO
+				, USR.USER_NM LEADER_NM
+				, USR.USER_ID LEADER_ID
+				, PRJ.STAT
+				, COD1.CODE_NM STAT_NM
+				, PRJ.DAY_REPORT_RULE
+				, PRJ.MANAGE_COST_RULE
+				, PRJ.BUDGET_EXCEED_RULE
+				, PRJ.PURCHASE_PRJ_ID
+				, PRJ.REG_DT
+				, PRJ.WRITER_NO
+				, PRJ.PRJ_TREE SN
+			FROM TBL_PRJ PRJ
+			JOIN TBL_USERINFO USR
+				ON PRJ.LEADER_NO = USR.NO
+			JOIN TBL_ORGNZT ORG
+				ON PRJ.ORGNZT_ID = ORG.ORGNZT_ID
+			JOIN COMTCCMMNDETAILCODE COD1
+				ON PRJ.STAT=COD1.CODE 
+				AND COD1.CODE_ID ='KMS010'
+			JOIN TBL_PRJ_INPUT PIN
+				ON PRJ.PRJ_ID = PIN.PRJ_ID
+				AND PIN.YEAR = #searchYear#
+				AND PIN.MONTH = #searchMonth#
+				AND PIN.USER_NO = #searchUserInputNo#
+			WHERE 
+				PRJ.PRJ_TYPE != 'E'
+			<isNotEmpty prepend="AND" property="includeEndPrj" >
+				STAT = 'P' 	
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchKeyword">
+				PRJ.PRJ_NM like CONCAT('%',#searchKeyword#,'%')
+			</isNotEmpty>
+		GROUP BY PRJ_ID	
+		ORDER BY PRJ.PRJ_CD
+	</select>	
+	
+	<select id="KmsProjectDAO.selectProjectCnt" parameterClass="projectVO" resultClass="int">
+			SELECT count(*) FROM (SELECT
+				IF(PRJ.PRJ_ID = PRNT_PRJ_ID, 'M', 'S') TYPE
+				,PRJ.PRJ_ID
+				, PRJ.PRJ_NM
+				, PRJ.PRJ_CD
+				, PRJ.PRNT_PRJ_ID
+				, PRJ.ORGNZT_ID
+				, ORG.ORGNZT_NM
+				, PRJ.LEADER_NO
+				, USR.USER_NM LEADER_NM
+				, USR.USER_ID LEADER_ID
+				, PRJ.STAT
+				, COD1.CODE_NM STAT_NM
+				, PRJ.DAY_REPORT_RULE
+				, PRJ.MANAGE_COST_RULE
+				, PRJ.BUDGET_EXCEED_RULE
+				, PRJ.PURCHASE_PRJ_ID
+				, PRJ.REG_DT
+				, PRJ.UPD_DT
+				, PRJ.WRITER_NO
+				, PRJ.PRJ_TREE SN
+
+			FROM TBL_PRJ PRJ
+			LEFT OUTER JOIN TBL_USERINFO USR
+				ON PRJ.LEADER_NO = USR.NO
+			LEFT OUTER JOIN TBL_ORGNZT ORG
+				ON PRJ.ORGNZT_ID = ORG.ORGNZT_ID
+			INNER JOIN COMTCCMMNDETAILCODE COD1
+				ON PRJ.STAT=COD1.CODE 
+				AND COD1.CODE_ID ='KMS010'
+			<isNotEmpty property="searchUserInputNm" >
+			INNER JOIN TBL_PRJ_INPUT PIN
+				ON PRJ.PRJ_ID = PIN.PRJ_ID
+				AND PIN.YEAR = YEAR(CURDATE())
+				AND PIN.MONTH = MONTH(CURDATE())
+			INNER JOIN TBL_USERINFO USR2
+				ON PIN.USER_NO  = USR2.NO
+				AND USR2.USER_NM like CONCAT('%',#searchUserInputNm#,'%')
+			</isNotEmpty>	
+			<isNotEmpty property="searchUserInputId" >
+			INNER JOIN TBL_PRJ_INPUT PIN
+				ON PRJ.PRJ_ID = PIN.PRJ_ID
+				AND PIN.YEAR = YEAR(CURDATE())
+				AND PIN.MONTH = MONTH(CURDATE())
+			INNER JOIN TBL_USERINFO USR2
+				ON PIN.USER_NO  = USR2.NO
+				AND USR2.USER_ID = #searchUserInputId#
+			</isNotEmpty>	
+			 ) a
+			  <!-- 회사 -->
+			WHERE 1=1
+			<isNotEmpty prepend="AND" property="searchPrntPrjId">
+			PRNT_PRJ_ID = #searchPrntPrjId#
+			AND PRJ_ID !=#searchPrntPrjId#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchStatL">
+			STAT IN
+				<iterate property="searchStatL" open="(" close=")" conjunction=",">
+						 #searchStatL[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchMSPrntStatL">
+			(SELECT STAT FROM TBL_PRJ WHERE SUBSTR(SN,1,20)=PRJ_ID) IN
+				<iterate property="searchMSPrntStatL" open="(" close=")" conjunction=",">
+						 #searchMSPrntStatL[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchOrgnztIdList">
+			ORGNZT_ID IN
+				<iterate property="searchOrgnztIdList" open="(" close=")" conjunction=",">
+						#searchOrgnztIdList[]#
+				</iterate> 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchPrjNm">
+			PRJ_NM like CONCAT('%',#searchPrjNm#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchLeaderId">
+			LEADER_ID = #searchLeaderId#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchLeaderNm">
+			LEADER_NM LIKE CONCAT('%',#searchLeaderNm#,'%')
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchRegStDt" >
+				<![CDATA[
+				(
+					DATE_FORMAT(REG_DT, '%Y%m%d') > #searchRegStDt#
+				OR  DATE_FORMAT(UPD_DT, '%Y%m%d') > #searchRegStDt#
+				)
+				]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchRegEnDt" >
+				<![CDATA[
+				(
+					DATE_FORMAT(REG_DT, '%Y%m%d') <= #searchRegEnDt#
+				OR	DATE_FORMAT(UPD_DT, '%Y%m%d') <= #searchRegEnDt#
+				)
+				]]>
+			</isNotEmpty>
+	</select>
+
+
+	<!-- 상위 프로젝트 변경 -->
+	<update id="KmsProjectDAO.updatePrntPrjId" parameterClass="projectVO">
+	UPDATE TBL_PRJ
+	SET PRNT_PRJ_ID = #prntPrjId#
+	WHERE PRJ_ID = #prjId#
+	</update>
+	
+	
+	<!-- 상위 부서 변경 -->
+	<!-- 해당프로젝트의 최상위 프로젝트가 같은 프로젝트의 모든 부서의 부서 값을 변경  -->
+	<update id="KmsProjectDAO.updateOrgnztIdRecur" parameterClass="projectVO">
+	UPDATE TBL_PRJ
+
+	SET ORGNZT_ID = #orgnztId#
+
+	<!-- WHERE SUBSTR(FN_PRJ_TREE(PRJ_ID),1,20) = SUBSTR(FN_PRJ_TREE(#prjId#),1,20) -->
+	<!-- WHERE FN_PRJ_TREE(PRJ_ID) LIKE CONCAT('%', #prjId#, '%') -->
+	WHERE FN_PRJ_TREE(PRJ_ID) LIKE CONCAT(FN_PRJ_TREE(#prjId#), '%')
+	</update>
+	
+	<!-- 부서-프로젝트 트리 -->		
+	<select id="KmsProjectDAO.projectOrganTree" parameterClass="projectVO" resultClass="egovMap">
+		<isNotEmpty property="searchKeyword">
+			SELECT 
+				a.*
+				, c.PRJ_CD CD
+			FROM V_PRJ_TREE2 a 
+			INNER JOIN 
+			   (
+				SELECT CONCAT(FN_ORGAN_TREE(ORGNZT_ID),"/",PRJ_TREE) PRJ_SN, PRJ_CD, STAT
+					 FROM TBL_PRJ 
+				WHERE 
+					PRJ_NM like CONCAT('%',#searchKeyword#,'%')
+					OR PRJ_CD like CONCAT('%',#searchKeyword#,'%')
+			   ) b
+			LEFT OUTER JOIN TBL_PRJ c
+			   ON a.ID = c.PRJ_ID 
+			WHERE
+				b.PRJ_SN like CONCAT('%',a.ID,'%')
+			<isNotEmpty prepend="AND" property="includeEndPrj">
+				(b.STAT = 'P' || a.TYP = 'ORG')
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="orgnztId">
+				 a.SN LIKE CONCAT('%', #orgnztId# ,'%')
+			</isNotEmpty>
+			GROUP BY a.ID
+			ORDER BY REPLACE(a.SN_ORD, "PRJ", "000")
+		</isNotEmpty>
+		
+		<isEmpty property="searchKeyword">
+			SELECT 
+				a.*, b.PRJ_CD CD 
+			FROM
+				V_PRJ_TREE2 a
+			LEFT OUTER JOIN TBL_PRJ b
+			ON a.ID = b.PRJ_ID
+			WHERE 1=1 
+			<isNotEmpty prepend="AND" property="includeEndPrj">
+				(b.STAT = 'P' || a.TYP = 'ORG')
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="orgnztId">
+				 a.SN LIKE CONCAT('%', #orgnztId# ,'%')
+			</isNotEmpty>
+			ORDER BY REPLACE(SN_ORD, "PRJ", "000")
+		</isEmpty>
+	
+	</select>
+	
+	<select id="KmsProjectDAO.projectOrganTreeOld" parameterClass="projectVO" resultClass="egovMap">
+		<isNotEmpty property="searchKeyword">
+			SELECT 
+				a.*
+				, c.PRJ_CD CD
+			FROM V_PRJ_TREE a 
+			INNER JOIN 
+			   (
+				SELECT CONCAT(FN_ORGAN_TREE(ORGNZT_ID),"/",PRJ_TREE) PRJ_SN, PRJ_CD, STAT
+					 FROM TBL_PRJ 
+				WHERE 
+					PRJ_NM like CONCAT('%',#searchKeyword#,'%')
+					OR PRJ_CD like CONCAT('%',#searchKeyword#,'%')
+			   ) b
+			LEFT OUTER JOIN TBL_PRJ c
+			   ON a.ID = c.PRJ_ID 
+			WHERE
+				b.PRJ_SN like CONCAT('%',a.ID,'%')
+			<isNotEmpty prepend="AND" property="includeEndPrj">
+				(b.STAT = 'P' || a.TYP = 'ORG')
+			</isNotEmpty>
+			GROUP BY a.ID
+			ORDER BY REPLACE(a.SN,"PRJ","AAA")
+		</isNotEmpty>
+		
+		<isEmpty property="searchKeyword">
+			SELECT 
+				a.*, b.PRJ_CD CD 
+			FROM
+				V_PRJ_TREE a
+			LEFT OUTER JOIN TBL_PRJ b
+			ON a.ID = b.PRJ_ID
+			WHERE 1=1 
+			<isNotEmpty prepend="AND" property="includeEndPrj">
+				(b.STAT = 'P' || a.TYP = 'ORG')
+			</isNotEmpty>
+			ORDER BY REPLACE(SN,"PRJ","AAA")
+		</isEmpty>
+	
+	</select>
+	
+	<select id="KmsProjectDAO.selectNextPrjLv" parameterClass="projectVO" resultClass="java.lang.Integer">
+	SELECT	
+		IFNULL((SELECT PRJ_LV FROM TBL_PRJ 
+	WHERE PRJ_ID = #prjId#),-1) +1   prjLv
+
+	</select>
+	
+	
+	<!-- for project input -->
+	
+	<select id="KmsProjectDAO.selectProjectInput" parameterClass="projectInputVO" resultClass="egovMap">
+		SELECT 
+			YEAR
+			,PRJ_ID
+			,USER_NO
+			,USER_NM
+			,USER_ID
+			,SUM(IF(MONTH=1,1,0)) MONTH1_LIST
+			,SUM(IF(MONTH=2,1,0)) MONTH2_LIST
+			,SUM(IF(MONTH=3,1,0)) MONTH3_LIST
+			,SUM(IF(MONTH=4,1,0)) MONTH4_LIST
+			,SUM(IF(MONTH=5,1,0)) MONTH5_LIST
+			,SUM(IF(MONTH=6,1,0)) MONTH6_LIST
+			,SUM(IF(MONTH=7,1,0)) MONTH7_LIST
+			,SUM(IF(MONTH=8,1,0)) MONTH8_LIST
+			,SUM(IF(MONTH=9,1,0)) MONTH9_LIST
+			,SUM(IF(MONTH=10,1,0)) MONTH10_LIST
+			,SUM(IF(MONTH=11,1,0)) MONTH11_LIST
+			,SUM(IF(MONTH=12,1,0)) MONTH12_LIST
+			,IF(COUNT(*)=12,1,0) MONTH_ALL
+		FROM TBL_PRJ_INPUT INP
+		INNER JOIN TBL_USERINFO USR
+		ON INP.USER_NO = USR.NO
+		
+		WHERE PRJ_ID =#prjId#
+		AND YEAR =#year#
+		
+		GROUP BY USER_NO
+	</select>
+	<select id="KmsProjectDAO.selectUserPrjInputCnt" parameterClass="projectInputVO" resultClass="java.lang.Integer">
+		SELECT 
+			IF(a.DAY_REPORT_RULE = 'Y', COUNT(*)
+				, IF(a.DAY_REPORT_RULE = 'ALL', 1, 0))
+		FROM
+			TBL_PRJ a
+			LEFT JOIN TBL_PRJ_INPUT b 
+				ON a.PRJ_ID = b.PRJ_ID
+		WHERE
+			a.PRJ_ID = #prjId#
+			AND b.YEAR = #year#
+			AND b.MONTH = #month#
+			AND b.USER_NO = #userNo#
+	</select>
+	
+	<insert id="KmsProjectDAO.insertProjectInput" parameterClass="projectInputVO">
+		<![CDATA[
+			INSERT INTO TBL_PRJ_INPUT 
+				( PRJ_ID
+				  , USER_NO
+				  , YEAR
+				  , MONTH
+				  , REG_DT
+				  , WRITER_NO )
+			VALUES ( #prjId#
+				  , (SELECT NO FROM TBL_USERINFO WHERE USER_ID = #userId#)  
+				  , #year#
+				  , #month#
+				  , SYSDATE()
+				  , #writerNo# )
+		]]>
+	</insert>
+	
+	<delete id="KmsProjectDAO.deleteProjectInputBatch" parameterClass="projectInputVO">
+		<![CDATA[
+			DELETE FROM TBL_PRJ_INPUT
+			WHERE PRJ_ID=#prjId#
+			AND YEAR =#year#
+		]]>
+	</delete>
+	
+	
+	<update id="KmsProjectDAO.updatePrntPrjStatRecur" parameterClass="projectVO">
+	UPDATE TBL_PRJ
+		SET STAT = #stat#		
+	WHERE	
+		FN_PRJ_TREE(#prjId#) LIKE CONCAT('%',PRJ_ID,'%')
+		AND PRJ_ID !=#prjId#
+	</update>
+	
+	<update id="KmsProjectDAO.updateChildPrjStatRecur" parameterClass="projectVO">
+	UPDATE TBL_PRJ
+		SET STAT = IF(STAT="P",#stat#,STAT)		
+	WHERE	
+		PRJ_TREE LIKE CONCAT('%',#prjId#,'%')	
+		AND PRJ_ID !=#prjId#	
+	</update>	
+	
+	<update id="KmsProjectDAO.updatePrjCd" parameterClass="projectVO">
+	UPDATE TBL_PRJ
+		SET PRJ_CD = FN_CREATE_PRJ_CD(PRJ_ID)
+	WHERE PRJ_ID = #prjId#
+	</update>
+	
+	<update id="KmsProjectDAO.incrPrntPrjCurMaxPrjCd" parameterClass="projectVO">
+	UPDATE TBL_PRJ
+		SET CUR_MAX_PRJ_CD = CUR_MAX_PRJ_CD + 1
+	WHERE PRJ_ID = #prntPrjId#
+	</update>
+	
+	<update id="KmsProjectDAO.incrOrgnztCurMaxPrjCd" parameterClass="projectVO">
+	UPDATE TBL_ORGNZT
+		SET CUR_MAX_PRJ_CD = CUR_MAX_PRJ_CD + 1
+	WHERE ORGNZT_ID = #orgnztId#
+	</update>
+		
+	<update id="KmsProjectDAO.updatePrjCdRecur" parameterClass="projectVO">
+	UPDATE TBL_PRJ
+		SET PRJ_CD = REPLACE(PRJ_CD,#beforePrjCd#, #curPrjCd#)		
+	WHERE PRJ_TREE LIKE CONCAT('%',#prjId#,'%')
+		AND PRJ_ID !=#prjId#
+	</update>
+	
+	
+	<select id="KmsProjectDAO.selectPrjInputCnt" parameterClass="projectInputVO" resultClass="java.lang.Integer">
+	SELECT COUNT(DISTINCT(USER_NO)) CNT
+	FROM TBL_PRJ_INPUT a
+	WHERE PRJ_ID = #prjId#
+	</select>
+	
+	<select id="KmsProjectDAO.selectPrjInputMaxUser" parameterClass="projectInputVO" resultClass="egovMap">
+	SELECT
+		a.USER_NO, c.USER_NM, C.USER_ID
+	FROM (
+		SELECT 
+			a.USER_NO
+			,COUNT(*) CNT
+		FROM TBL_PRJ_INPUT a
+		WHERE PRJ_ID = #prjId#
+		GROUP BY USER_NO
+	) a
+	INNER JOIN (
+		SELECT MAX(CNT) CNT
+		FROM
+		(
+			SELECT 
+				a.USER_NO
+				,COUNT(*) CNT
+			FROM TBL_PRJ_INPUT a
+			WHERE PRJ_ID = #prjId#
+			GROUP BY USER_NO
+		) a
+	) b 
+	INNER JOIN TBL_USERINFO c
+	ON a.USER_NO=  c.NO
+	WHERE a.CNT = b.CNT
+	LIMIT 1
+
+	</select>
+		
+	<select id="KmsProjectDAO.selectDefaultPrjCnt" resultClass="java.lang.Integer">
+	SELECT 
+		COUNT(*)
+	FROM TBL_ORGNZT
+	WHERE DEFAULT_PRJ_ID = #prjId#
+	AND USE_YN = 'Y'
+	</select>	
+
+	<select id="KmsProjectDAO.selectPresetPrjCnt" resultClass="java.lang.Integer">
+	SELECT
+		 COUNT(*)
+	FROM TBL_EAPP_PRESET
+	WHERE PRJ_ID = #prjId#
+	</select>
+	
+	<insert id="KmsProjectDAO.insertPrntPrjInput">
+	INSERT INTO TBL_PRJ_INPUT
+		(PRJ_ID
+		, USER_NO
+		, YEAR, MONTH
+		, REG_DT
+		, WRITER_NO)
+	
+		SELECT 
+			#prjId#,USER_NO, YEAR, MONTH, SYSDATE(), #writerNo#
+		FROM TBL_PRJ_INPUT
+		WHERE 
+			PRJ_ID = (SELECT PRNT_PRJ_ID FROM TBL_PRJ WHERE PRJ_ID = #prjId#)
+			<!-- 해당 프로젝트에 기 삽입되어있는 인풋은 삽입하지 않게 -->
+			AND CONCAT(YEAR,"/",MONTH,"/",USER_NO) NOT IN (
+			SELECT CONCAT(YEAR,"/",MONTH,"/",USER_NO)
+			FROM TBL_PRJ_INPUT b
+			WHERE PRJ_ID = #prjId#	
+		)
+	</insert>
+	
+	<select id="KmsProjectDAO.selectProjectMonthlyReport" resultMap="projectMonthlyReport">
+	SELECT
+		topPrj.PRJ_ID AS ID
+		, cal.CAL_MONTH AS MNTH
+		, IFNULL(SUM(IFNULL(tot.SALES_OUT, 0)), 0) AS SALES_OUT
+		, IFNULL(SUM(IFNULL(tot.SALES_IN, 0)), 0) AS SALES_IN
+		, IFNULL(SUM(IFNULL(tot.PURCHASE_OUT, 0)), 0) AS PURCHASE_OUT
+		, IFNULL(SUM(IFNULL(tot.PURCHASE_IN_NORMAL, 0) + IFNULL(tot.PURCHASE_IN_COMMON, 0)), 0) AS PURCHASE_IN
+		, IFNULL(SUM(IFNULL(tot.PLAN_LABOR, 0)), 0) AS SALARY_PLAN
+		, IFNULL(SUM(IFNULL(tot.PLAN_EXP, 0)), 0) AS EXPENSE_PLAN
+		, IFNULL(SUM(IFNULL(tot.LABOR, 0)), 0) AS SALARY
+		, IFNULL(SUM(IFNULL(tot.EXP, 0)), 0) AS EXPENSE
+	FROM
+		(
+			TBL_PRJ topPrj
+			, TBL_CALENDAR_DATA cal
+		)
+		INNER JOIN TBL_PRJ subPrj
+			ON (
+				subPrj.PRJ_ID = topPrj.PRJ_ID
+				<isEqual prepend="OR" property="includeUnderPrj" compareValue="Y">
+					subPrj.PRJ_TREE LIKE CONCAT('%', topPrj.PRJ_ID, '%')
+				</isEqual>
+			)
+		LEFT JOIN TBL_PRJ_RESULT_TOTAL tot
+			ON tot.PRJ_ID = subPrj.PRJ_ID
+			AND tot.YEAR = cal.CAL_YEAR
+			AND tot.MONTH = cal.CAL_MONTH
+	WHERE
+		cal.CAL_DAY = '01'
+		AND cal.CAL_YEAR = #searchYear#
+		AND topPrj.PRJ_ID = #prjId#
+	GROUP BY cal.CAL_MONTH
+	</select>
+	
+	<select id="KmsProjectDAO.selectProjectMonthlyReportPreSum" resultMap="projectMonthlyReport">
+	SELECT
+		topPrj.PRJ_ID AS ID
+		, cal.CAL_MONTH AS MNTH
+		, IFNULL(SUM(IFNULL(tot.SALES_OUT, 0)), 0) AS SALES_OUT
+		, IFNULL(SUM(IFNULL(tot.SALES_IN, 0)), 0) AS SALES_IN
+		, IFNULL(SUM(IFNULL(tot.PURCHASE_OUT, 0)), 0) AS PURCHASE_OUT
+		, IFNULL(SUM(IFNULL(tot.PURCHASE_IN_NORMAL, 0) + IFNULL(tot.PURCHASE_IN_COMMON, 0)), 0) AS PURCHASE_IN
+		, IFNULL(SUM(IFNULL(tot.PLAN_LABOR, 0)), 0) AS SALARY_PLAN
+		, IFNULL(SUM(IFNULL(tot.PLAN_EXP, 0)), 0) AS EXPENSE_PLAN
+		, IFNULL(SUM(IFNULL(tot.LABOR, 0)), 0) AS SALARY
+		, IFNULL(SUM(IFNULL(tot.EXP, 0)), 0) AS EXPENSE
+	FROM
+		(
+			TBL_PRJ topPrj
+			, TBL_CALENDAR_DATA cal
+		)
+		INNER JOIN TBL_PRJ subPrj
+			ON (
+				subPrj.PRJ_ID = topPrj.PRJ_ID
+				<isEqual prepend="OR" property="includeUnderPrj" compareValue="Y">
+					subPrj.PRJ_TREE LIKE CONCAT('%', topPrj.PRJ_ID, '%')
+				</isEqual>
+			)
+		LEFT JOIN TBL_PRJ_RESULT_TOTAL tot
+			ON tot.PRJ_ID = subPrj.PRJ_ID
+			AND tot.YEAR = cal.CAL_YEAR
+			AND tot.MONTH = cal.CAL_MONTH
+	WHERE
+		cal.CAL_DAY = '01'
+		AND cal.CAL_YEAR = #searchYear#
+		AND topPrj.PRJ_ID = #prjId#
+	GROUP BY cal.CAL_YEAR
+	</select>
+	
+	
+	<select id="KmsProjectDAO.selectPrjAuth" resultClass="java.lang.Integer">
+	SELECT count(*) cnt 
+		FROM TBL_PRJ
+	WHERE 
+		FN_PRJ_TREE(#prjId#) LIKE CONCAT('%',PRJ_ID ,'%') 
+		AND LEADER_NO = #searchLeaderNo#
+	</select>
+	
+	<select id="KmsProjectDAO.selectPrjAuth2" resultClass="java.lang.String">
+	SELECT CASE WHEN COUNT(*) > 0 THEN 'Y' ELSE 'N' END
+	  FROM(SELECT USR.NO
+			 FROM TBL_USERINFO USR
+				  LEFT JOIN TBL_PRJ PRJ ON TRUE
+				  INNER JOIN TBL_ORGNZT ORG ON PRJ.ORGNZT_ID = ORG.ORGNZT_ID
+			WHERE PRJ.PRJ_ID = #prjId#
+			  AND (USR.POSITION IN ('H', 'S')
+			  AND ORG.ORG_TREE LIKE CONCAT('%', USR.ORGNZT_ID, '%'))) RESULT
+	 WHERE RESULT.NO = #searchUserNo#
+	</select>
+	
+	<update id="KmsProjectDAO.updatePrjTree">
+	UPDATE TBL_PRJ
+		SET PRJ_TREE = FN_PRJ_TREE(PRJ_ID)
+		, ORG_PRJ_TREE = CONCAT(FN_ORGAN_TREE(ORGNZT_ID),'/',FN_PRJ_TREE(PRJ_ID) )
+		, ORG_PRJ_TREE_ORD = CONCAT(FN_ORGAN_TREE_ORD(ORGNZT_ID),'/',FN_PRJ_TREE_ORD(PRJ_ID) )
+	WHERE 
+		FN_PRJ_TREE(PRJ_ID) LIKE CONCAT('%',#prjId#,'%')
+	</update>
+	
+	<update id="KmsProjectDAO.updatePrjTreeByOrg">
+	UPDATE TBL_PRJ
+		SET PRJ_TREE = FN_PRJ_TREE(PRJ_ID)
+		, ORG_PRJ_TREE = CONCAT(FN_ORGAN_TREE(ORGNZT_ID),'/',FN_PRJ_TREE(PRJ_ID) )
+		, ORG_PRJ_TREE_ORD = CONCAT(FN_ORGAN_TREE_ORD(ORGNZT_ID),'/',FN_PRJ_TREE_ORD(PRJ_ID) )
+	WHERE 
+		ORGNZT_ID = #orgnztId#
+	</update>
+
+	<select id="KmsProjectDAO.selectProjectListForDelete" resultClass="egovMap">
+		SELECT
+			PRJ_ID
+			, PRJ_CD
+			, PRJ_NM
+			, c00 + c01 + c02 + c03 + c04 + c05 + c06 + c07 + c08 + c09 + c10 + c11 + c12 + c13 + c14 + c15 + c16 + c17 + c18 + c19 + c20 + c21 + c22 + c23 + c24 + c25 + c26 AS cntAll
+			, c00 , c01 , c02 , c03 , c04 , c05 , c06 , c07 , c08 , c09 , c10 , c11 , c12 , c13 , c14 , c15 , c16 , c17 , c18 , c19 , c20 , c21 , c22 , c23 , c24 , c25 , c26
+		FROM
+		(
+			SELECT
+					prj.PRJ_ID
+				,	prj.PRJ_CD
+				,	prj.PRJ_NM
+				,	(SELECT COUNT(*) FROM TBL_PRJ					t00 WHERE t00.PRNT_PRJ_ID = prj.PRJ_ID AND t00.PRJ_ID != t00.PRNT_PRJ_ID)		AS c00
+				,	(SELECT COUNT(*) FROM COMTNBBS					t01 WHERE t01.PRJ_ID = prj.PRJ_ID)												AS c01
+				,	(SELECT COUNT(*) FROM TBL_BUSINESS_CONTACT		t02 WHERE t02.PRJ_ID = prj.PRJ_ID)												AS c02
+				,	(SELECT COUNT(*) FROM TBL_EAPP_BUDGET_ALLOCATE2	t03 WHERE t03.PRJ_ID = prj.PRJ_ID)												AS c03
+				,	(SELECT COUNT(*) FROM TBL_EAPP_EXP				t04 WHERE t04.PRJ_ID = prj.PRJ_ID)												AS c04
+				,	(SELECT COUNT(*) FROM TBL_EAPP_GEN_SALES		t05 WHERE t05.SALES_PRJ_ID = prj.PRJ_ID)										AS c05
+				,	(SELECT COUNT(*) FROM TBL_EAPP_HOL				t06 WHERE t06.PRJ_ID = prj.PRJ_ID)												AS c06
+				,	(SELECT COUNT(*) FROM TBL_EAPP_PRESET			t07 WHERE t07.PRJ_ID = prj.PRJ_ID)												AS c07
+				,	(SELECT COUNT(*) FROM TBL_EAPP_SALES_IN			t08 WHERE t08.SALES_PRJ_ID = prj.PRJ_ID OR t08.PURCHASE_PRJ_ID = prj.PRJ_ID)	AS c08
+				,	(SELECT COUNT(*) FROM TBL_EAPP_TOT_SALES		t09 WHERE t09.SALES_PRJ_ID = prj.PRJ_ID OR t09.PURCHASE_PRJ_ID = prj.PRJ_ID)	AS c09
+				,	(SELECT COUNT(*) FROM TBL_PLAN_EXP				t10 WHERE t10.PRJ_ID = prj.PRJ_ID)												AS c10
+				,	(SELECT COUNT(*) FROM TBL_PLAN_LABOR			t11 WHERE t11.PRJ_ID = prj.PRJ_ID)												AS c11
+				,	(SELECT COUNT(*) FROM TBL_PRJ_INPUT				t12 WHERE t12.PRJ_ID = prj.PRJ_ID)												AS c12
+				,	0												AS c13
+				,	(SELECT COUNT(*) FROM TBL_PURCHASE_IN			t14 WHERE t14.SALES_PRJ_ID = prj.PRJ_ID OR t14.PURCHASE_PRJ_ID = prj.PRJ_ID)	AS c14
+				,	(SELECT COUNT(*) FROM TBL_PURCHASE_IN_LABOR		t15 WHERE t15.SALES_PRJ_ID = prj.PRJ_ID OR t15.PURCHASE_PRJ_ID = prj.PRJ_ID)	AS c15
+				,	(SELECT COUNT(*) FROM TBL_PURCHASE_OUT			t16 WHERE t16.PRJ_ID = prj.PRJ_ID)												AS c16
+				,	(SELECT COUNT(*) FROM TBL_SALES					t17 WHERE t17.PRJ_ID = prj.PRJ_ID)												AS c17
+				,	(SELECT COUNT(*) FROM TBL_TASK					t18 WHERE t18.PRJ_ID = prj.PRJ_ID)												AS c18
+				,	(SELECT COUNT(*) FROM TBL_BOND_PRJ				t19 WHERE t19.PRJ_ID = prj.PRJ_ID)												AS c19
+				,	(SELECT COUNT(*) FROM TBL_MEETING_ROOM			t20 WHERE t20.PRJ_ID = prj.PRJ_ID)												AS c20
+				,	(SELECT COUNT(*) FROM TBL_CONTRACT				t21 WHERE t21.PRJ_ID = prj.PRJ_ID)												AS c21
+				,	(SELECT COUNT(*) FROM TBL_PRJ_RESULT_TOTAL		t22 WHERE t22.PRJ_ID = prj.PRJ_ID)												AS c22
+				,	(SELECT COUNT(*) FROM TBL_CAREER				t23 WHERE t23.PRJ_ID = prj.PRJ_ID)												AS c23
+				,	(SELECT COUNT(*) FROM TBL_FUND					t24 WHERE t24.PRJ_ID = prj.PRJ_ID)												AS c24
+				,	(SELECT COUNT(*) FROM TBL_STOCK					t25 WHERE t25.PRJ_ID = prj.PRJ_ID)												AS c25
+				,	(SELECT COUNT(*) FROM TBL_STOCK_HISTORY			t26 WHERE t26.PRJ_ID = prj.PRJ_ID)												AS c26
+			FROM
+				TBL_PRJ prj
+				INNER JOIN TBL_ORGNZT org ON prj.ORGNZT_ID = org.ORGNZT_ID
+			<dynamic prepend="WHERE">
+				<isNotEmpty prepend="AND" property="searchKeyword">
+				(
+					prj.PRJ_ID LIKE CONCAT('%', #searchKeyword#, '%')
+					OR prj.PRJ_CD LIKE CONCAT('%', #searchKeyword#, '%')
+					OR prj.PRJ_NM LIKE CONCAT('%', #searchKeyword#, '%')
+					OR org.ORGNZT_ID LIKE CONCAT('%', #searchKeyword#, '%')
+					OR org.ORGNZT_NM LIKE CONCAT('%', #searchKeyword#, '%')
+				)
+				</isNotEmpty>
+			</dynamic>
+		) cntTbl
+		ORDER BY
+			IF(cntAll = 0, '1', '2')
+			,PRJ_CD
+	</select>
+
+	<delete id="KmsProjectDAO.deleteProject">
+		DELETE FROM
+			TBL_PRJ
+		WHERE PRJ_ID = (
+			SELECT
+				PRJ_ID
+			FROM
+				(
+					SELECT
+						PRJ_ID
+						, PRJ_CD
+						, PRJ_NM
+						, (c00 + c01 + c02 + c03 + c04 + c05 + c06 + c07 + c08 + c09 
+							+ c10 + c11 + c12 + c13 + c14 + c15 + c16 + c17 + c18 + c19 
+							+ c20 + c21 + c22 + c23 + c24 + c25 + c26) AS cntAll
+						, c00 , c01 , c02 , c03 , c04 , c05 , c06 , c07 , c08 , c09 
+						, c10 , c11 , c12 , c13 , c14 , c15 , c16 , c17 , c18 , c19 
+						, c20 , c21 , c22 , c23 , c24 , c25 , c26
+					FROM
+					(
+						SELECT
+								prj.PRJ_ID
+							,	prj.PRJ_CD
+							,	prj.PRJ_NM
+							,	(SELECT COUNT(*) FROM TBL_PRJ					t00 WHERE t00.PRNT_PRJ_ID = prj.PRJ_ID AND t00.PRJ_ID != t00.PRNT_PRJ_ID)		AS c00
+							,	(SELECT COUNT(*) FROM COMTNBBS					t01 WHERE t01.PRJ_ID = prj.PRJ_ID)												AS c01
+							,	(SELECT COUNT(*) FROM TBL_BUSINESS_CONTACT		t02 WHERE t02.PRJ_ID = prj.PRJ_ID)												AS c02
+							,	(SELECT COUNT(*) FROM TBL_EAPP_BUDGET_ALLOCATE2	t03 WHERE t03.PRJ_ID = prj.PRJ_ID)												AS c03
+							,	(SELECT COUNT(*) FROM TBL_EAPP_EXP				t04 WHERE t04.PRJ_ID = prj.PRJ_ID)												AS c04
+							,	(SELECT COUNT(*) FROM TBL_EAPP_GEN_SALES		t05 WHERE t05.SALES_PRJ_ID = prj.PRJ_ID)										AS c05
+							,	(SELECT COUNT(*) FROM TBL_EAPP_HOL				t06 WHERE t06.PRJ_ID = prj.PRJ_ID)												AS c06
+							,	(SELECT COUNT(*) FROM TBL_EAPP_PRESET			t07 WHERE t07.PRJ_ID = prj.PRJ_ID)												AS c07
+							,	(SELECT COUNT(*) FROM TBL_EAPP_SALES_IN			t08 WHERE t08.SALES_PRJ_ID = prj.PRJ_ID OR t08.PURCHASE_PRJ_ID = prj.PRJ_ID)	AS c08
+							,	(SELECT COUNT(*) FROM TBL_EAPP_TOT_SALES		t09 WHERE t09.SALES_PRJ_ID = prj.PRJ_ID OR t09.PURCHASE_PRJ_ID = prj.PRJ_ID)	AS c09
+							,	(SELECT COUNT(*) FROM TBL_PLAN_EXP				t10 WHERE t10.PRJ_ID = prj.PRJ_ID)												AS c10
+							,	(SELECT COUNT(*) FROM TBL_PLAN_LABOR			t11 WHERE t11.PRJ_ID = prj.PRJ_ID)												AS c11
+							,	(SELECT COUNT(*) FROM TBL_PRJ_INPUT				t12 WHERE t12.PRJ_ID = prj.PRJ_ID)												AS c12
+							,	0												AS c13
+							,	(SELECT COUNT(*) FROM TBL_PURCHASE_IN			t14 WHERE t14.SALES_PRJ_ID = prj.PRJ_ID OR t14.PURCHASE_PRJ_ID = prj.PRJ_ID)	AS c14
+							,	(SELECT COUNT(*) FROM TBL_PURCHASE_IN_LABOR		t15 WHERE t15.SALES_PRJ_ID = prj.PRJ_ID OR t15.PURCHASE_PRJ_ID = prj.PRJ_ID)	AS c15
+							,	(SELECT COUNT(*) FROM TBL_PURCHASE_OUT			t16 WHERE t16.PRJ_ID = prj.PRJ_ID)												AS c16
+							,	(SELECT COUNT(*) FROM TBL_SALES					t17 WHERE t17.PRJ_ID = prj.PRJ_ID)												AS c17
+							,	(SELECT COUNT(*) FROM TBL_TASK					t18 WHERE t18.PRJ_ID = prj.PRJ_ID)												AS c18
+							,	(SELECT COUNT(*) FROM TBL_BOND_PRJ				t19 WHERE t19.PRJ_ID = prj.PRJ_ID)												AS c19
+							,	(SELECT COUNT(*) FROM TBL_MEETING_ROOM			t20 WHERE t20.PRJ_ID = prj.PRJ_ID)												AS c20
+							,	(SELECT COUNT(*) FROM TBL_CONTRACT				t21 WHERE t21.PRJ_ID = prj.PRJ_ID)												AS c21
+							,	(SELECT COUNT(*) FROM TBL_PRJ_RESULT_TOTAL		t22 WHERE t22.PRJ_ID = prj.PRJ_ID)												AS c22
+							,	(SELECT COUNT(*) FROM TBL_CAREER				t23 WHERE t23.PRJ_ID = prj.PRJ_ID)												AS c23
+							,	(SELECT COUNT(*) FROM TBL_FUND					t24 WHERE t24.PRJ_ID = prj.PRJ_ID)												AS c24
+							,	(SELECT COUNT(*) FROM TBL_STOCK					t25 WHERE t25.PRJ_ID = prj.PRJ_ID)												AS c25
+							,	(SELECT COUNT(*) FROM TBL_STOCK_HISTORY			t26 WHERE t26.PRJ_ID = prj.PRJ_ID)												AS c26
+						FROM
+							TBL_PRJ prj
+						WHERE
+							prj.PRJ_ID = #prjIdToDel#
+					) cntTbl
+				) sumTbl
+			WHERE sumTbl.cntAll = 0
+		)
+	</delete>
+	
+	<delete id="KmsProjectDAO.deleteProjectResTotal">
+		DELETE FROM
+			TBL_PRJ_RESULT_TOTAL
+		WHERE PRJ_ID = #prjIdToDel#					
+	</delete>
+	
+	<select id="KmsProjectDAO.selectPrjInterestCnt" resultClass="java.lang.Integer">
+	SELECT
+		COUNT(*)
+	FROM
+		TBL_PRJ_INTEREST
+	WHERE
+		PRJ_ID = #prjId#
+		AND USER_NO = #searchUserNo#
+	</select>
+	
+	<insert id="KmsProjectDAO.insertPrjInterest">
+	INSERT INTO
+		TBL_PRJ_INTEREST (PRJ_ID, USER_NO)
+		VALUES (#prjId#, #searchUserNo#)
+	</insert>
+	
+	<delete id="KmsProjectDAO.deletePrjInterest">
+	DELETE FROM
+		TBL_PRJ_INTEREST
+	WHERE
+		PRJ_ID = #prjId#
+		AND USER_NO = #searchUserNo#
+	</delete>
+	
+
+	<select id="KmsProjectDAO.selectProjectDetailList" parameterClass="projectVO" resultClass="egovMap">
+		SELECT A.*,FN_STR_COUNT(A.PRJ_SN,"/") PRJ_LV,
+			   FORMAT(IFNULL((SELECT IFNULL(SUM(B.sales_out),0) + 
+									 IFNULL(SUM(B.sales_in),0) - 
+									 IFNULL(SUM(B.purchase_out),0) - 
+									 IFNULL(SUM(B.purchase_in_normal),0) - 
+									 IFNULL(SUM(B.purchase_in_common),0) - 
+									 IFNULL(SUM(B.labor),0) - 
+									 IFNULL(SUM(B.exp),0)
+								FROM TBL_PRJ_RESULT_TOTAL B
+							   WHERE CONCAT(B.YEAR,B.MONTH) = DATE_FORMAT(SYSDATE(),'%Y%m') 
+								 AND B.PRJ_ID = A.PRJ_ID),'0'),0) AS BUSI_PROF,
+			   FORMAT(IFNULL((SELECT IFNULL(SUM(B.sales_out),0) + 
+									 IFNULL(SUM(B.sales_in),0) - 
+									 IFNULL(SUM(B.purchase_out),0) - 
+									 IFNULL(SUM(B.purchase_in_normal),0) - 
+									 IFNULL(SUM(B.purchase_in_common),0) - 
+									 IFNULL(SUM(B.labor),0) - 
+									 IFNULL(SUM(B.exp),0)
+								FROM TBL_PRJ_RESULT_TOTAL B
+	<![CDATA[
+							   WHERE DATE_FORMAT(SYSDATE(),'%Y%m') >= CONCAT(B.YEAR,B.MONTH)
+								 AND DATE_FORMAT(SYSDATE(),'%Y01') <= CONCAT(B.YEAR,B.MONTH)
+	]]>
+								 AND B.PRJ_ID = A.PRJ_ID),'0'),0) AS BUSI_PROF_ACC
+		  FROM ( SELECT IF(PRJ.PRJ_ID = PRNT_PRJ_ID, 'M', 'S') TYPE
+					   ,PRJ.PRJ_ID
+					   ,PRJ.PRJ_NM
+					   ,PRJ.PRJ_CD
+					   ,PRJ.PRNT_PRJ_ID
+					   ,PRJ.ORGNZT_ID PRJ_ORG_ID
+					   ,ORG.ORGNZT_NM
+					   ,PRJ.LEADER_NO
+					   ,USR.USER_NM LEADER_NM
+					   ,USR.USER_ID LEADER_ID
+					   ,PRJ.STAT
+					   ,COD1.CODE_NM STAT_NM
+					   ,PRJ.DAY_REPORT_RULE
+					   ,PRJ.MANAGE_COST_RULE
+					   ,PRJ.BUDGET_EXCEED_RULE
+					   ,PRJ.PURCHASE_PRJ_ID
+					   ,PRJ.REG_DT
+					   ,PRJ.WRITER_NO
+					   ,PRJ.PRJ_TREE PRJ_SN
+					   ,FN_ORGAN_TREE(PRJ.ORGNZT_ID) ORG_SN
+					   ,SRCHUSR.ORGNZT_ID SRCHUSR_ORG_ID
+					   ,FN_ORGAN_TREE(SRCHUSR.ORGNZT_ID) SRCHUSR_ORG_SN
+					   ,PRJ.COMP_DUE_DT
+				   FROM TBL_PRJ PRJ
+						LEFT OUTER JOIN TBL_USERINFO USR ON PRJ.LEADER_NO = USR.NO
+						LEFT OUTER JOIN TBL_ORGNZT ORG ON PRJ.ORGNZT_ID = ORG.ORGNZT_ID
+						INNER JOIN COMTCCMMNDETAILCODE COD1 ON PRJ.STAT=COD1.CODE AND COD1.CODE_ID ='KMS010'
+						LEFT OUTER JOIN TBL_USERINFO SRCHUSR ON SRCHUSR.NO = #searchUserNo#
+						LEFT OUTER JOIN TBL_PRJ_INTEREST INTR ON PRJ.PRJ_ID = INTR.PRJ_ID AND INTR.USER_NO = #searchUserNo#
+				 WHERE PRJ.PRJ_TYPE = #searchPrjType#	    
+				 ) a
+		 WHERE 1=1
+			<isNotEmpty prepend="AND" property="searchStatL">
+			STAT IN
+				<iterate property="searchStatL" open="(" close=")" conjunction=",">
+						 #searchStatL[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchOrgnztIdList">
+			PRJ_ORG_ID IN
+				<iterate property="searchOrgnztIdList" open="(" close=")" conjunction=",">
+						#searchOrgnztIdList[]#
+				</iterate> 
+			</isNotEmpty>
+		GROUP BY PRJ_ID	
+		ORDER BY 
+			CASE
+				WHEN a.PRJ_ORG_ID = a.SRCHUSR_ORG_ID THEN 1
+				WHEN a.ORG_SN LIKE CONCAT('%', a.SRCHUSR_ORG_SN, '%') THEN 2
+				WHEN a.SRCHUSR_ORG_SN LIKE CONCAT('%', a.ORG_SN, '%') THEN 3
+				ELSE 9
+			END ASC
+			, SUBSTRING_INDEX(a.PRJ_CD, '-', 1)
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '-', 1)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 1)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '-', 1)) - 1), 4, '0')
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 1)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 2)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 1)) - 1), 4, '0')
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 2)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 3)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 2)) - 1), 4, '0')
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 3)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 4)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 3)) - 1), 4, '0')
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 4)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 5)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 4)) - 1), 4, '0')
+			, CONCAT(a.PRJ_ORG_ID,PRJ_SN)
+			, a.PRJ_ORG_ID
+	</select>
+
+	<select id="KmsProjectDAO.selectProjectRowCnt" parameterClass="projectVO" resultClass="egovMap">
+		SELECT A.PRJ_ORG_ID,
+			   COUNT(A.PRJ_ORG_ID) AS PRJ_LV
+		  FROM ( SELECT IF(PRJ.PRJ_ID = PRNT_PRJ_ID, 'M', 'S') TYPE
+					   ,PRJ.PRJ_ID
+					   ,PRJ.PRJ_NM
+					   ,PRJ.PRJ_CD
+					   ,PRJ.PRNT_PRJ_ID
+					   ,PRJ.ORGNZT_ID PRJ_ORG_ID
+					   ,ORG.ORGNZT_NM
+					   ,PRJ.LEADER_NO
+					   ,USR.USER_NM LEADER_NM
+					   ,USR.USER_ID LEADER_ID
+					   ,PRJ.STAT
+					   ,COD1.CODE_NM STAT_NM
+					   ,PRJ.DAY_REPORT_RULE
+					   ,PRJ.MANAGE_COST_RULE
+					   ,PRJ.BUDGET_EXCEED_RULE
+					   ,PRJ.PURCHASE_PRJ_ID
+					   ,PRJ.REG_DT
+					   ,PRJ.WRITER_NO
+					   ,PRJ.PRJ_TREE PRJ_SN
+					   ,FN_ORGAN_TREE(PRJ.ORGNZT_ID) ORG_SN
+					   ,SRCHUSR.ORGNZT_ID SRCHUSR_ORG_ID
+					   ,FN_ORGAN_TREE(SRCHUSR.ORGNZT_ID) SRCHUSR_ORG_SN
+				   FROM TBL_PRJ PRJ
+						LEFT OUTER JOIN TBL_USERINFO USR ON PRJ.LEADER_NO = USR.NO
+						LEFT OUTER JOIN TBL_ORGNZT ORG ON PRJ.ORGNZT_ID = ORG.ORGNZT_ID
+						INNER JOIN COMTCCMMNDETAILCODE COD1 ON PRJ.STAT=COD1.CODE AND COD1.CODE_ID ='KMS010'
+						LEFT OUTER JOIN TBL_USERINFO SRCHUSR ON SRCHUSR.NO = #searchUserNo#
+						LEFT OUTER JOIN TBL_PRJ_INTEREST INTR ON PRJ.PRJ_ID = INTR.PRJ_ID AND INTR.USER_NO = #searchUserNo#
+				 WHERE PRJ.PRJ_TYPE = #searchPrjType#	    
+				 ) a
+		 WHERE 1=1
+			<isNotEmpty prepend="AND" property="searchStatL">
+			STAT IN
+				<iterate property="searchStatL" open="(" close=")" conjunction=",">
+						 #searchStatL[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchOrgnztIdList">
+			PRJ_ORG_ID IN
+				<iterate property="searchOrgnztIdList" open="(" close=")" conjunction=",">
+						#searchOrgnztIdList[]#
+				</iterate> 
+			</isNotEmpty>
+		GROUP BY PRJ_ORG_ID	
+		ORDER BY 
+			CASE
+				WHEN a.PRJ_ORG_ID = a.SRCHUSR_ORG_ID THEN 1
+				WHEN a.ORG_SN LIKE CONCAT('%', a.SRCHUSR_ORG_SN, '%') THEN 2
+				WHEN a.SRCHUSR_ORG_SN LIKE CONCAT('%', a.ORG_SN, '%') THEN 3
+				ELSE 9
+			END ASC
+			, SUBSTRING_INDEX(a.PRJ_CD, '-', 1)
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '-', 1)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 1)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '-', 1)) - 1), 4, '0')
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 1)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 2)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 1)) - 1), 4, '0')
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 2)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 3)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 2)) - 1), 4, '0')
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 3)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 4)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 3)) - 1), 4, '0')
+			, LPAD(SUBSTRING(a.PRJ_CD, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 4)) + 2, LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 5)) - LENGTH(SUBSTRING_INDEX(a.PRJ_CD, '.', 4)) - 1), 4, '0')
+			, CONCAT(a.PRJ_ORG_ID,PRJ_SN)
+			, a.PRJ_ORG_ID
+	</select>
+
+
+<!-- //프로젝트 데이터 이동  -->
+
+
+
+	<select id="KmsProjectDAO.selectUnderPrjDataCnt" resultClass="java.lang.Integer">
+		SELECT IFNULL(SUM(cntAll),0) FROM
+		(
+				SELECT
+					c00 + c01 + c02 + c03 + c04 + c05 + c06 + c07 + c08 + c09 + c10 + c11 + c12 + c13 + c14 + c15 + c16 + c17 + c18 + c19 + c20 + c21 + c22 + c23 + c24 + c25 + c26 AS cntAll
+				FROM
+				(
+					SELECT
+							(SELECT COUNT(*) FROM TBL_PRJ					t00 WHERE t00.PRNT_PRJ_ID = prj.PRJ_ID AND t00.PRJ_ID != t00.PRNT_PRJ_ID)		AS c00
+						,	(SELECT COUNT(*) FROM COMTNBBS					t01 WHERE t01.PRJ_ID = prj.PRJ_ID)												AS c01
+						,	(SELECT COUNT(*) FROM TBL_BUSINESS_CONTACT		t02 WHERE t02.PRJ_ID = prj.PRJ_ID)												AS c02
+						,	(SELECT COUNT(*) FROM TBL_EAPP_BUDGET_ALLOCATE2	t03 WHERE t03.PRJ_ID = prj.PRJ_ID)												AS c03
+						,	(SELECT COUNT(*) FROM TBL_EAPP_EXP				t04 WHERE t04.PRJ_ID = prj.PRJ_ID)												AS c04
+						,	(SELECT COUNT(*) FROM TBL_EAPP_GEN_SALES		t05 WHERE t05.SALES_PRJ_ID = prj.PRJ_ID)										AS c05
+						,	(SELECT COUNT(*) FROM TBL_EAPP_HOL				t06 WHERE t06.PRJ_ID = prj.PRJ_ID)												AS c06
+						,	(SELECT COUNT(*) FROM TBL_EAPP_PRESET			t07 WHERE t07.PRJ_ID = prj.PRJ_ID)												AS c07
+						,	(SELECT COUNT(*) FROM TBL_EAPP_SALES_IN			t08 WHERE t08.SALES_PRJ_ID = prj.PRJ_ID OR t08.PURCHASE_PRJ_ID = prj.PRJ_ID)	AS c08
+						,	(SELECT COUNT(*) FROM TBL_EAPP_TOT_SALES		t09 WHERE t09.SALES_PRJ_ID = prj.PRJ_ID OR t09.PURCHASE_PRJ_ID = prj.PRJ_ID)	AS c09
+						,	(SELECT COUNT(*) FROM TBL_PLAN_EXP				t10 WHERE t10.PRJ_ID = prj.PRJ_ID)		AS c10
+						,	(SELECT COUNT(*) FROM TBL_PLAN_LABOR			t11 WHERE t11.PRJ_ID = prj.PRJ_ID)			AS c11
+						,	(SELECT COUNT(*) FROM TBL_PRJ_INPUT				t12 WHERE t12.PRJ_ID = prj.PRJ_ID)		AS c12
+						,	0												AS c13
+						,	(SELECT COUNT(*) FROM TBL_PURCHASE_IN			t14 WHERE t14.SALES_PRJ_ID = prj.PRJ_ID OR t14.PURCHASE_PRJ_ID = prj.PRJ_ID)	AS c14
+						,	(SELECT COUNT(*) FROM TBL_PURCHASE_IN_LABOR		t15 WHERE t15.SALES_PRJ_ID = prj.PRJ_ID OR t15.PURCHASE_PRJ_ID = prj.PRJ_ID)	AS c15
+						,	(SELECT COUNT(*) FROM TBL_PURCHASE_OUT			t16 WHERE t16.PRJ_ID = prj.PRJ_ID)												AS c16
+						,	(SELECT COUNT(*) FROM TBL_SALES					t17 WHERE t17.PRJ_ID = prj.PRJ_ID)												AS c17
+						,	(SELECT COUNT(*) FROM TBL_TASK					t18 WHERE t18.PRJ_ID = prj.PRJ_ID)												AS c18
+						,	(SELECT COUNT(*) FROM TBL_BOND_PRJ				t19 WHERE t19.PRJ_ID = prj.PRJ_ID)												AS c19
+						,	(SELECT COUNT(*) FROM TBL_MEETING_ROOM			t20 WHERE t20.PRJ_ID = prj.PRJ_ID)												AS c20
+						,	(SELECT COUNT(*) FROM TBL_CONTRACT				t21 WHERE t21.PRJ_ID = prj.PRJ_ID)												AS c21
+						,	(SELECT COUNT(*) FROM TBL_PRJ_RESULT_TOTAL		t22 WHERE t22.PRJ_ID = prj.PRJ_ID)												AS c22
+						,	(SELECT COUNT(*) FROM TBL_CAREER				t23 WHERE t23.PRJ_ID = prj.PRJ_ID)												AS c23
+						,	(SELECT COUNT(*) FROM TBL_FUND					t24 WHERE t24.PRJ_ID = prj.PRJ_ID)												AS c24
+						,	(SELECT COUNT(*) FROM TBL_STOCK					t25 WHERE t25.PRJ_ID = prj.PRJ_ID)												AS c25
+						,	(SELECT COUNT(*) FROM TBL_STOCK_HISTORY			t26 WHERE t26.PRJ_ID = prj.PRJ_ID)												AS c26
+					FROM
+						TBL_PRJ prj
+						INNER JOIN TBL_ORGNZT org ON prj.ORGNZT_ID = org.ORGNZT_ID
+						AND prj.PRNT_PRJ_ID NOT IN (prj.PRJ_ID)
+						AND prj.PRNT_PRJ_ID = #prjId#
+				) cntTbl
+			) cntTbl
+	</select>
+	
+
+
+
+
+
+
+
+
+	<select id="KmsProjectDAO.selectProjectInputForTransfer" parameterClass="projectVO" resultClass="egovMap">
+		SELECT A.PRJ_INPUT_NO 
+		FROM tbl_prj_input A 
+		JOIN tbl_prj_input B ON A.USER_NO = B.USER_NO 
+							AND A.YEAR = B.YEAR 
+							AND A.MONTH = B.MONTH 
+							AND B.PRJ_ID = #transferPrjId#
+		WHERE A.PRJ_ID = #prjId#
+	</select>
+	
+	<update id="KmsProjectDAO.update_comtnbbs">
+	UPDATE comtnbbs
+		SET PRJ_ID = #transferPrjId#
+	WHERE 
+		PRJ_ID = #prjId#
+	</update>
+	<update id="KmsProjectDAO.update_tbl_bond_prj">
+	UPDATE tbl_bond_prj
+		SET PRJ_ID = #transferPrjId#
+	WHERE 
+		PRJ_ID = #prjId#
+	</update>
+	<update id="KmsProjectDAO.update_tbl_business_contact">
+	UPDATE tbl_business_contact
+		SET PRJ_ID = #transferPrjId#
+	WHERE 
+		PRJ_ID = #prjId#
+	</update>
+	<update id="KmsProjectDAO.update_tbl_career">
+	UPDATE tbl_career
+		SET PRJ_ID = #transferPrjId#
+	WHERE 
+		PRJ_ID = #prjId#
+	</update>
+	<update id="KmsProjectDAO.update_tbl_contract">
+	UPDATE tbl_contract
+		SET PRJ_ID = #transferPrjId#
+	WHERE 
+		PRJ_ID = #prjId#
+	</update>		
+	<update id="KmsProjectDAO.update_tbl_eapp_budget_allocate2">
+	UPDATE tbl_eapp_budget_allocate2 
+		SET PRJ_ID = #transferPrjId#
+	WHERE 
+		PRJ_ID = #prjId#
+	</update>
+	<update id="KmsProjectDAO.update_tbl_eapp_doc">
+	UPDATE tbl_eapp_doc 
+		SET PRJ_ID_DOC = #transferPrjId#
+	WHERE 
+		PRJ_ID_DOC = #prjId#
+	</update>
+	<update id="KmsProjectDAO.update_tbl_eapp_exp">
+	UPDATE tbl_eapp_exp   
+		SET PRJ_ID  = #transferPrjId#
+		,BUDGET_PRJ = FN_GET_BUDGET_PRJ(#transferPrjId#)
+	WHERE 
+		PRJ_ID  = #prjId#
+	</update>
+	<update id="KmsProjectDAO.update_tbl_eapp_gen_sales">
+	UPDATE tbl_eapp_gen_sales 
+		SET SALES_PRJ_ID = #transferPrjId#
+	WHERE 
+		SALES_PRJ_ID = #prjId#
+	</update>
+	<update id="KmsProjectDAO.update_tbl_eapp_hol">
+	UPDATE tbl_eapp_hol 
+		SET PRJ_ID = #transferPrjId#
+	WHERE 
+		PRJ_ID = #prjId#
+	</update>	
+	
+	<update id="KmsProjectDAO.update_tbl_eapp_sales_in_sales_prj_id">
+	UPDATE tbl_eapp_sales_in   
+		SET SALES_PRJ_ID = #transferPrjId#
+	WHERE 
+		SALES_PRJ_ID = #prjId#
+	</update>
+	<update id="KmsProjectDAO.update_tbl_eapp_sales_in_purchase_prj_id">
+	UPDATE tbl_eapp_sales_in   
+		SET PURCHASE_PRJ_ID = #transferPrjId#
+	WHERE 
+		PURCHASE_PRJ_ID = #prjId#
+	</update>
+	
+	<update id="KmsProjectDAO.update_tbl_eapp_preset">
+	UPDATE tbl_eapp_preset 
+		SET PRJ_ID = #transferPrjId#
+	WHERE 
+		PRJ_ID = #prjId#
+	</update>	
+
+	<update id="KmsProjectDAO.update_tbl_eapp_tot_sales_sales_prj_id">
+	UPDATE tbl_eapp_tot_sales 
+		SET SALES_PRJ_ID = #transferPrjId#
+	WHERE 
+		SALES_PRJ_ID = #prjId#
+	</update>	
+	<update id="KmsProjectDAO.update_tbl_eapp_tot_sales_purchase_prj_id">
+	UPDATE tbl_eapp_tot_sales 
+		SET PURCHASE_PRJ_ID = #transferPrjId#
+	WHERE 
+		PURCHASE_PRJ_ID = #prjId#
+	</update>	
+	
+	
+	<update id="KmsProjectDAO.update_tbl_fund">
+	UPDATE tbl_fund 
+		SET PRJ_ID = #transferPrjId#
+	WHERE 
+		PRJ_ID = #prjId#
+	</update>		
+	<update id="KmsProjectDAO.update_tbl_meeting_room">
+	UPDATE tbl_meeting_room 
+		SET PRJ_ID = #transferPrjId#
+	WHERE 
+		PRJ_ID = #prjId#
+	</update>
+	<update id="KmsProjectDAO.update_tbl_plan_exp">
+	UPDATE tbl_plan_exp 
+		SET PRJ_ID = #transferPrjId#
+	WHERE 
+		PRJ_ID = #prjId#
+	</update>	
+	<update id="KmsProjectDAO.update_tbl_plan_labor">
+	UPDATE tbl_plan_labor 
+		SET PRJ_ID = #transferPrjId#
+	WHERE 
+		PRJ_ID = #prjId#
+	</update>	
+	
+	
+	
+	
+	<delete id="KmsProjectDAO.delete_tbl_prj_input">
+		DELETE FROM tbl_prj_input
+		WHERE PRJ_INPUT_NO IN
+			<iterate property="prjInputNoL" open="(" close=")" conjunction=",">
+						#prjInputNoL[]#
+			</iterate>
+	</delete>
+	
+	<update id="KmsProjectDAO.update_tbl_prj_input">
+	UPDATE tbl_prj_input 
+		SET PRJ_ID = #transferPrjId#
+	WHERE 
+		PRJ_ID = #prjId#
+	</update>		
+	<update id="KmsProjectDAO.update_tbl_prj_interest">
+	UPDATE tbl_prj_interest 
+		SET PRJ_ID = #transferPrjId#
+	WHERE 
+		PRJ_ID = #prjId#
+	</update>	
+	<update id="KmsProjectDAO.update_tbl_prj_result_total">
+	UPDATE tbl_prj_result_total 
+		SET PRJ_ID = #transferPrjId#
+	WHERE 
+		PRJ_ID = #prjId#
+	</update>
+	<delete id="KmsProjectDAO.delete_tbl_prj_result_total">
+	DELETE
+	FROM
+		tbl_prj_result_total
+	WHERE 
+		PRJ_ID = #prjId#
+	</delete>	
+	<update id="KmsProjectDAO.update_tbl_purchase_in_sales_prj_id">
+	UPDATE tbl_purchase_in   
+		SET SALES_PRJ_ID = #transferPrjId#
+	WHERE 
+		SALES_PRJ_ID = #prjId#
+	</update>
+	<update id="KmsProjectDAO.update_tbl_purchase_in_purchase_prj_id">
+	UPDATE tbl_purchase_in   
+		SET PURCHASE_PRJ_ID = #transferPrjId#
+	WHERE 
+		PURCHASE_PRJ_ID = #prjId#
+	</update>				
+	<update id="KmsProjectDAO.update_tbl_purchase_in_labor_sales_prj_id">
+	UPDATE tbl_purchase_in_labor   
+		SET SALES_PRJ_ID = #transferPrjId#
+	WHERE 
+		SALES_PRJ_ID = #prjId#
+	</update>
+	<update id="KmsProjectDAO.update_tbl_purchase_in_labor_purchase_prj_id">
+	UPDATE tbl_purchase_in_labor   
+		SET PURCHASE_PRJ_ID = #transferPrjId#
+	WHERE 
+		PURCHASE_PRJ_ID = #prjId#
+	</update>
+	<update id="KmsProjectDAO.update_tbl_purchase_out">
+	UPDATE tbl_purchase_out 
+		SET PRJ_ID = #transferPrjId#
+	WHERE 
+		PRJ_ID = #prjId#
+	</update>	
+	<update id="KmsProjectDAO.update_tbl_sales">
+	UPDATE tbl_sales 
+		SET PRJ_ID = #transferPrjId#
+	WHERE 
+		PRJ_ID = #prjId#
+	</update>
+	<update id="KmsProjectDAO.update_tbl_stock">
+	UPDATE tbl_stock 
+		SET PRJ_ID = #transferPrjId#
+	WHERE 
+		PRJ_ID = #prjId#
+	</update>
+	<update id="KmsProjectDAO.update_tbl_stock_history">
+	UPDATE tbl_stock_history 
+		SET PRJ_ID = #transferPrjId#
+	WHERE 
+		PRJ_ID = #prjId#
+	</update>
+	<update id="KmsProjectDAO.update_tbl_task">
+	UPDATE tbl_task 
+		SET PRJ_ID = #transferPrjId#
+	WHERE 
+		PRJ_ID = #prjId#
+	</update>
+	
+	<select id="KmsProjectDAO.selectChildDate" parameterClass="java.lang.String" resultClass="HashMap">
+		SELECT min(st_dt) as childStDt, max(comp_due_dt) as childCompDueDt
+		FROM tbl_prj
+		WHERE prnt_prj_id = #prjId#
+		AND prj_id != #prjId#
+	</select>
+	
+	<select id="KmsProjectDAO.selectProjectInfo" parameterClass="java.lang.String" resultClass="JSONObject">
+		SELECT IFNULL(prj.PRJ_TYPE, '') as PRJ_TYPE
+				, prj.leader_no
+				, CONCAT(usr.user_nm, '(', usr.user_id, ')') as leader_mix
+		FROM tbl_prj prj
+			LEFT JOIN tbl_userinfo usr
+			ON prj.leader_no = usr.no
+		WHERE prj.prj_id = #prjId#
+	</select>
+	
+	<select id="KmsProjectDAO.selectProjectInfoProgress" parameterClass="java.lang.String" resultClass="JSONObject">
+		SELECT count(*) as cnt
+		  FROM tbl_eapp_doc a
+		 INNER JOIN tbl_eapp_sales_in b
+			ON a.doc_id = b.doc_id
+		 WHERE b.templt_id = '28'
+		   AND a.doc_stat IN ('APP001', 'APP002', 'APP003')
+		   AND b.purchase_prj_id = #prjId#
+	</select>
+	
+	<select id="KmsProjectDAO.getTransApprovalDateDiff" parameterClass="java.lang.String" resultClass="JSONObject">
+		SELECT IFNULL(DATEDIFF(SYSDATE(), MAX(wt_dt)), -1) AS cmp_date
+		  FROM tbl_eapp_sales_in a
+		 INNER JOIN tbl_eapp_comment b
+			ON a.doc_id = b.doc_id
+		 WHERE a.templt_id = '28'
+		   AND b.app_typ = 'APR003'
+		   AND a.purchase_prj_id = #prjId#
+	</select>
+	
+	<select id="KmsProjectDAO.selectReceivablePrjCnt" parameterClass="projectVO" resultClass="int">
+		SELECT COUNT(*)
+		FROM   TBL_PRJ a 
+			   LEFT JOIN (SELECT sales.PRJ_ID AS PRJ_ID, 
+								 SUM(IFNULL(sales.COST, 0)) AS ACC_SUM_SALES 
+						  FROM   TBL_SALES sales 
+								 INNER JOIN TBL_EAPP_DOC doc 
+										 ON sales.DOC_ID = doc.DOC_ID 
+											AND doc.DOC_STAT IN ( 'APP004', 'APP005' ) 
+											AND doc.NEW_AT = 1 
+								 INNER JOIN TBL_PRJ prj 
+										 ON sales.PRJ_ID = prj.PRJ_ID 
+											AND prj.PRJ_ID = #prjId#
+						  WHERE  sales.BOND_MANAGE_YN = 'Y' 
+								 AND sales.DECIDE_YN = 'Y' 
+								 AND sales.COST != 1 
+								 AND prj.BOND_YN = 'Y' 
+						  GROUP  BY sales.PRJ_ID) salessum 
+				ON a.PRJ_ID = salessum.PRJ_ID 
+			   LEFT JOIN (SELECT bondprj.PRJ_ID AS PRJ_ID, 
+								 SUM(IFNULL(bondprj.EXPENSE, 0)) AS ACC_SUM_PUBLISH, 
+			   					 SUM(IFNULL(ROUND(bondprj.EXPENSE * 1.1), 0)) AS ACC_SUM_WILL_COLLECT 
+						  FROM   TBL_BOND bond 
+								 INNER JOIN TBL_BOND_PRJ bondprj 
+										 ON bond.BOND_ID = bondprj.BOND_ID 
+											AND bondprj.USE_AT = 'Y' 
+								 INNER JOIN TBL_PRJ prj 
+										 ON bondprj.PRJ_ID = prj.PRJ_ID 
+											AND prj.PRJ_ID = #prjId# 
+						   WHERE  bond.BOND_STAT = 'Y' 
+						   AND bond.USE_AT = 'Y' 
+						   AND prj.BOND_YN = 'Y' 
+						   GROUP  BY bondprj.PRJ_ID) publishsum 
+				ON a.PRJ_ID = publishsum.PRJ_ID 
+			   LEFT JOIN (SELECT bondprj.PRJ_ID AS PRJ_ID, 
+								 SUM(IFNULL(col.EXPENSE, 0)) AS ACC_SUM_COLLECT 
+						  FROM   TBL_BOND bond 
+								 INNER JOIN TBL_BOND_PRJ bondprj 
+										 ON bond.BOND_ID = bondprj.BOND_ID 
+											AND bondprj.USE_AT = 'Y' 
+								 INNER JOIN TBL_BOND_COLLECTION col 
+										 ON bondprj.NO = col.BOND_PRJ_NO 
+											AND col.USE_AT = 'Y' 
+								 INNER JOIN TBL_PRJ prj 
+										 ON bondprj.PRJ_ID = prj.PRJ_ID 
+											AND prj.PRJ_ID = #prjId# 
+						  WHERE  bond.BOND_STAT = 'Y' 
+								 AND bond.USE_AT = 'Y' 
+								 AND prj.BOND_YN = 'Y' 
+						  GROUP  BY bondprj.PRJ_ID) collectsum 
+				ON a.PRJ_ID = collectsum.PRJ_ID 
+		WHERE  a.PRJ_ID = #prjId#
+			   AND ( 
+					( IFNULL(salessum.ACC_SUM_SALES, 0) - IFNULL(publishsum.ACC_SUM_PUBLISH, 0) ) > 1000 
+					OR  ( IFNULL(publishsum.ACC_SUM_WILL_COLLECT, 0) - IFNULL(collectsum.ACC_SUM_COLLECT, 0) ) > 1000
+				   ) 
+	</select>
+	
+	
+	<sql id="SQL_selectSalesProjectList">
+	  FROM (
+		SELECT DISTINCT p.PRJ_ID, p.PRJ_NM, p.PRJ_CD, p.CUST_ID, p.LEADER_NO, p.LAST_REPORT_NO
+		  FROM TBL_PRJ p
+		  LEFT OUTER JOIN TBL_PRJ_INPUT input
+		  ON p.PRJ_ID = input.PRJ_ID
+		 WHERE p.PRJ_TYPE IN (
+			<isEqual property="searchPrjType" compareValue="0">'S', 'B'</isEqual>
+			<isEqual property="searchPrjType" compareValue="1">'S'</isEqual>
+			<isEqual property="searchPrjType" compareValue="2">'B'</isEqual>
+			)
+		   AND p.STAT IN ('P'<isEqual property="searchIncEndPrj" compareValue="Y">, 'S', 'E'</isEqual>)
+		<isNotEqual property="searchTypAll" compareValue="Y">
+			<isEqual prepend="AND" property="searchTyp" compareValue="0">
+			   (
+				   (
+				   input.USER_NO = #userNo#
+				   AND YEAR = DATE_FORMAT(SYSDATE(),'%Y')
+				   <![CDATA[
+				   AND MONTH = IF(DATE_FORMAT(SYSDATE(),'%m') < '10', SUBSTR(DATE_FORMAT(SYSDATE(),'%m'), 2, 1), DATE_FORMAT(SYSDATE(),'%m'))
+				   ]]>
+				   )
+			    OR p.LEADER_NO = #userNo#
+			   )
+			</isEqual>
+			<isEqual prepend="AND" property="searchTyp" compareValue="1">
+				(
+			    P.ORG_PRJ_TREE LIKE CONCAT('%', #searchOrgnztId#, '%')
+			    	<isNotEmpty prepend="OR" property="searchOrgnztIdSec">
+			    		P.ORG_PRJ_TREE LIKE CONCAT('%', #searchOrgnztIdSec#, '%')
+			    	</isNotEmpty>
+			    )
+			</isEqual>
+		</isNotEqual>
+		<isEqual property="searchTypAll" compareValue="Y">
+			<isNotEmpty prepend="AND" property="searchArrPrjNm">
+				(
+				<iterate property="searchArrPrjNm" conjunction="OR">
+					  p.PRJ_NM LIKE CONCAT('%', #searchArrPrjNm[]#, '%')
+				</iterate>
+				)
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchOrgnztIdList">
+				p.ORGNZT_ID IN
+				<iterate property="searchOrgnztIdList" open="(" close=")" conjunction=",">
+						#searchOrgnztIdList[]#
+				</iterate> 
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchArrUserNo">
+				(
+				<iterate prepend="input.USER_NO IN" property="searchArrUserNo" open="(" close=")" conjunction=",">
+						#searchArrUserNo[]#
+				</iterate>
+				<iterate prepend="OR p.LEADER_NO IN" property="searchArrUserNo" open="(" close=")" conjunction=",">
+						#searchArrUserNo[]#
+				</iterate>
+				)
+			</isNotEmpty>
+		</isEqual>
+	  ) prj
+	  LEFT OUTER JOIN TBL_CUSTOMER cust
+	  ON prj.CUST_ID = cust.CUST_ID
+	  LEFT OUTER JOIN TBL_USERINFO leader
+	  ON prj.LEADER_NO = leader.NO
+	  LEFT OUTER JOIN TBL_DAY_REPORT rpt
+	  ON prj.LAST_REPORT_NO = rpt.NO
+	 WHERE 1=1
+	 	<isNotEmpty prepend="AND" property="searchCustNm">
+			cust.CUST_NM LIKE CONCAT('%', #searchCustNm#, '%')
+		</isNotEmpty>
+	</sql>
+	
+	<select id="KmsProjectDAO.selectSalesProjectList" parameterClass="projectVO" resultMap="salesProjectView">
+		SELECT 
+			prj.PRJ_ID
+			, prj.PRJ_NM
+			, prj.PRJ_CD
+			, prj.CUST_ID
+			, cust.CUST_NM
+			, leader.USER_NM AS LEADER_NM
+			, leader.NO AS LEADER_NO
+			, leader.USER_ID AS LEADER_ID
+			, rpt.DAY_REPORT_DT as REG_DT
+		<include refid="SQL_selectSalesProjectList"/>
+		ORDER BY rpt.DAY_REPORT_DT DESC, rpt.REG_DT DESC
+		LIMIT 
+			#recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<select id="KmsProjectDAO.selectSalesProjectCnt" parameterClass="projectVO" resultClass="int">
+		SELECT COUNT(*)
+		<include refid="SQL_selectSalesProjectList"/>
+	</select>
+	
+	<update id="KmsProjectDAO.updateProjectLastReport" parameterClass="projectVO">		
+		UPDATE TBL_PRJ
+		SET PRJ_ID = #prjId#
+			<isNotEmpty property="lastReportNo" >
+				, LAST_REPORT_NO = #lastReportNo#
+			</isNotEmpty>
+		WHERE PRJ_ID = #prjId#
+	</update>
+	
+	
+	<sql id="SQL_selectPrntPrjList">
+		<isNotEmpty property="searchUserNo">
+			SELECT DISTINCT innerPrj.PRJ_ID
+			  FROM TBL_PRJ innerPrj
+			  INNER JOIN 
+			  (SELECT PRJ_ID
+				  FROM TBL_PRJ 
+				 WHERE LEADER_NO = #searchUserNo# ) leaderPrj
+			  ON innerPrj.PRJ_TREE LIKE CONCAT('%', leaderPrj.PRJ_ID, '%')
+			 <!-- WHERE innerPrj.STAT = 'P' -->
+			<isNotEmpty prepend="WHERE" property="prjId">
+				innerPrj.PRJ_ID = #prjId#
+			</isNotEmpty>
+			UNION
+			SELECT DISTINCT innerPrj.PRJ_ID
+			  FROM TBL_PRJ innerPrj
+			  INNER JOIN 
+			  (     SELECT usr.ORGNZT_ID
+				  FROM TBL_USERINFO usr
+				  INNER JOIN TBL_ORGNZT org
+				  ON usr.ORGNZT_ID = org.ORGNZT_ID
+				 WHERE usr.NO = #searchUserNo#
+				   AND POSITION IN ('H', 'S') ) innerOrg
+			  ON innerPrj.ORG_PRJ_TREE LIKE CONCAT('%', innerOrg.ORGNZT_ID, '%')
+			 <!-- WHERE innerPrj.STAT = 'P' -->
+			<isNotEmpty prepend="WHERE" property="prjId">
+				innerPrj.PRJ_ID = #prjId#
+			</isNotEmpty>
+		</isNotEmpty>
+		<isEmpty property="searchUserNo">
+			SELECT PRJ_ID
+			  FROM TBL_PRJ
+			<isNotEmpty prepend="WHERE" property="prjId">
+				PRJ_ID = #prjId#
+			</isNotEmpty>
+		</isEmpty>
+	</sql>
+	
+	<select id="KmsProjectDAO.selectPrntPrjList" parameterClass="projectVO" resultClass="egovMap">
+		SELECT p.PRJ_ID, p.PRJ_NM, p.PRJ_CD, 
+				p.ST_DT AS prntStDt, 
+				p.COMP_DUE_DT AS prntCompDueDt,
+				(SELECT MIN(ST_DT)
+					FROM   TBL_PRJ 
+					WHERE  PRNT_PRJ_ID = p.PRJ_ID) AS childStDt, 
+				(SELECT MAX(COMP_DUE_DT)
+					FROM   TBL_PRJ 
+					WHERE  PRNT_PRJ_ID = p.PRJ_ID) AS childCompDueDt
+		  FROM TBL_PRJ p
+		  INNER JOIN
+		(
+		<include refid="SQL_selectPrntPrjList"/>
+		) a
+		  ON p.PRJ_ID = a.PRJ_ID
+		ORDER BY p.ORG_PRJ_TREE_ORD
+	</select>
+	
+	<select id="KmsProjectDAO.selectPrntPrjListCnt" parameterClass="projectVO" resultClass="String">
+		SELECT MIN(PRJ_ID)
+		  FROM
+		(
+		<include refid="SQL_selectPrntPrjList"/>
+		) a
+	</select>
+	
+	<select id="KmsProjectDAO.selectPrntPrj" parameterClass="projectVO" resultClass="JSONObject">
+		SELECT p.PRJ_ID AS prjId, p.PRJ_NM AS prjNm, p.PRJ_CD AS prjCd, 
+				p.ST_DT AS prntStDt, 
+				p.COMP_DUE_DT AS prntCompDueDt,
+				(SELECT MIN(ST_DT)
+					FROM   TBL_PRJ 
+					WHERE  PRNT_PRJ_ID = p.PRJ_ID) AS childStDt, 
+				(SELECT MAX(COMP_DUE_DT)
+					FROM   TBL_PRJ 
+					WHERE  PRNT_PRJ_ID = p.PRJ_ID) AS childCompDueDt,
+				org.ORGNZT_ID AS orgnztId, org.ORGNZT_NM AS orgnztNm
+		  FROM TBL_PRJ p
+		  INNER JOIN
+		(
+		<include refid="SQL_selectPrntPrjList"/>
+		) a
+		  ON p.PRJ_ID = a.PRJ_ID
+		  LEFT JOIN TBL_ORGNZT org
+		  ON p.ORGNZT_ID = org.ORGNZT_ID
+		ORDER BY p.ORG_PRJ_TREE_ORD
+	</select>
+	
+
+</sqlMap>

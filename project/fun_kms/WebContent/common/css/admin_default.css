@@ -1,0 +1,19 @@
+@charset "utf-8";
+
+/* Page Base */
+@import url(admin_style.css);
+/* Page Layout */
+@import url(admin_layout.css);
+/* Template Design */
+@import url(admin_board.css);
+/* Content Design */
+/*@import url(section.css);*/
+/* Content Design */
+@import url(layer.css);
+
+/*  print  */
+@media print {
+#head, #visual, #sidebar, #body_foot, #foot, #wing, #fontsize { display: none; }
+#container { background: #fff; }
+#body { margin: 0; padding: 0; background: #fff;}
+}

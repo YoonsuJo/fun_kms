@@ -1,0 +1,1537 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsInvoiceDAO">
+
+	<typeAlias alias="egovMap"
+		type="egovframework.rte.psl.dataaccess.util.EgovMap" />
+	<typeAlias alias="InvoiceVO" 					type="kms.com.fund.vo.InvoiceVO" 				/>
+	<typeAlias alias="InvoiceContentsVO" 		type="kms.com.fund.vo.InvoiceContentsVO" 	/>
+	<typeAlias alias="InvoiceProjectVO" 			type="kms.com.fund.vo.InvoiceProjectVO" 		/>
+	<typeAlias alias="InvoiceCollectVO" 			type="kms.com.fund.vo.InvoiceCollectVO" 		/>
+	<typeAlias alias="InvcStatVO" 				type="kms.com.fund.vo.InvcStatVO" 				/>
+	<typeAlias alias="CollectListVO" 				type="kms.com.fund.vo.CollectListVO" 			/>
+	<typeAlias alias="ProjectCollectVO" 			type="kms.com.fund.vo.ProjectCollectVO" 	/>
+
+	<!-- TENY_170206 invoice를 만들면서 새로 만든 버젼의 resultMap들 -->
+	<resultMap id="mapInvoiceVOList" class="InvoiceVO">
+		<result property="invoiceId" 					column="INVOICE_ID" 						/>
+		<result property="title" 						column="TITLE" 								/>
+		<result property="custCompanyName" 		column="CUST_COMPANY_NAME" 		/>
+		<result property="totalSum" 					column="TOTAL_SUM" 					/>
+		<result property="publishReqDate" 			column="PUBLISH_REQ_DATE" 			/>
+		<result property="publishCoAcronym" 		column="PUBLISH_CO_ACRONYM" 		/>
+		<result property="writeUserNo" 				column="WRITE_USER_NO" 				/>
+		<result property="writeUserName" 			column="WRITE_USER_NAME" 			/>
+		<result property="writeDatetime" 			column="WRITE_DATETIME" 				/>
+		<result property="status" 						column="STATUS" 							/>
+	</resultMap>
+	<!-- TENY_170206 한장의 세금계산서를 보기위한 처리시 사용되는 resultMap -->
+	<resultMap id="mapInvoiceVO" class="InvoiceVO">
+		<result property="invoiceId" 					column="INVOICE_ID" 						/>
+		<result property="title" 						column="TITLE" 								/>
+		<result property="custCompanyName" 		column="CUST_COMPANY_NAME" 		/>
+		<result property="custCeoName" 			column="CUST_CEO_NAME" 				/>
+		<result property="custBusiNo" 				column="CUST_BUSI_NO" 					/>
+		<result property="custBusiType" 				column="CUST_BUSI_TYPE" 				/>
+		<result property="custBusiKind" 				column="CUST_BUSI_KIND" 				/>
+		<result property="custAddress" 				column="CUST_ADDRESS" 				/>
+		<result property="custEmail1" 				column="CUST_EMAIL_1" 					/>
+		<result property="custEmail2"  				column="CUST_EMAIL_2" 					/>
+		<result property="custEmail3"  				column="CUST_EMAIL_3" 					/>
+		<result property="custEmail4"  				column="CUST_EMAIL_4"  				/>
+		<result property="custEmail5"  				column="CUST_EMAIL_5"  				/>
+		<result property="custName1"  				column="CUST_NAME_1"  				/>
+		<result property="custName2"  				column="CUST_NAME_2"  				/>
+		<result property="custName3"  				column="CUST_NAME_3"  				/>
+		<result property="custName4"  				column="CUST_NAME_4"  				/>
+		<result property="custName5"  				column="CUST_NAME_5"  				/>
+		<result property="custTelNo1"  				column="CUST_TELNO_1"  				/>
+		<result property="custTelNo2"  				column="CUST_TELNO_2"  				/>
+		<result property="custTelNo3"  				column="CUST_TELNO_3"  				/>
+		<result property="custTelNo4"  				column="CUST_TELNO_4"  				/>
+		<result property="custTelNo5"  				column="CUST_TELNO_5"  				/>
+		<result property="taxZero"  					column="TAX_ZERO"  						/>
+		<result property="totalPrice"  				column="TOTAL_PRICE"  					/>
+		<result property="totalVat"  					column="TOTAL_VAT"  					/>
+		<result property="totalSum"  					column="TOTAL_SUM"  					/>
+		<result property="totalCollect" 				column="TOTAL_COLLECT" 					/>
+		<result property="publishType"  				column="PUBLISH_TYPE"  					/>
+		<result property="publishCoAcronym" 		column="PUBLISH_CO_ACRONYM" 		/>
+		<result property="publishReqDate" 			column="PUBLISH_REQ_DATE" 			/>
+		<result property="writeUserNo" 				column="WRITE_USER_NO" 				/>
+		<result property="writeUserName" 			column="WRITE_USER_NAME" 			/>
+		<result property="writeDatetime" 			column="WRITE_DATETIME" 				/>
+		<result property="publishUserNo" 			column="PUBLISH_USER_NO" 			/>
+		<result property="publishUserName" 		column="PUBLISH_USER_NAME" 			/>
+		<result property="publishDatetime" 			column="PUBLISH_DATETIME" 			/>
+		<result property="status" 						column="STATUS" 							/>
+		<result property="useAt" 						column="USE_AT" 							/>
+		<result property="attachFileId" 				column="ATTACH_FILE_ID" 				/>
+		<result property="comment" 					column="COMMENT" 						/>
+		<result property="collectExpectDate" 		column="COLLECT_EXPECT_DATE" 		/>
+	</resultMap>
+
+	<!-- TENY_170206 세금계산서 목록을 볼때 사용되는 resultMap -->
+	<resultMap id="mapInvoiceVOCompList" class="InvoiceVO">
+		<result property="custCompanyName" 		column="CUST_COMPANY_NAME" 		/>
+		<result property="custCeoName" 			column="CUST_CEO_NAME" 				/>
+		<result property="custBusiNo" 				column="CUST_BUSI_NO" 					/>
+		<result property="custBusiType" 				column="CUST_BUSI_TYPE" 				/>
+		<result property="custBusiKind" 				column="CUST_BUSI_KIND"				/>
+		<result property="custAddress" 				column="CUST_ADDRESS" 				/>
+		<result property="custEmail1" 				column="CUST_EMAIL_1" 					/>
+		<result property="custEmail2" 				column="CUST_EMAIL_2" 					/>
+		<result property="custEmail3" 				column="CUST_EMAIL_3" 					/>
+		<result property="custEmail4" 				column="CUST_EMAIL_4" 					/>
+		<result property="custEmail5" 				column="CUST_EMAIL_5" 					/>
+		<result property="custName1" 				column="CUST_NAME_1" 					/>
+		<result property="custName2" 				column="CUST_NAME_2" 					/>
+		<result property="custName3" 				column="CUST_NAME_3" 					/>
+		<result property="custName4" 				column="CUST_NAME_4" 					/>
+		<result property="custName5" 				column="CUST_NAME_5" 					/>
+		<result property="custTelNo1" 				column="CUST_TELNO_1" 					/>
+		<result property="custTelNo2" 				column="CUST_TELNO_2" 					/>
+		<result property="custTelNo3" 				column="CUST_TELNO_3" 					/>
+		<result property="custTelNo4" 				column="CUST_TELNO_4" 					/>
+		<result property="custTelNo5" 				column="CUST_TELNO_5" 					/>
+	</resultMap>
+
+	<!-- TENY_170206 한장의 세금계산서를 볼때 적요 목록 조회시 사용되는 resultMap -->
+	<resultMap id="mapInvoiceContentsVO" class="InvoiceContentsVO">
+		<result property="no" 					column="NO" 					/>
+		<result property="productName" 	column="PRODUCT_NAME"	/>
+		<result property="price" 				column="PRICE" 				/>
+		<result property="vat" 					column="VAT" 					/>
+		<result property="sum" 				column="SUM" 					/>
+		<result property="note" 				column="NOTE" 				/>
+	</resultMap>
+
+	<!-- TENY_170206 한장의 세금계산서를 볼때 관련프로젝트 조회시 사용되는 resultMap -->
+	<resultMap id="mapInvoiceProjectVO" class="InvoiceProjectVO">
+		<result property="no" 						column="NO" 						/>
+		<result property="prjId" 					column="PRJ_ID" 					/>
+		<result property="prjName" 				column="PRJ_NM" 					/>
+		<result property="price" 					column="PRICE" 					/>
+		<result property="sum" 					column="SUM" 						/>
+		<result property="collect" 					column="COLLECT" 				/>
+		<result property="invoiceId" 				column="INVOICE_ID" 				/>
+		<result property="title" 					column="TITLE" 						/>
+		<result property="publishDatetime" 		column="PUBLISH_DATETIME" 	/>
+		<result property="bondManageYn" 		column="BOND_MANAGE_YN" 	/>
+		<result property="status" 					column="STATUS" 					/>
+		<result property="useAt" 					column="USE_AT" 					/>
+	</resultMap>
+
+	<!-- TENY_170206 한장의 세금계산서를 볼때 관련 수금내역 목록을 조회시 사용되는 resultMap -->
+	<resultMap id="mapInvoiceCollectVO" class="InvoiceCollectVO">
+		<result property="no" 						column="NO" 							/>
+		<result property="invoiceId" 				column="INVOICE_ID" 					/>
+		<result property="collectUserName" 	column="COLLECT_USER_NAME" 	/>
+		<result property="collectDate" 			column="COLLECT_DATE" 				/>
+		<result property="collect" 					column="COLLECT" 					/>
+		<result property="type" 					column="TYPE" 							/>
+		<result property="note" 					column="NOTE" 						/>
+	</resultMap>
+
+	<!-- TENY_170327 사업부에서 최근수금내역 목록을 조회시 사용되는 resultMap -->
+	<resultMap id="mapCollectListVO" 			class="CollectListVO">
+		<result property="no" 						column="NO" 							/>
+		<result property="invoiceId" 				column="INVOICE_ID" 					/>
+		<result property="prjId" 					column="PRJ_ID" 						/>
+		<result property="prjName" 				column="PRJ_NAME" 					/>
+		<result property="prjUncollect" 			column="UNCOLLECT" 					/>
+		<result property="collectUserName" 	column="COLLECT_USER_NAME" 	/>
+		<result property="collectDate" 			column="COLLECT_DATE" 				/>
+		<result property="collect" 					column="COLLECT" 					/>
+		<result property="noteLength" 			column="NOTE_LENGTH" 				/>
+	</resultMap>
+
+	<resultMap id="mapInvcStatVO" class="kms.com.fund.vo.InvcStatVO">
+		<result property="orgnztId" 			column="ORGNZT_ID" 			/>
+		<result property="orgnztName" 		column="ORGNZT_NAME" 	/>
+		<result property="prjId" 				column="PRJ_ID" 				/>
+		<result property="prjName" 			column="PRJ_NAME" 			/>
+		<result property="totalSales" 			column="TOTAL_SALES" 		/>
+		<result property="totalInvoice" 		column="TOTAL_INVOICE" 	/>
+		<result property="totalCollect" 		column="TOTAL_COLLECT" 	/>
+	</resultMap>
+
+	<resultMap id="mapInvcStatVOOrgList" class="kms.com.fund.vo.InvcStatVO">
+		<result property="orgnztId" 			column="ORGNZT_ID" 			/>
+		<result property="orgnztName" 		column="ORGNZT_NAME" 	/>
+	</resultMap>
+
+	<resultMap id="mapProjSalesCheckVO" class="kms.com.fund.vo.InvcStatVO">
+		<result property="orgnztId" 				column="ORGNZT_ID" 				/>
+		<result property="orgnztName" 			column="ORGNZT_NAME"	 		/>
+		<result property="prjId" 					column="PRJ_ID" 					/>
+		<result property="prjName" 				column="PRJ_NAME" 				/>
+		<result property="contractSales" 		column="CONTRACT_SALES" 		/>
+		<result property="progressiveSales" 	column="PROGRESSIVE_SALES" 	/>
+		<result property="invPrjPrice" 			column="IP_PRICE" 					/>
+		<result property="invPrjSum" 			column="IP_SUM" 					/>
+		<result property="invPrjCollect" 			column="IP_COLLECT" 				/>
+	</resultMap>
+
+	<resultMap id="mapInvcStatVOSalesList" class="kms.com.fund.vo.InvcStatVO">
+		<result property="salesDocId" 			column="DOC_ID" />
+		<result property="salesSubject" 			column="SUBJECT" />
+		<result property="salesDocDate" 		column="DOC_DT" />
+		<result property="salesDocStat" 			column="DOC_STAT" />
+		<result property="salesNewAt" 			column="NEW_AT" />
+		<result property="salesStatus" 			column="STATUS" />
+		<result property="salesBondYn" 			column="BOND_MANAGE_YN" />
+		<result property="salesDeciedYn" 		column="DECIDE_YN" />
+		<result property="salesWholeSales" 		column="DEPOSIT" />
+		<result property="salesSales" 			column="COST" />
+		<result property="salesMaintSales" 		column="MAINTENANCE" />
+	</resultMap>
+	
+	<resultMap id="mapBondCheck" class="kms.com.fund.vo.BondCheckVO">
+		<result property="prjId" 					column="PRJ_ID" />
+		<result property="prjName" 				column="PRJ_NAME" />
+		<result property="bondYn" 				column="BOND_YN" />
+		<result property="stat" 					column="STAT" />
+		<result property="totalPrjSum" 			column="IP_SUM" />
+		<result property="totalPrjCollect" 		column="IP_COLLECT" />
+		<result property="monthPrjSum" 		column="IP_SUM_M" />
+		<result property="monthPrjCollect" 		column="IP_COLLECT_M" />
+	</resultMap>
+
+	<!-- TENY_170511  해당 프로젝트의 계산서 발행, 수금 현황을 일자별로 보는 resultMap -->
+	<resultMap id="mapProjectCollectVO" 		class="ProjectCollectVO">
+		<result property="date" 					column="DATE" 				/>
+		<result property="type" 					column="TYPE" 					/>
+		<result property="invoiceId" 				column="INVOICE_ID" 			/>
+		<result property="title" 					column="TITLE" 					/>
+		<result property="invoiceSum" 			column="INVOICE_SUM"		/>
+		<result property="projectSum" 			column="PROJECT_SUM" 		/>
+		<result property="collectSum" 			column="COLLECT_SUM" 		/>
+		<result property="userNo" 				column="USER_NO"			/>
+		<result property="userName" 			column="USER_NAME"			/>
+	</resultMap>
+	
+	<!-- SELECT 문들 -->
+	<!-- TENY_170206 invoice를 만들면서 새로 만든 버젼의 SQL구분들 -->
+	<!-- TENY_170206 조건에 따라 세금계산서 목록을 읽기 위한 조회문 -->
+	<select id="KmsInvoiceDAO.selectInvoiceList" parameterClass="InvoiceVO" resultMap="mapInvoiceVOList">
+		SELECT
+			ivc.INVOICE_ID
+			, ivc.TITLE
+			, ivc.CUST_COMPANY_NAME
+			, ivc.TOTAL_SUM
+			, ivc.PUBLISH_REQ_DATE
+			, ivc.PUBLISH_CO_ACRONYM
+			, usr.USER_NM AS WRITE_USER_NAME
+			, usr.NO AS WRITE_USER_NO
+			, DATE_FORMAT(ivc.WRITE_DATETIME, '%y.%m.%d') AS WRITE_DATETIME
+			, ivc.STATUS
+		FROM	hm_invoice ivc
+			JOIN TBL_USERINFO usr
+				ON ivc.WRITE_USER_NO = usr.NO 
+		WHERE
+			ivc.use_at = 'Y'
+		<isNotEmpty prepend="AND" property="searchStatus">
+			<![CDATA[
+				ivc.STATUS & #searchStatus#
+			]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchWriterMixes">
+			CONCAT(usr.USER_NM, '(', usr.USER_ID, ')' ) = #searchWriterMixes#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchPublishCoAcronym">
+			ivc.PUBLISH_CO_ACRONYM = #searchPublishCoAcronym#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchTitle">
+			ivc.TITLE LIKE CONCAT('%', #searchTitle#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchCompanyName">
+			ivc.CUST_COMPANY_NAME LIKE CONCAT('%', #searchCompanyName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDateFrom">
+<![CDATA[
+			ivc.PUBLISH_REQ_DATE >= #searchDateFrom#
+]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDateTo">
+<![CDATA[
+			ivc.PUBLISH_REQ_DATE <= #searchDateTo#
+]]>
+		</isNotEmpty>
+		ORDER BY  ivc.INVOICE_ID DESC
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+
+	<!-- TENY_170206 조건에 따라 세금계산서 목록을 읽을때 페이징처리를 위하여 몇개의 목록이 조회되는 지를 알기위한 조회문 -->
+	<select id="KmsInvoiceDAO.selectInvoiceListCount" parameterClass="InvoiceVO" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM	hm_invoice ivc
+			JOIN TBL_USERINFO usr
+				ON ivc.WRITE_USER_NO = usr.NO 
+		WHERE
+			ivc.use_at = 'Y'
+		<isNotEmpty prepend="AND" property="searchStatus">
+			<![CDATA[
+				ivc.STATUS & #searchStatus#
+			]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchWriterMixes">
+			CONCAT(usr.USER_NM, '(', usr.USER_ID, ')' ) = #searchWriterMixes#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchPublishCoAcronym">
+			ivc.PUBLISH_CO_ACRONYM = #searchPublishCoAcronym#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchTitle">
+			ivc.TITLE LIKE CONCAT('%', #searchTitle#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchCompanyName">
+			ivc.CUST_COMPANY_NAME LIKE CONCAT('%', #searchCompanyName#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDateFrom">
+<![CDATA[
+			ivc.PUBLISH_REQ_DATE >= #searchDateFrom#
+]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchDateTo">
+<![CDATA[
+			ivc.PUBLISH_REQ_DATE <= #searchDateTo#
+]]>
+		</isNotEmpty>
+
+	</select>
+
+	<!-- TENY_170206 한장의 세금계산서를 읽기 위한 조회문 -->
+	<select id="KmsInvoiceDAO.selectInvoiceView" resultMap="mapInvoiceVO">
+		SELECT
+			ivc.INVOICE_ID
+			,ivc.TITLE
+			,ivc.CUST_COMPANY_NAME
+			,ivc.CUST_CEO_NAME
+			,ivc.CUST_BUSI_NO
+			,ivc.CUST_BUSI_TYPE
+			,ivc.CUST_BUSI_KIND
+			,ivc.CUST_ADDRESS
+			,ivc.CUST_EMAIL_1
+			,ivc.CUST_EMAIL_2
+			,ivc.CUST_EMAIL_3
+			,ivc.CUST_EMAIL_4
+			,ivc.CUST_EMAIL_5
+			,ivc.CUST_NAME_1
+			,ivc.CUST_NAME_2
+			,ivc.CUST_NAME_3
+			,ivc.CUST_NAME_4
+			,ivc.CUST_NAME_5
+			,ivc.CUST_TELNO_1
+			,ivc.CUST_TELNO_2
+			,ivc.CUST_TELNO_3
+			,ivc.CUST_TELNO_4
+			,ivc.CUST_TELNO_5
+			,ivc.TAX_ZERO
+			,ivc.TOTAL_PRICE
+			,ivc.TOTAL_VAT
+			,ivc.TOTAL_SUM
+			,ivc.PUBLISH_TYPE
+			,ivc.PUBLISH_CO_ACRONYM
+			,ivc.PUBLISH_REQ_DATE
+			,ivc.WRITE_USER_NO
+			,wusr.USER_NM AS WRITE_USER_NAME
+			,DATE_FORMAT(ivc.WRITE_DATETIME, '%Y.%m.%d %H:%i') AS WRITE_DATETIME
+			,IFNULL(ivc.PUBLISH_USER_NO, 0) AS PUBLISH_USER_NO
+			,pusr.USER_NM AS PUBLISH_USER_NAME
+			,DATE_FORMAT(ivc.PUBLISH_DATETIME, '%Y.%m.%d') AS PUBLISH_DATETIME
+			,ivc.STATUS
+			,ivc.USE_AT
+			,ivc.ATTACH_FILE_ID
+			,ivc.COMMENT
+			,ivc.COLLECT_EXPECT_DATE
+			,ivc.TOTAL_COLLECT
+		FROM hm_invoice ivc
+		LEFT JOIN tbl_userinfo wusr
+			ON ivc.WRITE_USER_NO = wusr.NO
+		LEFT JOIN tbl_userinfo pusr
+			ON ivc.PUBLISH_USER_NO = pusr.NO
+		WHERE
+			ivc.INVOICE_ID = #invoiceId#
+	</select>
+
+	<!-- TENY_170206 한장의 세금계산서를 읽을 때 필요한 적요 목록을 읽하기 위한 조회문 -->
+	<select id="KmsInvoiceDAO.selectInvoiceContentsList" resultMap="mapInvoiceContentsVO">
+		SELECT
+			NO
+			,PRODUCT_NAME
+			,PRICE
+			, VAT
+			, SUM
+			, NOTE
+		FROM hm_invoice_contents
+		WHERE
+			INVOICE_ID = #invoiceId#
+		ORDER BY NO ASC
+	</select>
+
+	<!-- TENY_170206 한장의 세금계산서를 읽을 때 필요한 관련 프로젝트 목록을 읽하기 위한 조회문 -->
+	<select id="KmsInvoiceDAO.selectInvoiceProjectList" resultMap="mapInvoiceProjectVO">
+		SELECT
+			ip.NO
+			, ip.PRJ_ID
+			, p.PRJ_NM
+			, ip.PRICE
+			, ip.SUM
+			, ip.COLLECT
+			, ip.BOND_MANAGE_YN AS BOND_MANAGE_YN
+			, '' AS INVOICE_ID
+			, '' AS TITLE
+			, '' AS PUBLISH_DATETIME
+			, '' AS STATUS
+			, '' AS USE_AT
+		FROM  hm_invoice_project ip
+		LEFT JOIN tbl_prj p
+			ON ip.PRJ_ID = p.PRJ_ID
+		WHERE
+			ip.INVOICE_ID = #invoiceId#
+		ORDER BY  ip.NO ASC
+	</select>
+
+	<!-- TENY_170206 한장의 세금계산서를 읽을 때 필요한 관련 수금정보 목록을 읽하기 위한 조회문 -->
+	<select id="KmsInvoiceDAO.selectInvoiceCollectList" resultMap="mapInvoiceCollectVO">
+	SELECT
+		col.NO
+		, col.INVOICE_ID
+		, usr.USER_NM AS COLLECT_USER_NAME
+		, col.COLLECT_DATE
+		, col.COLLECT
+		, col.TYPE
+		, col.NOTE
+	FROM
+		hm_invoice_collect col
+	LEFT JOIN tbl_userinfo usr
+		ON col.COLLECT_USER_NO = usr.NO
+	WHERE
+		col.INVOICE_ID = #invoiceId#
+	ORDER BY
+		col.NO ASC
+	</select>
+
+	<!-- TENY_170209 세금계산서 작성시 기작성된 세금계산서에서 회사정보를 가져와 정보를 채우기 위해 정보목록을 조회시 사옹되는 
+		조회문 -->
+	<select id="KmsInvoiceDAO.selectInvoiceCustInfoList"
+		parameterClass="InvoiceVO" resultMap="mapInvoiceVOCompList">
+		SELECT
+		CUST_COMPANY_NAME
+		,CUST_CEO_NAME
+		,CUST_BUSI_NO
+		,CUST_BUSI_TYPE
+		,CUST_BUSI_KIND
+		,CUST_ADDRESS
+		,CUST_EMAIL_1
+		,CUST_EMAIL_2
+		,CUST_EMAIL_3
+		,CUST_EMAIL_4
+		,CUST_EMAIL_5
+		,CUST_NAME_1
+		,CUST_NAME_2
+		,CUST_NAME_3
+		,CUST_NAME_4
+		,CUST_NAME_5
+		,CUST_TELNO_1
+		,CUST_TELNO_2
+		,CUST_TELNO_3
+		,CUST_TELNO_4
+		,CUST_TELNO_5
+		FROM hm_invoice
+		WHERE
+			TRUE
+		<isNotEmpty prepend="AND " property="searchCompanyName">
+			CUST_COMPANY_NAME LIKE CONCAT('%',#searchCompanyName#,'%')
+		</isNotEmpty>
+		GROUP BY CUST_COMPANY_NAME
+		ORDER BY CUST_COMPANY_NAME ASC;
+	</select>
+
+	<!-- TENY_170214 세금계산서 발행요청서 ID를 생성하기 위해 현재의 최대값을 추출하기 위해 사용하는 위한 SQL문 -->
+	<select id="KmsInvoiceDAO.selectMaxInvoiceId" resultClass="java.lang.String">
+		SELECT MAX(invoice_id) FROM hm_invoice
+	</select>
+
+	<!-- TENY_170511 해당 프로젝트의 계산서 발행, 수금, 잔금 현황을 일자별로 보는 조회문 -->
+	<select id="KmsInvoiceDAO.selectProjectCollectList" 		resultMap="mapProjectCollectVO">
+	SELECT
+		DATE,
+		TYPE,
+		INVOICE_ID,
+		TITLE,
+		INVOICE_SUM,
+		PROJECT_SUM,
+		COLLECT_SUM,
+		USER_NO,
+		USER_NAME
+	FROM (
+		SELECT 
+			DATE_FORMAT(i.PUBLISH_DATETIME, '%Y%m%d') 	AS DATE,
+			i.INVOICE_ID													AS INVOICE_ID,
+			'I'																AS TYPE,
+			i.TITLE															AS TITLE,
+			i.TOTAL_SUM													AS INVOICE_SUM,
+			ip.SUM														AS PROJECT_SUM,
+			0																AS COLLECT_SUM,
+			u.NO															AS USER_NO,
+			u.USER_NM													AS USER_NAME
+		FROM hm_invoice_project ip
+			INNER JOIN tbl_prj p ON ip.PRJ_ID = p.PRJ_ID
+				AND ip.BOND_MANAGE_YN = 'Y'
+				AND p.BOND_YN = 'Y'
+				AND p.STAT != 'E'	
+				AND p.PRJ_ID = 	#prjId#
+			JOIN hm_invoice i
+				ON ip.INVOICE_ID = i.INVOICE_ID
+					
+					AND i.STATUS >= 4
+			JOIN tbl_userinfo u
+				ON i.WRITE_USER_NO = u.NO
+		
+		UNION ALL
+
+		SELECT 
+			IFNULL(ic.COLLECT_DATE, '22222222') 					AS DATE,
+			'C'																AS TYPE,
+			ic.INVOICE_ID												AS INVOICE_ID,
+			IFNULL(ic.Note, '입금')										AS TITLE,
+			0																AS INVOICE_SUM,
+			0																AS PROJECT_SUM,
+			ic.COLLECT 													AS COLLECT_SUM,
+			IFNULL(ic.COLLECT_USER_NO, 0)							AS USER_NO,
+			IFNULL(u.USER_NM, '')										AS USER_NAME
+		FROM hm_invoice_project  ip
+			INNER JOIN tbl_prj p ON ip.PRJ_ID = p.PRJ_ID
+			AND ip.BOND_MANAGE_YN = 'Y'
+			AND p.BOND_YN = 'Y'
+			AND p.STAT != 'E'			
+			AND p.PRJ_ID = #prjId#
+			INNER JOIN hm_invoice_collect ic ON ip.NO = ic.BOND_PRJ_NO
+			AND (
+				ic.USE_AT IS NULL
+				OR ic.USE_AT = 'Y'
+				)							
+			LEFT JOIN tbl_userinfo u
+				ON ic.COLLECT_USER_NO = u.NO
+	) t
+	ORDER BY DATE, TYPE DESC
+	</select>
+
+	<!-- INSERT 문들 -->
+	<!-- TENY_170214 한장의 세금계산서를 저장할 사용하기 위한 조회문 -->
+	<insert id="KmsInvoiceDAO.insertInvoice" parameterClass="InvoiceVO">
+		INSERT INTO hm_invoice (
+			INVOICE_ID
+			,TITLE
+			,CUST_COMPANY_NAME
+			,CUST_CEO_NAME
+			,CUST_BUSI_NO
+			,CUST_BUSI_TYPE
+			,CUST_BUSI_KIND
+			,CUST_ADDRESS
+			,CUST_EMAIL_1
+			,CUST_EMAIL_2
+			,CUST_EMAIL_3
+			,CUST_EMAIL_4
+			,CUST_EMAIL_5
+			,CUST_NAME_1
+			,CUST_NAME_2
+			,CUST_NAME_3
+			,CUST_NAME_4
+			,CUST_NAME_5
+			,CUST_TELNO_1
+			,CUST_TELNO_2
+			,CUST_TELNO_3
+			,CUST_TELNO_4
+			,CUST_TELNO_5
+			,TAX_ZERO
+			,TOTAL_PRICE
+			,TOTAL_VAT
+			,TOTAL_SUM
+			,PUBLISH_TYPE
+			,PUBLISH_CO_ACRONYM
+			,PUBLISH_REQ_DATE
+			,WRITE_USER_NO
+			,WRITE_DATETIME
+			,STATUS
+			,ATTACH_FILE_ID
+			,COMMENT
+			,COLLECT_EXPECT_DATE
+		)
+		VALUES (
+			#invoiceId#
+			,#title#
+			,#custCompanyName#
+			,#custCeoName#
+			,#custBusiNo#
+			,#custBusiType#
+			,#custBusiKind#
+			,#custAddress#
+			,#custEmail1#
+			,#custEmail2#
+			,#custEmail3#
+			,#custEmail4#
+			,#custEmail5#
+			,#custName1#
+			,#custName2#
+			,#custName3#
+			,#custName4#
+			,#custName5#
+			,#custTelNo1#
+			,#custTelNo2#
+			,#custTelNo3#
+			,#custTelNo4#
+			,#custTelNo5#
+			,#taxZero#
+			,#totalPrice#
+			,#totalVat#
+			,#totalSum#
+			,#publishType#
+			,#publishCoAcronym#
+			,#publishReqDate#
+			,#writeUserNo#
+			,SYSDATE()
+			, 2
+			,#attachFileId#
+			,#comment#
+			,#collectExpectDate#
+		)
+	</insert>
+
+	<!-- TENY_170214 세금계산서의 세부 내역 정보를 입력하기 위해 사용하는 SQL문 -->
+	<insert id="KmsInvoiceDAO.insertInvoiceContents">
+		INSERT INTO
+		hm_invoice_contents (
+			PRODUCT_NAME
+			, INVOICE_ID
+			, PRICE
+			, VAT
+			, SUM
+			, NOTE
+		)
+		VALUES (
+			#productName#
+			, #invoiceId#
+			, #price#
+			, #vat#
+			, #sum#
+			, #note#
+		)
+	</insert>
+
+	<!-- TENY_170214 세금계산서의 프로젝트 정보를 입력하기 위해 사용하는 SQL문 -->
+	<insert id="KmsInvoiceDAO.insertInvoiceProject">
+		INSERT INTO
+		hm_invoice_project (
+			INVOICE_ID
+			, PRJ_ID
+			, PRICE
+			, SUM
+		)
+		VALUES (
+			#invoiceId#
+			, #prjId#
+			, #price#
+			,#sum#
+		)
+	</insert>
+
+	<!-- TENY_170214 세금계산서의 수금받은 내용을 입력하기 위해 사용하는 SQL문 -->
+	<insert id="KmsInvoiceDAO.insertInvoiceCollect" >
+		INSERT INTO
+		hm_invoice_collect (
+		INVOICE_ID
+		, COLLECT_USER_NO
+		, COLLECT_DATE
+		, COLLECT
+		, TYPE
+		, NOTE
+		, BOND_PRJ_NO
+		, USE_AT
+		)
+		VALUES (
+		#invoiceId#
+		, #collectUserNo#
+		, #collectDate#
+		, #collect#
+		, #type#
+		, #note#
+		, #no#
+		, 'Y'
+		)
+		
+	</insert>
+
+	<insert id="KmsInvoiceDAO.insertFund">
+	INSERT INTO
+	tbl_fund
+	(
+		date, type, account, bank_book, expense, prj_id, note, company_cd, reg_date
+		<isNotEmpty property="docId">
+			, doc_id
+		</isNotEmpty>
+		<isNotEmpty property="plan">
+			, plan
+		</isNotEmpty>
+	)
+	VALUES
+	(
+		#date#, #type#, #account#, #bankBook#, #expense#, #prjId#, #note#, #companyCd#, CURDATE()
+		<isNotEmpty property="docId">
+			, #docId#
+		</isNotEmpty>
+		<isNotEmpty property="plan">
+			, #plan#
+		</isNotEmpty>
+	)
+	</insert>
+	
+
+	<!-- UPDATE 문들 -->
+	<!-- TENY_170214 한장의 세금계산서의 내용을 수정때 사용하기 위한 SQL문 -->
+	<update id="KmsInvoiceDAO.updateInvoice" parameterClass="InvoiceVO">
+		UPDATE hm_invoice
+		SET
+		TITLE = #title#
+		,CUST_COMPANY_NAME = #custCompanyName#
+		,CUST_CEO_NAME = #custCeoName#
+		,CUST_BUSI_NO = #custBusiNo#
+		,CUST_BUSI_TYPE = #custBusiType#
+		,CUST_BUSI_KIND = #custBusiKind#
+		,CUST_ADDRESS = #custAddress#
+		,CUST_EMAIL_1 = #custEmail1#
+		,CUST_EMAIL_2 = #custEmail2#
+		,CUST_EMAIL_3 = #custEmail3#
+		,CUST_EMAIL_4 = #custEmail4#
+		,CUST_EMAIL_5 = #custEmail5#
+		,CUST_NAME_1 = #custName1#
+		,CUST_NAME_2 = #custName2#
+		,CUST_NAME_3 = #custName3#
+		,CUST_NAME_4 = #custName4#
+		,CUST_NAME_5 = #custName5#
+		,CUST_TELNO_1 = #custTelNo1#
+		,CUST_TELNO_2 = #custTelNo2#
+		,CUST_TELNO_3 = #custTelNo3#
+		,CUST_TELNO_4 = #custTelNo4#
+		,CUST_TELNO_5 = #custTelNo5#
+		,TAX_ZERO = #taxZero#
+		,TOTAL_PRICE = #totalPrice#
+		,TOTAL_VAT = #totalVat#
+		,TOTAL_SUM = #totalSum#
+		,PUBLISH_TYPE = #publishType#
+		,PUBLISH_CO_ACRONYM = #publishCoAcronym#
+		,PUBLISH_REQ_DATE = #publishReqDate#
+		,WRITE_DATETIME = SYSDATE()
+		,ATTACH_FILE_ID = #attachFileId#
+		,COMMENT = #comment#
+		,COLLECT_EXPECT_DATE = #collectExpectDate#
+		WHERE
+		INVOICE_ID = #invoiceId#
+	</update>
+
+	<!-- TENY_170214 한장의 세금계산서의 내용을 수정때 사용하기 위한 SQL문 -->
+	<update id="KmsInvoiceDAO.updateInvoice2" >
+		UPDATE hm_invoice
+		SET
+			INVOICE_ID = #invoiceId#
+			<isNotEmpty prepend=", " property="title">						TITLE 							= #title#							</isNotEmpty>
+			<isNotEmpty prepend=", " property="custCompanyName">		CUST_COMPANY_NAME 	= #custCompanyName#		</isNotEmpty>
+			<isNotEmpty prepend=", " property="custCeoName">			CUST_CEO_NAME 			= #custCeoName#				</isNotEmpty>
+			<isNotEmpty prepend=", " property="custBusiNo">				CUST_BUSI_NO 				= #custBusiNo#					</isNotEmpty>
+			<isNotEmpty prepend=", " property="custBusiType">			CUST_BUSI_TYPE 			= #custBusiType#				</isNotEmpty>
+			<isNotEmpty prepend=", " property="custBusiKind">				CUST_BUSI_KIND 			= #custBusiKind#				</isNotEmpty>
+			<isNotEmpty prepend=", " property="custAddress">				CUST_ADDRESS 				= #custAddress#				</isNotEmpty>
+			<isNotEmpty prepend=", " property="custEmail1">				CUST_EMAIL_1 				= #custEmail1#					</isNotEmpty>
+			<isNotEmpty prepend=", " property="custEmail2">				CUST_EMAIL_2 				= #custEmail2#					</isNotEmpty>
+			<isNotEmpty prepend=", " property="custEmail3">				CUST_EMAIL_3 				= #custEmail3#					</isNotEmpty>
+			<isNotEmpty prepend=", " property="custEmail4">				CUST_EMAIL_4 				= #custEmail4#					</isNotEmpty>
+			<isNotEmpty prepend=", " property="custEmail5">				CUST_EMAIL_5 				= #custEmail5#					</isNotEmpty>
+			<isNotEmpty prepend=", " property="custName1">				CUST_NAME_1 				= #custName1#					</isNotEmpty>
+			<isNotEmpty prepend=", " property="custName2">				CUST_NAME_2 				= #custName2#					</isNotEmpty>
+			<isNotEmpty prepend=", " property="custName3">				CUST_NAME_3 				= #custName3#					</isNotEmpty>
+			<isNotEmpty prepend=", " property="custName4">				CUST_NAME_4 				= #custName4#					</isNotEmpty>
+			<isNotEmpty prepend=", " property="custName5">				CUST_NAME_5 				= #custName5#					</isNotEmpty>
+			<isNotEmpty prepend=", " property="custTelNo1">				CUST_TELNO_1 				= #custTelNo1#					</isNotEmpty>
+			<isNotEmpty prepend=", " property="custTelNo2">				CUST_TELNO_2 				= #custTelNo2#					</isNotEmpty>
+			<isNotEmpty prepend=", " property="custTelNo3">				CUST_TELNO_3 				= #custTelNo3#					</isNotEmpty>
+			<isNotEmpty prepend=", " property="custTelNo4">				CUST_TELNO_4 				= #custTelNo4#					</isNotEmpty>
+			<isNotEmpty prepend=", " property="custTelNo5">				CUST_TELNO_5 				= #custTelNo5#					</isNotEmpty>
+			<isNotEmpty prepend=", " property="taxZero">					TAX_ZERO 					= #taxZero#						</isNotEmpty>
+			<isNotEmpty prepend=", " property="totalPrice">					TOTAL_PRICE 				= #totalPrice#					</isNotEmpty>
+			<isNotEmpty prepend=", " property="totalVat">					TOTAL_VAT 					= #totalVat#						</isNotEmpty>
+			<isNotEmpty prepend=", " property="totalSum">					TOTAL_SUM 					= #totalSum#					</isNotEmpty>
+			<isNotEmpty prepend=", " property="totalCollect">				TOTAL_COLLECT				= #totalCollect#					</isNotEmpty>
+			<isNotEmpty prepend=", " property="publishType">				PUBLISH_TYPE 				= #publishType#				</isNotEmpty>
+			<isNotEmpty prepend=", " property="publishCoAcronym">		PUBLISH_CO_ACRONYM 	= #publishCoAcronym#		</isNotEmpty>
+			<isNotEmpty prepend=", " property="publishReqDate">			PUBLISH_REQ_DATE 		= #publishReqDate#			</isNotEmpty>
+			<isNotEmpty prepend=", " property="attatchFileId">				ATTACH_FILE_ID 			= #attatchFileId#				</isNotEmpty>
+			<isNotEmpty prepend=", " property="comment">					COMMENT 					= #comment#					</isNotEmpty>
+			<isNotEmpty prepend=", " property="collectExpectDate">		COLLECT_EXPECT_DATE 	= #collectExpectDate#			</isNotEmpty>
+			<isNotEmpty prepend=", " property="useAt">						USE_AT 						= #useAt#						</isNotEmpty>
+			<isNotEmpty prepend=", " property="publishUserNo">	 		PUBLISH_USER_NO = #publishUserNo#						</isNotEmpty>
+			<isEqual prepend=", " property="status" compareValue="4">	STATUS = #status#, PUBLISH_DATETIME = SYSDATE()	</isEqual>
+			<isNotEqual prepend=", " property="status" compareValue="4">	STATUS = #status#	</isNotEqual>
+		WHERE
+			INVOICE_ID = #invoiceId#
+	</update>
+
+	<!-- TENY_170214 한장의 세금계산서의 상태값을 바꿀때 때 사용하기 위한 SQL문. 
+		- 상태값(status)가 Y인경우 즉 발행처리를 할 경우 hm_invoice_project의 BOND_MANAGE_YN를 바꿔준다 -->
+	<!-- TENY_170214 수금등록시점에 프로젝트별로 수금금액을 입력할때 사용하는 SQL문 -->
+	<update id="KmsInvoiceDAO.updateInvoiceProject">
+		UPDATE hm_invoice_project
+		SET
+			NO = NO
+		<isNotEmpty prepend=", " property="price">
+			PRICE = #price#
+		</isNotEmpty>
+		<isNotEmpty prepend=", " property="sum">
+			SUM = #sum#
+		</isNotEmpty>
+		<isNotEmpty prepend=", " property="collect">
+			COLLECT = ( #collect# + #collectOld# )
+		</isNotEmpty>
+		<isNotEmpty prepend=", " property="bondManageYn">
+			BOND_MANAGE_YN = #bondManageYn#
+		</isNotEmpty>
+		WHERE
+			TRUE
+			<isNotEmpty prepend="AND" property="no">
+				NO = #no#
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="invoiceId">
+				INVOICE_ID = #invoiceId#
+			</isNotEmpty>
+	</update>
+
+	<!-- TENY_170214 한장의 세금계산서를 삭제하기 위해 사용하는 위한 SQL문 -->
+	<!-- 입력파라미터로 Map을 사용한다 -->
+	<update id="KmsInvoiceDAO.deleteInvoice">
+		UPDATE hm_invoice
+		SET
+			USE_AT = 'N'
+			,DELETE_DATETIME = SYSDATE()
+			,DELETE_USER_NO = #deleteUserNo#
+		WHERE
+		INVOICE_ID = #invoiceId#
+	</update>
+
+	<update id="KmsInvoiceDAO.deleteInvoiceList" 	parameterClass="InvoiceVO">
+		UPDATE hm_invoice 
+		SET
+			USE_AT = 'N'
+			, STATUS = 1
+			,DELETE_DATETIME = SYSDATE()
+			,DELETE_USER_NO = #writeUserNo#
+		WHERE
+<![CDATA[
+			(STATUS < 4 )
+]]>
+		<iterate prepend="AND INVOICE_ID IN " property="invoiceIdList" open="(" close=")" conjunction=",">
+			#invoiceIdList[]#
+		</iterate>
+	</update>
+
+	<!-- DELETE 문들 -->
+	<!-- TENY_170216 세금계산서의 세부 내역 정보를 삭제하기 위해 사용하는 위한 SQL문 -->
+	<delete id="KmsInvoiceDAO.deleteInvoiceContents">
+		DELETE FROM 
+			hm_invoice_contents
+		WHERE
+		INVOICE_ID = #invoiceId#
+	</delete>
+
+	<!-- TENY_170216 한장의 세금계산서의 프로젝트정보를 삭제하기 위해 사용하는 위한 SQL문 -->
+	<delete id="KmsInvoiceDAO.deleteInvoiceProject">
+		DELETE FROM
+			hm_invoice_project
+		WHERE
+		INVOICE_ID = #invoiceId#
+	</delete>
+
+	<!-- TENY_170216 한장의 세금계산서의 수금정보를 삭제하기 위해 사용하는 위한 SQL문 -->
+	<delete id="KmsInvoiceDAO.deleteInvoiceCollect">
+		DELETE FROM
+			hm_invoice_collect
+		WHERE
+		INVOICE_ID = #invoiceId#
+	</delete>
+
+
+	<select id="KmsInvoiceDAO.selectBondOrgnztList" resultMap="mapInvcStatVOOrgList" >
+	SELECT 
+		ORGNZT_ID,
+		ORGNZT_NAME,
+		PROGRESSIVE_SALES,
+		IP_SUM
+		FROM (
+			SELECT
+				 o.ORGNZT_ID 							AS ORGNZT_ID
+				, o.ORGNZT_NM 						AS ORGNZT_NAME
+				, IFNULL(SUM(ss.SALES_SUM), 0) 		AS PROGRESSIVE_SALES
+				, IFNULL(SUM(ivcm.IP_SUM), 0) 			AS IP_SUM
+				, (IFNULL(SUM(ss.SALES_SUM), 0) + IFNULL(SUM(ivcm.IP_SUM), 0)) AS TOTALSUM
+			FROM tbl_orgnzt o
+				JOIN tbl_prj tp
+					ON o.ORGNZT_ID  = tp.ORGNZT_ID  AND tp.STAT != 'E' 
+				LEFT JOIN (
+					SELECT 
+						o.ORGNZT_ID 											AS ORGNZT_ID
+						, IFNULL(SUM(s.COST) , 0)							AS SALES_SUM
+					FROM tbl_sales s
+						JOIN tbl_eapp_doc d
+							ON s.DOC_ID = d.DOC_ID AND d.NEW_AT = 1	
+						JOIN tbl_prj p
+							ON s.PRJ_ID = p.PRJ_ID  AND p.STAT != 'E' AND p.BOND_YN = 'Y' AND s.BOND_MANAGE_YN = 'Y'
+						JOIN tbl_orgnzt o
+							ON p.ORGNZT_ID = o.ORGNZT_ID 
+					GROUP BY o.ORGNZT_ID 	
+				) ss
+				ON o.ORGNZT_ID 	=  ss.ORGNZT_ID
+				LEFT JOIN (
+					SELECT 
+						o.ORGNZT_ID 											AS ORGNZT_ID
+						, IFNULL(SUM(ip.PRICE) , 0)					AS IP_PRICE
+						, IFNULL(SUM(ip.SUM) , 0)							AS IP_SUM
+					FROM hm_invoice_project ip
+						JOIN tbl_prj p
+							ON ip.PRJ_ID = p.PRJ_ID  AND p.STAT != 'E' AND p.BOND_YN = 'Y' AND ip.BOND_MANAGE_YN = 'Y'
+						JOIN tbl_orgnzt o
+							ON p.ORGNZT_ID = o.ORGNZT_ID 
+						JOIN hm_invoice i
+							ON ip.INVOICE_ID = i.INVOICE_ID AND i.STATUS > 2
+					GROUP BY o.ORGNZT_ID 	
+				) ivcm
+				ON o.ORGNZT_ID  = ivcm.ORGNZT_ID
+				WHERE
+					tp.BOND_YN = 'Y'
+				GROUP BY o.ORGNZT_ID
+			) tmp
+			WHERE 
+<![CDATA[
+				TOTALSUM > 100
+]]>
+
+	</select>
+
+	<!-- TENY_170228 채권관리를 위하여 부서별 매출등록액, 세금계산서 발행액, 수금액을 조회하는 SQL문 -->
+	<select id="KmsInvoiceDAO.selectCheckOrgSalesList" resultMap="mapProjSalesCheckVO"  >
+	SELECT 
+		PRJ_ID,
+		PRJ_NAME,
+		ORGNZT_ID,
+		ORGNZT_NAME,
+		CONTRACT_SALES,
+		PROGRESSIVE_SALES,
+		IP_PRICE,
+		IP_SUM,
+		IP_COLLECT
+		FROM (
+			SELECT
+				''		AS PRJ_ID
+				, '' 		AS PRJ_NAME
+				, o.ORGNZT_ID 							AS ORGNZT_ID
+				, o.ORGNZT_NM 						AS ORGNZT_NAME
+				, (IFNULL(SUM(ts.WHOE_SUM), 0) + IFNULL(SUM(gs.WHOE_SUM), 0)) 	AS CONTRACT_SALES
+				, IFNULL(SUM(ss.SALES_SUM), 0) 		AS PROGRESSIVE_SALES
+				, IFNULL(SUM(ivcm.IP_PRICE), 0) 			AS IP_PRICE
+				, IFNULL(SUM(ivcm.IP_SUM), 0) 			AS IP_SUM
+				, IFNULL(SUM(ivcc.IP_COLLECT), 0) 	AS IP_COLLECT
+			FROM tbl_orgnzt o
+				LEFT JOIN (
+					SELECT 
+						o.ORGNZT_ID 											AS ORGNZT_ID
+						, IFNULL(SUM(s.DEPOSIT) , 0)					AS WHOE_SUM
+					FROM tbl_eapp_tot_sales s
+						JOIN tbl_prj p
+							ON s.SALES_PRJ_ID = p.PRJ_ID  AND p.STAT != 'E' AND p.BOND_YN = 'Y' AND s.BOND_MANAGE_YN = 'Y'
+						JOIN tbl_orgnzt o
+							ON p.ORGNZT_ID = o.ORGNZT_ID 
+						JOIN tbl_eapp_doc d
+							ON s.DOC_ID = d.DOC_ID AND d.NEW_AT = 1	
+					GROUP BY o.ORGNZT_ID 	
+				) ts
+				ON o.ORGNZT_ID  = ts.ORGNZT_ID
+				LEFT JOIN (
+					SELECT 
+						o.ORGNZT_ID 											AS ORGNZT_ID
+						, IFNULL(SUM(s.COST) , 0)					AS WHOE_SUM
+					FROM tbl_eapp_gen_sales s
+						JOIN tbl_prj p
+							ON s.SALES_PRJ_ID = p.PRJ_ID  AND p.STAT != 'E' AND p.BOND_YN = 'Y' AND s.BOND_MANAGE_YN = 'Y'
+						JOIN tbl_orgnzt o
+							ON p.ORGNZT_ID = o.ORGNZT_ID 
+						JOIN tbl_eapp_doc d
+							ON s.DOC_ID = d.DOC_ID AND d.NEW_AT = 1	
+					GROUP BY o.ORGNZT_ID 	
+				) gs
+				ON o.ORGNZT_ID  = gs.ORGNZT_ID
+				LEFT JOIN (
+					SELECT 
+						o.ORGNZT_ID 											AS ORGNZT_ID
+						, IFNULL(SUM(s.COST) , 0)							AS SALES_SUM
+					FROM tbl_sales s
+						JOIN tbl_eapp_doc d
+							ON s.DOC_ID = d.DOC_ID AND d.NEW_AT = 1	
+						JOIN tbl_prj p
+							ON s.PRJ_ID = p.PRJ_ID  AND p.STAT != 'E' AND p.BOND_YN = 'Y' AND s.BOND_MANAGE_YN = 'Y'
+						JOIN tbl_orgnzt o
+							ON p.ORGNZT_ID = o.ORGNZT_ID 
+					WHERE
+						TRUE
+				<isNotEmpty prepend="AND" property="toDate">
+<![CDATA[
+						s.sales_dt <= #toDate#
+]]>
+				</isNotEmpty>
+					GROUP BY o.ORGNZT_ID 	
+				) ss
+				ON o.ORGNZT_ID 	=  ss.ORGNZT_ID
+				LEFT JOIN (
+					SELECT 
+						o.ORGNZT_ID 											AS ORGNZT_ID
+						, IFNULL(SUM(ip.PRICE) , 0)					AS IP_PRICE
+						, IFNULL(SUM(ip.SUM) , 0)							AS IP_SUM
+					FROM hm_invoice_project ip
+						JOIN tbl_prj p
+							ON ip.PRJ_ID = p.PRJ_ID  AND p.STAT != 'E' AND p.BOND_YN = 'Y' AND ip.BOND_MANAGE_YN = 'Y'
+						JOIN tbl_orgnzt o
+							ON p.ORGNZT_ID = o.ORGNZT_ID 
+						JOIN hm_invoice i
+							ON ip.INVOICE_ID = i.INVOICE_ID AND i.STATUS >= 4
+					GROUP BY o.ORGNZT_ID 	
+				) ivcm
+				ON o.ORGNZT_ID  = ivcm.ORGNZT_ID
+				LEFT JOIN (
+					SELECT 
+						o.ORGNZT_ID 											AS ORGNZT_ID
+						, IFNULL(SUM(c.COLLECT) , 0)					AS IP_COLLECT
+					FROM hm_invoice_project ip
+						JOIN tbl_prj p
+							ON ip.PRJ_ID = p.PRJ_ID AND p.STAT != 'E' AND p.BOND_YN = 'Y' AND ip.BOND_MANAGE_YN = 'Y'
+						JOIN tbl_orgnzt o
+							ON p.ORGNZT_ID = o.ORGNZT_ID 
+						JOIN  hm_invoice_collect  c
+							ON ip.NO = c.BOND_PRJ_NO  AND (c.USE_AT IS NULL OR c.USE_AT = 'Y' )
+					GROUP BY o.ORGNZT_ID 	
+				) ivcc
+				ON o.ORGNZT_ID  = ivcc.ORGNZT_ID
+				GROUP BY o.ORGNZT_ID
+			) tmp
+			WHERE 
+				CONTRACT_SALES != 0
+				AND PROGRESSIVE_SALES != 0
+				
+	</select>
+
+	<!-- TENY_170329 매출 채권관리를 위하여 프로젝트별 매출등록액, 세금계산서 발행액, 수금액을 조회하는 SQL문 -->
+	<select id="KmsInvoiceDAO.selectProjectSalesCheckList" resultMap="mapProjSalesCheckVO"  >
+	SELECT 
+		PRJ_ID,
+		PRJ_NAME,
+		'' 	AS ORGNZT_ID,
+		'' 	AS ORGNZT_NAME,
+		CONTRACT_SALES,
+		PROGRESSIVE_SALES,
+		IP_PRICE,
+		IP_SUM,
+		IP_COLLECT
+		FROM (
+			SELECT
+				tp.PRJ_ID							AS PRJ_ID
+				, tp.PRJ_NM					 		AS PRJ_NAME
+				, tp.ORGNZT_ID					AS ORGNZT_ID
+				, (IFNULL(SUM(ts.WHOE_SUM), 0) + IFNULL(SUM(gs.WHOE_SUM), 0)) 	AS CONTRACT_SALES
+				, IFNULL(SUM(ss.SALES_SUM), 0) 		AS PROGRESSIVE_SALES
+				, IFNULL(SUM(ivcm.IP_PRICE), 0) 			AS IP_PRICE
+				, IFNULL(SUM(ivcm.IP_SUM), 0) 			AS IP_SUM
+				, IFNULL(SUM(ivcc.IP_COLLECT), 0) 	AS IP_COLLECT
+			FROM tbl_prj tp
+				LEFT JOIN (
+					SELECT 
+						p.PRJ_ID 														AS PRJ_ID
+						, IFNULL(SUM(s.DEPOSIT) , 0)					AS WHOE_SUM
+					FROM tbl_eapp_tot_sales s
+						JOIN tbl_prj p
+							ON s.SALES_PRJ_ID = p.PRJ_ID  AND p.BOND_YN = 'Y' AND s.BOND_MANAGE_YN = 'Y' 
+						<isNotEmpty prepend="AND" property="orgnztId">
+								p.ORGNZT_ID = #orgnztId#
+						</isNotEmpty>
+						JOIN tbl_eapp_doc d
+							ON s.DOC_ID = d.DOC_ID AND d.NEW_AT = 1	
+					GROUP BY p.PRJ_ID 	
+				) ts
+				ON tp.PRJ_ID = ts.PRJ_ID
+				LEFT JOIN (
+					SELECT 
+						p.PRJ_ID 														AS PRJ_ID
+						, IFNULL(SUM(s.COST) , 0)					AS WHOE_SUM
+					FROM tbl_eapp_gen_sales s
+						JOIN tbl_prj p
+							ON s.SALES_PRJ_ID = p.PRJ_ID  AND p.BOND_YN = 'Y' AND s.BOND_MANAGE_YN = 'Y' 
+						<isNotEmpty prepend="AND" property="orgnztId">
+								p.ORGNZT_ID = #orgnztId#
+						</isNotEmpty>
+						JOIN tbl_eapp_doc d
+							ON s.DOC_ID = d.DOC_ID AND d.NEW_AT = 1	
+					GROUP BY p.PRJ_ID 	
+				) gs
+				ON tp.PRJ_ID = gs.PRJ_ID
+				LEFT JOIN (
+					SELECT 
+						p.PRJ_ID 														AS PRJ_ID
+						, IFNULL(SUM(s.COST) , 0)							AS SALES_SUM
+					FROM tbl_sales s
+						JOIN tbl_prj p
+							ON s.PRJ_ID = p.PRJ_ID  AND p.BOND_YN = 'Y' AND s.BOND_MANAGE_YN = 'Y' 
+						<isNotEmpty prepend="AND" property="orgnztId">
+								p.ORGNZT_ID = #orgnztId#
+						</isNotEmpty>
+						JOIN tbl_eapp_doc d
+							ON s.DOC_ID = d.DOC_ID AND d.NEW_AT = 1	
+					WHERE
+						s.COST != 0 
+						<isNotEmpty prepend="AND" property="toDate">
+<![CDATA[
+								s.sales_dt <= #toDate#  
+]]>
+						</isNotEmpty>
+					GROUP BY p.PRJ_ID 	
+				) ss
+				ON tp.PRJ_ID = ss.PRJ_ID
+				LEFT JOIN (
+					SELECT 
+						p.PRJ_ID 													AS PRJ_ID
+						, IFNULL(SUM(ip.PRICE) , 0)					AS IP_PRICE
+						, IFNULL(SUM(ip.SUM) , 0)					AS IP_SUM
+					FROM hm_invoice_project ip
+						JOIN tbl_prj p
+							ON ip.PRJ_ID = p.PRJ_ID  AND p.BOND_YN = 'Y' AND ip.BOND_MANAGE_YN = 'Y' 
+						<isNotEmpty prepend="AND" property="orgnztId">
+								p.ORGNZT_ID = #orgnztId#
+						</isNotEmpty>
+						JOIN hm_invoice i
+							ON ip.INVOICE_ID = i.INVOICE_ID 
+<![CDATA[
+							AND i.STATUS >= 4
+]]>
+					GROUP BY p.PRJ_ID 	
+				) ivcm
+				ON tp.PRJ_ID = ivcm.PRJ_ID
+				LEFT JOIN (
+					SELECT 
+						p.PRJ_ID 														AS PRJ_ID
+						, IFNULL(SUM(c.COLLECT) , 0)					AS IP_COLLECT
+					FROM hm_invoice_project ip
+						JOIN tbl_prj p
+							ON ip.PRJ_ID = p.PRJ_ID AND p.BOND_YN = 'Y' AND ip.BOND_MANAGE_YN = 'Y'  
+						<isNotEmpty prepend="AND" property="orgnztId">
+								p.ORGNZT_ID = #orgnztId#
+						</isNotEmpty>
+						JOIN  hm_invoice_collect  c
+							ON ip.NO = c.BOND_PRJ_NO  AND (c.USE_AT IS NULL OR c.USE_AT = 'Y' )
+					GROUP BY p.PRJ_ID 	
+				) ivcc
+				ON tp.PRJ_ID = ivcc.PRJ_ID
+			GROUP BY tp.PRJ_ID 	
+			) total
+		WHERE
+		 total.CONTRACT_SALES != 0
+		 AND total.PROGRESSIVE_SALES != 0
+
+	</select>
+
+	<!-- TENY_170228 채권관리를 위하여 프로젝트별 매출등록액, 세금계산서 발행액, 수금액을 조회할때 페이지처리를 위해 총갯수를 구하는 SQL문 -->
+	<select id="KmsInvoiceDAO.selectCheckProjectSalesCount" resultClass="java.lang.Integer">
+	SELECT 
+		COUNT(*)
+		FROM (
+			SELECT
+				tp.PRJ_ID							AS PRJ_ID
+				, tp.PRJ_NM					 		AS PRJ_NAME
+				, tp.ORGNZT_ID					AS ORGNZT_ID
+				, (IFNULL(SUM(ts.WHOE_SUM), 0) + IFNULL(SUM(gs.WHOE_SUM), 0)) 	AS CONTRACT_SALES
+				, IFNULL(SUM(ss.SALES_SUM), 0) 		AS PROGRESSIVE_SALES
+				, IFNULL(SUM(ivcm.IP_PRICE), 0) 			AS IP_PRICE
+				, IFNULL(SUM(ivcm.IP_SUM), 0) 			AS IP_SUM
+				, IFNULL(SUM(ivcc.IP_COLLECT), 0) 	AS IP_COLLECT
+			FROM tbl_prj tp
+				LEFT JOIN (
+					SELECT 
+						p.PRJ_ID 														AS PRJ_ID
+						, IFNULL(SUM(s.DEPOSIT) , 0)					AS WHOE_SUM
+					FROM tbl_eapp_tot_sales s
+						JOIN tbl_prj p
+							ON s.SALES_PRJ_ID = p.PRJ_ID  AND p.BOND_YN = 'Y' AND s.BOND_MANAGE_YN = 'Y' 
+						<isNotEmpty prepend="AND" property="orgnztId">
+								p.ORGNZT_ID = #orgnztId#
+						</isNotEmpty>
+						JOIN tbl_eapp_doc d
+							ON s.DOC_ID = d.DOC_ID AND d.NEW_AT = 1	
+					GROUP BY p.PRJ_ID 	
+				) ts
+				ON tp.PRJ_ID = ts.PRJ_ID
+				LEFT JOIN (
+					SELECT 
+						p.PRJ_ID 														AS PRJ_ID
+						, IFNULL(SUM(s.COST) , 0)					AS WHOE_SUM
+					FROM tbl_eapp_gen_sales s
+						JOIN tbl_prj p
+							ON s.SALES_PRJ_ID = p.PRJ_ID  AND p.BOND_YN = 'Y' AND s.BOND_MANAGE_YN = 'Y' 
+						<isNotEmpty prepend="AND" property="orgnztId">
+								p.ORGNZT_ID = #orgnztId#
+						</isNotEmpty>
+						JOIN tbl_eapp_doc d
+							ON s.DOC_ID = d.DOC_ID AND d.NEW_AT = 1	
+					GROUP BY p.PRJ_ID 	
+				) gs
+				ON tp.PRJ_ID = gs.PRJ_ID
+				LEFT JOIN (
+					SELECT 
+						p.PRJ_ID 														AS PRJ_ID
+						, IFNULL(SUM(s.COST) , 0)							AS SALES_SUM
+					FROM tbl_sales s
+						JOIN tbl_prj p
+							ON s.PRJ_ID = p.PRJ_ID  AND p.BOND_YN = 'Y' AND s.BOND_MANAGE_YN = 'Y' 
+						<isNotEmpty prepend="AND" property="orgnztId">
+								p.ORGNZT_ID = #orgnztId#
+						</isNotEmpty>
+						JOIN tbl_eapp_doc d
+							ON s.DOC_ID = d.DOC_ID AND d.NEW_AT = 1	
+					WHERE
+						s.COST != 0 
+						<isNotEmpty prepend="AND" property="toDate">
+<![CDATA[
+								s.sales_dt <= #toDate#  
+]]>
+						</isNotEmpty>
+					GROUP BY p.PRJ_ID 	
+				) ss
+				ON tp.PRJ_ID = ss.PRJ_ID
+				LEFT JOIN (
+					SELECT 
+						p.PRJ_ID 													AS PRJ_ID
+						, IFNULL(SUM(ip.PRICE) , 0)					AS IP_PRICE
+						, IFNULL(SUM(ip.SUM) , 0)					AS IP_SUM
+					FROM hm_invoice_project ip
+						JOIN tbl_prj p
+							ON ip.PRJ_ID = p.PRJ_ID  AND p.BOND_YN = 'Y' AND ip.BOND_MANAGE_YN = 'Y' 
+						<isNotEmpty prepend="AND" property="orgnztId">
+								p.ORGNZT_ID = #orgnztId#
+						</isNotEmpty>
+						JOIN hm_invoice i
+							ON ip.INVOICE_ID = i.INVOICE_ID 
+<![CDATA[
+							AND i.STATUS >= 4
+]]>
+					GROUP BY p.PRJ_ID 	
+				) ivcm
+				ON tp.PRJ_ID = ivcm.PRJ_ID
+				LEFT JOIN (
+					SELECT 
+						p.PRJ_ID 														AS PRJ_ID
+						, IFNULL(SUM(c.COLLECT) , 0)					AS IP_COLLECT
+					FROM hm_invoice_project ip
+						JOIN tbl_prj p
+							ON ip.PRJ_ID = p.PRJ_ID AND p.BOND_YN = 'Y' AND ip.BOND_MANAGE_YN = 'Y'  
+						<isNotEmpty prepend="AND" property="orgnztId">
+								p.ORGNZT_ID = #orgnztId#
+						</isNotEmpty>
+						JOIN  hm_invoice_collect  c
+							ON ip.NO = c.BOND_PRJ_NO  AND (c.USE_AT IS NULL OR c.USE_AT = 'Y' )
+					GROUP BY p.PRJ_ID 	
+				) ivcc
+				ON tp.PRJ_ID = ivcc.PRJ_ID
+			GROUP BY tp.PRJ_ID 	
+			) total
+		WHERE
+		 total.CONTRACT_SALES != 0
+		 AND total.PROGRESSIVE_SALES != 0
+
+	</select>
+
+	<!-- TENY_170323 채권관리(사업부)를 위하여 프로젝트별 총계산서발행액, 총수금액, 금월발행액, 금월수금액을 조회하는 SQL문 -->
+	<select id="KmsInvoiceDAO.selectProjectBondCheckList" resultMap="mapBondCheck"  >
+	SELECT 
+		PRJ_ID,
+		PRJ_NAME,
+		BOND_YN,
+		STAT,
+		IP_SUM,
+		IP_COLLECT,
+		IP_SUM_M,
+		IP_COLLECT_M
+		FROM (
+			SELECT
+				tp.PRJ_ID 								AS PRJ_ID
+				, tp.PRJ_NM 							AS PRJ_NAME
+				, ''		AS ORGNZT_ID
+				, '' 		AS ORGNZT_NAME
+				, tp.BOND_YN 							AS BOND_YN
+				, tp.STAT 									AS STAT
+				, IFNULL(SUM(ivp.IP_SUM), 0) 			AS IP_SUM
+				, IFNULL(SUM(ivc.IP_COLLECT), 0) 	AS IP_COLLECT
+				, IFNULL(SUM(ivcm.IP_SUM), 0) 			AS IP_SUM_M
+				, IFNULL(SUM(ivcc.IP_COLLECT), 0) 	AS IP_COLLECT_M
+				, (IFNULL(SUM(ivp.IP_SUM), 0) ) + IFNULL(SUM(ivc.IP_COLLECT), 0) AS TOTALSUM
+				, (IFNULL(SUM(ivp.IP_SUM), 0) -  IFNULL(SUM(ivc.IP_COLLECT), 0) )			AS IP_UNCOLLECT
+			FROM tbl_prj tp
+				LEFT JOIN (
+					SELECT 
+						p.PRJ_ID 												AS PRJ_ID
+						, IFNULL(SUM(ip.SUM) , 0)							AS IP_SUM
+					FROM hm_invoice_project ip
+					JOIN tbl_prj p
+						ON ip.PRJ_ID = p.PRJ_ID AND ip.BOND_MANAGE_YN = 'Y' AND  p.BOND_YN = 'Y' AND p.STAT != 'E'
+					<isNotEmpty prepend="AND" property="orgnztId">
+						p.ORGNZT_ID = #orgnztId#
+					</isNotEmpty>
+					GROUP BY p.PRJ_ID
+				) ivp
+				ON tp.PRJ_ID = ivp.PRJ_ID 
+				LEFT JOIN (
+					SELECT 
+						ip.PRJ_ID 												AS PRJ_ID
+						, IFNULL(SUM(c.COLLECT) , 0	)					AS IP_COLLECT
+					FROM hm_invoice_project ip
+					JOIN tbl_prj p
+						ON ip.PRJ_ID = p.PRJ_ID AND ip.BOND_MANAGE_YN = 'Y' AND  p.BOND_YN = 'Y' AND p.STAT != 'E'
+					<isNotEmpty prepend="AND" property="orgnztId">
+						p.ORGNZT_ID = #orgnztId#
+					</isNotEmpty>
+					JOIN  hm_invoice_collect  c
+						ON ip.NO = c.BOND_PRJ_NO AND (c.USE_AT IS NULL OR c.USE_AT = 'Y' )
+					GROUP BY p.PRJ_ID
+				) ivc
+				ON tp.PRJ_ID = ivc.PRJ_ID
+				LEFT JOIN (
+					SELECT 
+						p.PRJ_ID 												AS PRJ_ID
+						, IFNULL(SUM(ip.SUM) , 0)							AS IP_SUM
+					FROM hm_invoice_project ip
+					JOIN tbl_prj p
+						ON ip.PRJ_ID = p.PRJ_ID AND ip.BOND_MANAGE_YN = 'Y' AND  p.BOND_YN = 'Y' AND p.STAT != 'E'
+					<isNotEmpty prepend="AND" property="orgnztId">
+						p.ORGNZT_ID = #orgnztId#
+					</isNotEmpty>
+					JOIN hm_invoice i
+<![CDATA[
+						ON ip.INVOICE_ID = i.INVOICE_ID AND 	i.USE_AT = 'Y' AND i.STATUS > 2  
+]]>
+					<isNotEmpty prepend="AND" property="fromDateDash">
+<![CDATA[
+						i.PUBLISH_DATETIME  >= #fromDateDash#
+]]>
+					</isNotEmpty>
+					GROUP BY p.PRJ_ID
+				) ivcm
+				ON tp.PRJ_ID = ivcm.PRJ_ID
+				LEFT JOIN (
+					SELECT 
+						ip.PRJ_ID 												AS PRJ_ID
+						, IFNULL(SUM(c.COLLECT) , 0)					AS IP_COLLECT
+					FROM hm_invoice_collect  c
+					JOIN  hm_invoice_project ip
+						ON ip.NO = c.BOND_PRJ_NO  AND (c.USE_AT IS NULL OR c.USE_AT = 'Y' )
+					JOIN tbl_prj p
+						ON ip.PRJ_ID = p.PRJ_ID AND ip.BOND_MANAGE_YN = 'Y' AND  p.BOND_YN = 'Y' AND p.STAT != 'E'
+					<isNotEmpty prepend="AND" property="orgnztId">
+						p.ORGNZT_ID = #orgnztId#
+					</isNotEmpty>
+					WHERE
+						TRUE
+					<isNotEmpty prepend="AND" property="fromDate">
+<![CDATA[
+						c.COLLECT_DATE  >= #fromDate#
+]]>
+					</isNotEmpty>
+					GROUP BY p.PRJ_ID
+				) ivcc
+				ON tp.PRJ_ID = ivcc.PRJ_ID
+				WHERE
+					tp.BOND_YN = 'Y'
+				GROUP BY tp.PRJ_ID
+		) tmp
+		WHERE
+			tmp.IP_SUM != 0
+		<isNotEqual prepend="AND" property="inclBondZero" compareValue="Y">
+<![CDATA[
+			tmp.IP_UNCOLLECT != 0
+]]>
+		</isNotEqual>
+		ORDER BY IP_UNCOLLECT DESC
+
+	</select>
+
+	<!-- TENY_170323 수금현황관리(사업부)를 조회하는 SQL문 -->
+	<select id="KmsInvoiceDAO.selectCollectList" resultMap="mapCollectListVO"  >
+	SELECT 
+		c.NO						AS NO,
+		p.PRJ_ID 					AS PRJ_ID,
+		p.PRJ_NM 				AS PRJ_NAME,
+		c.INVOICE_ID				AS INVOICE_ID,
+		ipp.UNCOLLECT 			AS UNCOLLECT,
+		"박진주"					AS COLLECT_USER_NAME,
+		c.COLLECT_DATE 		AS COLLECT_DATE,
+		c.COLLECT				AS COLLECT,	
+		LENGTH(c.NOTE)			AS NOTE_LENGTH
+	FROM hm_invoice_collect c
+	JOIN hm_invoice_project ip
+		ON c.BOND_PRJ_NO = ip.NO AND c.USE_AT = 'Y'
+		JOIN (
+			SELECT 
+				ip2.PRJ_ID 									AS PRJ_ID,
+				(SUM(ip2.SUM)  - SUM(c2.COLLECT)) 	AS UNCOLLECT
+			FROM hm_invoice_project ip2
+			JOIN hm_invoice_collect c2
+				ON ip2.NO = c2.BOND_PRJ_NO 
+					<isNotEmpty prepend="AND" property="fromDate">
+<![CDATA[
+						c2.COLLECT_DATE >= #fromDate#
+]]>
+					</isNotEmpty>
+					<isNotEmpty prepend="AND" property="toDate">
+<![CDATA[
+						c2.COLLECT_DATE <= #toDate#
+]]>
+					</isNotEmpty>
+			WHERE ip2.BOND_MANAGE_YN = 'Y'
+			GROUP BY ip2.PRJ_ID 
+			) ipp
+		ON ipp.PRJ_ID = ip.PRJ_ID
+	JOIN tbl_prj p
+		ON ip.PRJ_ID = p.PRJ_ID
+		<isNotEmpty prepend="AND" property="orgnztId">
+			 p.orgnzt_id = #orgnztId#
+		</isNotEmpty>
+	WHERE
+		TRUE
+		<isNotEmpty prepend="AND" property="fromDate">
+<![CDATA[
+			c.COLLECT_DATE >= #fromDate#
+]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="toDate">
+<![CDATA[
+			c.COLLECT_DATE <= #toDate#
+]]>
+		</isNotEmpty>
+	ORDER BY c.COLLECT_DATE DESC
+
+	</select>
+
+	<!-- TENY_170308 종합매출로 등록된 매출건을 조회하는 SQL문 -->
+	<select id="KmsInvoiceDAO.selectTotSalesListOfPrj" resultMap="mapInvcStatVOSalesList"  >
+		SELECT d.DOC_ID 									AS DOC_ID
+			, d.SUBJECT 										AS SUBJECT
+			, DATE_FORMAT(d.DOC_DT, '%y.%m.%d') 	AS DOC_DT
+			, d.DOC_STAT									AS DOC_STAT
+			, d.NEW_AT										AS NEW_AT
+			, d.STATUS										AS STATUS
+			, s.BOND_MANAGE_YN							AS BOND_MANAGE_YN
+			, s.DECIDE_YN									AS	DECIDE_YN
+			, s.DEPOSIT										AS DEPOSIT
+			, s.COST											AS COST
+			, s.MAINTENANCE								AS MAINTENANCE
+		FROM tbl_eapp_tot_sales s
+			LEFT JOIN tbl_eapp_doc d
+			ON s.DOC_ID = d.DOC_ID
+		WHERE 
+			d.NEW_AT = 1 AND s.BOND_MANAGE_YN = 'Y'
+		<isNotEmpty prepend="AND" property="prjId">
+			s.SALES_PRJ_ID = #prjId#
+		</isNotEmpty>
+		ORDER BY d.DOC_ID DESC
+	</select>
+	
+	<!-- TENY_170308 일반매출로 등록된 매출건을 조회하는 SQL문 -->
+	<select id="KmsInvoiceDAO.selectGenSalesListOfPrj" resultMap="mapInvcStatVOSalesList"  >
+		SELECT d.DOC_ID 									AS DOC_ID
+			, d.SUBJECT 										AS SUBJECT
+			, DATE_FORMAT(d.DOC_DT, '%y.%m.%d') 	AS DOC_DT
+			, d.DOC_STAT									AS DOC_STAT
+			, d.NEW_AT										AS NEW_AT
+			, d.STATUS										AS STATUS
+			, s.BOND_MANAGE_YN							AS BOND_MANAGE_YN
+			, s.DECIDE_YN									AS	DECIDE_YN
+			, 0													AS DEPOSIT
+			, s.COST											AS COST
+			, 0													AS MAINTENANCE
+		FROM tbl_eapp_gen_sales s
+			LEFT JOIN tbl_eapp_doc d
+			ON s.DOC_ID = d.DOC_ID
+		WHERE 
+			d.NEW_AT = 1 AND s.BOND_MANAGE_YN = 'Y'
+		<isNotEmpty prepend="AND" property="prjId">
+			s.SALES_PRJ_ID = #prjId#
+		</isNotEmpty>
+		ORDER BY d.DOC_ID DESC
+	</select>
+
+	<!-- TENY_170313 특정 프로젝트와 관련되어 발행된 계산서 목록을 읽하기 위한 SQL문 -->
+	<select id="KmsInvoiceDAO.selectInvoiceListOfProject" resultMap="mapInvoiceProjectVO">
+		SELECT
+			ip.NO										AS NO
+			, '' 											AS PRJ_ID
+			, ''  										AS PRJ_NM
+			, ip.PRICE									AS PRICE
+			, ip.SUM									AS SUM
+			, IFNULL(SUM(c.COLLECT), 0)			AS COLLECT
+			, ip.BOND_MANAGE_YN				AS BOND_MANAGE_YN
+			, i.INVOICE_ID							AS INVOICE_ID
+			, i.TITLE									AS TITLE
+			, DATE_FORMAT(i.PUBLISH_DATETIME, '%y.%m.%d')		AS PUBLISH_DATETIME
+			, i.STATUS								AS STATUS
+			, i.USE_AT									AS USE_AT
+		FROM hm_invoice_project ip
+			JOIN hm_invoice i
+				ON ip.INVOICE_ID = i.INVOICE_ID and i.STATUS > 2
+			LEFT JOIN hm_invoice_collect c
+				ON c.BOND_PRJ_NO = ip.NO AND c.USE_AT = 'Y'  
+			WHERE
+				ip.BOND_MANAGE_YN = 'Y'
+		<isNotEmpty prepend="AND" property="prjId">
+				ip.PRJ_ID = #prjId#
+		</isNotEmpty>
+			GROUP BY i.INVOICE_ID
+		ORDER BY
+			ip.NO DESC
+	</select>
+
+	<update id="KmsInvoiceDAO.updateTotSalesBondMngStatus" 	parameterClass="InvoiceVO">
+		UPDATE tbl_eapp_tot_sales 
+		SET
+			BOND_MANAGE_YN = 'N'
+		WHERE
+			TRUE
+		<iterate prepend="AND DOC_ID IN " property="salesDocIdList" open="(" close=")" conjunction=",">
+			#salesDocIdList[]#
+		</iterate>
+	</update>
+
+	<update id="KmsInvoiceDAO.updateGenSalesBondMngStatus" 	parameterClass="InvcStatVO">
+		UPDATE tbl_eapp_gen_sales 
+		SET
+			BOND_MANAGE_YN = 'N'
+		WHERE
+			TRUE
+		<iterate prepend="AND DOC_ID IN " property="salesDocIdList" open="(" close=")" conjunction=",">
+			#salesDocIdList[]#
+		</iterate>
+	</update>
+
+	<update id="KmsInvoiceDAO.updateInvPrjBondMngStatus" 	parameterClass="InvcStatVO">
+		UPDATE hm_invoice_project 
+		SET
+			BOND_MANAGE_YN = 'N'
+		WHERE
+			TRUE
+		<iterate prepend="AND NO IN " property="invPrjNoList" open="(" close=")" conjunction=",">
+			#invPrjNoList[]#
+		</iterate>
+	</update>
+
+</sqlMap>

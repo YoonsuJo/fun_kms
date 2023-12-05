@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="TblAuthority">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="authVO" type="kms.com.admin.authority.service.AuthVO"/>
+	
+	<select id="authDAO.selectAuthList" parameterClass="authVO" resultClass="egovMap">
+		SELECT a.AUTH_CODE, a.AUTH_NM,  a.AUTH_DESC,
+		GROUP_CONCAT(CONCAT(USER_NM,"(",USER_ID,")") SEPARATOR ',') AS USER_COMPLEXS
+			FROM
+				TBL_AUTH AS a
+				LEFT OUTER JOIN
+				TBL_USER_AUTH AS b
+				INNER JOIN TBL_USERINFO AS c
+				ON b.USER_NO = c.NO
+				ON a.AUTH_CODE = b.AUTH_CODE
+
+			GROUP BY a.AUTH_CODE
+	</select>
+	
+	<select id="authDAO.selectUserAuthList" resultClass="String">
+		SELECT
+			a.AUTH_CODE
+		FROM
+			TBL_USER_AUTH a
+		WHERE
+			a.USER_NO = #userNo#
+	</select>
+		
+	<delete id="authDAO.deleteAuthList" parameterClass="authVO">
+		DELETE FROM TBL_USER_AUTH
+		
+		WHERE
+		
+		AUTH_CODE = #authCode#
+		
+	</delete>
+	
+	
+	
+	<insert id="authDAO.insertAuthUser" parameterClass="authVO">
+		INSERT INTO TBL_USER_AUTH 
+		 (AUTH_CODE, USER_NO, REG_DT)
+		
+		VALUES
+		(#authCode#,
+		(SELECT NO FROM TBL_USERINFO WHERE USER_ID = #userId#)
+
+		, SYSDATE()) 
+		
+	</insert>
+	
+	<select id="authDAO.selectAuthUserList" resultClass="egovMap">
+		SELECT
+			b.USER_NM, b.USER_ID
+		FROM
+			TBL_USER_AUTH a JOIN TBL_USERINFO b
+	    ON
+	    	a.USER_NO = b.NO
+		WHERE
+			a.AUTH_CODE = #authCode#
+	</select>
+		
+</sqlMap>

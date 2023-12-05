@@ -1,0 +1,81 @@
+<script>
+$(document).ready(function() {
+	var maxFileNum = document.approvalVO.posblAtchFileNumber.value;
+	var multi_selector = new MultiSelector( document.getElementById( 'egovComFileList' ), maxFileNum );
+	multi_selector.addElement( document.getElementById( 'egovComFileUploader' ) );
+
+	var form = $('#approvalVO');
+	var templtId =${approvalVO.templtId};
+	switch (templtId) {
+	case 1 :  
+		form.validate({
+		   rules: {
+		      subject: {required: true,minlength:10,maxlength:200},
+		     deciderMix: {required: true},
+		      content: {maxlength:4000}
+		 	 }
+			});
+		  break;
+	case 2 :  
+		form.validate({
+		   rules: {
+		      subject: {required: true,minlength:10,maxlength:200},
+		     deciderMix: {required: true},
+		      content: {maxlength:4000},
+		      stDt : {required: true,minlength:6,maxlength:6,digits: true},
+		      edDt : {required: true,minlength:6,maxlength:6,digits: true}
+		 	 },
+		 messages :{
+			stDt : "날짜값을 양식에 맞게 입력해주세요. ex)YYMMDD",
+			edDt : "날짜값을 양식에 맞게 입력해주세요. ex)YYMMDD"
+
+		}
+			});
+		  break;
+	case 3 :  
+		form.validate({
+		   rules: {
+		      subject: {required: true,minlength:10,maxlength:200},
+		     deciderMix: {required: true},
+		      content: {maxlength:4000},
+		      companyId : {required: true},
+		      officialId : {required: true},
+		      destn : {required: true}
+		 	 },
+		 messages :{
+			stDt : "날짜값을 양식에 맞게 입력해주세요. ex)YYMMDD",
+			edDt : "날짜값을 양식에 맞게 입력해주세요. ex)YYMMDD",
+			companyId : "회사를 체크해 주세요"
+
+		}
+			});
+		  break;
+	default:
+		form.validate({
+		   rules: {
+		      subject: {required: true,minlength:10,maxlength:200},
+		     deciderMix: {required: true},
+		      content: {maxlength:4000}
+		 	 }
+			});
+		  break;
+	
+	}   
+	$('#approvalInsertB').click(function(){
+			alert(form.valid());			
+			form.attr("action", "/approval/approvalI.do?save=0");
+			form.submit();
+			
+	});
+
+	$('#approvalSaveB').click(function(){
+		form.attr("action", "/approval/approvalI.do?save=1");
+		form.submit();
+	});
+	$('#gobackB').click(function(){
+		history.go(-1);
+	});
+	
+});
+
+</script>

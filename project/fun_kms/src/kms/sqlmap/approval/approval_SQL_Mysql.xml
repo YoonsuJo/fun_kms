@@ -1,0 +1,4299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="approval">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="approval" type="kms.com.app.service.Approval"/>
+	<typeAlias  alias="approvalReaderVO" type="kms.com.app.service.ApprovalReaderVO"/>
+	<typeAlias  alias="approvalVO" type="kms.com.app.service.ApprovalVO"/>
+	<typeAlias  alias="approvalVacVO" type="kms.com.app.service.ApprovalVacVO"/>
+	<typeAlias  alias="approvalOfficialVO" type="kms.com.app.service.ApprovalOfficialVO"/>
+	<typeAlias  alias="approvalJobgVO" type="kms.com.app.service.ApprovalJobgVO"/>
+	<typeAlias  alias="approvalExpenseVO" type="kms.com.app.service.ApprovalExpenseVO"/>	
+	<typeAlias  alias="JSONObject" type="org.json.simple.JSONObject"/>	
+	<typeAlias  alias="approvalHolVO" type="kms.com.app.service.ApprovalHolVO"/>
+	<typeAlias  alias="approvalBusinessPlanVO" type="kms.com.app.service.ApprovalBusinessPlanVO"/>
+	
+
+	
+	<resultMap id="approvalVOAll" class="kms.com.app.service.ApprovalVO">
+		<result property="docId" column="DOC_ID" columnIndex="1"/>
+		<result property="parntId" column="PARNT_ID" columnIndex="2"/>
+		<result property="writerNo" column="WRITER_NO" columnIndex="3"/>
+		<result property="subject" column="SUBJECT" columnIndex="4"/>
+		<result property="content" column="CONTENT" columnIndex="5"/>
+		<result property="writeDt" column="DOC_DT" columnIndex="6"/>
+		<result property="docStat" column="DOC_STAT" columnIndex="7"/>
+		<result property="newAt" column="NEW_AT" columnIndex="8"/>
+		<result property="cnt" column="CNT" columnIndex="9"/>
+		<result property="atchFileId" column="ATCH_FILE_ID" columnIndex="10"/>
+		<result property="reWriteTyp" column="RE_WRITE_TYP" columnIndex="11"/>
+		<result property="reUseCnt" column="RE_USE_CNT" columnIndex="12"/>
+		<result property="templtId" column="TEMPLT_ID" columnIndex="13"/>
+		<result property="handleStat" column="HANDLE_STAT" columnIndex="14"/>
+		<result property="writerNm" column="WRITER_NM" columnIndex="15"/>
+		<result property="writerId" column="WRITER_ID" columnIndex="16"/>
+	</resultMap>
+	
+	<resultMap id="approvalVOAllNew" class="kms.com.app.service.ApprovalVO">
+		<result property="docId" column="DOC_ID" columnIndex="1"/>
+		<result property="parntId" column="PARNT_ID" columnIndex="2"/>
+		<result property="writerNo" column="WRITER_NO" columnIndex="3"/>
+		<result property="subject" column="SUBJECT" columnIndex="4"/>
+		<result property="content" column="CONTENT" columnIndex="5"/>
+		<result property="writeDt" column="DOC_DT" columnIndex="6"/>
+		<result property="docStat" column="DOC_STAT" columnIndex="7"/>
+		<result property="newAt" column="NEW_AT" columnIndex="8"/>
+		<result property="cnt" column="CNT" columnIndex="9"/>
+		<result property="atchFileId" column="ATCH_FILE_ID" columnIndex="10"/>
+		<result property="reWriteTyp" column="RE_WRITE_TYP" columnIndex="11"/>
+		<result property="reUseCnt" column="RE_USE_CNT" columnIndex="12"/>
+		<result property="templtId" column="TEMPLT_ID" columnIndex="13"/>
+		<result property="handleStat" column="HANDLE_STAT" columnIndex="14"/>
+		<result property="writerNm" column="WRITER_NM" columnIndex="15"/>
+		<result property="writerId" column="WRITER_ID" columnIndex="16"/>
+		<result property="prjIdDoc" column="PRJ_ID_DOC" columnIndex="17"/>
+		<result property="prjNmDoc" column="PRJ_NM_DOC" columnIndex="18"/>
+		<result property="prjCdDoc" column="PRJ_CD_DOC" columnIndex="19"/>
+		<result property="emailAddr" column="EMAIL_ADDR" columnIndex="20"/>
+		<result property="docStat" column="DOC_STAT" columnIndex="21"/>
+		<result property="preAppDt" column="PRE_APP_DT" columnIndex="22"/>
+	</resultMap>
+
+	<resultMap id="approvalVOList" class="kms.com.app.service.ApprovalVO">
+		<result property="docId" column="DOC_ID" columnIndex="1"/>
+		<result property="parntId" column="PARNT_ID" columnIndex="2"/>
+		<result property="writerNo" column="WRITER_NO" columnIndex="3"/>
+		<result property="subject" column="SUBJECT" columnIndex="4"/>
+		<result property="content" column="CONTENT" columnIndex="5"/>
+		<result property="writeDt" column="DOC_DT" columnIndex="6"/>
+		<result property="docStat" column="DOC_STAT" columnIndex="7"/>
+		<result property="newAt" column="NEW_AT" columnIndex="8"/>
+		<result property="cnt" column="CNT" columnIndex="9"/>
+		<result property="atchFileId" column="ATCH_FILE_ID" columnIndex="10"/>
+		<result property="reWriteTyp" column="RE_WRITE_TYP" columnIndex="11"/>
+		<result property="reUseCnt" column="RE_USE_CNT" columnIndex="12"/>
+		<result property="templtId" column="TEMPLT_ID" columnIndex="13"/>
+		<result property="templtNm" column="TEMPLT_NM" columnIndex="13"/>
+		<result property="handleStat" column="HANDLE_STAT" columnIndex="14"/>
+		<result property="handleDt" column="HANDLE_DT" columnIndex="14"/>
+		<result property="writerNm" column="WRITER_NM" columnIndex="15"/>
+		<result property="writerId" column="WRITER_ID" columnIndex="16"/>
+		<result property="preAppDt" column="PRE_APP_DT" columnIndex="18"/>    
+		<result property="srchDt" column="SRCH_DT" columnIndex="19"/>
+		<result property="doHandle" column="DO_HANDLE" columnIndex="19"/>
+		<result property="expSum" column="EXP_SUM" columnIndex="20"/>
+		<result property="stat" column="STAT" columnIndex="21"/>
+		<result property="exceedManage" column="EXCEED_MANAGE" columnIndex="22"/>
+		<result property="expiredDate" column="EXPIRED_DATE" columnIndex="23"/>
+		<result property="templtNmBr" column="TEMPLT_NM_BR" columnIndex="24"/>
+	</resultMap>	
+	
+	<resultMap id="approvalVOSummary" class="kms.com.app.service.ApprovalVO">
+		<result property="docStat" column="DOC_STAT" columnIndex="1"/>  
+		<result property="docStatCnt" column="DOC_STAT_CNT" columnIndex="2"/>  
+	</resultMap>
+	
+	<resultMap id="approvalReaderVOAll" class="kms.com.app.service.ApprovalReaderVO">
+		<result property="docId" column="DOC_ID" columnIndex="1"/>
+		<result property="no" column="NO" columnIndex="2"/>
+		<result property="appTyp" column="APP_TYP" columnIndex="3"/>
+		<result property="srchDt" column="SRCH_DT" columnIndex="4"/>
+		<result property="stat" column="STAT" columnIndex="5"/>
+		<result property="readerNo" column="READER_NO" columnIndex="6"/>
+		<result property="appDt" column="APP_DT" columnIndex="7"/>
+		<result property="readerNm" column="READER_NM" columnIndex="8"/>
+		<result property="readerId" column="READER_ID" columnIndex="9"/>
+	</resultMap>	
+
+
+	<!-- 각문서 종류에 따르는 result Map -->
+
+	<resultMap id="approvalVacVOAll" class="kms.com.app.service.ApprovalVacVO">
+		<result property="docId" column="DOC_ID" columnIndex="1"/>
+		<result property="vacTyp" column="VAC_TYP" columnIndex="2"/>
+		<result property="stDt" column="ST_DT" columnIndex="3"/>
+		<result property="edDt" column="ED_DT" columnIndex="4"/>
+		<result property="stAmpm" column="ST_AMPM" columnIndex="5"/>
+		<result property="edAmpm" column="ED_AMPM" columnIndex="6"/>
+		<result property="sumDate" column="SUM_DATE" columnIndex="7"/>
+		<result property="system" column="SYSTEM" columnIndex="7"/>
+		<result property="wsPlace" column="WS_PLACE" columnIndex="7"/>
+	</resultMap>
+	
+		
+	<resultMap id="ApprovalOfficialVOAll" class="kms.com.app.service.ApprovalOfficialVO">
+		<result property="docId" column="DOC_ID" columnIndex="1"/>
+		<result property="officialNm" column="OFFICIAL_NM" columnIndex="2"/>
+		<result property="companyNm" column="COMPANY_NM" columnIndex="2"/>
+		<result property="companyId" column="COMPANY_ID" columnIndex="3"/>
+		<result property="destn" column="DESTN" columnIndex="4"/>
+	</resultMap>
+	
+	
+	<resultMap id="approvalJobgVOAll" class="kms.com.app.service.ApprovalJobgVO">
+		<result property="docId" column="DOC_ID" columnIndex="1"/>
+		<result property="orgnztId" column="ORGNZT_ID" columnIndex="2"/>
+		<result property="orgnztNm" column="ORGNZT_NM" columnIndex="3"/>
+		<result property="mngTsk" column="MNG_TSK" columnIndex="4"/>
+		<result property="carCd" column="CAR_CD" columnIndex="5"/>
+		<result property="carMinYear" column="CAR_MIN_YEAR" columnIndex="6"/>
+		<result property="carMaxYear" column="CAR_MAX_YEAR" columnIndex="7"/>
+		<result property="monPayMin" column="MON_PAY_MIN" columnIndex="8"/>
+		<result property="monPayMax" column="MON_PAY_MAX" columnIndex="9"/>
+		<result property="education" column="EDUCATION" columnIndex="10"/>
+		<result property="ageMin" column="AGE_MIN" columnIndex="11"/>
+		<result property="ageMax" column="AGE_MAX" columnIndex="12"/>
+		<result property="rankId" column="RANK_ID" columnIndex="13"/>
+		<result property="gendCd" column="GEND_CD" columnIndex="14"/>
+		<result property="dsdFrWk" column="DSD_FR_WK" columnIndex="15"/>
+		<result property="keywd" column="KEYWD" columnIndex="16"/>
+		<result property="otrCon" column="OTR_CON" columnIndex="17"/>
+	</resultMap>
+	
+		
+	
+	<resultMap id="approvalExpenseVOAll" class="kms.com.app.service.ApprovalExpenseVO">
+		<result property="expId" column="EXP_ID" columnIndex="1"/>
+		<result property="presetId" column="PRESET_ID" columnIndex="2"/>
+		<result property="expSpendTyp" column="EXP_SPEND_TYP" columnIndex="3"/>
+		<result property="accId" column="ACC_ID" columnIndex="4"/>
+		<result property="prjId" column="PRJ_ID" columnIndex="5"/>
+		<result property="companyCd" column="COMPANY_CD" columnIndex="6"/>
+		<result property="expDt" column="EXP_DT" columnIndex="7"/>
+		<result property="expSpend" column="EXP_SPEND" columnIndex="8"/>
+		<result property="expCt" column="EXP_CT" columnIndex="9"/>
+		<result property="payingDueDate" column="PAYING_DUE_DATE" columnIndex="10"/>
+		<result property="cardSpendNo" column="CARD_SPEND_NO" columnIndex="11"/>
+	</resultMap>
+		
+	
+	<resultMap id="approvalHolVOAll" class="kms.com.app.service.ApprovalHolVO">
+		<result property="holNo" column="HOL_NO" columnIndex="1"/>
+		<result property="docId" column="DOC_ID" columnIndex="1"/>
+		<result property="prjId" column="PRJ_ID" columnIndex="2"/>
+		<result property="prjNm" column="PRJ_NM" columnIndex="2"/>
+		<result property="prjCd" column="PRJ_CD" columnIndex="2"/>
+		<result property="period" column="PERIOD" columnIndex="3"/>
+		<result property="stDt" column="ST_DT" columnIndex="4"/>
+		<result property="stTm" column="ST_TM" columnIndex="5"/>
+		<result property="edDt" column="ED_DT" columnIndex="6"/>
+		<result property="edTm" column="ED_TM" columnIndex="7"/>
+		<result property="cost" column="COST" columnIndex="8"/>
+		<result property="exceedManage" column="EXCEED_MANAGE" columnIndex="9"/>
+	</resultMap>
+	
+	<resultMap id="holidayWorkStatistic" class="kms.com.member.service.HolidayWorkStatistic">
+		<result property="userNo"		column="USER_NO"		columnIndex="1"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="2"/>
+		<result property="userId"		column="USER_ID"		columnIndex="3"/>
+		<result property="orgnztId"		column="ORGNZT_ID"		columnIndex="4"/>
+		<result property="orgnztNm"		column="ORGNZT_NM"		columnIndex="5"/>
+		<result property="hol01"		column="HOL_01"			columnIndex="6"/>
+		<result property="hol02"		column="HOL_02"			columnIndex="7"/>
+		<result property="hol03"		column="HOL_03"			columnIndex="8"/>
+		<result property="hol04"		column="HOL_04"			columnIndex="9"/>
+		<result property="hol05"		column="HOL_05"			columnIndex="10"/>
+		<result property="hol06"		column="HOL_06"			columnIndex="11"/>
+		<result property="hol07"		column="HOL_07"			columnIndex="12"/>
+		<result property="hol08"		column="HOL_08"			columnIndex="13"/>
+		<result property="hol09"		column="HOL_09"			columnIndex="14"/>
+		<result property="hol10"		column="HOL_10"			columnIndex="15"/>
+		<result property="hol11"		column="HOL_11"			columnIndex="16"/>
+		<result property="hol12"		column="HOL_12"			columnIndex="17"/>
+		<result property="holSum"		column="HOL_SUM"		columnIndex="18"/>
+	</resultMap>
+	
+	<resultMap id="holidayWorkDetail" class="kms.com.member.service.HolidayWorkDetail">
+		<result property="userNo"	column="USER_NO"	columnIndex="1"/>
+		<result property="userNm"	column="USER_NM"	columnIndex="2"/>
+		<result property="userId"	column="USER_ID"	columnIndex="3"/>
+		<result property="stDt"		column="ST_DT"		columnIndex="4"/>
+		<result property="stTm"		column="ST_TM"		columnIndex="5"/>
+		<result property="edDt"		column="ED_DT"		columnIndex="6"/>
+		<result property="edTm"		column="ED_TM"		columnIndex="7"/>
+		<result property="period"	column="PERIOD"		columnIndex="8"/>
+		<result property="prjId"	column="PRJ_ID"		columnIndex="9"/>
+		<result property="prjCd"	column="PRJ_CD"		columnIndex="10"/>
+		<result property="prjNm"	column="PRJ_NM"		columnIndex="11"/>
+		<result property="content"	column="CONTENT"	columnIndex="12"/>
+	</resultMap>
+	
+	
+	<resultMap id="selfDevStatistic" class="kms.com.member.service.SelfDevStatistic">
+		<result property="userNo"	column="USER_NO"	columnIndex="1"/>
+		<result property="userNm"	column="USER_NM"	columnIndex="2"/>
+		<result property="userId"	column="USER_ID"	columnIndex="3"/>
+		<result property="orgnztId"	column="ORGNZT_ID"	columnIndex="4"/>
+		<result property="orgnztNm"	column="ORGNZT_NM"	columnIndex="5"/>
+		<result property="full"		column="FULL"		columnIndex="6"/>
+		<result property="half"		column="HALF"		columnIndex="7"/>
+		<result property="used"		column="USED"		columnIndex="8"/>
+	</resultMap>
+	
+	<resultMap id="selfDevDetail" class="kms.com.member.service.SelfDevDetail">
+		<result property="expDt"	column="EXP_DT"		columnIndex="1"/>
+		<result property="expSpend"	column="EXP_SPEND"	columnIndex="2"/>
+		<result property="expCt"	column="EXP_CT"		columnIndex="3"/>
+		<result property="docId"	column="DOC_ID"		columnIndex="4"/>
+	</resultMap>
+	
+	<resultMap id="salesListAjax" class="kms.com.app.service.ApprovalVO">
+		<result property="templtNm" column="TEMPLT_NM" columnIndex="1" />
+		<result property="docId" column="DOC_ID" columnIndex="2" />
+		<result property="subject" column="SUBJECT" columnIndex="3" />
+		<result property="writerNo" column="WRITER_NO" columnIndex="4" />
+		<result property="writerNm" column="WRITER_NM" columnIndex="5" />
+		<result property="writerId" column="WRITER_ID" columnIndex="6" />
+		<result property="writeDt" column="DOC_DT" columnIndex="7" />
+		<result property="docStat" column="DOC_STAT" columnIndex="8" />
+		<result property="preAppDt" column="PRE_APP_DT" columnIndex="9" />
+		<result property="newAt" column="NEW_AT" columnIndex="10" />
+		<result property="salesOut" column="SALES_OUT" columnIndex="11" />
+		<result property="salesIn" column="SALES_IN" columnIndex="12" />
+		<result property="expSum" column="EXP_SUM" columnIndex="13" />
+	</resultMap>
+	
+	<resultMap id="approvalListAjax" class="kms.com.app.service.ApprovalVO">
+		<result property="docId" column="DOC_ID" columnIndex="1"/>
+		<result property="parntId" column="PARNT_ID" columnIndex="2"/>
+		<result property="writerNo" column="WRITER_NO" columnIndex="3"/>
+		<result property="subject" column="SUBJECT" columnIndex="4"/>
+		<result property="content" column="CONTENT" columnIndex="5"/>
+		<result property="writeDt" column="DOC_DT" columnIndex="6"/>
+		<result property="preAppDt" column="PRE_APP_DT" columnIndex="7"/>
+		<result property="docStat" column="DOC_STAT" columnIndex="8"/>
+		<result property="newAt" column="NEW_AT" columnIndex="9"/>
+		<result property="cnt" column="CNT" columnIndex="10"/>
+		<result property="reUseCnt" column="RE_USE_CNT" columnIndex="11"/>
+		<result property="handleStat" column="HANDLE_STAT" columnIndex="12"/>
+		<result property="handleDt" column="HANDLE_DT" columnIndex="13"/>		
+		<result property="atchFileId" column="ATCH_FILE_ID" columnIndex="14"/>
+		<result property="templtId" column="TEMPLT_ID" columnIndex="15"/>
+		<result property="templtNm" column="TEMPLT_NM" columnIndex="16"/>
+		<result property="reWriteTyp" column="RE_WRITE_TYP" columnIndex="17"/>		
+		<result property="writerNm" column="WRITER_NM" columnIndex="18"/>
+		<result property="writerId" column="WRITER_ID" columnIndex="19"/>		
+	</resultMap>	
+	
+	<resultMap id="bondSalesListAjax" class="kms.com.app.service.ApprovalVO">
+		<result property="templtNm" column="TEMPLT_NM" columnIndex="1" />
+		<result property="docId" column="DOC_ID" columnIndex="2" />
+		<result property="subject" column="SUBJECT" columnIndex="3" />
+		<result property="writerNo" column="WRITER_NO" columnIndex="4" />
+		<result property="writerNm" column="WRITER_NM" columnIndex="5" />
+		<result property="writerId" column="WRITER_ID" columnIndex="6" />
+		<result property="writeDt" column="WRITE_DT" columnIndex="7" />
+		<result property="docStat" column="DOC_STAT" columnIndex="8" />
+		<result property="preAppDt" column="PRE_APP_DT" columnIndex="9" />
+		<result property="newAt" column="NEW_AT" columnIndex="10" />
+		<result property="expSum" column="EXP_SUM" columnIndex="11" />
+		<result property="bondManageYn" column="BOND_MANAGE_YN" columnIndex="12" />
+		<result property="decideYn" column="DECIDE_YN" columnIndex="13" />
+		<result property="mapYn" column="MAP_YN" columnIndex="14" />
+	</resultMap>
+
+	<resultMap id="purchaseInListAjax" class="kms.com.app.service.ApprovalVO">
+		<result property="templtNm" column="TEMPLT_NM" columnIndex="1" />
+		<result property="docId" column="DOC_ID" columnIndex="2" />
+		<result property="subject" column="SUBJECT" columnIndex="3" />
+		<result property="writerNo" column="WRITER_NO" columnIndex="4" />
+		<result property="writerNm" column="WRITER_NM" columnIndex="5" />
+		<result property="writerId" column="WRITER_ID" columnIndex="6" />
+		<result property="writeDt" column="DOC_DT" columnIndex="7" />
+		<result property="docStat" column="DOC_STAT" columnIndex="8" />
+		<result property="preAppDt" column="PRE_APP_DT" columnIndex="9" />
+		<result property="newAt" column="NEW_AT" columnIndex="10" />
+	</resultMap>
+	
+	<resultMap id="purchaseOutListAjax" class="kms.com.app.service.ApprovalVO">
+		<result property="templtNm" column="TEMPLT_NM" columnIndex="1" />
+		<result property="docId" column="DOC_ID" columnIndex="2" />
+		<result property="subject" column="SUBJECT" columnIndex="3" />
+		<result property="writerNo" column="WRITER_NO" columnIndex="4" />
+		<result property="writerNm" column="WRITER_NM" columnIndex="5" />
+		<result property="writerId" column="WRITER_ID" columnIndex="6" />
+		<result property="writeDt" column="DOC_DT" columnIndex="7" />
+		<result property="docStat" column="DOC_STAT" columnIndex="8" />
+		<result property="preAppDt" column="PRE_APP_DT" columnIndex="9" />
+		<result property="newAt" column="NEW_AT" columnIndex="10" />
+		<result property="cost" column="COST" columnIndex="11" />
+	</resultMap>
+
+	<select id="ApprovalDAO.selectApprovalCntSummary1" parameterClass="approvalVO" resultMap="approvalVOSummary" >			
+		SELECT 
+			APD.DOC_STAT AS DOC_STAT 
+			, COUNT(DISTINCT (APD.`DOC_ID`)) AS DOC_STAT_CNT
+		FROM
+			TBL_EAPP_DOC APD
+			INNER JOIN TBL_EAPP_READER APR
+			ON APD.DOC_ID = APR.DOC_ID			
+		WHERE 
+		 	APD.WRITER_NO = #writerNo#
+	    	AND (
+	    			(
+			    	<!--결재실패일 경우 confirm이 안난 경우에만 -->
+	    			DOC_STAT = "APP099"
+	    			AND APR.STAT = 0
+	    			AND APR.APP_TYP = "APR099"
+	    			AND APR.READER_NO = #writerNo#
+	    		) OR
+	    			DOC_STAT IN ("APP001", "APP002", "APP003")
+	    	)	    	
+	    GROUP BY APD.DOC_STAT
+	    	    
+	    <!--처리해야 되는 문서 수  count해서 handlding에 넣어줌 -->
+		UNION 
+		
+		SELECT 
+		"HANDLING" AS DOC_STAT 
+		, COUNT(DISTINCT (APD.`DOC_ID`))  AS  DOC_STAT_CNT
+		FROM TBL_EAPP_DOC APD
+		INNER JOIN TBL_EAPP_READER APR
+		ON APD.DOC_ID = APR.DOC_ID			
+		WHERE 
+	    	APR.APP_TYP = "APR005"
+			AND APR.READER_NO =  #writerNo#
+		 	AND APD.HANDLE_STAT IN ('0', '2') 
+		 	AND DOC_STAT IN ("APP004", "APP005")
+	</select>		 
+
+	
+	<select id="ApprovalDAO.selectApprovalList" parameterClass="approvalVO" resultMap="approvalVOList" >
+		
+		SELECT 
+			APD.`DOC_ID` 
+			,APD.`PARNT_ID` 
+			,APD.`WRITER_NO` 
+			,APD.`SUBJECT` 
+			,APD.`CONTENT` 
+			,DATE_FORMAT(APD.DOC_DT, '%Y.%m.%d %H:%i') AS DOC_DT 
+			,DATE_FORMAT(PRE_APP_DT, '%Y.%m.%d %H:%i') AS PRE_APP_DT
+			,APD.`DOC_STAT` 
+			,APD.`NEW_AT`
+			,APD.`CNT` 
+			,APD.`RE_USE_CNT` 
+			,APD.`HANDLE_STAT`
+			,APD.`HANDLE_DT`
+			,APD.`ATCH_FILE_ID` 
+			,APD.`TEMPLT_ID` 
+			,TYP.DOC_SJ  AS TEMPLT_NM
+			,TYP.DOC_SJ_BR  AS TEMPLT_NM_BR  
+			,APD.`RE_WRITE_TYP`
+			,APR.SRCH_DT
+			,USR.`USER_NM` WRITER_NM
+			,USR.`USER_ID` WRITER_ID  
+			,APR.APP_TYP 
+			,APR.READER_NO
+			,APR.STAT
+			,IF( APD.DOC_STAT IN ('APP005', 'APP004')
+				, IF((SELECT COUNT(*)  FROM TBL_EAPP_READER k WHERE k.DOC_ID = APD.DOC_ID AND k.APP_TYP = 'APR005') = 0, 'N', 'Y')
+			  	, 'U')
+			  	DO_HANDLE
+			,CAST(SUM(IFNULL(IF(EXP.EXP_SPEND_TYP = 'PP',  EXP.EXP_SPEND, 0),0)) / COUNT(DISTINCT APR.NO) AS SIGNED) EXP_SUM
+			,CAST(SUM(IFNULL(IF(EXP.EXP_SPEND_TYP = 'CP',  EXP.EXP_SPEND, 0),0)) / COUNT(DISTINCT APR.NO) AS SIGNED) CP_EXP_SUM
+			,CAST(SUM(IFNULL(IF(EXP.EXP_SPEND_TYP = 'CC',  EXP.EXP_SPEND, 0),0)) / COUNT(DISTINCT APR.NO) AS SIGNED) CC_EXP_SUM
+			,GROUP_CONCAT(DISTINCT EXP.EXP_SPEND ORDER BY EXP.EXP_SPEND ASC SEPARATOR ',') AS EXP_ALL
+			,IF(EXP.EXCEED_MANAGE = 'Y' OR HOL.EXCEED_MANAGE = 'Y', 'Y', 'N') EXCEED_MANAGE
+			,EXP.EXPIRED_DATE
+		FROM
+			TBL_EAPP_DOC APD
+			INNER JOIN TBL_USERINFO USR
+				ON APD.WRITER_NO = USR.`NO`
+			<!-- INNER JOIN TBL_EAPP_READER APR
+				ON APD.DOC_ID = APR.DOC_ID -->
+			INNER JOIN 
+			(SELECT DOC_ID, NO, APP_TYP, SRCH_DT, STAT, READER_NO, APP_DT
+				FROM tbl_eapp_reader APR
+				WHERE 1=1
+				
+				<!-- 저장/기안취소/반려확인이후 문서 -->
+				<isEqual prepend="AND" property="mode" compareValue="1">
+			   		(
+				    	(
+				    		APR.APP_TYP = "APR000"
+				    	) OR (
+				    		APR.APP_TYP = "APR099"
+				    		AND APR.STAT = 1
+				    	)
+				    )
+				</isEqual>
+					
+				<!-- 지금 승인할 문서 -->
+				<isEqual prepend="AND" property="mode" compareValue="2">
+			    	APR.READER_NO = #readerNo#
+					AND APR.STAT = 0 
+				</isEqual>
+					
+				<!-- 내가 기안한 문서 중 참조완료 이전 문서 (전결이전 문서로 변경) -->
+				<isEqual prepend="AND" property="mode" compareValue="3">
+			    	APR.APP_TYP = "APR000"
+				</isEqual>
+			   
+				<!-- 내가 결재한 문서 중 참조완료 이전 문서 (전결이전 문서로 변경)-->
+				<isEqual prepend="AND" property="mode" compareValue="4">				
+			    	APR.READER_NO = #readerNo#
+			    	AND APR.STAT != 0 
+			    	AND APR.APP_TYP != "APR000"				
+				</isEqual>
+				
+				<!-- 내가 반려확인 해야 할 문서 -->
+				<isEqual prepend="AND" property="mode" compareValue="5">
+			    	APR.APP_TYP = "APR099"
+			    	AND APR.READER_NO = #readerNo#
+			    	AND APR.STAT = 0
+				</isEqual>
+			   
+				<!-- 반려확인 이후 문서 (사용하지 않음) -->
+				<isEqual prepend="AND" property="mode" compareValue="6">
+			    	APR.APP_TYP = "APR099"
+			    	AND APR.READER_NO = #readerNo#
+			    	AND APR.STAT = 1
+				</isEqual>
+				   
+				<!-- 이전 결재자의 승인 이후 나에게 도착할 문서 -->
+				<isEqual prepend="AND" property="mode" compareValue="7">
+			    	APR.READER_NO = #readerNo#
+			    	AND APR.APP_TYP IN ("APR001", "APR002", "APR003", "APR004") 
+			    	AND APR.STAT = 0
+				</isEqual>
+		
+				<!-- 내가 결재한 완료문서 -->
+				<isEqual prepend="AND" property="mode" compareValue="11">
+			    	APR.READER_NO = #readerNo#
+			    	AND APR.APP_TYP IN ("APR001", "APR002", "APR003", "APR004")
+				</isEqual>
+			   
+				<!-- 지금 참조할 문서 (미참조) -->
+				<isEqual prepend="AND" property="mode" compareValue="12">
+			    	APR.READER_NO = #readerNo#
+			    	AND APR.APP_TYP = "APR004"
+			    	AND APR.STAT = 0
+				</isEqual>
+				
+				<!-- 내가 처리할 문서 (미처리) -->
+				<isEqual prepend="AND" property="mode" compareValue="13">
+			    	APR.READER_NO = #readerNo#
+			    	AND APR.APP_TYP = "APR005"
+				</isEqual>
+				) APR
+				ON APD.DOC_ID = APR.DOC_ID
+			INNER JOIN TBL_EAPP_DOCTYP TYP
+				ON APD.TEMPLT_ID = TYP.TEMPLT_ID
+			LEFT JOIN TBL_EAPP_EXP EXP
+				ON APD.DOC_ID = EXP.DOC_ID
+			LEFT JOIN TBL_EAPP_HOL HOL
+				ON APD.DOC_ID = HOL.DOC_ID
+		WHERE 1=1
+
+		<!-- 저장/기안취소/반려확인이후 문서 -->
+		<isEqual prepend="AND" property="mode" compareValue="1">
+	   		(
+		    	(
+		    		APD.DOC_STAT = "APP000"
+		    	) OR (
+			    	APD.DOC_STAT = "APP099"
+		    	)
+		    )
+		    AND APD.WRITER_NO = #readerNo#
+		</isEqual>
+			
+		<!-- 지금 승인할 문서 -->
+		<isEqual prepend="AND" property="mode" compareValue="2">
+	    	APD.DOC_STAT IN ("APP001", "APP002", "APP003")
+	    	AND SUBSTRING(APR.APP_TYP, 4, 3) = SUBSTRING(APD.DOC_STAT, 4, 3) 
+	    	
+		</isEqual>
+			
+		<!-- 내가 기안한 문서 중 참조완료 이전 문서 (전결이전 문서로 변경) -->
+		<isEqual prepend="AND" property="mode" compareValue="3">
+	    	APD.DOC_STAT IN ("APP001", "APP002", "APP003")
+	    	AND APD.WRITER_NO = #readerNo#
+		</isEqual>
+	   
+		<!-- 내가 결재한 문서 중 참조완료 이전 문서 (전결이전 문서로 변경)-->
+		<isEqual prepend="AND" property="mode" compareValue="4">				
+	    	APD.DOC_STAT IN ("APP001", "APP002", "APP003")
+	    	AND SUBSTRING(APD.DOC_STAT, 4, 3) >= SUBSTRING(APR.APP_TYP, 4, 3)  
+		</isEqual>
+		
+		<!-- 내가 반려확인 해야 할 문서 -->
+		<isEqual prepend="AND" property="mode" compareValue="5">
+	    	APD.DOC_STAT = "APP099"
+		</isEqual>
+	   
+		<!-- 반려확인 이후 문서 (사용하지 않음) -->
+		<isEqual prepend="AND" property="mode" compareValue="6">
+	    	APD.DOC_STAT = "APP099"
+		</isEqual>
+		   
+		<!-- 이전 결재자의 승인 이후 나에게 도착할 문서 -->
+		<isEqual prepend="AND" property="mode" compareValue="7">
+	    	APD.DOC_STAT IN ("APP001", "APP002", "APP003")
+	    	AND SUBSTRING(APR.APP_TYP,4,3) > SUBSTRING(APD.DOC_STAT,4,3) 
+		</isEqual>
+
+		<!-- 전결나지 않은 내가 참조할 문서 (사용하지 않음) -->
+		<isEqual prepend="AND" property="mode" compareValue="8">
+	    	APD.DOC_STAT IN ("APP001", "APP002", "APP003")
+	    	AND APR.APP_TYP = "APR004"
+	    	AND APR.READER_NO = #readerNo#
+		</isEqual>
+	   
+		<!-- 나와 관련된 문서 중 전결나지 않은 모든 문서 (사용하지 않음) -->
+		<isEqual prepend="AND" property="mode" compareValue="9">
+	    	APD.DOC_STAT IN ("APP001", "APP002", "APP003")
+	    	AND (APR.READER_NO = #readerNo# OR APD.WRITER_NO = #readerNo#)
+		</isEqual>
+		   
+		<!-- 내가 기안한 완료문서 -->
+		<isEqual prepend="AND" property="mode" compareValue="10">
+	    	APD.DOC_STAT IN ("APP004", "APP005")
+	    	AND APD.WRITER_NO = #readerNo# 
+		</isEqual>
+	   
+		<!-- 내가 결재한 완료문서 -->
+		<isEqual prepend="AND" property="mode" compareValue="11">
+	    	APD.DOC_STAT IN ("APP004", "APP005")
+		</isEqual>
+	   
+		<!-- 지금 참조할 문서 (미참조) -->
+		<isEqual prepend="AND" property="mode" compareValue="12">
+	    	APD.DOC_STAT IN ("APP004", "APP005")
+		</isEqual>
+		
+		<!-- 내가 처리할 문서 (미처리) -->
+		<isEqual prepend="AND" property="mode" compareValue="13">
+	    	APD.DOC_STAT IN ("APP004", "APP005")
+			AND APD.HANDLE_STAT IN ('0', '2')
+		</isEqual>
+
+		<!-- 모든 전결완료문서 (저장문서 제외) -->
+		<isEqual prepend="AND" property="mode" compareValue="14">
+	    	APD.DOC_STAT IN ("APP004", "APP005")
+		</isEqual>
+		   
+		<!--채용요청 현황 (저장문서 제외) -->
+		<isEqual prepend="AND" property="mode" compareValue="50">
+			(
+	    		APD.DOC_STAT IN ("APP001", "APP002", "APP003")
+	    		OR APD.DOC_STAT IN ("APP004", "APP005") AND APD.NEW_AT = '1'
+	    	)
+	    	AND APD.TEMPLT_ID = #templtId#
+		</isEqual>
+		   
+		<isNotEmpty property="searchdocStatL">
+			AND APD.`DOC_STAT` IN  
+			<iterate property="searchdocStatL" open="(" close=")" conjunction=",">
+				#searchdocStatL[]#
+			</iterate>
+		</isNotEmpty>
+		   
+		<isNotEmpty property="searchSubject">
+			AND APD.`SUBJECT` LIKE CONCAT('%', #searchSubject#,'%')
+		</isNotEmpty>
+		   
+		<isNotEmpty property="searchWriterNm">
+			AND USR.`USER_NM` LIKE CONCAT('%', #searchWriterNm#,'%')
+		</isNotEmpty>
+		   
+		<isNotEmpty property="searchTempltId">
+			AND APD.TEMPLT_ID = #searchTempltId#
+		</isNotEmpty>
+
+		<isNotEmpty property="searchCompanyId">
+			AND USR.COMPNY_ID = #searchCompanyId#
+		</isNotEmpty>
+		   
+		<isNotEmpty property="completeDocYn">
+			<isEqual property="completeDocYn" compareValue="N">
+				AND APD.`DOC_STAT`IN ("APP001","APP002","APP003")
+			</isEqual>
+			<isEqual property="completeDocYn" compareValue="Y">
+				AND APD.`DOC_STAT`IN ("APP004","APP005")
+			</isEqual>
+		</isNotEmpty>
+
+		<isNotEmpty property="searchExpDesc">
+			AND EXP.EXP_CT LIKE CONCAT('%', #searchExpDesc#, '%')
+		</isNotEmpty>
+		
+		<isNotEmpty property="searchExpDesc">
+			AND EXP.EXP_CT LIKE CONCAT('%', #searchExpDesc#, '%')
+		</isNotEmpty>
+		
+		<isNotEqual property="searchAllPeriod" compareValue="1">
+			<isNotEmpty property="searchBgnDe">
+				<![CDATA[
+				AND DATE_FORMAT(APD.DOC_DT, '%Y%m%d') >= #searchBgnDe#
+				]]>
+			</isNotEmpty>
+			<isNotEmpty property="searchEndDe">
+				<![CDATA[
+				AND DATE_FORMAT(APD.DOC_DT, '%Y%m%d') <= #searchEndDe#
+				]]>
+			</isNotEmpty>
+		</isNotEqual>
+		
+		GROUP BY 
+			APD.DOC_ID
+		HAVING
+			1=1
+		<isNotEmpty property="searchExpMoney">
+	  		AND (
+	  			EXP_SUM = #searchExpMoney#
+	  			OR CP_EXP_SUM = #searchExpMoney#
+	  			OR CC_EXP_SUM = #searchExpMoney#
+	  			OR EXP_ALL LIKE CONCAT('%', #searchExpMoney#, '%')
+	  		)
+	    </isNotEmpty>
+	    
+	    <isNotEmpty property="searchHandleStatL">
+			AND (
+				`HANDLE_STAT` IN  
+				<iterate property="searchHandleStatL" open="(" close=")" conjunction=",">
+					#searchHandleStatL[]#
+				</iterate>
+				AND DO_HANDLE = 'Y' 
+			)
+		</isNotEmpty>
+		
+		ORDER BY 
+		<isEqual property="mode" compareValue="2">
+			DOC_DT ASC,
+		</isEqual>
+		<isEqual property="mode" compareValue="3">			
+		</isEqual>
+		<isEqual property="mode" compareValue="4">				
+		</isEqual>
+		<isEqual property="mode" compareValue="7">				
+		</isEqual>
+		<isEqual property="mode" compareValue="10">
+		</isEqual>
+		<isEqual property="mode" compareValue="12">
+			DOC_DT ASC,
+		</isEqual>
+		<isEqual property="mode" compareValue="13">
+			DOC_DT ASC,
+		</isEqual>
+		<isEqual property="mode" compareValue="50">
+			DOC_STAT ASC,
+			HANDLE_STAT ASC,
+		</isEqual>
+			DOC_DT DESC 
+		LIMIT
+			#recordCountPerPage# OFFSET #firstIndex#			
+			
+	</select>
+	
+	<select id="ApprovalDAO.selectApprovalListCnt" parameterClass="approvalVO" resultClass="java.lang.Integer" >
+			
+		SELECT 
+			COUNT(DISTINCT (APD.`DOC_ID`))			
+		FROM TBL_EAPP_DOC APD
+		INNER JOIN TBL_USERINFO USR
+			ON APD.WRITER_NO = USR.`NO`
+		<!-- INNER JOIN TBL_EAPP_READER APR
+			ON APD.DOC_ID = APR.DOC_ID -->
+		INNER JOIN (SELECT DOC_ID, NO, APP_TYP, SRCH_DT, STAT, READER_NO, APP_DT
+				FROM tbl_eapp_reader APR
+				WHERE 1=1
+				
+				<!-- 저장/기안취소/반려확인이후 문서 -->
+				<isEqual prepend="AND" property="mode" compareValue="1">
+			   		(
+				    	(
+				    		APR.APP_TYP = "APR000"
+				    	) OR (
+				    		APR.APP_TYP = "APR099"
+				    		AND APR.STAT = 1
+				    	)
+				    )
+				</isEqual>
+					
+				<!-- 지금 승인할 문서 -->
+				<isEqual prepend="AND" property="mode" compareValue="2">
+			    	APR.READER_NO = #readerNo#
+					AND APR.STAT = 0 
+				</isEqual>
+					
+				<!-- 내가 기안한 문서 중 참조완료 이전 문서 (전결이전 문서로 변경) -->
+				<isEqual prepend="AND" property="mode" compareValue="3">
+			    	APR.APP_TYP = "APR000"
+				</isEqual>
+			   
+				<!-- 내가 결재한 문서 중 참조완료 이전 문서 (전결이전 문서로 변경)-->
+				<isEqual prepend="AND" property="mode" compareValue="4">				
+			    	APR.READER_NO = #readerNo#
+			    	AND APR.STAT != 0 
+			    	AND APR.APP_TYP != "APR000"				
+				</isEqual>
+				
+				<!-- 내가 반려확인 해야 할 문서 -->
+				<isEqual prepend="AND" property="mode" compareValue="5">
+			    	APR.APP_TYP = "APR099"
+			    	AND APR.READER_NO = #readerNo#
+			    	AND APR.STAT = 0
+				</isEqual>
+			   
+				<!-- 반려확인 이후 문서 (사용하지 않음) -->
+				<isEqual prepend="AND" property="mode" compareValue="6">
+			    	APR.APP_TYP = "APR099"
+			    	AND APR.READER_NO = #readerNo#
+			    	AND APR.STAT = 1
+				</isEqual>
+				   
+				<!-- 이전 결재자의 승인 이후 나에게 도착할 문서 -->
+				<isEqual prepend="AND" property="mode" compareValue="7">
+			    	APR.READER_NO = #readerNo#
+			    	AND APR.APP_TYP IN ("APR001", "APR002", "APR003", "APR004") 
+			    	AND APR.STAT = 0
+				</isEqual>
+		
+				<!-- 내가 결재한 완료문서 -->
+				<isEqual prepend="AND" property="mode" compareValue="11">
+			    	APR.READER_NO = #readerNo#
+			    	AND APR.APP_TYP IN ("APR001", "APR002", "APR003", "APR004")
+				</isEqual>
+			   
+				<!-- 지금 참조할 문서 (미참조) -->
+				<isEqual prepend="AND" property="mode" compareValue="12">
+			    	APR.READER_NO = #readerNo#
+			    	AND APR.APP_TYP = "APR004"
+			    	AND APR.STAT = 0
+				</isEqual>
+				
+				<!-- 내가 처리할 문서 (미처리) -->
+				<isEqual prepend="AND" property="mode" compareValue="13">
+			    	APR.READER_NO = #readerNo#
+			    	AND APR.APP_TYP = "APR005"
+				</isEqual>
+				) APR
+			ON APD.DOC_ID = APR.DOC_ID
+		INNER JOIN TBL_EAPP_DOCTYP TYP
+			ON APD.TEMPLT_ID = TYP.TEMPLT_ID
+		LEFT JOIN TBL_EAPP_EXP EXP
+			ON APD.DOC_ID = EXP.DOC_ID
+		WHERE 1=1
+		<!-- 저장/기안취소/반려확인이후 문서 -->
+		<isEqual prepend="AND" property="mode" compareValue="1">
+	   		(
+		    	(
+		    		APD.DOC_STAT = "APP000"
+		    	) OR (
+			    	APD.DOC_STAT = "APP099"
+		    	)
+		    )
+		    AND APD.WRITER_NO = #readerNo#
+		</isEqual>
+			
+		<!-- 지금 승인할 문서 -->
+		<isEqual prepend="AND" property="mode" compareValue="2">
+	    	APD.DOC_STAT IN ("APP001", "APP002", "APP003")
+	    	AND SUBSTRING(APR.APP_TYP, 4, 3) = SUBSTRING(APD.DOC_STAT, 4, 3) 
+		</isEqual>
+			
+		<!-- 내가 기안한 문서 중 참조완료 이전 문서 (전결이전 문서로 변경) -->
+		<isEqual prepend="AND" property="mode" compareValue="3">
+	    	APD.DOC_STAT IN ("APP001", "APP002", "APP003")
+	    	AND APD.WRITER_NO = #readerNo#
+		</isEqual>
+	   
+		<!-- 내가 결재한 문서 중 참조완료 이전 문서 (전결이전 문서로 변경)-->
+		<isEqual prepend="AND" property="mode" compareValue="4">				
+	    	APD.DOC_STAT IN ("APP001", "APP002", "APP003")
+	    	AND SUBSTRING(APD.DOC_STAT, 4, 3) >= SUBSTRING(APR.APP_TYP, 4, 3)  
+		</isEqual>
+		
+		<!-- 내가 반려확인 해야 할 문서 -->
+		<isEqual prepend="AND" property="mode" compareValue="5">
+	    	APD.DOC_STAT = "APP099"
+		</isEqual>
+	   
+		<!-- 반려확인 이후 문서 (사용하지 않음) -->
+		<isEqual prepend="AND" property="mode" compareValue="6">
+	    	APD.DOC_STAT = "APP099"
+		</isEqual>
+		   
+		<!-- 이전 결재자의 승인 이후 나에게 도착할 문서 -->
+		<isEqual prepend="AND" property="mode" compareValue="7">
+	    	APD.DOC_STAT IN ("APP001", "APP002", "APP003")
+	    	AND SUBSTRING(APR.APP_TYP,4,3) > SUBSTRING(APD.DOC_STAT,4,3) 
+		</isEqual>
+
+		<!-- 전결나지 않은 내가 참조할 문서 (사용하지 않음) -->
+		<isEqual prepend="AND" property="mode" compareValue="8">
+	    	APD.DOC_STAT IN ("APP001", "APP002", "APP003")
+	    	AND APR.APP_TYP = "APR004"
+	    	AND APR.READER_NO = #readerNo#
+		</isEqual>
+	   
+		<!-- 나와 관련된 문서 중 전결나지 않은 모든 문서 (사용하지 않음) -->
+		<isEqual prepend="AND" property="mode" compareValue="9">
+	    	APD.DOC_STAT IN ("APP001", "APP002", "APP003")
+	    	AND (APR.READER_NO = #readerNo# OR APD.WRITER_NO = #readerNo#)
+		</isEqual>
+		   
+		<!-- 내가 기안한 완료문서 -->
+		<isEqual prepend="AND" property="mode" compareValue="10">
+	    	APD.DOC_STAT IN ("APP004", "APP005")
+	    	AND APD.WRITER_NO = #readerNo# 
+		</isEqual>
+	   
+		<!-- 내가 결재한 완료문서 -->
+		<isEqual prepend="AND" property="mode" compareValue="11">
+	    	APD.DOC_STAT IN ("APP004", "APP005")
+		</isEqual>
+	   
+		<!-- 지금 참조할 문서 (미참조) -->
+		<isEqual prepend="AND" property="mode" compareValue="12">
+	    	APD.DOC_STAT IN ("APP004", "APP005")
+		</isEqual>
+		
+		<!-- 내가 처리할 문서 (미처리) -->
+		<isEqual prepend="AND" property="mode" compareValue="13">
+	    	APD.DOC_STAT IN ("APP004", "APP005")
+			AND APD.HANDLE_STAT IN ('0', '2')
+		</isEqual>
+
+		<!-- 모든 전결완료문서 (저장문서 제외) -->
+		<isEqual prepend="AND" property="mode" compareValue="14">
+	    	APD.DOC_STAT IN ("APP004", "APP005")
+		</isEqual>
+		   
+		<!--채용요청 현황 (저장문서 제외) -->
+		<isEqual prepend="AND" property="mode" compareValue="50">
+			(
+	    		APD.DOC_STAT IN ("APP001", "APP002", "APP003")
+	    		OR APD.DOC_STAT IN ("APP004", "APP005") AND APD.NEW_AT = '1'
+	    	)
+	    	AND APD.TEMPLT_ID = #templtId#
+		</isEqual>
+
+		<isNotEmpty property="searchHandleStatL">
+			AND (
+					(APD.`HANDLE_STAT` IN  
+					<iterate property="searchHandleStatL" open="(" close=")" conjunction=",">
+						#searchHandleStatL[]#
+					</iterate>
+					AND IF(
+						(SELECT COUNT(*)
+						FROM TBL_EAPP_READER k
+						WHERE k.DOC_ID = APD.DOC_ID
+						AND k.APP_TYP = 'APR005') = 0
+					,'N','Y')
+					= 'Y' 
+				)
+				<isEqual property="searchDoHandle" compareValue="N">
+					OR IF( 
+						(SELECT COUNT(*)
+						FROM TBL_EAPP_READER k 
+						WHERE k.DOC_ID = APD.DOC_ID 
+						AND k.APP_TYP = 'APR005') = 0
+					, 'N', 'Y')
+					= 'N'
+				</isEqual>
+			)
+		</isNotEmpty>
+		  
+		<isEmpty property="searchHandleStatL">
+			  <isEqual property="searchDoHandle" compareValue="N" prepend="AND">
+		  			IF((SELECT COUNT(*)  FROM TBL_EAPP_READER k WHERE k.DOC_ID = APD.DOC_ID AND k.APP_TYP = 'APR005') = 0,'N','Y')
+		  				='N'
+		  		</isEqual>
+		</isEmpty>
+		  
+		<isNotEmpty property="searchdocStatL">		  		
+			AND APD.`DOC_STAT` IN  
+			<iterate property="searchdocStatL" open="(" close=")" conjunction=",">
+				#searchdocStatL[]#
+			</iterate>
+		</isNotEmpty>
+		  
+		<isNotEmpty property="searchSubject">
+		 		AND APD.`SUBJECT` LIKE CONCAT('%', #searchSubject#,'%')
+		</isNotEmpty>
+		  
+		<isNotEmpty property="searchWriterNm">
+		 		AND USR.`USER_NM` LIKE CONCAT('%', #searchWriterNm#,'%')
+		</isNotEmpty>
+		  
+		<isNotEmpty property="searchTempltId">
+		 	 AND APD.TEMPLT_ID = #searchTempltId#
+		</isNotEmpty>
+
+		<isNotEmpty property="searchCompanyId">
+			AND USR.COMPNY_ID = #searchCompanyId#
+		</isNotEmpty>
+
+		<isNotEmpty property="completeDocYn">
+			<isEqual property="completeDocYn" compareValue="N">
+				AND APD.`DOC_STAT`IN ("APP001","APP002","APP003")
+			</isEqual>
+			<isEqual property="completeDocYn" compareValue="Y">
+				AND APD.`DOC_STAT`IN ("APP004","APP005")
+			</isEqual>
+		</isNotEmpty>
+				  
+		<isNotEmpty property="searchExpMoney">
+			AND EXP.EXP_SPEND = #searchExpMoney#
+		</isNotEmpty>
+		
+		<isNotEmpty property="searchExpDesc">
+			AND EXP.EXP_CT LIKE CONCAT('%', #searchExpDesc#, '%')
+		</isNotEmpty>		
+		
+		<isNotEqual property="searchAllPeriod" compareValue="1">
+			<isNotEmpty property="searchBgnDe">
+				<![CDATA[
+				AND DATE_FORMAT(APD.DOC_DT, '%Y%m%d') >= #searchBgnDe#
+				]]>
+			</isNotEmpty>
+			<isNotEmpty property="searchEndDe">
+				<![CDATA[
+				AND DATE_FORMAT(APD.DOC_DT, '%Y%m%d') <= #searchEndDe#
+				]]>
+			</isNotEmpty>
+		</isNotEqual>
+		
+	</select>
+	
+	
+	<insert id="ApprovalDAO.insertApprovalCmm" parameterClass="approval" >
+		INSERT INTO TBL_EAPP_DOC 
+		(
+			 `DOC_ID` 
+			 , `PARNT_ID` 
+			 , `WRITER_NO` 
+			 , `SUBJECT` 
+			 , `CONTENT` 
+			 , `DOC_DT` 
+			 , `PRE_APP_DT` 
+			 , `DOC_STAT` 
+			 , `NEW_AT`
+			 , `CNT` 
+			 , `RE_USE_CNT` 
+			 , `HANDLE_STAT` 
+			 , `ATCH_FILE_ID` 
+			 , `TEMPLT_ID` 
+			 , `RE_WRITE_TYP` 
+			 , `PRJ_ID_DOC`
+		)
+		VALUES (
+			#docId#
+			,#parntId#
+			,(SELECT NO FROM TBL_USERINFO WHERE USER_ID = #writerId#)  
+			,#subject#
+			,#content#
+			,SYSDATE()
+			,SYSDATE()
+			,#docStat#
+			,#newAt#
+			,#cnt#
+			,#reUseCnt#
+			,#handleStat#
+			,#atchFileId#
+			,#templtId#
+			,#reWriteTyp#
+			,#prjIdDoc#
+		)
+	</insert>
+	
+	<update id="ApprovalDAO.updateApprovalCmm" parameterClass="approval" >
+		UPDATE TBL_EAPP_DOC 
+		SET
+			 `PARNT_ID` = #parntId#
+			 , `SUBJECT` = #subject# 
+			 , `CONTENT` = #content#
+			 , `DOC_DT` = SYSDATE()
+			 , `PRE_APP_DT` =SYSDATE()
+			 , `DOC_STAT` = #docStat#
+			 , `NEW_AT` = #newAt#
+			 , `CNT`  = 0
+			 , `RE_USE_CNT` = 0 
+			 , `HANDLE_STAT` = #handleStat#
+			 , `ATCH_FILE_ID` =#atchFileId#
+		where DOC_ID = #docId# 
+		
+	</update>
+	
+	
+	<insert id="ApprovalDAO.insertApprovalReader" parameterClass="approvalReaderVO" >
+		INSERT INTO TBL_EAPP_READER
+		(
+		 `DOC_ID` 
+		,  `APP_TYP`
+		,  `SRCH_DT`
+		,  `STAT`
+		,  `READER_NO`
+		,  `APP_DT`
+		)
+		VALUES
+		(
+		#docId#
+		,#appTyp#
+		,#srchDt#
+		,#stat#  
+		,(SELECT NO FROM TBL_USERINFO WHERE 1=1 AND (USER_ID = #readerId# OR CONCAT(USER_NM, '(', USER_ID, ')') = #readerId#))
+		,#appDt#
+		)
+	</insert>
+	
+	
+	<select id="ApprovalDAO.viewApprovalDoc" parameterClass="approvalVO" resultMap="approvalVOAllNew" >
+			<![CDATA[
+			select 
+			 `DOC_ID`
+			  ,`PARNT_ID` 
+			  ,APD.`WRITER_NO` 
+			  ,`SUBJECT` 
+			  ,`CONTENT` 
+			  ,DATE_FORMAT(DOC_DT, '%Y.%m.%d %H:%i') AS DOC_DT 
+			  ,`DOC_STAT` 
+			  ,`NEW_AT`
+			  ,`CNT` 
+			  ,`RE_USE_CNT` 
+			  ,`HANDLE_STAT`
+			  ,`ATCH_FILE_ID` 
+			  ,`TEMPLT_ID` 
+			  ,`RE_WRITE_TYP`
+			  ,`PRJ_ID_DOC`
+			  ,PRJ.`PRJ_NM` AS PRJ_NM_DOC
+			  ,PRJ.`PRJ_CD` AS PRJ_CD_DOC
+			  ,USR.`USER_NM` AS WRITER_NM  
+			  ,USR.`USER_ID` AS WRITER_ID
+			  ,EMO.EMAIL_ADDR AS EMAIL_ADDR
+			  ,APD.DOC_STAT
+			  ,APD.PRE_APP_DT
+			FROM TBL_EAPP_DOC APD
+			INNER JOIN TBL_USERINFO USR
+			ON APD.WRITER_NO = USR.`NO`
+			LEFT JOIN TBL_PRJ PRJ
+			ON APD.PRJ_ID_DOC = PRJ.PRJ_ID
+			LEFT JOIN TBL_MAIL_OUT EMO
+			ON APD.DOC_ID = EMO.REF_ID
+			WHERE APD.DOC_ID = #docId#
+			 ]]>		 
+	</select>
+	
+	
+	<select id="ApprovalDAO.viewApprovalReader" parameterClass="approvalVO" resultMap="approvalReaderVOAll" >
+			<![CDATA[
+			select 
+			  APR.`DOC_ID` 
+			, APR.`NO`
+			, APR.`APP_TYP`
+			, DATE_FORMAT(APR.`SRCH_DT`, '%Y.%m.%d %H:%i') AS `SRCH_DT`
+			, APR. `STAT`
+			, APR.READER_NO 
+			, DATE_FORMAT( APR.`APP_DT`, '%Y.%m.%d %H:%i') AS `APP_DT`
+			, USR.`USER_NM` AS READER_NM
+			, USR.`USER_ID` AS READER_ID
+			, USR.NO AS READER_NO
+			
+			FROM TBL_EAPP_READER APR
+				INNER JOIN TBL_USERINFO USR
+				ON APR.READER_NO = USR.`NO`
+				
+			WHERE APR.DOC_ID = #docId#
+			ORDER BY APR.APP_TYP ASC
+			 ]]>
+		 
+	</select>
+	
+	<select id="ApprovalDAO.selectReaderNo" parameterClass="approvalReaderVO" resultClass="java.lang.Integer" >		
+		SELECT
+			APR.`NO`
+		FROM 
+			TBL_EAPP_READER APR			 
+		WHERE 
+			DOC_ID = #docId#
+			AND APP_TYP = #appTyp#
+			AND READER_NO = #readerNo#	 
+	</select>
+	
+	
+	<select id="ApprovalDAO.selectUserMixByUserNo" resultClass="java.lang.String" parameterClass="java.lang.Integer">	
+		SELECT
+			CONCAT(USER_NM,' (',USER_ID,')') 
+		FROM
+			TBL_USERINFO
+		WHERE
+			NO = #userNo#	 
+	</select>
+	
+	<select id="ApprovalDAO.getChildDoc" resultMap="approvalVOAll" parameterClass="approvalVO">
+	<![CDATA[
+			select 
+			 `DOC_ID`
+			  ,`PARNT_ID` 
+			  ,`WRITER_NO` 
+			  ,`SUBJECT` 
+			  ,`CONTENT` 
+			  ,DATE_FORMAT(DOC_DT, '%Y.%m.%d %H:%i') AS DOC_DT 
+			  ,`DOC_STAT` 
+			  ,`NEW_AT`
+			  ,`CNT` 
+			  ,`RE_USE_CNT` 
+			  ,`HANDLE_STAT`
+			  ,`ATCH_FILE_ID` 
+			  ,`TEMPLT_ID` 
+			  ,`RE_WRITE_TYP`
+			  ,USR.`USER_NM` AS WRITER_NM  
+			  ,USR.`USER_ID` AS WRITER_ID
+			FROM TBL_EAPP_DOC APD
+			INNER JOIN TBL_USERINFO USR
+			ON APD.WRITER_NO = USR.`NO`
+			WHERE APD.DOC_ID != #docId#
+			AND APD.PARNT_ID = #parntId#
+			AND APD.DOC_STAT IN ('APP004', 'APP005')
+			LIMIT 0,1
+			 ]]>
+	</select>
+	
+	<select id="ApprovalDAO.getParentDoc" resultMap="approvalVOAll" parameterClass="approvalVO">
+	<![CDATA[
+			select 
+			 `DOC_ID`
+			  ,`PARNT_ID` 
+			  ,`WRITER_NO` 
+			  ,`SUBJECT` 
+			  ,`CONTENT` 
+			  ,DATE_FORMAT(DOC_DT, '%Y.%m.%d %H:%i') AS DOC_DT 
+			  ,`DOC_STAT` 
+			  ,`NEW_AT`
+			  ,`CNT` 
+			  ,`RE_USE_CNT` 
+			  ,`HANDLE_STAT`
+			  ,`ATCH_FILE_ID` 
+			  ,`TEMPLT_ID` 
+			  ,`RE_WRITE_TYP`
+			  ,USR.`USER_NM` AS WRITER_NM  
+			  ,USR.`USER_ID` AS WRITER_ID
+			FROM TBL_EAPP_DOC APD
+			INNER JOIN TBL_USERINFO USR
+			ON APD.WRITER_NO = USR.`NO`
+			WHERE APD.DOC_ID = #docId#
+			 ]]>
+	</select>
+	
+	<update id="ApprovalDAO.updateReaderStat" parameterClass="approvalReaderVO">
+		UPDATE TBL_EAPP_READER APR
+		SET
+			STAT = #stat#
+			,APP_DT = SYSDATE()
+		WHERE DOC_ID = #docId#
+		and APP_TYP = #appTyp#
+		AND READER_NO = #readerNo#
+ 	</update> 	
+ 	
+ 	<update id="ApprovalDAO.updateDocStat" parameterClass="approvalVO">
+		UPDATE TBL_EAPP_DOC APD
+		SET
+			DOC_STAT = #docStat#
+			,PRE_APP_DT = SYSDATE()
+		WHERE DOC_ID = #docId#
+ 	</update>
+ 	
+ 	<select id="ApprovalDAO.countUnAppReaderByTyp" resultClass="java.lang.Integer" parameterClass="approvalReaderVO">
+	<![CDATA[
+		SELECT
+			count(*)
+		FROM
+			 TBL_EAPP_READER APR
+		WHERE DOC_ID = #docId#
+			and APP_TYP = #appTyp#
+			AND STAT = 0
+
+	 ]]>
+	</select>
+ 	
+	<update id="ApprovalDAO.updateReaderSrchDt" parameterClass="approvalReaderVO">			
+		UPDATE  
+			TBL_EAPP_READER		
+		SET
+			SRCH_DT = IFNULL(SRCH_DT,SYSDATE())		
+		WHERE 
+			DOC_ID = #docId#
+			AND READER_NO = #readerNo#
+ 	</update>	
+
+	<update id="ApprovalDAO.incrementReUseCnt" parameterClass="java.lang.String">			
+		UPDATE 
+			TBL_EAPP_DOC APD		
+		SET
+			RE_USE_CNT = RE_USE_CNT + 1 		
+		WHERE 
+			DOC_ID = #docId#
+ 	</update> 	
+ 	
+	<update id="ApprovalDAO.upDateDocNewAt" parameterClass="approvalVO">			
+		UPDATE 
+			TBL_EAPP_DOC APD		
+		SET
+			NEW_AT = #newAt#
+		WHERE 
+			DOC_ID = #docId#
+ 	</update>
+ 	
+ 	<update id="ApprovalDAO.updateDocContent" parameterClass="approvalVO">			
+		UPDATE 
+			TBL_EAPP_DOC APD		
+		SET
+			CONTENT = #content#
+		WHERE 
+			DOC_ID = #docId#
+ 	</update>
+ 	
+
+<!-- about vac 휴가문서 -->
+
+	<insert id="ApprovalDAO.insertApprovalVac" parameterClass="approvalVacVO">		
+		INSERT INTO TBL_EAPP_VAC 
+			( DOC_ID
+			  , VAC_TYP
+			  , ST_DT
+			  , ED_DT
+			  , ST_AMPM
+			  , ED_AMPM
+			  , SUM_DATE
+			  , SYSTEM
+			  , WS_PLACE
+			  , EAPP_WRITER_NO )
+		VALUES ( #docId#
+			  , #vacTyp#
+			  , #stDt#
+			  , #edDt#
+			  , #stAmpm#
+			  , #edAmpm#
+			  , #sumDate#
+			  , #system#
+			  , #wsPlace#
+			  , #writerNo# )		
+	</insert>
+	
+	
+	<select id="ApprovalDAO.viewApprovalVac" parameterClass="approvalVO" resultMap="approvalVacVOAll">
+			select 
+			 APV.`DOC_ID`
+				, APV.VAC_TYP
+				, APV.ST_DT
+				, APV.ED_DT
+				, APV.ST_AMPM
+				, APV.ED_AMPM
+				, APV.SUM_DATE
+				, APV.SYSTEM
+				, APV.WS_PLACE
+			FROM TBL_EAPP_VAC AS APV
+			WHERE DOC_ID = #docId#
+	</select>
+	
+	<select id="ApprovalDAO.selectVacDateSum" resultClass="java.lang.Double">		
+		
+		SELECT 
+			COUNT(*) + (#edAmpm#  - #stAmpm#) * 0.5 - 0.5 AS sumDate
+		FROM 
+			TBL_CALENDAR_DATA A
+		WHERE 
+			CAL_DATE BETWEEN #stDt# AND #edDt#
+			AND CAL_DATE NOT IN (
+				SELECT 
+					CONCAT(IFNULL(b.SCHE_YEAR, YEAR(A.CAL_DATE)), b.SCHE_MONTH, b.SCHE_DATE)
+				FROM 
+					TBL_SCHEDULE b
+				WHERE 
+					SCHE_TYP IN ('H','I','J') 
+					AND DELETE_YN = 'N'
+				GROUP BY 
+					CONCAT(IFNULL(b.SCHE_YEAR, YEAR(A.CAL_DATE)), b.SCHE_MONTH, b.SCHE_DATE)
+			)
+			AND DAYOFWEEK(A.CAL_DATE) IN (2,3,4,5,6)
+	
+	</select>
+	
+	<!--  for offical doc -->
+	<insert id="ApprovalDAO.insertApprovalOfficial">
+		INSERT INTO TBL_EAPP_OFFICIAL 
+			( DOC_ID
+			  , COMPANY_ID
+			  , DESTN )
+		VALUES ( #docId#
+			  , #companyId#
+			  , #destn# )
+	</insert>
+	
+	<select id="ApprovalDAO.viewApprovalOfficial" resultMap="ApprovalOfficialVOAll" parameterClass="approvalVO">
+		<![CDATA[
+			SELECT
+				DOC_ID
+				, IF(OFFICIAL_ID IS NULL , "", CONCAT(b.COLUMN1,OFFICIAL_YEAR,"-",LPAD(OFFICIAL_ID,4,"0"))) OFFICIAL_NM
+				, b.CODE_NM COMPANY_NM
+				, a.COMPANY_ID
+				, DESTN
+			FROM TBL_EAPP_OFFICIAL a
+			LEFT OUTER JOIN COMTCCMMNDETAILCODE b
+			ON a.COMPANY_ID = b.CODE
+
+			WHERE DOC_ID=#docId#
+			
+		]]>
+	</select>	
+	 
+	<update id="ApprovalDAO.updateOfficialId">
+	UPDATE TBL_EAPP_OFFICIAL
+	SET
+	 	OFFICIAL_YEAR = (SELECT LEFT(DOC_DT,4) FROM TBL_EAPP_DOC WHERE DOC_ID = #docId#)
+		,OFFICIAL_ID =  
+		(SELECT b FROM 
+			(SELECT OFFICIAL_ID + 1 b  FROM TBL_EAPP_OFFICIAL WHERE OFFICIAL_YEAR = YEAR(SYSDATE()))
+			 a
+		)
+	WHERE DOC_ID = #docId#
+	
+	</update>
+	
+	<insert id="ApprovalDAO.insertApprovalJobg" parameterClass="approvalJobgVO">
+		<![CDATA[
+			INSERT INTO TBL_EAPP_JOBG 
+				( DOC_ID
+				  , ORGNZT_ID
+				  , MNG_TSK
+				  , CAR_CD
+				  , CAR_MIN_YEAR
+				  , CAR_MAX_YEAR
+				  , MON_PAY_MIN
+				  , MON_PAY_MAX
+				  , EDUCATION
+				  , AGE_MIN
+				  , AGE_MAX
+				  , RANK_ID
+				  , GEND_CD
+				  , DSD_FR_WK
+				  , KEYWD
+				  , OTR_CON )
+			VALUES ( #docId#
+				  , #orgnztId#
+				  , #mngTsk#
+				  , #carCd#
+				  , #carMinYear#
+				  , #carMaxYear#
+				  , #monPayMin#
+				  , #monPayMax#
+				  , #education#
+				  , #ageMin#
+				  , #ageMax#
+				  , #rankId#
+				  , #gendCd#
+				  , #dsdFrWk#
+				  , #keywd#
+				  , #otrCon# )
+		]]>
+	</insert>
+	
+	<select id="ApprovalDAO.viewApprovalJobj" parameterClass="approvalVO" resultMap="approvalJobgVOAll">
+		<![CDATA[
+			SELECT
+				DOC_ID
+				, b.ORGNZT_ID
+				, b.ORGNZT_NM
+				, MNG_TSK
+				, CAR_CD
+				, CAR_MIN_YEAR
+				, CAR_MAX_YEAR
+				, MON_PAY_MIN
+				, MON_PAY_MAX
+				, EDUCATION
+				, AGE_MIN
+				, AGE_MAX
+				, RANK_ID
+				, GEND_CD
+				, DSD_FR_WK
+				, KEYWD
+				, OTR_CON
+			FROM TBL_EAPP_JOBG a
+			INNER JOIN TBL_ORGNZT b
+			ON a.ORGNZT_ID = b.ORGNZT_ID
+			WHERE DOC_ID=#docId#
+		]]>
+	</select>
+	
+	<!--  delete -->	
+	<delete id="ApprovalDAO.deleteApprovalJobg"  parameterClass="java.lang.String">		
+		DELETE FROM TBL_EAPP_JOBG 
+		WHERE DOC_ID = #docId#		
+	</delete>
+	
+	<delete id="ApprovalDAO.deleteApprovalOfficial" parameterClass="java.lang.String">
+		DELETE FROM TBL_EAPP_OFFICIAL 
+		WHERE DOC_ID=#docId#		
+	</delete>
+	
+	<delete id="ApprovalDAO.deleteApprovalVac" parameterClass="java.lang.String">
+		<![CDATA[
+			DELETE FROM TBL_EAPP_VAC
+			WHERE DOC_ID=#docId#
+		]]>
+	</delete>
+	
+	<delete id="ApprovalDAO.deleteApprovalHol" parameterClass="java.lang.String">
+		<![CDATA[
+			DELETE FROM TBL_EAPP_HOL 
+			WHERE DOC_ID=#docId#
+		]]>
+	</delete>
+	
+	<delete id="ApprovalDAO.deleteApprovalExpense" parameterClass="java.lang.String">
+		<![CDATA[
+			DELETE 
+			FROM TBL_EAPP_EXP 
+			WHERE DOC_ID=#docId#
+		]]>
+	</delete>
+	
+	<delete id="ApprovalDAO.deleteApprovalExpenseDining" parameterClass="java.lang.String">
+		<![CDATA[
+			DELETE b
+			FROM TBL_EAPP_EXP a
+			INNER JOIN TBL_EAPP_DINING b
+			ON a.EXP_ID = b.EXP_ID
+			AND a.DOC_ID=#docId#
+		]]>
+	</delete>
+	
+	<delete id="ApprovalDAO.deleteApprovalBusinessPlan" parameterClass="java.lang.String">
+		<![CDATA[
+			DELETE FROM TBL_EAPP_BUSINESS_PLAN
+			WHERE DOC_ID=#docId#
+		]]>
+	</delete>
+	
+	<delete id="ApprovalDAO.deleteApprovalBudgetAllocate" parameterClass="java.lang.String">
+		<![CDATA[
+			DELETE FROM TBL_EAPP_BUDGET_ALLOCATE
+			WHERE DOC_ID=#docId#
+		]]>
+	</delete>
+	
+	<delete id="ApprovalDAO.deleteApprovalBudgetAllocate2" parameterClass="java.lang.String">
+		<![CDATA[
+			DELETE FROM TBL_EAPP_BUDGET_ALLOCATE2
+			WHERE DOC_ID=#docId#
+		]]>
+	</delete>
+	
+	<delete id="ApprovalDAO.deleteApprovalSalesIn" parameterClass="java.lang.String">
+		<![CDATA[
+			DELETE FROM TBL_EAPP_SALES_IN
+			WHERE DOC_ID=#docId#
+		]]>
+	</delete>
+
+	<delete id="ApprovalDAO.deleteDoc" parameterClass="java.lang.String">
+		<![CDATA[
+			DELETE FROM TBL_EAPP_DOC
+			WHERE DOC_ID=#docId#
+		]]>
+	</delete>
+	
+	<delete id="ApprovalDAO.deleteReader" parameterClass="java.lang.String">
+		<![CDATA[
+			DELETE FROM TBL_EAPP_READER
+			WHERE DOC_ID=#docId#
+		]]>
+	</delete>
+	
+	<delete id="ApprovalDAO.deleteComment" parameterClass="java.lang.String">
+		<![CDATA[
+			DELETE FROM TBL_EAPP_COMMENT
+			WHERE DOC_ID=#docId#
+		]]>
+	</delete>
+	
+	<delete id="ApprovalDAO.deleteApprovalGeneralSales">
+		DELETE
+		FROM TBL_EAPP_GEN_SALES
+		WHERE DOC_ID = #docId#
+	</delete>
+	
+	<delete id="ApprovalDAO.deleteApprovalTotalSales">
+		DELETE
+		FROM TBL_EAPP_TOT_SALES
+		WHERE DOC_ID = #docId#
+	</delete>
+	
+	<delete id="ApprovalDAO.deleteSales">
+		DELETE
+		FROM TBL_SALES
+		WHERE DOC_ID = #docId#
+	</delete>
+	
+	<delete id="ApprovalDAO.deletePurchaseOut">
+		DELETE
+		FROM TBL_PURCHASE_OUT
+		WHERE DOC_ID = #docId#
+	</delete>
+	
+	<delete id="ApprovalDAO.deletePurchaseIn">
+		DELETE
+		FROM TBL_PURCHASE_IN
+		WHERE DOC_ID = #docId#
+	</delete>
+	<delete id="ApprovalDAO.deletePurchaseInLabor">
+		DELETE
+		FROM TBL_PURCHASE_IN_LABOR
+		WHERE DOC_ID = #docId#
+	</delete>
+	
+	<delete id="ApprovalDAO.deletePlanExpense">
+		DELETE
+		FROM TBL_PLAN_EXP
+		WHERE DOC_ID = #docId#
+	</delete>
+	
+	<delete id="ApprovalDAO.deletePlanLabor">
+		DELETE
+		FROM TBL_PLAN_LABOR
+		WHERE DOC_ID = #docId#
+	</delete>
+	
+	
+	
+	<!--  end delete -->
+ 	<update id="ApprovalDAO.updateHandleStat" parameterClass="approvalVO">
+		UPDATE TBL_EAPP_DOC APD
+		SET
+			HANDLE_STAT = #handleStat#
+			,HANDLE_DT = #handleDt#
+		WHERE DOC_ID = #docId#
+ 	</update>	
+	
+	<update id="ApprovalDAO.updateApprovalVac" parameterClass="approvalVacVO">
+		UPDATE TBL_EAPP_VAC APD
+		SET
+			VAC_TYP = #vacTyp#			
+		WHERE DOC_ID = #docId#
+ 	</update>	
+		
+	
+	<select id="ApprovalDAO.selectVacationSummary" resultClass="egovMap">		
+		SELECT
+			a.NO AS USER_NO
+			,a.USER_NM
+			,a.USER_ID
+			,a.ORGNZT_ID
+			,d.ORGNZT_NM
+			,PERIOD_DIFF(
+				IF(a.COMPOT_DT IS NULL OR a.COMPOT_DT = '', SUBSTRING(IF(DATE_FORMAT(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , '%m%d') <![CDATA[<]]> DATE_FORMAT(#searchDate#, '%m%d'), IF(TIMESTAMPDIFF(DAY,DATE_ADD(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , INTERVAL +1 YEAR),DATE_FORMAT(now(), '%Y-%m-%d')) <![CDATA[>]]> 0 , DATE_FORMAT(DATE_ADD(#searchDate#, INTERVAL +1 YEAR), '%Y%m%d') , DATE_FORMAT(#searchDate#, '%Y%m%d')), DATE_FORMAT(#searchDate#, '%Y%m%d')),1,6), SUBSTRING(a.COMPOT_DT,1,6)),
+				IFNULL(SUBSTRING(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT),1,6), DATE_FORMAT(SYSDATE(), '%Y%m'))
+			) AS WORK_MONTH
+			,CALC_VAC(IFNULL(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT), DATE_FORMAT(#searchDate#, '%Y%m%d')), IF(DATE_FORMAT(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , '%m%d') <![CDATA[<]]> DATE_FORMAT(#searchDate#, '%m%d'), IF(TIMESTAMPDIFF(DAY,DATE_ADD(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , INTERVAL +1 YEAR),DATE_FORMAT(now(), '%Y-%m-%d')) <![CDATA[>]]> 0 , DATE_FORMAT(DATE_ADD(#searchDate#, INTERVAL +1 YEAR), '%Y%m%d') , DATE_FORMAT(#searchDate#, '%Y%m%d')), DATE_FORMAT(#searchDate#, '%Y%m%d'))) AS VAC_CNT
+			,CALC_VAC(IFNULL(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT), DATE_FORMAT(#searchDate#, '%Y%m%d')), CONCAT(YEAR(IF(DATE_FORMAT(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , '%m%d') <![CDATA[<]]> DATE_FORMAT(#searchDate#, '%m%d'), IF(TIMESTAMPDIFF(DAY,DATE_ADD(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , INTERVAL +1 YEAR),DATE_FORMAT(now(), '%Y-%m-%d')) <![CDATA[>]]> 0 , DATE_FORMAT(DATE_ADD(#searchDate#, INTERVAL +1 YEAR), '%Y%m%d') , DATE_FORMAT(#searchDate#, '%Y%m%d')), DATE_FORMAT(#searchDate#, '%Y%m%d'))), '1231')) AS EXP_VAC_CNT
+			,IF(CONCAT(YEAR(SYSDATE()), '0701') > IFNULL(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT), DATE_FORMAT(SYSDATE(), '%Y%m%d')) 
+				, IF(CONCAT(YEAR(SYSDATE()), '0401') > IFNULL(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT), DATE_FORMAT(SYSDATE(), '%Y%m%d'))
+					, 2, 1)
+				, 0) AS SUM_VAC_CNT
+			,SUM(IF(c.VAC_TYP = 1 AND B.NEW_AT = 1 AND B.RE_WRITE_TYP != 2, c.SUM_DATE,0)) AS CNT_NM
+			,SUM(IF(c.VAC_TYP = 5 AND B.NEW_AT = 1 AND B.RE_WRITE_TYP != 2, c.SUM_DATE,0)) AS CNT_SV
+			,SUM(IF(c.VAC_TYP = 2 AND B.NEW_AT = 1 AND B.RE_WRITE_TYP != 2, c.SUM_DATE,0)) AS CNT_HS
+			,SUM(IF(c.VAC_TYP = 3 AND B.NEW_AT = 1 AND B.RE_WRITE_TYP != 2, c.SUM_DATE,0)) AS CNT_SPCL
+			,SUM(IF(c.VAC_TYP = 4 AND B.NEW_AT = 1 AND B.RE_WRITE_TYP != 2, c.SUM_DATE,0)) AS CNT_ETC
+			,IFNULL(SUM( IF(B.NEW_AT = 1 AND B.RE_WRITE_TYP != 2 AND C.VAC_TYP != 5, c.SUM_DATE, 0) ),0) AS CNT_ALL
+			,IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) as COMPIN_DT
+			,CONCAT(YEAR(DATE_ADD(IF(DATE_FORMAT(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , '%m%d') <![CDATA[<]]> DATE_FORMAT(#searchDate#, '%m%d'), IF(TIMESTAMPDIFF(DAY,DATE_ADD(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , INTERVAL +1 YEAR),DATE_FORMAT(now(), '%Y-%m-%d')) <![CDATA[>]]> 0 , DATE_FORMAT(DATE_ADD(#searchDate#, INTERVAL +1 YEAR), '%Y%m%d') , DATE_FORMAT(#searchDate#, '%Y%m%d')), DATE_FORMAT(#searchDate#, '%Y%m%d')), INTERVAL -1 YEAR)), SUBSTRING(IFNULL(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT), DATE_FORMAT(#searchDate#, '%Y%m%d')),5,7)) AS startVacation
+			,DATE_FORMAT(DATE_ADD(CONCAT(YEAR(IF(DATE_FORMAT(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , '%m%d') <![CDATA[<]]> DATE_FORMAT(#searchDate#, '%m%d'), IF(TIMESTAMPDIFF(DAY,DATE_ADD(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , INTERVAL +1 YEAR),DATE_FORMAT(now(), '%Y-%m-%d')) <![CDATA[>]]> 0 , DATE_FORMAT(DATE_ADD(#searchDate#, INTERVAL +1 YEAR), '%Y%m%d') , DATE_FORMAT(#searchDate#, '%Y%m%d')), DATE_FORMAT(#searchDate#, '%Y%m%d'))), SUBSTRING(IFNULL(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT), DATE_FORMAT(#searchDate#, '%Y%m%d')),5,7)) , INTERVAL -1 DAY), '%Y%m%d') AS endVacation			
+		FROM
+			TBL_USERINFO a
+			LEFT JOIN TBL_EAPP_VAC C 
+				ON C.ST_DT >= CONCAT(YEAR(DATE_ADD(IF(DATE_FORMAT(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , '%m%d') <![CDATA[<]]> DATE_FORMAT(#searchDate#, '%m%d'), IF(TIMESTAMPDIFF(DAY,DATE_ADD(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , INTERVAL +1 YEAR),DATE_FORMAT(now(), '%Y-%m-%d')) <![CDATA[>]]> 0 , DATE_FORMAT(DATE_ADD(#searchDate#, INTERVAL +1 YEAR), '%Y%m%d') , DATE_FORMAT(#searchDate#, '%Y%m%d')), DATE_FORMAT(#searchDate#, '%Y%m%d')), INTERVAL -1 YEAR)), SUBSTRING(IFNULL(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT), DATE_FORMAT(#searchDate#, '%Y%m%d')),5,7)) 
+				AND DATE_FORMAT(DATE_ADD(CONCAT(YEAR(IF(DATE_FORMAT(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , '%m%d') <![CDATA[<]]> DATE_FORMAT(#searchDate#, '%m%d'), IF(TIMESTAMPDIFF(DAY,DATE_ADD(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , INTERVAL +1 YEAR),DATE_FORMAT(now(), '%Y-%m-%d')) <![CDATA[>]]> 0 , DATE_FORMAT(DATE_ADD(#searchDate#, INTERVAL +1 YEAR), '%Y%m%d') , DATE_FORMAT(#searchDate#, '%Y%m%d')), DATE_FORMAT(#searchDate#, '%Y%m%d'))), SUBSTRING(IFNULL(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT), DATE_FORMAT(#searchDate#, '%Y%m%d')),5,7)) , INTERVAL -1 DAY), '%Y%m%d') >= C.ST_DT
+<!-- 				ON C.ST_DT >= CONCAT(SUBSTRING(#searchDate#,1,4),'0101')
+				AND CONCAT(SUBSTRING(#searchDate#,1,4),'1231') >= C.ST_DT -->
+				AND A.NO = C.EAPP_WRITER_NO
+			LEFT JOIN TBL_EAPP_DOC B 
+				ON A.NO = B.WRITER_NO
+				AND B.TEMPLT_ID = 2
+				AND B.DOC_ID = C.DOC_ID 
+			LEFT JOIN TBL_ORGNZT d 
+				ON a.ORGNZT_ID = d.ORGNZT_ID
+		WHERE
+			A.GHOST = '0'
+			AND A.NO = #userNo#
+			AND A.COMPIN_DT IS NOT NULL
+			AND CONCAT(SUBSTRING(IF(DATE_FORMAT(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , '%m%d') <![CDATA[<]]> DATE_FORMAT(#searchDate#, '%m%d'), IF(TIMESTAMPDIFF(DAY,DATE_ADD(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , INTERVAL +1 YEAR),DATE_FORMAT(now(), '%Y-%m-%d')) <![CDATA[>]]> 0 , DATE_FORMAT(DATE_ADD(#searchDate#, INTERVAL +1 YEAR), '%Y%m%d') , DATE_FORMAT(#searchDate#, '%Y%m%d')), DATE_FORMAT(#searchDate#, '%Y%m%d')),1,4),'1231') >= IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT)
+			AND (A.COMPOT_DT IS NULL OR A.COMPOT_DT = ''
+				OR A.COMPOT_DT >=  CONCAT(SUBSTRING(IF(DATE_FORMAT(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , '%m%d') <![CDATA[<]]> DATE_FORMAT(#searchDate#, '%m%d'), IF(TIMESTAMPDIFF(DAY,DATE_ADD(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , INTERVAL +1 YEAR),DATE_FORMAT(now(), '%Y-%m-%d')) <![CDATA[>]]> 0 , DATE_FORMAT(DATE_ADD(#searchDate#, INTERVAL +1 YEAR), '%Y%m%d') , DATE_FORMAT(#searchDate#, '%Y%m%d')), DATE_FORMAT(#searchDate#, '%Y%m%d')),1,4),'0101'))			
+		<isEqual prepend="AND" property="searchCondition" compareValue="0">
+			CONCAT(a.USER_NM, '(', a.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+		</isEqual>
+		<isEqual property="searchCondition" compareValue="1">
+			<isNotEmpty prepend="AND" property="searchOrgId">
+				<iterate prepend="a.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+					#searchOrgIdList[]#
+				</iterate>
+			</isNotEmpty>
+		</isEqual>		
+		GROUP BY A.NO
+		ORDER BY A.USER_NM
+	</select>
+	
+	<select id="ApprovalDAO.selectVacationSummaryDetail" resultClass="egovMap">
+		SELECT
+			CONCAT(DATE_FORMAT(a.ST_DT, '%Y.%m.%d(%a)'),IF(a.ST_AMPM=1,'오전',IF(a.ST_AMPM=2,'오후',''))) AS ST,
+			CONCAT(DATE_FORMAT(a.ED_DT, '%Y.%m.%d(%a)'),IF(a.ED_AMPM=1,'오전',IF(a.ED_AMPM=2,'오후',''))) AS ED,
+			a.VAC_TYP, a.SUM_DATE, b.CONTENT, b.DOC_ID, B.WRITER_NO AS USER_NO
+		FROM
+			TBL_EAPP_VAC a
+			INNER JOIN TBL_EAPP_DOC b 
+				ON a.DOC_ID = b.DOC_ID 
+				AND NEW_AT = 1
+				AND RE_WRITE_TYP != 2
+			INNER JOIN TBL_USERINFO c ON b.WRITER_NO = c.no	
+		WHERE
+			b.WRITER_NO = #userNo#
+			<!-- AND SUBSTRING(a.ST_DT,1,4) = YEAR(#searchDate#) -->
+			<!-- AND a.ST_DT >= CONCAT(YEAR(DATE_ADD(#searchDate#, INTERVAL -1 YEAR)), SUBSTRING(IFNULL(IFNULL(c.ACCEPT_COMPIN_DT,c.COMPIN_DT), DATE_FORMAT(SYSDATE(), '%Y%m%d')),5,7))
+			AND CONCAT(YEAR(#searchDate#), SUBSTRING(IFNULL(IFNULL(c.ACCEPT_COMPIN_DT,c.COMPIN_DT), DATE_FORMAT(SYSDATE(), '%Y%m%d')),5,7)) >= a.ST_DT -->
+			AND	a.ST_DT >= CONCAT(YEAR(DATE_ADD(IF(DATE_FORMAT(IFNULL(c.ACCEPT_COMPIN_DT,c.COMPIN_DT) , '%m%d') <![CDATA[<]]> DATE_FORMAT(#searchDate#, '%m%d'), IF(TIMESTAMPDIFF(DAY,DATE_ADD(IFNULL(c.ACCEPT_COMPIN_DT,c.COMPIN_DT) , INTERVAL +1 YEAR),DATE_FORMAT(now(), '%Y-%m-%d')) <![CDATA[>]]> 0 , DATE_FORMAT(DATE_ADD(#searchDate#, INTERVAL +1 YEAR), '%Y%m%d') , DATE_FORMAT(#searchDate#, '%Y%m%d')), DATE_FORMAT(#searchDate#, '%Y%m%d')), INTERVAL -1 YEAR)), SUBSTRING(IFNULL(IFNULL(c.ACCEPT_COMPIN_DT,c.COMPIN_DT), DATE_FORMAT(#searchDate#, '%Y%m%d')),5,7)) 
+			AND DATE_FORMAT(DATE_ADD(CONCAT(YEAR(IF(DATE_FORMAT(IFNULL(c.ACCEPT_COMPIN_DT,c.COMPIN_DT) , '%m%d') <![CDATA[<]]> DATE_FORMAT(#searchDate#, '%m%d'), IF(TIMESTAMPDIFF(DAY,DATE_ADD(IFNULL(c.ACCEPT_COMPIN_DT,c.COMPIN_DT) , INTERVAL +1 YEAR),DATE_FORMAT(now(), '%Y-%m-%d')) <![CDATA[>]]> 0 , DATE_FORMAT(DATE_ADD(#searchDate#, INTERVAL +1 YEAR), '%Y%m%d') , DATE_FORMAT(#searchDate#, '%Y%m%d')), DATE_FORMAT(#searchDate#, '%Y%m%d'))), SUBSTRING(IFNULL(IFNULL(c.ACCEPT_COMPIN_DT,c.COMPIN_DT), DATE_FORMAT(#searchDate#, '%Y%m%d')),5,7)) , INTERVAL -1 DAY), '%Y%m%d') >= a.ST_DT						
+			<!-- LYS -  하계휴가 안나오도록 추가 -->
+			AND VAC_TYP != 5
+		<isNotEmpty prepend="AND" property="vacTyp">
+			a.VAC_TYP = #vacTyp#
+		</isNotEmpty>
+	</select>
+	
+	<select id="ApprovalDAO.selectVacationSummaryList" resultClass="egovMap">		
+		SELECT
+			a.NO AS USER_NO
+			,a.USER_NM
+			,a.USER_ID
+			,a.ORGNZT_ID
+			,d.ORGNZT_NM
+			,PERIOD_DIFF(
+				IF(a.COMPOT_DT IS NULL OR a.COMPOT_DT = '', SUBSTRING(IF(DATE_FORMAT(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , '%m%d') <![CDATA[<]]> DATE_FORMAT(#searchDate#, '%m%d'), IF(TIMESTAMPDIFF(DAY,DATE_ADD(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , INTERVAL +1 YEAR),DATE_FORMAT(now(), '%Y-%m-%d')) <![CDATA[>]]> 0 , DATE_FORMAT(DATE_ADD(#searchDate#, INTERVAL +1 YEAR), '%Y%m%d') , DATE_FORMAT(#searchDate#, '%Y%m%d')), DATE_FORMAT(#searchDate#, '%Y%m%d')),1,6), SUBSTRING(a.COMPOT_DT,1,6)),
+				IFNULL(SUBSTRING(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT),1,6), DATE_FORMAT(SYSDATE(), '%Y%m'))
+			) AS WORK_MONTH
+			,CALC_VAC(IFNULL(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT), DATE_FORMAT(#searchDate#, '%Y%m%d')), IF(DATE_FORMAT(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , '%m%d') <![CDATA[<]]> DATE_FORMAT(#searchDate#, '%m%d'), IF(TIMESTAMPDIFF(DAY,DATE_ADD(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , INTERVAL +1 YEAR),DATE_FORMAT(now(), '%Y-%m-%d')) <![CDATA[>]]> 0 , DATE_FORMAT(DATE_ADD(#searchDate#, INTERVAL +1 YEAR), '%Y%m%d') , DATE_FORMAT(#searchDate#, '%Y%m%d')), DATE_FORMAT(#searchDate#, '%Y%m%d'))) AS VAC_CNT
+			,CALC_VAC(IFNULL(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT), DATE_FORMAT(#searchDate#, '%Y%m%d')), CONCAT(YEAR(IF(DATE_FORMAT(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , '%m%d') <![CDATA[<]]> DATE_FORMAT(#searchDate#, '%m%d'), IF(TIMESTAMPDIFF(DAY,DATE_ADD(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , INTERVAL +1 YEAR),DATE_FORMAT(now(), '%Y-%m-%d')) <![CDATA[>]]> 0 , DATE_FORMAT(DATE_ADD(#searchDate#, INTERVAL +1 YEAR), '%Y%m%d') , DATE_FORMAT(#searchDate#, '%Y%m%d')), DATE_FORMAT(#searchDate#, '%Y%m%d'))), '1231')) AS EXP_VAC_CNT
+			,IF(CONCAT(YEAR(SYSDATE()), '0701') > IFNULL(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT), DATE_FORMAT(SYSDATE(), '%Y%m%d')) 
+				, IF(CONCAT(YEAR(SYSDATE()), '0401') > IFNULL(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT), DATE_FORMAT(SYSDATE(), '%Y%m%d'))
+					, 2, 1)
+				, 0) AS SUM_VAC_CNT
+			,SUM(IF(c.VAC_TYP = 1 AND B.NEW_AT = 1 AND B.RE_WRITE_TYP != 2, c.SUM_DATE,0)) AS CNT_NM
+			,SUM(IF(c.VAC_TYP = 5 AND B.NEW_AT = 1 AND B.RE_WRITE_TYP != 2, c.SUM_DATE,0)) AS CNT_SV
+			,SUM(IF(c.VAC_TYP = 2 AND B.NEW_AT = 1 AND B.RE_WRITE_TYP != 2, c.SUM_DATE,0)) AS CNT_HS
+			,SUM(IF(c.VAC_TYP = 3 AND B.NEW_AT = 1 AND B.RE_WRITE_TYP != 2, c.SUM_DATE,0)) AS CNT_SPCL
+			,SUM(IF(c.VAC_TYP = 4 AND B.NEW_AT = 1 AND B.RE_WRITE_TYP != 2, c.SUM_DATE,0)) AS CNT_ETC
+			,IFNULL(SUM( IF(B.NEW_AT = 1 AND B.RE_WRITE_TYP != 2 AND C.VAC_TYP != 5, c.SUM_DATE, 0) ),0) AS CNT_ALL
+			,IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) as COMPIN_DT
+		FROM
+			TBL_USERINFO a
+			LEFT JOIN TBL_EAPP_VAC C 
+				ON C.ST_DT >= CONCAT(YEAR(DATE_ADD(IF(DATE_FORMAT(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , '%m%d') <![CDATA[<]]> DATE_FORMAT(#searchDate#, '%m%d'), IF(TIMESTAMPDIFF(DAY,DATE_ADD(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , INTERVAL +1 YEAR),DATE_FORMAT(now(), '%Y-%m-%d')) <![CDATA[>]]> 0 , DATE_FORMAT(DATE_ADD(#searchDate#, INTERVAL +1 YEAR), '%Y%m%d') , DATE_FORMAT(#searchDate#, '%Y%m%d')), DATE_FORMAT(#searchDate#, '%Y%m%d')), INTERVAL -1 YEAR)), SUBSTRING(IFNULL(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT), DATE_FORMAT(#searchDate#, '%Y%m%d')),5,7)) 
+				AND DATE_FORMAT(DATE_ADD(CONCAT(YEAR(IF(DATE_FORMAT(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , '%m%d') <![CDATA[<]]> DATE_FORMAT(#searchDate#, '%m%d'), IF(TIMESTAMPDIFF(DAY,DATE_ADD(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , INTERVAL +1 YEAR),DATE_FORMAT(now(), '%Y-%m-%d')) <![CDATA[>]]> 0 , DATE_FORMAT(DATE_ADD(#searchDate#, INTERVAL +1 YEAR), '%Y%m%d') , DATE_FORMAT(#searchDate#, '%Y%m%d')), DATE_FORMAT(#searchDate#, '%Y%m%d'))), SUBSTRING(IFNULL(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT), DATE_FORMAT(#searchDate#, '%Y%m%d')),5,7)) , INTERVAL -1 DAY), '%Y%m%d') >= C.ST_DT				
+<!-- 				ON C.ST_DT >= CONCAT(SUBSTRING(#searchDate#,1,4),'0101')
+				AND CONCAT(SUBSTRING(#searchDate#,1,4),'1231') >= C.ST_DT -->
+				AND A.NO = C.EAPP_WRITER_NO
+			LEFT JOIN TBL_EAPP_DOC B 
+				ON A.NO = B.WRITER_NO
+				AND B.TEMPLT_ID = 2
+				AND B.DOC_ID = C.DOC_ID 
+			LEFT JOIN TBL_ORGNZT d 
+				ON a.ORGNZT_ID = d.ORGNZT_ID				
+		WHERE
+			A.GHOST = '0'			
+			AND A.COMPIN_DT IS NOT NULL
+			AND CONCAT(SUBSTRING(IF(DATE_FORMAT(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , '%m%d') <![CDATA[<]]> DATE_FORMAT(#searchDate#, '%m%d'), IF(TIMESTAMPDIFF(DAY,DATE_ADD(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , INTERVAL +1 YEAR),DATE_FORMAT(now(), '%Y-%m-%d')) <![CDATA[>]]> 0 , DATE_FORMAT(DATE_ADD(#searchDate#, INTERVAL +1 YEAR), '%Y%m%d') , DATE_FORMAT(#searchDate#, '%Y%m%d')), DATE_FORMAT(#searchDate#, '%Y%m%d')),1,4),'1231') >= IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT)
+			AND (A.COMPOT_DT IS NULL OR A.COMPOT_DT = ''
+				OR A.COMPOT_DT >=  CONCAT(SUBSTRING(IF(DATE_FORMAT(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , '%m%d') <![CDATA[<]]> DATE_FORMAT(#searchDate#, '%m%d'), IF(TIMESTAMPDIFF(DAY,DATE_ADD(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT) , INTERVAL +1 YEAR),DATE_FORMAT(now(), '%Y-%m-%d')) <![CDATA[>]]> 0 , DATE_FORMAT(DATE_ADD(#searchDate#, INTERVAL +1 YEAR), '%Y%m%d') , DATE_FORMAT(#searchDate#, '%Y%m%d')), DATE_FORMAT(#searchDate#, '%Y%m%d')),1,4),'0101'))				
+		<isEqual prepend="AND" property="searchCondition" compareValue="0">
+			CONCAT(a.USER_NM, '(', a.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+		</isEqual>
+		<isEqual property="searchCondition" compareValue="1">
+			<isNotEmpty prepend="AND" property="searchOrgId">
+				<iterate prepend="a.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+					#searchOrgIdList[]#
+				</iterate>
+			</isNotEmpty>
+		</isEqual>
+		GROUP BY a.NO
+		ORDER BY a.USER_NM
+	</select>
+	
+	<select id="ApprovalDAO.selectJobgList" parameterClass="approvalVO" resultClass="egovMap" >	
+		SELECT
+			APD.`DOC_ID` 
+			,APD.`WRITER_NO` 
+			,APD.`SUBJECT` 
+			,APD.`CONTENT` 
+			,DATE_FORMAT(APD.DOC_DT, '%Y.%m.%d %H:%i') AS DOC_DT 
+			,APD.`DOC_STAT` 
+			,APJ.`ORGNZT_ID`
+			,APJ.MNG_TSK
+			,ORG.ORGNZT_NM 
+			,USR.`USER_NM` WRITER_NM
+			,USR.`USER_ID` WRITER_ID  
+		FROM
+			TBL_EAPP_DOC APD
+			INNER JOIN TBL_USERINFO USR
+				ON APD.WRITER_NO = USR.`NO`
+			INNER JOIN TBL_EAPP_JOBG APJ
+				ON APD.DOC_ID = APJ.DOC_ID
+			LEFT OUTER JOIN TBL_ORGNZT ORG
+				ON APJ.ORGNZT_ID = ORG.ORGNZT_ID
+		WHERE 1=1	
+			 AND APD.TEMPLT_ID = 4
+			 AND APD.NEW_AT = 1
+			 AND APD.DOC_STAT IN ('APP004', 'APP005')
+			 AND APD.HANDLE_STAT = 0
+		GROUP BY 
+			APD.`DOC_ID`
+		ORDER BY 
+			DOC_DT DESC
+		LIMIT
+			#recordCountPerPage# OFFSET #firstIndex#
+	</select>
+
+	
+	<insert id="ApprovalDAO.insertApprovalExpense">
+		INSERT INTO TBL_EAPP_EXP 
+			( DOC_ID
+			, EXP_ID
+			, PRESET_ID
+			, EXP_SPEND_TYP
+			, ACC_ID
+			, PRJ_ID
+			, COMPANY_CD
+			, EXP_DT
+			, EXP_SPEND
+			, EXP_CT
+			, PAYING_DUE_DATE
+			, CARD_SPEND_NO
+			, EXCEED_MANAGE
+			, EXPIRED_DATE
+			, COLUMN1 
+			, COLUMN2
+		<isNotEmpty property="stockList">
+			, STOCK_LIST
+		</isNotEmpty>		 
+		)
+		VALUES 
+			( #docId#
+			, #expId#
+			, IF(#presetId# = "", NULL, #presetId#)
+			, #expSpendTyp#
+			, #accId#
+			, #prjId#
+			, #companyCd#
+			, IF(#expDt# = "", NULL, #expDt#)
+			, #expSpend#
+			, #expCt#
+			, IF(#payingDueDate# = "", NULL, #payingDueDate#)
+			, #cardSpendNo#
+			, #exceedManage#
+			, #expiredDate#
+			, #column1#
+			, #column2#		
+		<isNotEmpty property="stockList">
+			, #stockList#
+		</isNotEmpty>
+		)
+	</insert>
+	
+	<update id="ApprovalDAO.updateExpense">		
+		UPDATE TBL_EAPP_EXP
+		SET EXP_ID=EXP_ID
+			<isNotEmpty property="presetId">
+			  , PRESET_ID=#presetId#
+			</isNotEmpty>
+			<isNotEmpty property="expSpendTyp">
+			  , EXP_SPEND_TYP=#expSpendTyp#
+			</isNotEmpty>
+			<isNotEmpty property="accId">
+			  , ACC_ID=#accId#
+			</isNotEmpty>
+			<isNotEmpty property="prjId">
+			  , PRJ_ID=#prjId#
+			</isNotEmpty>
+			<isNotEmpty property="companyCd">
+			  , COMPANY_CD=#companyCd#
+			</isNotEmpty>
+			<isNotEmpty property="expDt">
+			  , EXP_DT=#expDt#
+			</isNotEmpty>
+			<isNotEmpty property="expSpend">
+			  , EXP_SPEND=#expSpend#
+			</isNotEmpty>
+			<isNotEmpty property="expCt">
+			  , EXP_CT=#expCt#
+			</isNotEmpty>
+			<isNotEmpty property="payingDueDate">
+			  , PAYING_DUE_DATE=#payingDueDate#
+			</isNotEmpty>
+			<isNotEmpty property="cardSpendNo">
+			  , CARD_SPEND_NO=#cardSpendNo#
+			</isNotEmpty>
+		WHERE EXP_ID=#expId#
+	</update>
+	
+	
+	<update id="ApprovalDAO.updateExpenseDocId">
+		UPDATE
+			tbl_eapp_exp exp
+			INNER JOIN tbl_eapp_doc doc
+			ON exp.doc_id = doc.doc_id
+		SET
+			column2 = #docId#
+		WHERE
+			doc.templt_id = 13
+			AND exp.column2 = #parntId#
+	</update>
+	
+	<update id="ApprovalDAO.updateExpenseExceedManage">
+		UPDATE
+			TBL_EAPP_EXP EXP			
+		SET
+			EXP.EXCEED_MANAGE = #exceedManage#
+			, EXP.EXPIRED_DATE = #expiredDate#
+		WHERE
+			EXP.EXP_ID = #expId#
+	</update>
+	
+	
+	<select id="ApprovalDAO.selectExpenseList" parameterClass="approvalVO" resultClass="JSONObject">
+		SELECT
+			EXP.DOC_ID docId
+			,EXP.EXP_ID expId
+			, EXP.PRESET_ID presetId
+			, PRE.PRESET_NM presetNm
+			, EXP.EXP_SPEND_TYP expSpendTyp
+			, EXP.ACC_ID accId
+			, ACC.ACC_NM accNm
+			, ACC2.ACC_NM prntAccNm
+			, ACC2.ACC_ID prntAccId
+			, EXP.PRJ_ID prjId
+			, PRJ.PRJ_CD prjCd
+			, PRJ.PRJ_NM prjNm
+			, EXP.COMPANY_CD companyCd
+			, COD.CODE_NM companyNm
+			, EXP.EXP_DT expDt
+			, EXP.EXP_SPEND expSpend
+			, EXP.EXP_CT expCt
+			, EXP.PAYING_DUE_DATE payingDueDate
+			, EXP.CARD_SPEND_NO cardSpendNo
+			, EXP.EXCEED_MANAGE exceedManage
+			, EXP.EXPIRED_DATE expiredDate
+			, B.CARD_ID cardId					
+			, EXP.COLUMN1 column1
+			, EXP.COLUMN2 column2
+			, EXP.STOCK_LIST AS stockList
+		FROM TBL_EAPP_EXP EXP
+			LEFT OUTER JOIN TBL_EAPP_PRESET PRE
+				ON EXP.PRESET_ID = PRE.PRESET_ID 
+			LEFT OUTER JOIN TBL_PRJ PRJ 
+				ON EXP.PRJ_ID = PRJ.PRJ_ID
+			INNER JOIN TBL_ACCOUNT ACC
+				ON EXP.ACC_ID = ACC.ACC_ID
+			INNER JOIN TBL_ACCOUNT ACC2
+				ON ACC.PRNT_ACC_ID = ACC2.ACC_ID
+			LEFT OUTER JOIN COMTCCMMNDETAILCODE COD
+				ON EXP.COMPANY_CD = COD.CODE
+				AND COD.CODE_ID = 'KMS007'
+			LEFT OUTER JOIN TBL_CARD_SPEND b
+				ON EXP.CARD_SPEND_NO = b.CARD_SPEND_NO
+			LEFT OUTER JOIN TBL_CARD c
+				ON b.CARD_ID = c.CARD_ID			
+		WHERE 
+			EXP.DOC_ID = #docId#
+		GROUP BY 
+			EXP.EXP_ID
+		ORDER BY 
+			EXP.EXP_ID ASC			
+	</select>	
+	
+	<select id="ApprovalDAO.selectApprovalTeamSalesIn" parameterClass="approvalVO" resultClass="JSONObject">		
+		SELECT
+			A.DOC_ID AS docId 
+			, A.ST_DT AS expDt
+<!--			, SUBSTRING(A.ST_DT, 1, 6) AS expDt-->
+			, B.PRJ_ID AS prjId
+			, B.PRJ_CD AS prjCd
+			, B.PRJ_NM AS prjNm
+		FROM
+			TBL_EAPP_SALES_IN A
+			INNER JOIN
+			TBL_PRJ B
+			ON A.SALES_PRJ_ID = B.PRJ_ID
+		WHERE
+			DOC_ID = #docId#
+		LIMIT 1			
+	</select>
+	
+	<select id="ApprovalDAO.selectApprovalTeamExp" parameterClass="approvalVO" resultClass="JSONObject">
+		SELECT
+			A.DOC_ID AS docId 
+			, SUBSTRING(A.EXP_DT, 1, 6) AS expDt
+			, A.COST AS expSpend
+			, A.EXP_CT AS expCt
+			, B.PRJ_ID AS prjId
+			, B.PRJ_CD AS prjCd
+			, B.PRJ_NM AS prjNm
+		FROM
+			TBL_PLAN_EXP A
+			INNER JOIN
+			TBL_PRJ B
+			ON A.PRJ_ID = B.PRJ_ID
+		WHERE
+			DOC_ID = #docId#
+	</select>
+	
+	<select id="ApprovalDAO.selectApprovalTeamExpCnt" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM (
+			SELECT
+				A.DOC_ID AS docId 
+				, SUBSTRING(A.EXP_DT, 1, 6) AS expDt
+				, A.COST AS expSpend
+				, A.EXP_CT AS expCt
+				, B.PRJ_ID AS prjId
+				, B.PRJ_CD AS prjCd
+				, B.PRJ_NM AS prjNm
+			FROM
+				TBL_PLAN_EXP A
+				INNER JOIN
+				TBL_PRJ B
+				ON A.PRJ_ID = B.PRJ_ID
+			WHERE
+				DOC_ID = #docId#
+		) A
+	</select>
+	
+	<select id="ApprovalDAO.selectApprovalTeamExpBudget" parameterClass="ApprovalExpenseVO" resultClass="egovMap">				
+		SELECT
+			A.PRJ_ID, A.EXP_DT, IFNULL(A.BUDGET,0) AS BUDGET, IFNULL(B.SPEND,0) AS SPEND
+			, IFNULL(A.BUDGET,0) - IFNULL(B.SPEND,0) AS REMAIN
+		FROM
+		(
+<!--			#받은 예산-->
+			SELECT
+				EXP.PRJ_ID, EXP.EXP_DT, SUM(IFNULL(EXP.COST,0)) AS BUDGET
+			FROM
+				TBL_EAPP_DOC DOC
+				INNER JOIN 
+				TBL_PLAN_EXP EXP
+				ON DOC.DOC_ID = EXP.DOC_ID
+			WHERE
+				PRJ_ID = #prjId#
+				AND DOC.NEW_AT = 1 AND DOC.DOC_STAT IN ("APP004","APP005")
+				AND SUBSTRING(EXP.EXP_DT, 1, 4) = SUBSTRING(#expDt#, 1, 4)
+				AND CONCAT(#expDt#, '32') > EXP.EXP_DT
+		) A
+			LEFT JOIN 
+		(
+<!--			#사용금액-->
+			SELECT
+				EXP.PRJ_ID, SUM(IFNULL(EXP.EXP_SPEND,0)) AS SPEND
+			FROM
+				TBL_EAPP_DOC DOC
+				INNER JOIN
+				TBL_EAPP_EXP EXP
+				ON DOC.DOC_ID = EXP.DOC_ID
+			WHERE
+				EXP.PRJ_ID = #prjId#				
+				AND SUBSTRING(EXP.EXP_DT, 1, 4) = SUBSTRING(#expDt#, 1, 4)
+				AND CONCAT(#expDt#, '32') > EXP.EXP_DT
+				AND (
+					(DOC.NEW_AT = 0 AND DOC.DOC_STAT IN ("APP001","APP002","APP003")) 
+					OR
+					(DOC.NEW_AT = 1 AND DOC.DOC_STAT IN ("APP004","APP005"))
+				)
+		) B
+		ON A.PRJ_ID = B.PRJ_ID			
+	</select>
+	
+	<select id="ApprovalDAO.selectApprovalTeamExpBudgetAjax" resultClass="JSONObject">				
+		SELECT
+			A.PRJ_ID prjId, A.EXP_DT expDt, IFNULL(A.BUDGET,0) AS budget, IFNULL(B.SPEND,0) AS spend
+			, IFNULL(A.BUDGET,0) - IFNULL(B.SPEND,0) AS remain
+		FROM (
+<!--			#받은 예산-->
+			SELECT
+				EXP.PRJ_ID, EXP.EXP_DT, SUM(EXP.COST) AS BUDGET
+			FROM
+				TBL_EAPP_DOC DOC
+				INNER JOIN 
+				TBL_PLAN_EXP EXP
+				ON DOC.DOC_ID = EXP.DOC_ID
+			WHERE
+				PRJ_ID = #prjId#
+				AND DOC.NEW_AT = 1 AND DOC.DOC_STAT IN ("APP004","APP005")
+				AND SUBSTRING(EXP.EXP_DT, 1, 4) = SUBSTRING(#expDt#, 1, 4)
+				AND CONCAT(#expDt#, '32') > EXP.EXP_DT 
+		) A LEFT JOIN (
+<!--			#사용금액-->
+			SELECT
+				EXP.PRJ_ID, SUM(IFNULL(EXP.EXP_SPEND,0)) SPEND
+			FROM
+				TBL_EAPP_DOC DOC
+				INNER JOIN
+				TBL_EAPP_EXP EXP
+				ON DOC.DOC_ID = EXP.DOC_ID
+			WHERE
+				EXP.PRJ_ID = #prjId#				
+				AND SUBSTRING(EXP.EXP_DT, 1, 4) = SUBSTRING(#expDt#, 1, 4)
+				AND CONCAT(#expDt#, '32') > EXP.EXP_DT
+				AND (
+					(DOC.NEW_AT = 0 AND DOC.DOC_STAT IN ("APP001","APP002","APP003")) 
+					OR
+					(DOC.NEW_AT = 1 AND DOC.DOC_STAT IN ("APP004","APP005"))
+				)
+		) B
+		ON A.PRJ_ID = B.PRJ_ID			
+	</select>	
+	
+	<select id="ApprovalDAO.selectExpenseSalesDocInfo" resultClass="JSONObject">			
+		SELECT 
+			DATE_FORMAT(a.DOC_DT,'%Y.%m.%d' ) docDt 
+			, a.DOC_ID docId
+			, c.SALES_CT salesCt
+			, c.COST salesSum
+			, IFNULL(b.COST,0) purchaseOutSum
+			, IFNULL(d.EXP_SPEND,0) alreadyPurchasedSum
+		
+		FROM TBL_EAPP_DOC a
+			LEFT OUTER JOIN (
+				SELECT SUM(COST) COST,
+					DOC_ID
+					FROM TBL_PURCHASE_OUT 
+					GROUP BY DOC_ID
+			) b
+				ON a.DOC_ID = b.DOC_ID
+			LEFT OUTER JOIN (
+				SELECT SUM(COST) COST,
+					SALES_CT,
+					PRJ_ID,
+					DOC_ID
+					FROM TBL_SALES 
+					GROUP BY DOC_ID
+			) c
+				ON a.DOC_ID = c.DOC_ID
+			LEFT OUTER JOIN 
+			(
+				SELECT 
+					COLUMN2 DOC_ID
+					, SUM(a.EXP_SPEND) EXP_SPEND
+				FROM
+					TBL_EAPP_EXP a
+					INNER JOIN TBL_EAPP_DOC b
+						ON a.DOC_ID = b.DOC_ID
+						AND (
+							(b.NEW_AT = 1 AND b.DOC_STAT IN ('APP004', 'APP005'))
+							OR
+							(b.NEW_AT = 0 AND b.DOC_STAT IN ('APP001', 'APP002', 'APP003'))
+						)
+				WHERE 
+					COLUMN2 IS NOT NULL
+				GROUP BY COLUMN2				
+			)d
+				ON a.DOC_ID = d.DOC_ID
+		WHERE 
+			a.DOC_ID = #column2#
+	</select>
+	
+	<select id="ApprovalDAO.selectExpenseCnt" parameterClass="approvalVO" resultClass="java.lang.Integer">
+		SELECT
+				count(*)
+		FROM TBL_EAPP_EXP
+		WHERE DOC_ID = #docId#			
+	</select>	
+	
+	<select id="ApprovalDAO.selectExpenseSum" parameterClass="approvalVO" resultClass="JSONObject">
+		SELECT
+	 		   SUM(EXP.EXP_SPEND) expSum
+		       , SUM(IF(EXP_SPEND_TYP='PP',EXP_SPEND, 0)) expSumPP
+		  FROM TBL_EAPP_EXP EXP
+		 WHERE EXP.DOC_ID = #docId#			
+	</select>
+		
+	
+	<insert id="ApprovalDAO.insertApprovalDining">
+		<![CDATA[
+			INSERT INTO TBL_EAPP_DINING 
+				(  EXP_ID
+				  , ORGNZT_ID
+				  , DINING_SPEND
+				  )
+			VALUES ( #expId#
+					,#orgnztId#
+					,#diningSpend#
+					)
+			]]>
+	</insert>
+	
+		<select id="ApprovalDAO.selectDiningList" parameterClass="java.lang.String" resultClass="JSONObject">
+			SELECT
+				DIN.DINING_NO diningNo
+				,DIN.EXP_ID expId
+				,DIN.ORGNZT_ID orgnztId
+				,DIN.DINING_SPEND diningSpend
+				,ORG.ORGNZT_NM orgnztNm
+			FROM TBL_EAPP_DINING DIN
+			LEFT OUTER JOIN TBL_ORGNZT ORG
+			ON DIN.ORGNZT_ID = ORG.ORGNZT_ID
+			WHERE DIN.EXP_ID =#expId#
+			GROUP BY DIN.DINING_NO
+			
+	</select>	
+	
+		
+	<!-- 휴일근무 보고  -->
+	<insert id="ApprovalDAO.insertApprovalHol">
+		<![CDATA[
+			INSERT INTO TBL_EAPP_HOL 
+				(
+					DOC_ID
+				  , PRJ_ID
+				  , PERIOD
+				  , ST_DT
+				  , ST_TM
+				  , ED_DT
+				  , ED_TM
+				  , COST
+				  , EXCEED_MANAGE
+				)
+			VALUES (
+					#docId#
+				  ,	#prjId#
+				  , #period#
+				  , #stDt#
+				  , #stTm#
+				  , #edDt#
+				  , #edTm#
+				  , (
+						SELECT
+							GREATEST(IFNULL(b.SALARY,0), IFNULL(c.SALARY,0), IFNULL(d.SALARY,0)) * #period#
+						FROM
+							TBL_USERINFO a
+							LEFT JOIN TBL_USER_HOL_SALARY b 
+								ON a.NO = b.USER_NO 
+								AND b.YEAR = SUBSTRING(#stDt#, 1, 4) 
+								AND b.MONTH = SUBSTRING(#stDt#, 5, 2)
+							LEFT JOIN TBL_RANK_HOL_SALARY c 
+								ON FN_GET_RANKID_HISTORY(a.NO, #stDt#) = c.RANK_CODE 
+								AND c.YEAR = SUBSTRING(#stDt#, 1, 4) 
+								AND c.MONTH = SUBSTRING(#stDt#, 5, 2)
+							LEFT JOIN TBL_POS_HOL_SALARY d 
+								ON FN_GET_POSITION_HISTORY(a.NO, #stDt#) = d.POSITION_CODE 
+								AND d.YEAR = SUBSTRING(#stDt#, 1, 4) 
+								AND d.MONTH = SUBSTRING(#stDt#, 5, 2)
+						WHERE a.NO = #userNo#
+					)
+				  ,	#exceedManage#
+				)
+		]]>
+	</insert>
+	
+	
+
+	
+	<select id="ApprovalDAO.viewApprovalHol" resultMap="approvalHolVOAll">
+		<![CDATA[
+			SELECT
+				HOL.HOL_NO
+				, HOL.DOC_ID
+				, HOL.PRJ_ID
+				, PRJ.PRJ_NM
+				, PRJ.PRJ_CD
+				, HOL.PERIOD
+				, HOL.ST_DT
+				, HOL.ST_TM
+				, HOL.ED_DT
+				, HOL.ED_TM
+				, HOL.COST
+				, HOL.EXCEED_MANAGE
+			FROM TBL_EAPP_HOL HOL
+			INNER JOIN TBL_PRJ PRJ
+			ON HOL.PRJ_ID = PRJ.PRJ_ID
+			WHERE HOL.DOC_ID = #docId#
+		]]>
+	</select>
+	
+	<select id="ApprovalDAO.selectApprovalHolList" parameterClass="ApprovalHolVO" resultClass="egovMap">
+			SELECT
+				HOL_NO
+				, DOC_ID
+				, PRJ_ID
+				, PERIOD
+				, ST_DT
+				, ST_TM
+				, ED_DT
+				, ED_TM
+			FROM TBL_EAPP_HOL
+			WHERE 1=1
+			
+	</select>	
+
+	
+	<select id="ApprovalDAO.selectHolidayWorkStatistic" resultMap="holidayWorkStatistic">
+		SELECT
+			a.NO AS USER_NO, a.USER_NM, a.USER_ID, a.ORGNZT_ID, d.ORGNZT_NM,
+			SUM(IF(SUBSTRING(c.ST_DT,1,6) = CONCAT(#searchYear#,'01'), c.PERIOD, 0)) AS HOL_01,
+			SUM(IF(SUBSTRING(c.ST_DT,1,6) = CONCAT(#searchYear#,'02'), c.PERIOD, 0)) AS HOL_02,
+			SUM(IF(SUBSTRING(c.ST_DT,1,6) = CONCAT(#searchYear#,'03'), c.PERIOD, 0)) AS HOL_03,
+			SUM(IF(SUBSTRING(c.ST_DT,1,6) = CONCAT(#searchYear#,'04'), c.PERIOD, 0)) AS HOL_04,
+			SUM(IF(SUBSTRING(c.ST_DT,1,6) = CONCAT(#searchYear#,'05'), c.PERIOD, 0)) AS HOL_05,
+			SUM(IF(SUBSTRING(c.ST_DT,1,6) = CONCAT(#searchYear#,'06'), c.PERIOD, 0)) AS HOL_06,
+			SUM(IF(SUBSTRING(c.ST_DT,1,6) = CONCAT(#searchYear#,'07'), c.PERIOD, 0)) AS HOL_07,
+			SUM(IF(SUBSTRING(c.ST_DT,1,6) = CONCAT(#searchYear#,'08'), c.PERIOD, 0)) AS HOL_08,
+			SUM(IF(SUBSTRING(c.ST_DT,1,6) = CONCAT(#searchYear#,'09'), c.PERIOD, 0)) AS HOL_09,
+			SUM(IF(SUBSTRING(c.ST_DT,1,6) = CONCAT(#searchYear#,'10'), c.PERIOD, 0)) AS HOL_10,
+			SUM(IF(SUBSTRING(c.ST_DT,1,6) = CONCAT(#searchYear#,'11'), c.PERIOD, 0)) AS HOL_11,
+			SUM(IF(SUBSTRING(c.ST_DT,1,6) = CONCAT(#searchYear#,'12'), c.PERIOD, 0)) AS HOL_12,
+			SUM(IF(SUBSTRING(c.ST_DT,1,4) = #searchYear#, c.PERIOD, 0)) AS HOL_SUM
+		FROM
+			TBL_USERINFO a
+			LEFT JOIN TBL_EAPP_DOC b ON a.NO = b.WRITER_NO AND b.NEW_AT = 1
+			LEFT JOIN TBL_EAPP_HOL c ON b.DOC_ID = c.DOC_ID
+			LEFT JOIN TBL_ORGNZT d ON a.ORGNZT_ID = d.ORGNZT_ID
+		WHERE
+			a.GHOST = '0'
+			AND a.COMPIN_DT IS NOT NULL
+			<isNotEqual prepend="AND" property="searchUserNo" compareValue="0">
+				a.NO = #searchUserNo#
+			</isNotEqual>
+		GROUP BY a.NO
+	</select>
+	
+	<select id="ApprovalDAO.selectHolidayWorkStatisticList" resultMap="holidayWorkStatistic">
+		SELECT
+			a.NO AS USER_NO, a.USER_NM, a.USER_ID, a.ORGNZT_ID, d.ORGNZT_NM,
+			SUM(IF(SUBSTRING(c.ST_DT,1,6) = CONCAT(#searchYear#,'01'), c.PERIOD, 0)) AS HOL_01,
+			SUM(IF(SUBSTRING(c.ST_DT,1,6) = CONCAT(#searchYear#,'02'), c.PERIOD, 0)) AS HOL_02,
+			SUM(IF(SUBSTRING(c.ST_DT,1,6) = CONCAT(#searchYear#,'03'), c.PERIOD, 0)) AS HOL_03,
+			SUM(IF(SUBSTRING(c.ST_DT,1,6) = CONCAT(#searchYear#,'04'), c.PERIOD, 0)) AS HOL_04,
+			SUM(IF(SUBSTRING(c.ST_DT,1,6) = CONCAT(#searchYear#,'05'), c.PERIOD, 0)) AS HOL_05,
+			SUM(IF(SUBSTRING(c.ST_DT,1,6) = CONCAT(#searchYear#,'06'), c.PERIOD, 0)) AS HOL_06,
+			SUM(IF(SUBSTRING(c.ST_DT,1,6) = CONCAT(#searchYear#,'07'), c.PERIOD, 0)) AS HOL_07,
+			SUM(IF(SUBSTRING(c.ST_DT,1,6) = CONCAT(#searchYear#,'08'), c.PERIOD, 0)) AS HOL_08,
+			SUM(IF(SUBSTRING(c.ST_DT,1,6) = CONCAT(#searchYear#,'09'), c.PERIOD, 0)) AS HOL_09,
+			SUM(IF(SUBSTRING(c.ST_DT,1,6) = CONCAT(#searchYear#,'10'), c.PERIOD, 0)) AS HOL_10,
+			SUM(IF(SUBSTRING(c.ST_DT,1,6) = CONCAT(#searchYear#,'11'), c.PERIOD, 0)) AS HOL_11,
+			SUM(IF(SUBSTRING(c.ST_DT,1,6) = CONCAT(#searchYear#,'12'), c.PERIOD, 0)) AS HOL_12,
+			SUM(IF(SUBSTRING(c.ST_DT,1,4) = #searchYear#, c.PERIOD, 0)) AS HOL_SUM
+		FROM
+			TBL_USERINFO a
+			LEFT JOIN TBL_EAPP_DOC b ON a.NO = b.WRITER_NO AND b.NEW_AT = 1
+			LEFT JOIN TBL_EAPP_HOL c ON b.DOC_ID = c.DOC_ID
+			LEFT JOIN TBL_ORGNZT d ON a.ORGNZT_ID = d.ORGNZT_ID
+		WHERE
+			a.GHOST = '0'
+			AND a.COMPIN_DT IS NOT NULL
+			<isEqual prepend="AND" property="searchCondition" compareValue="0">
+				CONCAT(a.USER_NM, '(', a.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+			</isEqual>
+			<isEqual property="searchCondition" compareValue="1">
+				<isNotEmpty prepend="AND" property="searchOrgId">
+					<iterate prepend="a.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+						#searchOrgIdList[]#
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+		GROUP BY a.NO
+	</select>
+	
+	<select id="ApprovalDAO.selectHolidayWorkDetailList" resultMap="holidayWorkDetail">
+		SELECT
+			b.WRITER_NO AS USER_NO, c.USER_NM, c.USER_ID,
+			DATE_FORMAT(a.ST_DT, '%Y.%m.%d') AS ST_DT, a.ST_TM,
+			DATE_FORMAT(a.ED_DT, '%Y.%m.%d') AS ED_DT, a.ED_TM,
+			a.PERIOD, a.PRJ_ID, d.PRJ_CD, d.PRJ_NM, b.CONTENT
+		FROM
+			TBL_EAPP_HOL a
+			LEFT JOIN TBL_EAPP_DOC b ON a.DOC_ID = b.DOC_ID AND b.NEW_AT = 1
+			LEFT JOIN TBL_USERINFO c ON b.WRITER_NO = c.NO
+			LEFT JOIN TBL_PRJ d ON a.PRJ_ID = d.PRJ_ID
+		WHERE
+			b.WRITER_NO = #userNo#
+			AND SUBSTRING(a.ST_DT,1,4) = #searchYear#
+		<isNotEmpty prepend="AND" property="searchMonth">
+			SubString(a.ST_DT,5,2) = #searchMonth#
+		</isNotEmpty>
+		ORDER BY a.ST_DT ASC
+	</select>
+
+	<select id="ApprovalDAO.selectSelfDevDetailList" resultMap="selfDevDetail">
+		SELECT
+			DATE_FORMAT(a.EXP_DT, '%Y.%m.%d') AS EXP_DT, a.EXP_SPEND, a.EXP_CT, a.DOC_ID
+		FROM
+			TBL_EAPP_EXP a
+			LEFT JOIN TBL_EAPP_DOC b ON a.DOC_ID = b.DOC_ID
+		WHERE
+			b.TEMPLT_ID = 11
+			AND SUBSTRING(a.EXP_DT,1,4) = #searchYear#
+			AND b.WRITER_NO = #userNo#
+			AND (
+					(b.NEW_AT = 0 AND b.DOC_STAT IN ("APP001","APP002","APP003"))
+					OR
+					(b.NEW_AT = 1 AND b.DOC_STAT IN ("APP004","APP005"))
+			)
+	</select>
+
+	<select id="ApprovalDAO.selectSelfDevStatisticList" resultMap="selfDevStatistic">
+		SELECT
+			usr.NO AS USER_NO, usr.USER_NM, usr.USER_ID,
+			usr.ORGNZT_ID, org.ORGNZT_NM,
+			c.FULL, c.HALF, SUM(IFNULL(b.EXP_SPEND, 0)) AS USED
+		FROM
+			TBL_USERINFO usr
+			LEFT JOIN TBL_ORGNZT org ON usr.ORGNZT_ID = org.ORGNZT_ID
+			LEFT JOIN TBL_EAPP_DOC a
+				ON usr.NO = a.WRITER_NO
+				AND a.TEMPLT_ID = 11
+				AND (
+					(a.NEW_AT = 0 AND a.DOC_STAT IN ("APP001","APP002","APP003"))
+					OR
+					(a.NEW_AT = 1 AND a.DOC_STAT IN ("APP004","APP005"))
+				)
+			LEFT JOIN TBL_EAPP_EXP b ON a.DOC_ID = b.DOC_ID AND SUBSTRING(b.EXP_DT,1,4) = #searchYear#
+			LEFT JOIN (
+				<![CDATA[
+				SELECT
+					a.NO,
+					IF(IFNULL(SUBSTRING(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT),1,4), DATE_FORMAT(SYSDATE(), '%Y')) < #searchYear#, c.FULL, b.FULL) * IFNULL(d.PERCENT / 100, 1) + (IFNULL(d.EXTRA_CHARGE,0)/2) AS FULL,
+					IF(IFNULL(SUBSTRING(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT),1,4), DATE_FORMAT(SYSDATE(), '%Y')) < #searchYear#, c.HALF, b.HALF) * IFNULL(d.PERCENT / 100, 1) + (IFNULL(d.EXTRA_CHARGE,0)/2) AS HALF
+				FROM
+					TBL_USERINFO a
+					LEFT JOIN TBL_SELFDEV b ON IFNULL(SUBSTRING(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT),5,2), DATE_FORMAT(SYSDATE(),'%m')) = b.MONTH AND b.YEAR = #searchYear#
+					LEFT JOIN TBL_SELFDEV c ON c.MONTH = 1 AND c.YEAR = #searchYear#
+					LEFT JOIN TBL_SELFDEV_USR d ON a.NO = d.USER_NO AND d.YEAR = #searchYear#
+				WHERE
+					a.GHOST = '0'
+					AND a.COMPIN_DT IS NOT NULL
+				]]>
+			) c ON usr.NO = c.NO
+		WHERE
+			USR.GHOST = '0'
+			AND USR.COMPIN_DT IS NOT NULL
+			AND (USR.WORK_ST != 'R' OR
+				(USR.WORK_ST = 'R' AND b.EXP_SPEND > 0)	)
+		<isEqual property="searchCondition" compareValue="0">
+			<isNotEmpty prepend="AND" property="searchUserNm">
+				CONCAT(usr.USER_NM, '(', usr.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchCondition" compareValue="1">
+			<isNotEmpty prepend="AND" property="searchOrgId">
+				<iterate prepend="usr.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+					#searchOrgIdList[]#
+				</iterate>
+			</isNotEmpty>
+		</isEqual>
+		GROUP BY usr.NO
+		<isNotEmpty property="orderBy">
+			<isEqual property="orderBy" compareValue="name" prepend="ORDER BY ">
+				USR.USER_NM
+			</isEqual>
+			<isEqual property="orderBy" compareValue="org" prepend="ORDER BY ">
+				ORG.ORGNZT_NM
+			</isEqual>
+			<isEqual property="orderBy" compareValue="selfDev" prepend="ORDER BY ">
+				C.FULL + C.HALF DESC
+			</isEqual>
+			<isEqual property="orderBy" compareValue="used" prepend="ORDER BY ">
+				SUM(IFNULL(b.EXP_SPEND, 0)) DESC
+			</isEqual>
+			<isEqual property="orderBy" compareValue="fullLeft" prepend="ORDER BY ">
+				C.FULL - SUM(IFNULL(b.EXP_SPEND, 0)) DESC
+			</isEqual>
+			<isEqual property="orderBy" compareValue="halfLeft" prepend="ORDER BY ">
+				C.FULL + C.HALF - SUM(IFNULL(b.EXP_SPEND, 0)) DESC
+			</isEqual>			
+		</isNotEmpty>
+		<isEmpty prepend="ORDER BY " property="orderBy">
+			USR.NO
+		</isEmpty>		 
+	</select>
+	
+	<select id="ApprovalDAO.selectSelfDevStatistic" resultMap="selfDevStatistic">
+		SELECT
+			usr.NO AS USER_NO, usr.USER_NM, usr.USER_ID,
+			usr.ORGNZT_ID, org.ORGNZT_NM,
+			c.FULL, c.HALF, SUM(IFNULL(b.EXP_SPEND, 0)) AS USED
+		FROM
+			TBL_USERINFO usr
+			LEFT JOIN TBL_ORGNZT org ON usr.ORGNZT_ID = org.ORGNZT_ID
+			LEFT JOIN TBL_EAPP_DOC a
+				ON usr.NO = a.WRITER_NO
+				AND a.TEMPLT_ID = 11
+				AND (
+					(a.NEW_AT = 0 AND a.DOC_STAT IN ("APP001","APP002","APP003"))
+					OR
+					(a.NEW_AT = 1 AND a.DOC_STAT IN ("APP004","APP005"))
+				)
+			LEFT JOIN TBL_EAPP_EXP b ON a.DOC_ID = b.DOC_ID AND SUBSTRING(b.EXP_DT,1,4) = #searchYear#
+			LEFT JOIN (
+				<![CDATA[
+				SELECT
+					a.NO,
+					IF(IFNULL(SUBSTRING(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT),1,4), DATE_FORMAT(SYSDATE(),'%Y')) < #searchYear#, c.FULL, b.FULL) * IFNULL(d.PERCENT / 100, 1) + (IFNULL(d.EXTRA_CHARGE,0)/2) AS FULL,
+					IF(IFNULL(SUBSTRING(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT),1,4), DATE_FORMAT(SYSDATE(),'%Y')) < #searchYear#, c.HALF, b.HALF) * IFNULL(d.PERCENT / 100, 1) + (IFNULL(d.EXTRA_CHARGE,0)/2) AS HALF
+				FROM
+					TBL_USERINFO a
+					LEFT JOIN TBL_SELFDEV b ON IFNULL(SUBSTRING(IFNULL(a.ACCEPT_COMPIN_DT,a.COMPIN_DT),5,2), DATE_FORMAT(SYSDATE(),'%m')) = b.MONTH AND b.YEAR = #searchYear#
+					LEFT JOIN TBL_SELFDEV c ON c.MONTH = 1 AND c.YEAR = #searchYear#
+					LEFT JOIN TBL_SELFDEV_USR d ON a.NO = d.USER_NO AND d.YEAR = #searchYear#
+				WHERE
+					a.GHOST = '0'
+					AND a.COMPIN_DT IS NOT NULL
+				]]>
+			) c ON usr.NO = c.NO
+		WHERE
+			usr.GHOST = '0'
+			AND usr.COMPIN_DT IS NOT NULL
+		<isNotEqual prepend="AND" property="userNo" compareValue="0">
+			usr.NO = #userNo#
+		</isNotEqual>
+		GROUP BY usr.NO
+	</select>
+
+	<insert id="ApprovalDAO.insertApprovalTotalSalesDoc">
+		INSERT INTO TBL_EAPP_TOT_SALES
+		(
+			DOC_ID
+			,SALES_SJ
+			,SALES_PRJ_ID
+			,PURCHASE_PRJ_ID
+			,COST
+			,DEPOSIT
+			,MAINTENANCE
+			,ST_DT
+			,ED_DT
+			,DECIDE_YN
+			,BOND_MANAGE_YN
+			,COL_DUE_DT
+		)
+		VALUES
+		(
+			#docId#
+			,#salesSj#
+			,#sPrjId#
+			,#pPrjId#
+			,#cost#
+			,#deposit#
+			,#maintenance#
+			,#stDt#
+			,#edDt#
+			,#decideYn#
+			,'Y'
+			,#colDueDt#
+		)
+	</insert>
+	
+	<select id="ApprovalDAO.selectApprovalTotalSalesDoc" resultClass="JSONObject">
+		SELECT 
+			TSA.DOC_ID docId
+			,TSA.DECIDE_YN decideYn
+			,TSA.SALES_SJ salesSj
+			,PRJ1.PRJ_ID sPrjId 
+			,PRJ1.PRJ_NM sPrjNm
+			,PRJ1.PRJ_CD sPrjCd
+			,PRJ2.PRJ_ID pPrjId
+			,PRJ2.PRJ_NM pPrjNm
+			,PRJ2.PRJ_CD pPrjCd
+			,TSA.COST cost
+			,TSA.MAINTENANCE maintenance
+			,TSA.DEPOSIT deposit
+			,TSA.ST_DT stDt
+			,SUBSTRING(TSA.ST_DT,1,4) stYear
+			,SUBSTRING(TSA.ST_DT,5,2) stMonth
+			,TSA.ED_DT edDt
+			,SUBSTRING(TSA.ED_DT,1,4) edYear
+			,SUBSTRING(TSA.ED_DT,5,2) edMonth
+			,TSA.COL_DUE_DT colDueDt
+		
+		FROM TBL_EAPP_TOT_SALES TSA
+		INNER JOIN TBL_PRJ PRJ1
+		ON TSA.SALES_PRJ_ID = PRJ1.PRJ_ID
+		INNER JOIN TBL_PRJ PRJ2
+		ON TSA.PURCHASE_PRJ_ID = PRJ2.PRJ_ID
+		
+		WHERE
+			TSA.DOC_ID = #docId# 
+	</select>
+	
+	<insert id="ApprovalDAO.insertSales">
+	<![CDATA[
+		INSERT INTO TBL_SALES
+		(
+			DOC_ID
+			,PRJ_ID
+			,COST
+			,SALES_DT
+			,SALES_CT
+			,DECIDE_YN
+			,BOND_MANAGE_YN
+		)
+		VALUES
+		(
+			#docId#
+			,#prjId#
+			,#cost#
+			,CONCAT(#year#, IF(#month#<10, CONCAT("0",#month#), #month#),'01')
+			,#ct#
+			,#decideYn#
+			,'Y'
+		)
+	]]>
+	</insert>
+	
+	<select id="ApprovalDAO.selectSales" resultClass="JSONObject">
+	<![CDATA[
+		SELECT 
+			SAL.DOC_ID docId
+			,SAL.DECIDE_YN decideYn
+			,PRJ.PRJ_ID prjId
+			,PRJ.PRJ_NM prjNm
+			,PRJ.PRJ_CD prjCd
+			,SAL.COST cost
+			,YEAR(SAL.SALES_DT) year
+			,MONTH(SAL.SALES_DT) month
+			,SAL.SALES_CT ct
+			
+		FROM TBL_SALES SAL
+		INNER JOIN TBL_PRJ PRJ
+		ON SAL.PRJ_ID = PRJ.PRJ_ID
+		WHERE
+			SAL.DOC_ID = #docId# 
+		
+	]]>
+	</select>
+	
+	<insert id="ApprovalDAO.insertPurchaseOut">
+	<![CDATA[
+		INSERT INTO TBL_PURCHASE_OUT
+		(
+			DOC_ID
+			,IDENTIFY_NO
+			,PRJ_ID
+			,COST
+			,PURCHASE_OUT_DT
+			,PURCHASE_OUT_CT
+			,DECIDE_YN
+		)
+		VALUES
+		(
+			#docId#
+			,#identifyNo#
+			,#prjId#
+			,#cost#
+			,CONCAT(#year#, IF(#month#<10, CONCAT("0",#month#), #month#),'01')
+			,#ct#
+			,#decideYn#
+		)
+	]]>
+	</insert>
+	
+	<select id="ApprovalDAO.selectPurchaseOut" resultClass="JSONObject">
+	<![CDATA[
+		select 
+			PUO.DOC_ID docId
+			,PUO.IDENTIFY_NO identifyNo
+			,PRJ.PRJ_ID prjId
+			,PRJ.PRJ_NM prjNm
+			,PRJ.PRJ_CD prjCd
+			,PUO.COST cost
+			,YEAR(PUO.PURCHASE_OUT_DT) year
+			,MONTH(PUO.PURCHASE_OUT_DT) month
+			,PUO.PURCHASE_OUT_CT ct
+			,PUO.DECIDE_YN decideYn
+		FROM TBL_PURCHASE_OUT PUO
+		INNER JOIN TBL_PRJ PRJ
+		ON PUO.PRJ_ID = PRJ.PRJ_ID
+		WHERE
+			PUO.DOC_ID = #docId#
+		ORDER BY 
+			PUO.IDENTIFY_NO 
+	]]>
+	</select>
+	
+	<insert id="ApprovalDAO.insertPurchaseIn">
+		INSERT INTO TBL_PURCHASE_IN
+		(
+			DOC_ID
+			,PURCHASE_PRJ_ID
+			,SALES_PRJ_ID
+			,TYP
+			,COST
+			,PURCHASE_IN_DT
+			,PURCHASE_IN_CT
+			,IDENTIFY_NO
+			,DECIDE_YN
+		)
+		VALUES
+		(
+			#docId#
+			,#pPrjId#
+			,#sPrjId#
+			,#typ#
+			,#cost#
+			,CONCAT(#year#, IF(10>#month#, CONCAT("0",#month#), #month#),'01')
+			,#ct#
+			,#identifyNo#
+			,#decideYn#
+		)
+	</insert>
+	
+	<insert id="ApprovalDAO.insertUserInput">
+	<![CDATA[
+		INSERT INTO TBL_EAPP_USER_INPUT
+		(
+			DOC_ID
+			,USER_NO
+			,ST_DT
+			,ED_DT
+			,INPUT_PERCENT
+		)
+		VALUES
+		(
+			#docId#
+			,(SELECT NO FROM TBL_USERINFO WHERE USER_ID = #userId#)
+			,#stDt#
+			,#edDt#
+			,#inputPercent#
+		)
+	]]>
+	</insert>
+	
+	<delete id="ApprovalDAO.deleteUserInput">
+		DELETE FROM
+			TBL_EAPP_USER_INPUT
+		WHERE
+			DOC_ID = #docId# 
+	</delete>
+	
+	<insert id="ApprovalDAO.insertPurchaseInLabor">
+	<![CDATA[
+		INSERT INTO TBL_PURCHASE_IN_LABOR
+		(
+			DOC_ID
+			,PURCHASE_PRJ_ID
+			,SALES_PRJ_ID
+			,RATIO
+			,USER_NO
+			,PURCHASE_IN_DT
+			,PURCHASE_IN_CT
+			,DECIDE_YN
+			,SALARY
+			,COST
+		)
+		VALUES
+		(
+			#docId#
+			,#pPrjId#
+			,#sPrjId#
+			,#ratio#
+			,(SELECT NO FROM TBL_USERINFO WHERE USER_ID = #userId#)
+			,CONCAT(#year#, IF(#month#<10, CONCAT("0",#month#), #month#),'01')
+			,#ct#
+			,#decideYn#
+			,FN_GET_SALARY((SELECT NO FROM TBL_USERINFO WHERE USER_ID = #userId#),#year#,#month#)
+			,FN_GET_SALARY((SELECT NO FROM TBL_USERINFO WHERE USER_ID = #userId#),#year#,#month#) * #ratio#
+		)
+	]]>
+	</insert>
+	
+	<!-- [20140620,김동우] 매출이관용 인건비 삽입 추가 -->
+	<insert id="ApprovalDAO.insertPurchaseInLaborSalesTrans">
+	<![CDATA[
+		INSERT INTO TBL_PURCHASE_IN_LABOR
+		(
+			DOC_ID
+			,PURCHASE_PRJ_ID
+			,SALES_PRJ_ID
+			,RATIO
+			,USER_NO
+			,PURCHASE_IN_DT
+			,PURCHASE_IN_CT
+			,DECIDE_YN
+			,SALARY
+			,COST
+		)
+		VALUES
+		(
+			#docId#
+			,#pPrjId#
+			,#sPrjId#
+			,#ratio#
+			,(SELECT NO FROM TBL_USERINFO WHERE USER_ID = #userId#)
+			,CONCAT(#year#, IF(#month#<10, CONCAT("0",#month#), #month#),'01')
+			,#ct#
+			,#decideYn#
+			,0
+			,#cost#
+		)
+	]]>
+	</insert>
+	
+	
+	<select id="ApprovalDAO.selectPurchaseIn" resultClass="JSONObject">
+	<![CDATA[
+		select 
+			PUI.DOC_ID docID
+			,PRJ1.PRJ_ID sPrjId
+			,PRJ1.PRJ_NM sPrjNm
+			,PRJ1.PRJ_CD sPrjCd
+			,PRJ2.PRJ_ID pPrjId
+			,PRJ2.PRJ_NM pPrjNm 
+			,PRJ2.PRJ_CD pPrjCd
+			,PUI.TYP typ
+			,PUI.COST cost
+			,PUI.IDENTIFY_NO identifyNo
+			,YEAR(PUI.PURCHASE_IN_DT) year
+			,MONTH(PUI.PURCHASE_IN_DT) month
+			,PUI.PURCHASE_IN_CT ct
+			,PUI.DECIDE_YN decideYn
+		
+		FROM TBL_PURCHASE_IN PUI
+		INNER JOIN TBL_PRJ PRJ1
+		ON PUI.SALES_PRJ_ID = PRJ1.PRJ_ID
+		INNER JOIN TBL_PRJ PRJ2
+		ON PUI.PURCHASE_PRJ_ID = PRJ2.PRJ_ID
+		WHERE
+			PUI.DOC_ID = #docId# 
+	]]>
+		<isNotEmpty property="typ">
+			AND PUI.TYP = #typ#
+		</isNotEmpty>
+		<isNotEmpty property="year">
+			<isNotEmpty property="month">
+			AND SUBSTRING(PUI.PURCHASE_IN_DT,1,6) = CONCAT(#year#,LPAD(#month#,2,"0"))
+			</isNotEmpty>
+			<isEmpty property="month">
+			AND SUBSTRING(PUI.PURCHASE_IN_DT,1,4) = #year#
+			</isEmpty>
+		</isNotEmpty>
+		ORDER BY IDENTIFY_NO,
+		PURCHASE_IN_DT
+		
+	</select>
+	
+	<insert id="ApprovalDAO.insertPlanLabor">
+	<![CDATA[
+		INSERT INTO TBL_PLAN_LABOR
+		(
+			DOC_ID
+			,TYP
+			,PRJ_ID
+			,USER_NO
+			,LABOR_DT
+			,RATIO
+			,IDENTIFY_NO
+			,DECIDE_YN
+			,SALARY
+			,COST
+		)
+		VALUES
+		(
+			#docId#
+			,#typ#
+			,#prjId#
+			,(SELECT NO FROM TBL_USERINFO WHERE USER_ID = #userId#)
+			,CONCAT(#year#, IF(#month#<10, CONCAT("0",#month#), #month#),'01')
+			,#ratio#
+			,#identifyNo#
+			,#decideYn#
+			,FN_GET_SALARY((SELECT NO FROM TBL_USERINFO WHERE USER_ID = #userId#),#year#,#month#)
+			,FN_GET_SALARY((SELECT NO FROM TBL_USERINFO WHERE USER_ID = #userId#),#year#,#month#) * #ratio#
+		)
+	]]>
+	</insert>
+	
+	
+	<!-- [20140610,김동우] 매출이관용 인건비 삽입 추가 -->
+	<insert id="ApprovalDAO.insertPlanLaborSalesTrans">
+	<![CDATA[
+		INSERT INTO TBL_PLAN_LABOR
+		(
+			DOC_ID
+			,TYP
+			,PRJ_ID
+			,USER_NO
+			,LABOR_DT
+			,RATIO
+			,IDENTIFY_NO
+			,DECIDE_YN
+			,SALARY
+			,COST
+		)
+		VALUES
+		(
+			#docId#
+			,#typ#
+			,#prjId#
+			,#userId#
+			,CONCAT(#year#, IF(#month#<10, CONCAT("0",#month#), #month#),'01')
+			,#ratio#
+			,#identifyNo#
+			,#decideYn#
+			,0
+			,#cost#
+		)
+	]]>
+	</insert>
+	
+	<select id="ApprovalDAO.selectPlanLabor" resultClass="JSONObject">	
+		SELECT
+			PLA.DOC_ID docId
+			,PLA.TYP typ
+			,PRJ.PRJ_ID prjId
+			,PRJ.PRJ_NM prjNm
+			,PRJ.PRJ_CD prjCd
+			,PLA.USER_NO userNo
+			,USR.USER_ID userId
+			,USR.USER_NM userNm
+			,YEAR(PLA.LABOR_DT) year
+			,MONTH(PLA.LABOR_DT) month
+			,PLA.RATIO ratio
+			,PLA.SALARY labor
+			,PLA.IDENTIFY_NO identifyNo
+			,PLA.DECIDE_YN decideYn
+		FROM 
+			TBL_PLAN_LABOR PLA
+			INNER JOIN TBL_PRJ PRJ
+				ON PLA.PRJ_ID = PRJ.PRJ_ID
+			INNER JOIN TBL_USERINFO USR
+				ON PLA.USER_NO = USR.NO
+		WHERE
+			PLA.DOC_ID = #docId# 
+	
+		<isNotEmpty property="typ">
+			AND PLA.TYP = #typ#
+		</isNotEmpty>
+		<isNotEmpty property="year">
+			<isNotEmpty property="month">
+			AND SUBSTRING(PLA.LABOR_DT,1,6) = CONCAT(#year#,LPAD(#month#,2,"0"))
+			</isNotEmpty>
+		</isNotEmpty>
+		ORDER BY PLA.USER_NO
+			, PLA.IDENTIFY_NO
+			, MONTH(PLA.LABOR_DT)
+	</select>
+	
+	<select id="ApprovalDAO.selectUserInput" resultClass="JSONObject">	
+	SELECT
+		usr.user_nm AS userNm
+		, usr.user_id AS userId
+		, input.st_dt AS stDt
+		, input.ed_dt AS edDt
+		, input.input_percent AS inputPercent
+	FROM
+		tbl_eapp_user_input input
+		LEFT JOIN tbl_userinfo usr
+			ON input.user_no = usr.no
+	WHERE
+		doc_id = #docId#	
+	</select>
+	
+	<select id="ApprovalDAO.selectPurchaseInLabor" resultClass="JSONObject">
+	<![CDATA[
+		select 
+			PLA.DOC_ID docId
+			,PRJ1.PRJ_ID sPrjId
+			,PRJ1.PRJ_NM sPrjNm
+			,PRJ1.PRJ_CD sPrjCd
+			,PRJ2.PRJ_ID pPrjId
+			,PRJ2.PRJ_NM pPrjNm
+			,PRJ2.PRJ_CD pPrjCd
+			,PLA.USER_NO userNo
+			,USR.USER_ID userId
+			,USR.USER_NM userNm
+			,YEAR(PLA.PURCHASE_IN_DT) year
+			,MONTH(PLA.PURCHASE_IN_DT) month
+			,PLA.RATIO ratio
+			,PLA.SALARY labor
+			,PLA.IDENTIFY_NO identifyNo
+			,PLA.DECIDE_YN decideYn
+		
+		FROM TBL_PURCHASE_IN_LABOR PLA
+		INNER JOIN TBL_PRJ PRJ1
+		ON PLA.SALES_PRJ_ID = PRJ1.PRJ_ID
+		INNER JOIN TBL_PRJ PRJ2
+		ON PLA.PURCHASE_PRJ_ID = PRJ2.PRJ_ID
+		INNER JOIN TBL_USERINFO USR
+		ON PLA.USER_NO = USR.NO
+		WHERE
+			PLA.DOC_ID = #docId# 
+	]]>
+
+		<isNotEmpty property="year">
+			<isNotEmpty property="month">
+			AND SUBSTRING(PLA.PURCHASE_IN_DT,1,6) = CONCAT(#year#,LPAD(#month#,2,"0"))
+			</isNotEmpty>
+		</isNotEmpty>
+		ORDER BY PLA.USER_NO
+			, PLA.IDENTIFY_NO
+			, MONTH(PLA.PURCHASE_IN_DT)
+	</select>
+	
+	<insert id="ApprovalDAO.insertPlanExpense">
+	<![CDATA[
+		INSERT INTO TBL_PLAN_EXP
+		(
+			DOC_ID
+			,TYP
+			,PRJ_ID
+			,EXP_DT
+			,COST
+			,EXP_CT
+			,IDENTIFY_NO
+			,DECIDE_YN
+		)
+		VALUES
+		(
+			#docId#
+			,#typ#
+			,#prjId#
+			,CONCAT(#year#, IF(#month#<10, CONCAT("0",#month#), #month#),'01')
+			,#cost#
+			,#ct#
+			,#identifyNo#
+			,#decideYn#
+		)
+	]]>
+	</insert>
+	
+	<select id="ApprovalDAO.selectPlanExpense" resultClass="JSONObject">
+	<![CDATA[
+		select 
+			DOC_ID docId
+			,TYP typ
+			,PRJ.PRJ_ID prjId
+			,PRJ.PRJ_NM prjNm
+			,PRJ.PRJ_CD prjCd
+			,YEAR(EXP_DT) year
+			,MONTH(EXP_DT) month
+			,COST cost
+			,PEX.EXP_CT ct
+			,IDENTIFY_NO identifyNo
+			,PEX.DECIDE_YN decideYn
+		FROM TBL_PLAN_EXP PEX
+		
+			INNER JOIN TBL_PRJ PRJ
+			ON PEX.PRJ_ID = PRJ.PRJ_ID
+		WHERE
+			PEX.DOC_ID = #docId# 
+	]]>
+		<isNotEmpty property="typ">
+			AND PEX.TYP = #typ#
+		</isNotEmpty>
+		<isNotEmpty property="year">
+			<isNotEmpty property="month">
+			AND SUBSTRING(PEX.EXP_DT,1,6) = CONCAT(#year#,LPAD(#month#,2,"0"))
+			</isNotEmpty>
+			<isEmpty property="month">
+			AND SUBSTRING(PEX.EXP_DT,1,4) = #year#
+			</isEmpty>
+		</isNotEmpty>
+		ORDER BY PEX.IDENTIFY_NO
+				,MONTH(EXP_DT)
+	</select>
+	
+	<select id="ApprovalDAO.selectPurchaseOutNextIdentifyNo" resultClass="java.lang.Integer">
+		SELECT 
+			IFNULL(MAX(IDENTIFY_NO),0) + 1
+		FROM TBL_PURCHASE_OUT
+	</select>	
+	
+	
+	<insert id="ApprovalDAO.insertApprovalGeneralSalesDoc">
+		INSERT INTO TBL_EAPP_GEN_SALES
+		(
+			DOC_ID
+			,SALES_SJ
+			,SALES_PRJ_ID
+			,COST
+			,ST_DT
+			,DECIDE_YN
+			,BOND_MANAGE_YN
+			,COL_DUE_DT
+		)	
+		VALUES
+		(
+			#docId#
+			,#salesSj#
+			,#sPrjId#
+			,#cost#
+			,#stDt#
+			,#decideYn#
+			,'Y'
+			,#colDueDt#
+		)
+	</insert>
+	<select id="ApprovalDAO.selectApprovalGeneralSalesDoc" resultClass="JSONObject">
+		SELECT 
+			 GSA.DOC_ID docId
+			,GSA.SALES_SJ salesSj
+			,PRJ.PRJ_ID sPrjId
+			,PRJ.PRJ_NM sPrjNm
+			,PRJ.PRJ_CD sPrjCd
+			,GSA.COST cost
+			,GSA.ST_DT stDt
+			,GSA.COL_DUE_DT colDueDt
+			,GSA.DECIDE_YN decideYn
+		FROM TBL_EAPP_GEN_SALES GSA
+			INNER JOIN TBL_PRJ PRJ
+			ON GSA.SALES_PRJ_ID = PRJ.PRJ_ID
+		where DOC_ID = #docId#
+	</select>
+	
+	
+	<!-- for business plna -->
+	<insert id="ApprovalDAO.insertApprovalBusinessPlan" parameterClass="approvalBusinessPlanVO">
+	INSERT INTO TBL_EAPP_BUSINESS_PLAN
+		(
+		 `DOC_ID` 
+		 ,SALES_OUT
+		 ,SALES_IN
+		 ,PURCHASE_OUT
+		 ,PURCHASE_IN
+		 ,ORGNZT_ID
+		 ,LABOR
+		 ,EXPENSE
+		 ,PLAN_YM
+		)
+		VALUES
+		(
+		#docId#
+		,#salesOut#
+		,#salesIn#
+		,#purchaseOut#
+		,#purchaseIn#
+		,#orgnztId#
+		,#labor#
+		,#expense#
+		,#yyyymm#
+		)
+	</insert>
+	<select id="ApprovalDAO.selectBusinessPlanList" parameterClass="approvalVO" resultClass="approvalBusinessPlanVO">
+		SELECT 
+			 BPL.`DOC_ID` docId
+			 ,BPL.SALES_OUT salesOut
+			 ,BPL.SALES_IN salesIn
+			 ,BPL.PURCHASE_OUT purchaseOut
+			 ,BPL.PURCHASE_IN purchaseIn
+			 ,ORG.ORGNZT_ID orgnztId
+			 ,ORG.ORGNZT_NM orgnztNm
+			 ,BPL.LABOR labor
+			 ,BPL.EXPENSE expense
+		 	 ,PRJ1.PRJ_ID salesPrjId
+			 ,PRJ1.PRJ_NM salesPrjNm
+		 	 ,PRJ1.PRJ_CD salesPrjCd
+			 ,PRJ2.PRJ_ID purchasePrjId
+			 ,PRJ2.PRJ_NM purchasePrjNm 
+			 ,PRJ2.PRJ_CD purchasePrjCd
+			 ,PUI.COST purchaseInCommon
+			 ,SUBSTRING(BPL.PLAN_YM,1,4) year
+			 ,SUBSTRING(BPL.PLAN_YM,5,6) month			
+		FROM TBL_EAPP_BUSINESS_PLAN BPL
+		INNER JOIN TBL_ORGNZT ORG
+			ON BPL.ORGNZT_ID = ORG.ORGNZT_ID
+		INNER JOIN TBL_PURCHASE_IN PUI
+			ON BPL.DOC_ID = PUI.DOC_ID 
+			AND BPL.PLAN_YM = SUBSTRING(PUI.PURCHASE_IN_DT,1,6)
+		INNER JOIN TBL_PRJ PRJ1
+			ON PUI.SALES_PRJ_ID = PRJ1.PRJ_ID
+		INNER JOIN TBL_PRJ PRJ2
+			ON PUI.PURCHASE_PRJ_ID = PRJ2.PRJ_ID
+		WHERE
+			BPL.DOC_ID =#docId#
+		ORDER BY 
+			BPL.PLAN_YM ASC
+	</select>
+	
+	<select id="ApprovalDAO.selectBusinessPlanSum" parameterClass="approvalVO" resultClass="approvalBusinessPlanVO">
+		SELECT 
+			 BPL.`DOC_ID` docId
+			 ,SUM(BPL.SALES_OUT) salesOut
+			 ,SUM(BPL.SALES_IN) salesIn
+			 ,SUM(BPL.PURCHASE_OUT) purchaseOut
+			 ,SUM(BPL.PURCHASE_IN) purchaseIn
+			 ,ORG.ORGNZT_ID orgnztId
+			 ,ORG.ORGNZT_NM orgnztNm
+			 ,SUM(BPL.LABOR) labor
+			 ,SUM(BPL.EXPENSE) expense
+		 	 ,PRJ1.PRJ_ID salesPrjId
+			 ,PRJ1.PRJ_NM salesPrjNm
+		 	 ,PRJ1.PRJ_CD salesPrjCd
+			 ,PRJ2.PRJ_ID purchasePrjId
+			 ,PRJ2.PRJ_NM purchasePrjNm 
+			 ,PRJ2.PRJ_CD purchasePrjCd
+			 ,SUM(PUI.COST) purchaseInCommon
+			 ,SUBSTRING(BPL.PLAN_YM,1,4) year
+			 ,SUBSTRING(BPL.PLAN_YM,5,6) month
+			
+		FROM TBL_EAPP_BUSINESS_PLAN BPL
+		INNER JOIN TBL_ORGNZT ORG
+			ON BPL.ORGNZT_ID = ORG.ORGNZT_ID
+		INNER JOIN TBL_PURCHASE_IN PUI
+			ON BPL.DOC_ID = PUI.DOC_ID 
+			AND BPL.PLAN_YM = SUBSTRING(PUI.PURCHASE_IN_DT,1,6)
+		INNER JOIN TBL_PRJ PRJ1
+			ON PUI.SALES_PRJ_ID = PRJ1.PRJ_ID
+		INNER JOIN TBL_PRJ PRJ2
+			ON PUI.PURCHASE_PRJ_ID = PRJ2.PRJ_ID
+		WHERE
+			BPL.DOC_ID =#docId#
+		GROUP BY
+			BPL.DOC_ID 
+		ORDER BY 
+			BPL.PLAN_YM ASC
+	</select>
+	
+	<select id="ApprovalDAO.selectBudgetAllocateLaborList" resultClass="JSONObject">
+		SELECT 
+			a.USER_NO userNo
+			,b.USER_ID userId
+			,b.USER_NM userNm
+			,c.PRJ_ID prjId
+			,c.PRJ_NM prjNm
+			,c.PRJ_CD prjCd
+			,SUM(IF(MONTH(LABOR_DT)=1,RATIO,0)) month1
+			,SUM(IF(MONTH(LABOR_DT)=2,RATIO,0)) month2
+			,SUM(IF(MONTH(LABOR_DT)=3,RATIO,0)) month3
+			,SUM(IF(MONTH(LABOR_DT)=4,RATIO,0)) month4
+			,SUM(IF(MONTH(LABOR_DT)=5,RATIO,0)) month5
+			,SUM(IF(MONTH(LABOR_DT)=6,RATIO,0)) month6
+			,SUM(IF(MONTH(LABOR_DT)=7,RATIO,0)) month7 
+			,SUM(IF(MONTH(LABOR_DT)=8,RATIO,0)) month8
+			,SUM(IF(MONTH(LABOR_DT)=9,RATIO,0)) month9
+			,SUM(IF(MONTH(LABOR_DT)=10,RATIO,0)) month10
+			,SUM(IF(MONTH(LABOR_DT)=11,RATIO,0)) month11
+			,SUM(IF(MONTH(LABOR_DT)=12,RATIO,0)) month12
+		FROM TBL_PLAN_LABOR a
+		INNER JOIN TBL_USERINFO b
+			ON a.USER_NO = b.NO
+		INNER JOIN TBL_PRJ c
+			ON a.PRJ_ID =c.PRJ_ID
+		WHERE
+			DOC_ID = #docId#
+		GROUP BY IDENTIFY_NO
+		ORDER BY IDENTIFY_NO
+	</select>
+	
+	<select id="ApprovalDAO.selectBudgetAllocateExpenseList" resultClass="JSONObject">
+		SELECT 
+			c.PRJ_ID prjId
+			,c.PRJ_NM prjNm
+			,c.PRJ_CD prjCd
+			,SUM(IF(MONTH(EXP_DT)=1,COST,0)) month1
+			,SUM(IF(MONTH(EXP_DT)=2,COST,0)) month2
+			,SUM(IF(MONTH(EXP_DT)=3,COST,0)) month3
+			,SUM(IF(MONTH(EXP_DT)=4,COST,0)) month4
+			,SUM(IF(MONTH(EXP_DT)=5,COST,0)) month5
+			,SUM(IF(MONTH(EXP_DT)=6,COST,0)) month6
+			,SUM(IF(MONTH(EXP_DT)=7,COST,0)) month7 
+			,SUM(IF(MONTH(EXP_DT)=8,COST,0)) month8
+			,SUM(IF(MONTH(EXP_DT)=9,COST,0)) month9
+			,SUM(IF(MONTH(EXP_DT)=10,COST,0)) month10
+			,SUM(IF(MONTH(EXP_DT)=11,COST,0)) month11
+			,SUM(IF(MONTH(EXP_DT)=12,COST,0)) month12
+		FROM TBL_PLAN_EXP a
+		
+		INNER JOIN TBL_PRJ c
+			ON a.PRJ_ID =c.PRJ_ID
+		WHERE
+		
+		DOC_ID = #docId#
+		GROUP BY IDENTIFY_NO
+		ORDER BY IDENTIFY_NO
+	</select>
+	<insert id="AproovalDAO.insertBudgetAllocate" >
+		INSERT INTO
+		TBL_EAPP_BUDGET_ALLOCATE
+		(
+			DOC_ID
+			,YEAR
+			,USER_NO
+		)
+		VALUES
+		(
+			#docId#
+			,#year#
+			,(SELECT NO FROM TBL_USERINFO WHERE USER_ID = #userId#)
+		)
+	</insert>
+	
+	<insert id="ApprovalDAO.insertBudgetAllocate2" >
+		INSERT INTO
+		TBL_EAPP_BUDGET_ALLOCATE2
+		(
+			DOC_ID
+			,PRJ_ID
+			,ST_DT
+			,ED_DT
+			,DECIDE_YN
+		)
+		VALUES
+		(
+			#docId#
+			,#prjId#
+			,#stDt#
+			,#edDt#
+			,#decideYn#
+		)
+	</insert>
+	
+	<select id="ApprovalDAO.selectBudgetAllocate" resultClass="JSONObject">
+		SELECT 
+			a.DOC_ID docId
+			,a.YEAR year
+			,a.USER_NO userNo
+			,c.USER_NM userNm
+			,c.USER_ID userId
+		FROM TBL_EAPP_BUDGET_ALLOCATE a
+		INNER JOIN TBL_USERINFO c
+			ON a.USER_NO = c.NO
+		WHERE
+			a.DOC_ID = #docId#
+	</select>
+	
+	<select id="ApprovalDAO.selectBudgetAllocate2" resultClass="JSONObject">
+		SELECT 
+			a.DOC_ID docId
+			,a.ST_DT stDt
+			,a.ED_DT edDt
+			,a.PRJ_ID prjId
+			,b.PRJ_NM prjNm
+			,b.PRJ_CD prjCd
+			,SUBSTRING(a.ST_DT,1,4) stYear
+			,SUBSTRING(a.ST_DT,5,2) stMonth
+			,SUBSTRING(a.ED_DT,1,4) edYear
+			,SUBSTRING(a.ED_DT,5,2) edMonth
+		FROM TBL_EAPP_BUDGET_ALLOCATE2 a
+		INNER JOIN TBL_PRJ b
+			ON a.PRJ_ID = b.PRJ_ID
+		WHERE
+			a.DOC_ID = #docId#
+	</select>
+	
+
+	<insert id="ApprovalDAO.insertApprovalSalesIn" >
+		INSERT INTO
+		TBL_EAPP_SALES_IN
+		(
+			DOC_ID
+			,SALES_PRJ_ID
+			,PURCHASE_PRJ_ID
+			,ST_DT
+			,ED_DT
+			,TEMPLT_ID
+		)
+		VALUES
+		(
+			#docId#
+			,#sPrjId#
+			,#pPrjId#
+			,#stDt#
+			,#edDt#
+			,#templtId#
+		)
+	</insert>
+	
+	<select id="ApprovalDAO.selectApprovalSalesIn" resultClass="JSONObject">
+		SELECT 
+			a.DOC_ID docId
+			,a.ST_DT stDt
+			,a.ED_DT edDt
+			,a.SALES_PRJ_ID sPrjId
+			,b.PRJ_NM sPrjNm
+			,b.PRJ_CD sPrjCd
+			,a.PURCHASE_PRJ_ID pPrjId
+			,c.PRJ_NM pPrjNm
+			,c.PRJ_CD pPrjCd
+			,SUBSTRING(a.ST_DT,1,4) stYear
+			,SUBSTRING(a.ST_DT,5,2) stMonth
+			,SUBSTRING(a.ED_DT,1,4) edYear
+			,SUBSTRING(a.ED_DT,5,2) edMonth
+		FROM TBL_EAPP_SALES_IN a
+		INNER JOIN TBL_PRJ b
+			ON a.SALES_PRJ_ID = b.PRJ_ID
+		INNER JOIN TBL_PRJ c
+			ON a.PURCHASE_PRJ_ID = c.PRJ_ID
+		WHERE
+			a.DOC_ID = #docId#
+	</select>
+	
+	<update id="ApprovalDAO.updateGenSalesDecideYn">
+	UPDATE TBL_EAPP_GEN_SALES 
+		SET DECIDE_YN =#decideYn#
+	WHERE DOC_ID = #docId#
+	</update>
+	
+	<update id="ApprovalDAO.updateTotSalesDecideYn">
+	UPDATE TBL_EAPP_TOT_SALES 
+		SET DECIDE_YN =#decideYn#
+	WHERE DOC_ID = #docId#
+	</update>
+	
+	<update id="ApprovalDAO.updateSalesDecideYn">
+	UPDATE TBL_SALES 
+		SET DECIDE_YN =#decideYn#
+	WHERE DOC_ID = #docId#
+	</update>
+	
+	<update id="ApprovalDAO.updateGenSalesBondManageYn">
+	UPDATE TBL_EAPP_GEN_SALES 
+		SET DECIDE_YN =#bondManageYn#
+	WHERE DOC_ID = #docId#
+	</update>
+	
+	<update id="ApprovalDAO.updateTotSalesBondManageYn">
+	UPDATE TBL_EAPP_TOT_SALES 
+		SET DECIDE_YN =#bondManageYn#
+	WHERE DOC_ID = #docId#
+	</update>
+
+	<update id="ApprovalDAO.updateSalesBondManageYn">
+	UPDATE TBL_SALES 
+		SET BOND_MANAGE_YN =#bondManageYn#
+	WHERE DOC_ID = #docId#
+	</update>
+
+	<update id="ApprovalDAO.updatePurchaseOutDecideYn">
+	UPDATE TBL_PURCHASE_OUT 
+		SET DECIDE_YN =#decideYn#
+	WHERE DOC_ID = #docId#
+	</update>
+	
+	<update id="ApprovalDAO.updatePurchaseInDecideYn">
+	UPDATE TBL_PURCHASE_IN
+		SET DECIDE_YN =#decideYn#
+	WHERE DOC_ID = #docId#
+	</update>
+	
+	<update id="ApprovalDAO.updatePlanExpDecideYn">
+	UPDATE TBL_PLAN_EXP 
+		SET DECIDE_YN =#decideYn#
+	WHERE DOC_ID = #docId#
+	</update>
+	
+	<update id="ApprovalDAO.updatePlanLaborDecideYn">
+	UPDATE TBL_PLAN_LABOR
+		SET DECIDE_YN =#decideYn#
+	WHERE DOC_ID = #docId#
+	</update>
+	
+	<update id="ApprovalDAO.updatePurchaseInLaborDecideYn">
+	UPDATE TBL_PURCHASE_IN_LABOR 
+		SET DECIDE_YN =#decideYn#
+	WHERE DOC_ID = #docId#
+	</update>
+	
+	<select id="ApprovalDAO.selectSalesPurchaseOutList" resultClass="JSONObject">
+	<!-- 일반매출, 종합매출 조회 -->
+	SELECT 
+		DATE_FORMAT(a.DOC_DT,'%Y.%m.%d' ) docDt 
+		,a.DOC_ID docId
+		,c.SALES_CT salesCt
+		,c.PRJ_ID prjId
+		,c.COST salesSum
+		, IFNULL(b.COST,0) purchaseOutSum
+		, IFNULL(d.EXP_SPEND,0) alreadyPurchasedSum
+
+	FROM TBL_EAPP_DOC a
+	LEFT OUTER JOIN 
+	(
+		SELECT SUM(COST) COST,
+			DOC_ID
+			FROM TBL_PURCHASE_OUT 
+			GROUP BY DOC_ID
+	) b
+	ON a.DOC_ID = b.DOC_ID
+	LEFT OUTER JOIN (
+		SELECT SUM(COST) COST,
+			SALES_CT,
+			PRJ_ID,
+			DOC_ID
+			FROM TBL_SALES 
+			GROUP BY DOC_ID
+	) c
+	ON a.DOC_ID = c.DOC_ID
+	LEFT OUTER JOIN 
+	(
+		SELECT 
+			COLUMN2 DOC_ID
+			, SUM(a.EXP_SPEND) EXP_SPEND
+		FROM TBL_EAPP_EXP a
+		INNER JOIN TBL_EAPP_DOC b
+		ON a.DOC_ID = b.DOC_ID
+		WHERE 
+			COLUMN2 IS NOT NULL
+			AND
+			(
+				(b.NEW_AT = 1 AND b.DOC_STAT IN ("APP004" ,"APP005"))
+				OR
+				(b.NEW_AT = 0 AND b.DOC_STAT IN ("APP001" ,"APP002","APP003"))
+			)
+		GROUP BY COLUMN2
+		
+	 )d
+	 ON a.DOC_ID = d.DOC_ID
+	
+	WHERE a.NEW_AT = 1
+	AND c.PRJ_ID = #prjId#
+	GROUP BY b.DOC_ID
+	<!-- 사내매출, 테이블도 같이 조회 -->
+	UNION
+	SELECT 
+		DATE_FORMAT(a.DOC_DT,'%Y.%m.%d' ) docDt 
+		,a.DOC_ID docId
+		,a.SUBJECT salesCt
+		,c.PRJ_ID prjId
+		,c.COST salesSum
+		, IFNULL(b.COST,0) purchaseOutSum
+		, IFNULL(d.EXP_SPEND,0) alreadyPurchasedSum
+	FROM TBL_EAPP_DOC a
+	LEFT OUTER JOIN 
+	(
+		SELECT SUM(COST) COST,
+			DOC_ID
+			FROM TBL_PURCHASE_OUT 
+			GROUP BY DOC_ID
+	) b
+	ON a.DOC_ID = b.DOC_ID
+	LEFT OUTER JOIN (
+		SELECT 0 AS COST,
+			PURCHASE_PRJ_ID AS PRJ_ID,
+			DOC_ID
+			FROM TBL_EAPP_SALES_IN 
+			GROUP BY DOC_ID
+	) c
+	ON a.DOC_ID = c.DOC_ID
+	LEFT OUTER JOIN 
+	(
+		SELECT 
+			COLUMN2 DOC_ID
+			, SUM(a.EXP_SPEND) EXP_SPEND
+		FROM TBL_EAPP_EXP a
+		INNER JOIN TBL_EAPP_DOC b
+		ON a.DOC_ID = b.DOC_ID
+		WHERE 
+			COLUMN2 IS NOT NULL
+			AND
+			(
+				(b.NEW_AT = 1 AND b.DOC_STAT IN ("APP004" ,"APP005"))
+				OR
+				(b.NEW_AT = 0 AND b.DOC_STAT IN ("APP001" ,"APP002","APP003"))
+			)
+		GROUP BY COLUMN2
+		
+	 )d
+	 ON a.DOC_ID = d.DOC_ID
+	
+	WHERE a.NEW_AT = 1
+	AND c.PRJ_ID = #prjId#
+	GROUP BY b.DOC_ID
+	ORDER BY docDt
+	</select>
+
+<!-- 
+
+	<select id="ApprovalDAO.selectSalesPurchaseOutList" resultClass="JSONObject">
+	SELECT 
+		DATE_FORMAT(a.DOC_DT,'%Y.%m.%d' ) docDt 
+		,a.DOC_ID docId
+		,c.SALES_CT salesCt
+		,c.PRJ_ID prjId
+		,c.COST salesSum
+		, IFNULL(b.COST,0) purchaseOutSum
+		,(	
+				SELECT 
+					 SUM(a.EXP_SPEND) EXP_SPEND
+				FROM TBL_EAPP_EXP a
+				INNER JOIN TBL_EAPP_DOC b
+				ON a.DOC_ID = b.DOC_ID
+				WHERE 
+					COLUMN2 IS NOT NULL
+					AND PRJ_ID = #prjId#		
+					AND
+					(
+						(b.NEW_AT = 1 AND b.DOC_STAT IN ("APP004" ,"APP005"))
+						OR
+						(b.NEW_AT = 0 AND b.DOC_STAT IN ("APP001" ,"APP002","APP003"))
+					)
+		) alreadyPurchasedSum
+
+	FROM TBL_EAPP_DOC a
+	LEFT OUTER JOIN 
+	(
+		SELECT SUM(COST) COST,
+			DOC_ID
+			FROM TBL_PURCHASE_OUT 
+			GROUP BY DOC_ID
+	) b
+	ON a.DOC_ID = b.DOC_ID
+	LEFT OUTER JOIN (
+		SELECT SUM(COST) COST,
+			SALES_CT,
+			PRJ_ID,
+			DOC_ID
+			FROM TBL_SALES 
+			GROUP BY DOC_ID
+	) c
+	ON a.DOC_ID = c.DOC_ID
+	
+	WHERE a.NEW_AT = 1
+	AND c.PRJ_ID = #prjId#
+	GROUP BY b.DOC_ID
+	ORDER BY docDt
+	</select>
+	-->
+
+	
+	<select id="ApprovalDAO.selectCardSpendNoStatus" resultClass="java.lang.String">
+		SELECT
+			STATUS
+		FROM
+			TBL_CARD_SPEND
+		WHERE
+			CARD_SPEND_NO = #cardSpendNo#
+	</select>	
+	
+	<select id="ApprovalDAO.selectBudgetPrj" resultClass="java.lang.String">
+		SELECT FN_GET_BUDGET_PRJ(#prjId#) prjId
+	</select>	
+	
+	<select id="ApprovalDAO.getExceedDecider" resultClass="java.lang.String">
+		SELECT 'dosateny' userId
+	</select>
+	
+	<select id="ApprovalDAO.selectRemainPlanExp" resultClass="java.lang.Long">
+		SELECT 
+			IF(a.BUDGET_EXCEED_RULE = 'N', 99999999999
+				, PLAN_EXP - ALREADY_USE) REMAIN		
+		FROM 
+			TBL_PRJ A		
+			LEFT OUTER JOIN (		
+				SELECT 
+					IFNULL(SUM(EXP_SPEND),0) ALREADY_USE
+					, #expBudgetPrj# PRJ_ID
+				FROM V_EAPP_EXP EXP 
+					INNER JOIN TBL_EAPP_DOC DOC
+					ON EXP.DOC_ID = DOC.DOC_ID
+					INNER JOIN TBL_ACCOUNT ACC
+					ON EXP.ACC_ID = ACC.ACC_ID
+					INNER JOIN TBL_ACCOUNT PRNT
+					ON ACC.PRNT_ACC_ID = PRNT.ACC_ID
+					WHERE 1=1
+						AND EXP.BUDGET_PRJ  = #expBudgetPrj#
+						AND PRNT.PRNT_TYP = 'E'
+						AND SUBSTR(EXP.EXP_DT, 1, 4) = SUBSTR(#expDt#, 1, 4)
+						AND SUBSTR(#expDt#, 5, 2) >= SUBSTR(EXP.EXP_DT, 5, 2) 
+						AND DOC.STATUS IN (1, 2)				
+			) b
+			ON a.PRJ_ID = b.PRJ_ID
+			LEFT OUTER JOIN (
+				SELECT IFNULL(SUM(COST),0) PLAN_EXP
+				, #expBudgetPrj# PRJ_ID
+				FROM TBL_PLAN_EXP a
+				INNER JOIN TBL_EAPP_DOC b
+					ON a.DOC_ID = b.DOC_ID
+					AND B.STATUS = 2
+				WHERE 
+					A.BUDGET_PRJ = #expBudgetPrj#
+					AND SUBSTR(a.EXP_DT,1,4) = SUBSTR(#expDt#,1,4)
+					AND SUBSTR(#expDt#,5,2) >= SUBSTR(a.EXP_DT,5,2) 
+			) c
+			ON a.PRJ_ID = c.PRJ_ID
+		WHERE
+			a.PRJ_ID = #expBudgetPrj#
+	</select>
+	
+	<select id="ApprovalDAO.selectApprovalListAjax" resultMap="approvalListAjax" >		
+		SELECT
+			APD.`DOC_ID` 
+			,APD.`PARNT_ID` 
+			,APD.`WRITER_NO` 
+			,APD.`SUBJECT` 
+			,APD.`CONTENT` 
+			,DATE_FORMAT(APD.DOC_DT, '%Y.%m.%d %H:%i') AS DOC_DT 
+			,DATE_FORMAT(PRE_APP_DT, '%Y.%m.%d %H:%i') AS PRE_APP_DT
+			,APD.`DOC_STAT` 
+			,APD.`NEW_AT`
+			,APD.`CNT` 
+			,APD.`RE_USE_CNT` 
+			,APD.`HANDLE_STAT`
+			,APD.`HANDLE_DT`
+			,APD.`ATCH_FILE_ID` 
+			,APD.`TEMPLT_ID` 
+			,TYP.DOC_SJ  AS TEMPLT_NM 
+			,APD.`RE_WRITE_TYP`				  
+			,USR.`USER_NM` WRITER_NM
+			,USR.`USER_ID` WRITER_ID				  
+		FROM 
+			TBL_EAPP_DOC APD
+			INNER JOIN TBL_PRJ PRJ
+			ON APD.PRJ_ID_DOC = PRJ.PRJ_ID
+			INNER JOIN TBL_USERINFO USR
+			ON APD.WRITER_NO = USR.NO
+			INNER JOIN TBL_EAPP_DOCTYP TYP
+			ON APD.TEMPLT_ID = TYP.TEMPLT_ID
+		WHERE
+			1=1
+			AND APD.PRJ_ID_DOC = #prjId#
+			AND DOC_STAT IN ('APP000', 'APP001', 'APP002', 'APP003', 'APP004', 'APP005')
+			<isEqual prepend="OR" property="includeUnderProject" compareValue="Y">
+				PRJ.PRJ_TREE LIKE CONCAT ('%', #searchPrjId#, '%')
+			</isEqual>
+		GROUP BY
+			DOC_ID
+		ORDER BY 
+			DOC_DT DESC
+		LIMIT
+		#recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<select id="ApprovalDAO.selectApprovalListAjaxTotCnt" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			(
+			SELECT
+				APD.`DOC_ID` 
+				,APD.`PARNT_ID` 
+				,APD.`WRITER_NO` 
+				,APD.`SUBJECT` 
+				,APD.`CONTENT` 
+				,DATE_FORMAT(APD.DOC_DT, '%Y.%m.%d %H:%i') AS DOC_DT 
+				,DATE_FORMAT(PRE_APP_DT, '%Y.%m.%d %H:%i') AS PRE_APP_DT
+				,APD.`DOC_STAT` 
+				,APD.`NEW_AT`
+				,APD.`CNT` 
+				,APD.`RE_USE_CNT` 
+				,APD.`HANDLE_STAT`
+				,APD.`HANDLE_DT`
+				,APD.`ATCH_FILE_ID` 
+				,APD.`TEMPLT_ID` 
+				,TYP.DOC_SJ  AS TEMPLT_NM 
+				,APD.`RE_WRITE_TYP`				  
+				,USR.`USER_NM` WRITER_NM
+				,USR.`USER_ID` WRITER_ID  				  
+			FROM 
+				TBL_EAPP_DOC APD
+				INNER JOIN TBL_PRJ PRJ
+				ON APD.PRJ_ID_DOC = PRJ.PRJ_ID
+				INNER JOIN TBL_USERINFO USR
+				ON APD.WRITER_NO = USR.NO
+				INNER JOIN TBL_EAPP_DOCTYP TYP
+				ON APD.TEMPLT_ID = TYP.TEMPLT_ID
+			WHERE
+				1=1
+				AND APD.PRJ_ID_DOC = #prjId#
+				<isEqual prepend="OR" property="includeUnderProject" compareValue="Y">
+					PRJ.PRJ_TREE LIKE CONCAT ('%', #searchPrjId#, '%')
+				</isEqual>
+			) DOC
+		WHERE 
+			1=1			
+	</select>
+	
+	<select id="ApprovalDAO.selectSalesListAjax" resultMap="salesListAjax">
+		SELECT
+			doc.TEMPLT_NM
+			, doc.DOC_ID	
+			, doc.SUBJECT
+			, doc.WRITER_NO
+			, doc.WRITER_NM
+			, doc.WRITER_ID
+			, doc.DOC_DT
+			, doc.DOC_STAT
+			, doc.PRE_APP_DT
+			, doc.NEW_AT
+			, IF(SUM(doc.SALES_OUT_CNT) > 0, 'Y', 'N') AS SALES_OUT
+			, IF(SUM(doc.SALES_IN_CNT) > 0, 'Y', 'N') AS SALES_IN
+			, SUM(IFNULL(doc.cost, 0)) AS EXP_SUM
+		FROM (
+				SELECT
+					d.DOC_SJ AS TEMPLT_NM
+					, a.DOC_ID
+					, a.SUBJECT
+					, c.NO AS WRITER_NO
+					, c.USER_NM AS WRITER_NM
+					, c.USER_ID AS WRITER_ID
+					, a.DOC_DT
+					, a.DOC_STAT
+					, a.PRE_APP_DT
+					, a.NEW_AT
+					, 1 AS SALES_OUT_CNT
+					, 0 AS SALES_IN_CNT
+					, b.COST
+				FROM
+					tbl_eapp_doc a
+					INNER JOIN tbl_sales b
+						ON a.DOC_ID = b.DOC_ID
+						AND b.PRJ_ID = #prjId#
+						AND a.DOC_STAT IN ('APP001', 'APP002', 'APP003', 'APP004', 'APP005')
+					INNER JOIN tbl_userinfo c
+						ON a.WRITER_NO = c.NO
+					INNER JOIN tbl_eapp_doctyp d
+						ON a.TEMPLT_ID = d.TEMPLT_ID
+				<isNotEmpty prepend="WHERE" property="searchYear">
+					a.DOC_DT LIKE CONCAT('%', #searchYear#, '%')
+				</isNotEmpty>
+			<!-- 사내매출 보고서 -->
+			<isNotEmpty property="includeInnerSales">
+				<isEqual property="includeInnerSales" compareValue="Y">
+				UNION ALL
+		
+				SELECT
+					d.DOC_SJ AS TEMPLT_NM
+					, a.DOC_ID
+					, a.SUBJECT
+					, c.NO AS WRITER_NO
+					, c.USER_NM AS WRITER_NM
+					, c.USER_ID AS WRITER_ID
+					, a.DOC_DT
+					, a.DOC_STAT
+					, a.PRE_APP_DT
+					, a.NEW_AT
+					, 0 AS SALES_OUT_CNT
+					, 1 AS SALES_IN_CNT
+					, b.COST
+				FROM
+					tbl_eapp_doc a
+					INNER JOIN v_purchase_in b
+						ON a.DOC_ID = b.DOC_ID
+						AND b.PURCHASE_PRJ_ID = #prjId#
+						AND a.DOC_STAT IN ('APP001', 'APP002', 'APP003', 'APP004', 'APP005')
+					INNER JOIN tbl_userinfo c
+						ON a.WRITER_NO = c.NO
+					INNER JOIN tbl_eapp_doctyp d
+						ON a.TEMPLT_ID = d.TEMPLT_ID
+					<isNotEmpty prepend="WHERE" property="searchYear">
+						a.DOC_DT LIKE CONCAT('%', #searchYear#, '%')
+					</isNotEmpty>
+				</isEqual>
+			</isNotEmpty>
+			
+			<!-- 매출이관 보고서 -->
+			<isNotEmpty property="includeSalesTrans">
+				<isEqual property="includeSalesTrans" compareValue="Y">
+				UNION ALL
+		
+				SELECT
+					d.DOC_SJ AS TEMPLT_NM
+					, a.DOC_ID
+					, a.SUBJECT
+					, c.NO AS WRITER_NO
+					, c.USER_NM AS WRITER_NM
+					, c.USER_ID AS WRITER_ID
+					, a.DOC_DT
+					, a.DOC_STAT
+					, a.PRE_APP_DT
+					, a.NEW_AT
+					, 0 AS SALES_OUT_CNT
+					, 1 AS SALES_IN_CNT
+					, 0 as COST
+				FROM
+					tbl_eapp_doc a
+					INNER JOIN TBL_EAPP_SALES_IN b
+						ON a.DOC_ID = b.DOC_ID
+						AND b.SALES_PRJ_ID = #prjId#
+						AND a.DOC_STAT IN ('APP001', 'APP002', 'APP003', 'APP004', 'APP005')
+					INNER JOIN tbl_userinfo c
+						ON a.WRITER_NO = c.NO
+					INNER JOIN tbl_eapp_doctyp d
+						ON a.TEMPLT_ID = d.TEMPLT_ID
+				WHERE b.TEMPLT_ID = '28'
+				<isNotEmpty prepend="AND" property="searchYear">
+					a.DOC_DT LIKE CONCAT('%', #searchYear#, '%')
+				</isNotEmpty>
+				</isEqual>
+			</isNotEmpty>
+			) doc
+		WHERE
+			doc.SALES_OUT_CNT > 0 OR doc.SALES_IN_CNT > 0
+		GROUP BY
+			doc.DOC_ID
+		ORDER BY
+			doc.DOC_DT DESC
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<select id="ApprovalDAO.selectSalesListAjaxTotCnt" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			(
+				SELECT
+					a.DOC_ID
+					, 1 AS SALES_OUT_CNT
+					, 0 AS SALES_IN_CNT
+				FROM
+					tbl_eapp_doc a
+					INNER JOIN tbl_sales b
+						ON a.DOC_ID = b.DOC_ID
+						AND b.PRJ_ID = #prjId#
+						AND a.DOC_STAT IN ('APP001', 'APP002', 'APP003', 'APP004', 'APP005')
+					INNER JOIN tbl_eapp_doctyp d
+						ON a.TEMPLT_ID = d.TEMPLT_ID
+					GROUP BY
+						a.DOC_ID
+		
+			<isNotEmpty property="includeInnerSales">
+				<isEqual property="includeInnerSales" compareValue="Y">
+				UNION ALL
+		
+				SELECT
+					a.DOC_ID
+					, 0 AS SALES_OUT_CNT
+					, 1 AS SALES_IN_CNT
+				FROM
+					tbl_eapp_doc a
+					INNER JOIN v_purchase_in b
+						ON a.DOC_ID = b.DOC_ID
+						AND b.PURCHASE_PRJ_ID = #prjId#
+						AND a.DOC_STAT IN ('APP001', 'APP002', 'APP003', 'APP004', 'APP005')
+					INNER JOIN tbl_eapp_doctyp d
+						ON a.TEMPLT_ID = d.TEMPLT_ID
+					GROUP BY
+						a.DOC_ID
+				</isEqual>
+			</isNotEmpty>
+			
+			<isNotEmpty property="includeSalesTrans">
+				<isEqual property="includeSalesTrans" compareValue="Y">
+				UNION ALL
+		
+				SELECT
+					a.DOC_ID
+					, 0 AS SALES_OUT_CNT
+					, 1 AS SALES_IN_CNT
+				FROM
+					tbl_eapp_doc a
+					INNER JOIN TBL_EAPP_SALES_IN b
+						ON a.DOC_ID = b.DOC_ID
+						AND b.SALES_PRJ_ID = #prjId#
+						AND a.DOC_STAT IN ('APP001', 'APP002', 'APP003', 'APP004', 'APP005')
+					INNER JOIN tbl_eapp_doctyp d
+						ON a.TEMPLT_ID = d.TEMPLT_ID
+				WHERE b.TEMPLT_ID = '28'
+				</isEqual>
+			</isNotEmpty>
+			) doc
+		WHERE
+			doc.SALES_OUT_CNT > 0 OR doc.SALES_IN_CNT > 0
+	</select>
+	
+	<select id="ApprovalDAO.selectBondSalesListAjax" resultMap="bondSalesListAjax">
+		SELECT
+			d.DOC_SJ AS TEMPLT_NM
+			, a.DOC_ID AS DOC_ID
+			, a.SUBJECT AS SUBJECT
+			, c.NO AS WRITER_NO
+			, c.USER_NM AS WRITER_NM
+			, c.USER_ID AS WRITER_ID
+			, a.DOC_DT AS WRITE_DT
+			, a.DOC_STAT AS DOC_STAT
+			, a.PRE_APP_DT AS PRE_APP_DT
+			, a.NEW_AT AS NEW_AT
+			, SUM(IFNULL(b.COST, 0)) AS EXP_SUM
+			, b.BOND_MANAGE_YN AS BOND_MANAGE_YN
+			, B.DECIDE_YN
+			, IF((SELECT COUNT(DOC_ID) FROM TBL_SALES_BOND WHERE DOC_ID = a.DOC_ID)=0, 'N', 'Y') AS MAP_YN
+		FROM
+			TBL_EAPP_DOC a
+			INNER JOIN TBL_SALES b
+				ON a.DOC_ID = b.DOC_ID
+				<isNotEmpty property="prjId">
+					AND b.PRJ_ID = #prjId#
+				</isNotEmpty>
+				AND a.DOC_STAT IN ('APP004', 'APP005')
+			INNER JOIN TBL_USERINFO c
+				ON a.WRITER_NO = c.NO
+			INNER JOIN TBL_EAPP_DOCTYP d
+				ON a.TEMPLT_ID = d.TEMPLT_ID
+			<isNotEmpty property="bondPrjNo">
+				INNER JOIN TBL_SALES_BOND e
+					ON a.DOC_ID = e.DOC_ID
+					AND e.BOND_PRJ_NO = #bondPrjNo#
+			</isNotEmpty>
+		GROUP BY
+			a.DOC_ID
+		ORDER BY
+			a.DOC_DT DESC
+	</select>
+
+	<select id="ApprovalDAO.selectPurchaseInAjax" resultMap="purchaseInListAjax">
+		SELECT
+			d.DOC_SJ AS TEMPLT_NM
+			, a.DOC_ID
+			, a.SUBJECT
+			, c.NO AS WRITER_NO
+			, c.USER_NM AS WRITER_NM
+			, c.USER_ID AS WRITER_ID
+			, a.DOC_DT
+			, a.DOC_STAT
+			, a.PRE_APP_DT
+			, a.NEW_AT
+		FROM
+			tbl_eapp_doc a
+			INNER JOIN v_purchase_in b
+				ON a.DOC_ID = b.DOC_ID
+				AND b.SALES_PRJ_ID = #prjId#
+				AND a.DOC_STAT IN ('APP001', 'APP002', 'APP003', 'APP004', 'APP005')
+			INNER JOIN tbl_userinfo c
+				ON a.WRITER_NO = c.NO
+			INNER JOIN tbl_eapp_doctyp d
+				ON a.TEMPLT_ID = d.TEMPLT_ID
+			<isNotEmpty prepend="WHERE" property="searchYear">
+				a.DOC_DT LIKE CONCAT('%', #searchYear#, '%')
+			</isNotEmpty>
+		GROUP BY
+			a.DOC_ID
+		ORDER BY
+			a.DOC_DT DESC
+	</select>
+	
+	<select id="ApprovalDAO.selectPurchaseOutAjax" resultMap="purchaseOutListAjax">
+		SELECT
+			e.DOC_SJ AS TEMPLT_NM
+			, a.DOC_ID
+			, a.SUBJECT
+			, d.NO AS WRITER_NO
+			, d.USER_NM AS WRITER_NM
+			, d.USER_ID AS WRITER_ID
+			, a.DOC_DT
+			, a.DOC_STAT
+			, a.PRE_APP_DT
+			, a.NEW_AT
+			, SUM(b.EXP_SPEND) COST
+		FROM
+			tbl_eapp_doc a
+			INNER JOIN v_eapp_exp b
+				ON a.DOC_ID = b.DOC_ID
+				AND b.PRJ_ID = #prjId#
+				AND a.DOC_STAT IN ('APP001', 'APP002', 'APP003', 'APP004', 'APP005')
+			INNER JOIN (
+					SELECT
+						acc.*
+					FROM
+						tbl_account acc
+						INNER JOIN tbl_account prnt
+							ON acc.ACC_ID != prnt.PRNT_ACC_ID
+							AND acc.PRNT_ACC_ID = prnt.ACC_ID
+							AND prnt.PRNT_TYP = 'C'
+				) c
+				ON b.ACC_ID = c.ACC_ID
+			INNER JOIN tbl_userinfo d
+				ON a.WRITER_NO = d.NO
+			INNER JOIN tbl_eapp_doctyp e
+				ON a.TEMPLT_ID = e.TEMPLT_ID
+			<isNotEmpty prepend="WHERE" property="searchYear">
+				a.DOC_DT LIKE CONCAT('%', #searchYear#, '%')
+			</isNotEmpty>
+		GROUP BY
+			a.DOC_ID
+		ORDER BY
+			a.DOC_DT DESC
+	</select>
+	
+	<select id="ApprovalDAO.selectDuplicateCardSpendCnt" parameterClass="approvalVO" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			tbl_eapp_exp EXP
+			INNER JOIN tbl_eapp_exp EXP2
+				ON EXP.card_spend_no = EXP2.card_spend_no
+				AND EXP.doc_id = #docId#	
+				AND EXP.exp_spend_typ = 'CC'
+				AND EXP2.exp_spend_typ = 'CC'
+			INNER JOIN tbl_eapp_doc DOC
+				ON EXP2.doc_id = DOC.doc_id
+				AND DOC.new_at = 0
+				AND DOC.doc_stat IN ('APP001', 'APP002', 'APP003', 'APP004', 'APP005')
+	</select>
+
+	<insert id="ApprovalDAO.insertReferencer" >
+		INSERT INTO TBL_EAPP_READER (
+				DOC_ID
+				, APP_TYP
+				, STAT
+				, READER_NO
+		)
+		SELECT 	#docId#
+				, 'APR004'
+				, '0'
+				, NO
+		FROM 	TBL_USERINFO 
+		<iterate prepend="WHERE USER_ID IN " open="(" conjunction="," close=")" property="userIdList">
+			#userIdList[]#
+		</iterate>
+	</insert>
+	
+	<update id="ApprovalDAO.updateWriterNo">
+		UPDATE
+			TBL_EAPP_DOC A
+			INNER JOIN 
+			TBL_EAPP_READER B
+			ON A.DOC_ID = B.DOC_ID
+		SET A.WRITER_NO = #writerNo#
+			, B.READER_NO = #writerNo#
+		WHERE
+			A.DOC_ID = #docId#
+			AND B.APP_TYP = 'APR000'
+	</update>
+	
+	<update id="Approval.setInsertRefDocStat">
+		UPDATE	TBL_EAPP_DOC
+		SET		DOC_STAT = 'APP004'
+		WHERE	DOC_ID = #docId#
+		AND		DOC_STAT = 'APP005'
+	</update>
+	
+	<resultMap id="approvalLeader" class="kms.com.app.service.ApprovalVO">
+		<result property="docId"		column="DOC_ID"			columnIndex="1"/>
+		<result property="leaderNo"		column="LEADER_NO"		columnIndex="2"/>
+	</resultMap>
+	
+	<select id="ApprovalDAO.selectApprovalLeader" parameterClass="approvalVO" resultMap="approvalLeader" >
+		SELECT
+		A.DOC_ID, GROUP_CONCAT(A.LEADER_NO SEPARATOR ',') AS LEADER_NO
+		FROM (
+			SELECT
+			A.DOC_ID, REPLACE(REPLACE(CONCAT_WS(',', IFNULL(B.LEADER_NO,'NULL'), IFNULL(C.LEADER_NO,'NULL'), IFNULL(D.LEADER_NO,'NULL'), IFNULL(E.LEADER_NO,'NULL'), IFNULL(F.LEADER_NO,'NULL') )
+			,'NULL,',''), ',NULL','') AS LEADER_NO
+			FROM
+			TBL_EAPP_DOC A
+			LEFT OUTER JOIN
+				(SELECT B.DOC_ID, B.PRJ_ID, P.LEADER_NO
+				FROM
+				(SELECT B.DOC_ID, B.PRJ_ID FROM TBL_EAPP_EXP B
+					GROUP BY B.DOC_ID, B.PRJ_ID ORDER BY NULL) B
+				INNER JOIN TBL_PRJ P
+				ON B.PRJ_ID = P.PRJ_ID
+				) B
+			ON A.DOC_ID = B.DOC_ID
+			LEFT OUTER JOIN
+				(SELECT C.DOC_ID, C.SALES_PRJ_ID, P.LEADER_NO
+				FROM
+				TBL_EAPP_GEN_SALES C
+				INNER JOIN TBL_PRJ P
+				ON C.SALES_PRJ_ID = P.PRJ_ID
+				GROUP BY C.DOC_ID, C.SALES_PRJ_ID) C
+			ON A.DOC_ID = C.DOC_ID
+			LEFT OUTER JOIN
+				(SELECT D.DOC_ID, D.PRJ_ID, P.LEADER_NO
+				FROM
+				TBL_EAPP_HOL D
+				INNER JOIN TBL_PRJ P
+				ON D.PRJ_ID = P.PRJ_ID
+				GROUP BY D.DOC_ID, D.PRJ_ID) D
+			ON A.DOC_ID = D.DOC_ID
+			LEFT OUTER JOIN
+				(SELECT E.DOC_ID, E.SALES_PRJ_ID, E.PURCHASE_PRJ_ID, CONCAT_WS(',', IFNULL(S.LEADER_NO,'NULL'), IFNULL(P.LEADER_NO,'NULL')) LEADER_NO
+				FROM
+				TBL_EAPP_SALES_IN E
+				INNER JOIN TBL_PRJ S
+				ON E.SALES_PRJ_ID = S.PRJ_ID		
+				INNER JOIN TBL_PRJ P
+				ON E.PURCHASE_PRJ_ID = P.PRJ_ID
+				GROUP BY E.DOC_ID, E.SALES_PRJ_ID, E.PURCHASE_PRJ_ID) E
+			ON A.DOC_ID = E.DOC_ID
+			LEFT OUTER JOIN
+				(SELECT F.DOC_ID, F.SALES_PRJ_ID, F.PURCHASE_PRJ_ID, CONCAT_WS(',', IFNULL(S.LEADER_NO,'NULL'), IFNULL(P.LEADER_NO,'NULL')) LEADER_NO
+				FROM
+				TBL_EAPP_TOT_SALES F
+				INNER JOIN TBL_PRJ S
+				ON F.SALES_PRJ_ID = S.PRJ_ID		
+				INNER JOIN TBL_PRJ P
+				ON F.PURCHASE_PRJ_ID = P.PRJ_ID
+				GROUP BY F.DOC_ID, F.SALES_PRJ_ID, F.PURCHASE_PRJ_ID) F
+			ON A.DOC_ID = F.DOC_ID
+			WHERE
+				NOT (B.LEADER_NO IS NULL AND C.LEADER_NO IS NULL AND D.LEADER_NO IS NULL AND E.LEADER_NO IS NULL AND F.LEADER_NO IS NULL)
+				AND  A.DOC_ID = #docId#
+				LIMIT 400
+			) A
+		GROUP BY A.DOC_ID		
+	</select>
+	
+	<!-- 집계된 기존매출 인건비, 수행경비 조회  -->
+	<select id="ApprovalDAO.selectProjectPlan" resultClass="JSONObject">
+		SELECT PLAN_LABOR, PLAN_EXP
+		FROM TBL_PRJ_RESULT_TOTAL
+		WHERE PRJ_ID = #prjId#
+		
+		<isNotEmpty property="year">
+			AND YEAR = #year#
+		</isNotEmpty>
+		<isNotEmpty property="month">
+			AND MONTH = #month#
+		</isNotEmpty>
+		
+		ORDER BY MONTH
+		
+	</select>
+	
+	<!-- 이관매출 인건비, 수행경비 조회  -->
+	<select id="ApprovalDAO.selectPlanLaborExpense" resultClass="JSONObject">
+	<![CDATA[
+		select 
+			PEX.COST costExpense
+			,PLA.COST costLabor
+		FROM TBL_PRJ PRJ
+			INNER JOIN TBL_PLAN_EXP PEX
+			ON PRJ.PRJ_ID = PEX.PRJ_ID
+			INNER JOIN TBL_PLAN_LABOR PLA
+			ON PEX.DOC_ID = PLA.DOC_ID
+			AND PEX.EXP_DT = PLA.LABOR_DT
+		WHERE
+			PEX.DOC_ID = #docId# 
+	]]>
+		<isNotEmpty property="typ">
+			AND PEX.TYP = #typ#
+		</isNotEmpty>
+		<isNotEmpty property="year">
+			<isNotEmpty property="month">
+			AND SUBSTRING(PEX.EXP_DT,1,6) = CONCAT(#year#,LPAD(#month#,2,"0"))
+			</isNotEmpty>
+			<isEmpty property="month">
+			AND SUBSTRING(PEX.EXP_DT,1,4) = #year#
+			</isEmpty>
+		</isNotEmpty>
+		ORDER BY MONTH(EXP_DT)
+	</select>
+	
+	
+	<delete id="ApprovalDAO.deleteSalesTrans">
+		DELETE FROM
+			TBL_SALES_TRANS
+		WHERE
+			DOC_ID = #docId# 
+	</delete>
+	
+	<!-- [20140620,김동우] 매출이관용 기존매출(인건비, 수행경비) 삽입 추가 -->
+	<insert id="ApprovalDAO.insertSalesTrans">
+	<![CDATA[
+		INSERT INTO TBL_SALES_TRANS
+		(
+			DOC_ID
+			,PRJ_ID
+			,SAVE_DT
+			,COST_LABOR
+			,COST_EXP
+		)
+		VALUES
+		(
+			#docId#
+			,#prjId#
+			,CONCAT(#year#, IF(#month#<10, CONCAT("0",#month#), #month#),'01')
+			,#costLabor#
+			,#costExp#
+		)
+	]]>
+	</insert>
+	
+	<!-- 문서에 저장된 기존매출 인건비, 수행경비 조회  -->
+	<select id="ApprovalDAO.selectProjectSavedPlan" resultClass="JSONObject">
+	<![CDATA[
+		SELECT
+			COST_LABOR costLabor
+			,COST_EXP costExpense
+		FROM TBL_SALES_TRANS
+		WHERE
+			DOC_ID = #docId#
+	]]>
+		<isNotEmpty property="year">
+			<isNotEmpty property="month">
+			AND SUBSTRING(SAVE_DT,1,6) like CONCAT(#year#,LPAD(#month#,2,"0"))
+			</isNotEmpty>
+			<isEmpty property="month">
+			AND SUBSTRING(SAVE_DT,1,4) like #year# || '%'
+			</isEmpty>
+		</isNotEmpty>
+		ORDER BY MONTH(SAVE_DT)
+	</select>
+	
+	<select id="ApprovalDAO.selectDocStDt" parameterClass="java.lang.String" resultClass="JSONObject">
+		SELECT a.TEMPLT_ID
+				, IFNULL(CASE a.TEMPLT_ID WHEN 21 THEN b.ST_DT
+								 WHEN 20 THEN c.ST_DT END, '') AS ST_DT
+				, IFNULL(CASE a.TEMPLT_ID WHEN 21 THEN b.COL_DUE_DT
+								 WHEN 20 THEN c.COL_DUE_DT END, '') AS COL_DUE_DT
+		FROM TBL_EAPP_DOC a
+		LEFT OUTER JOIN TBL_EAPP_GEN_SALES b
+				ON a.DOC_ID = b.DOC_ID
+		LEFT OUTER JOIN TBL_EAPP_TOT_SALES c
+				ON a.DOC_ID = c.DOC_ID
+		WHERE a.doc_id = #docId#
+	</select>
+	
+	<update id="ApprovalDAO.updateGenSales">
+		UPDATE
+			TBL_EAPP_GEN_SALES
+		SET 
+			ST_DT = #stDt#,
+			COL_DUE_DT = #colDueDt#
+		WHERE
+			DOC_ID = #docId#
+	</update>
+	
+	<update id="ApprovalDAO.updateSalesDt">
+		UPDATE
+			TBL_SALES
+		SET 
+			SALES_DT = #stDt#
+		WHERE
+			DOC_ID = #docId#
+	</update>
+	
+	<update id="ApprovalDAO.updatePurchaseOutDt">
+		UPDATE
+			TBL_PURCHASE_OUT
+		SET 
+			PURCHASE_OUT_DT = #stDt#
+		WHERE
+			DOC_ID = #docId#
+	</update>
+	
+	<update id="ApprovalDAO.updatePurchaseInDt">
+		UPDATE
+			TBL_PURCHASE_IN
+		SET 
+			PURCHASE_IN_DT = #stDt#
+		WHERE
+			DOC_ID = #docId#
+	</update>
+	
+	<update id="ApprovalDAO.updatePlanExp">
+		UPDATE
+			TBL_PLAN_EXP
+		SET 
+			EXP_DT = #stDt#
+		WHERE
+			DOC_ID = #docId#
+	</update>
+	
+	<update id="ApprovalDAO.updateTotSales">
+		UPDATE
+			TBL_EAPP_TOT_SALES
+		SET 
+			COL_DUE_DT = #colDueDt#
+		WHERE
+			DOC_ID = #docId#
+	</update>
+	
+	<select id="ApprovalDAO.selectReusedDoc" parameterClass="java.lang.String" resultClass="java.lang.String">
+		<![CDATA[
+		SELECT IFNULL(MAX(SUBJECT), 'nothing') SUBJECT
+		  FROM TBL_EAPP_DOC
+		 WHERE PARNT_ID = #parntId#
+		   AND DOC_ID <> PARNT_ID
+		   AND (DOC_STAT IN ('APP001', 'APP002', 'APP003', 'APP004', 'APP005')
+		    OR NEW_AT = 1)
+		]]>
+	</select>
+</sqlMap>

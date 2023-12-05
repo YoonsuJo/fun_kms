@@ -1,0 +1,815 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="Comm">
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="Board2" type="kms.com.community.service.Board"/>
+	<typeAlias  alias="BoardVO2" type="kms.com.community.service.BoardVO"/>
+	<typeAlias  alias="MemberVO" type="kms.com.member.service.MemberVO"/>
+	<typeAlias  alias="SuggestVO" type="kms.com.support.service.SuggestVO"/>
+
+	<resultMap id="boardList" class="kms.com.community.service.BoardVO">
+		<result property="bbsId" column="BBS_ID" columnIndex="1"/>
+		<result property="nttId" column="NTT_ID" columnIndex="2"/>
+		<result property="nttSj" column="NTT_SJ" columnIndex="3"/>
+		<result property="frstRegisterId" column="FRST_REGISTER_ID" columnIndex="4"/>
+		<result property="frstRegisterNm" column="FRST_REGISTER_NM" columnIndex="5"/>
+		<result property="frstRegisterPnttm" column="FRST_REGISTER_PNTTM" columnIndex="6"/>
+		<result property="inqireCo" column="INQIRE_CO" columnIndex="7"/>
+		<result property="parnts" column="PARNTS" columnIndex="8"/>
+		<result property="replyAt" column="REPLY_AT" columnIndex="9"/>		
+		<result property="replyLc" column="REPLY_LC" columnIndex="10"/>
+		<result property="useAt" column="USE_AT" columnIndex="11"/>
+		<result property="atchFileId" column="ATCH_FILE_ID" columnIndex="12"/>
+		<result property="ntceBgnde" column="NTCE_BGNDE" columnIndex="13"/>
+		<result property="ntceEndde" column="NTCE_ENDDE" columnIndex="14"/>
+		<result property="commentCount" column="COMMENT_COUNT" columnIndex="15"/>
+		<result property="readBool" column="READ_BOOL" columnIndex="16"/>
+		<result property="exChk" column="EX_CHK" columnIndex="17"/>
+		<result property="exChkTm" column="EX_CHK_TM" columnIndex="18"/>
+		<result property="exDt" column="EX_DT" columnIndex="19"/>
+		<result property="exHm" column="EX_HM" columnIndex="20"/>
+		<result property="ntcrId" column="NTCR_ID" columnIndex="21"/>
+		<result property="ntcrNm" column="NTCR_NM" columnIndex="22"/>
+		<result property="prjId" column="PRJ_ID" columnIndex="23"/>
+		<result property="prjCd" column="PRJ_CD" columnIndex="24"/>
+		<result property="prjNm" column="PRJ_NM" columnIndex="25"/>
+		<result property="orgnztId" column="ORGNZT_ID" columnIndex="26"/>
+		<result property="orgnztNm" column="ORGNZT_NM" columnIndex="27"/>
+	</resultMap>
+
+	<resultMap id="unreadBoardList" class="kms.com.community.service.BoardVO">
+		<result property="bbsTyCode" column="BBS_TY_CODE" columnIndex="1"/>
+		<result property="bbsId" column="BBS_ID" columnIndex="1"/>
+		<result property="nttId" column="NTT_ID" columnIndex="2"/>
+		<result property="nttSj" column="NTT_SJ" columnIndex="3"/>
+		<result property="frstRegisterId" column="FRST_REGISTER_ID" columnIndex="4"/>
+		<result property="frstRegisterNm" column="FRST_REGISTER_NM" columnIndex="5"/>
+		<result property="frstRegisterPnttm" column="FRST_REGISTER_PNTTM" columnIndex="6"/>
+		<result property="inqireCo" column="INQIRE_CO" columnIndex="7"/>
+		<result property="parnts" column="PARNTS" columnIndex="8"/>
+		<result property="replyAt" column="REPLY_AT" columnIndex="9"/>		
+		<result property="replyLc" column="REPLY_LC" columnIndex="10"/>
+		<result property="useAt" column="USE_AT" columnIndex="11"/>
+		<result property="atchFileId" column="ATCH_FILE_ID" columnIndex="12"/>
+		<result property="ntceBgnde" column="NTCE_BGNDE" columnIndex="13"/>
+		<result property="ntceEndde" column="NTCE_ENDDE" columnIndex="14"/>
+		<result property="commentCount" column="COMMENT_COUNT" columnIndex="15"/>
+		<result property="exChk" column="EX_CHK" columnIndex="16"/>
+		<result property="exChkTm" column="EX_CHK_TM" columnIndex="17"/>
+		<result property="exDt" column="EX_DT" columnIndex="18"/>
+		<result property="exHm" column="EX_HM" columnIndex="19"/>
+		<result property="ntcrId" column="NTCR_ID" columnIndex="20"/>
+		<result property="ntcrNm" column="NTCR_NM" columnIndex="22"/>
+		<result property="bbsNm" column="BBS_NM" columnIndex="23"/>
+	</resultMap>
+
+	<resultMap id="boardInfo" class="kms.com.community.service.BoardVO">
+		<result property="bbsId" column="BBS_ID" columnIndex="1"/>
+		<result property="bbsTyCode" column="BBS_TY_CODE" columnIndex="2"/>
+		<result property="bbsAttrbCode" column="BBS_ATTRB_CODE" columnIndex="3"/>
+	</resultMap>
+	
+	<resultMap id="boardDetail" class="kms.com.community.service.BoardVO">
+		<result property="bbsId" column="BBS_ID" columnIndex="1"/>
+		<result property="nttId" column="NTT_ID" columnIndex="2"/>
+		<result property="nttSj" column="NTT_SJ" columnIndex="3"/>
+		<result property="ntcrId" column="NTCR_ID" columnIndex="4"/>
+		<result property="ntcrNm" column="NTCR_NM" columnIndex="5"/>
+		<result property="nttNo" column="NTT_NO" columnIndex="6"/>
+		<result property="nttCn" column="NTT_CN" columnIndex="7"/>
+		<result property="password" column="PASSWORD" columnIndex="8"/>
+		<result property="frstRegisterId" column="FRST_REGISTER_ID" columnIndex="9"/>
+		<result property="frstRegisterNm" column="FRST_REGISTER_NM" columnIndex="10"/>
+		<result property="frstRegisterPnttm" column="FRST_REGISTER_PNTTM" columnIndex="11"/>
+		<result property="ntceBgnde" column="NTCE_BGNDE" columnIndex="12"/>
+		<result property="ntceEndde" column="NTCE_ENDDE" columnIndex="13"/>
+		<result property="inqireCo" column="INQIRE_CO" columnIndex="14"/>
+		<result property="useAt" column="USE_AT" columnIndex="15"/>
+		<result property="atchFileId" column="ATCH_FILE_ID" columnIndex="16"/>
+		<result property="parnts" column="PARNTS" columnIndex="17"/>
+		<result property="replyAt" column="REPLY_AT" columnIndex="18"/>		
+		<result property="replyLc" column="REPLY_LC" columnIndex="19"/>
+		<result property="sortOrdr" column="SORT_ORDR" columnIndex="19"/>
+		<result property="bbsTyCode" column="BBS_TY_CODE" columnIndex="20"/>
+		<result property="bbsAttrbCode" column="BBS_ATTRB_CODE" columnIndex="21"/>
+		<result property="replyPosblAt" column="REPLY_POSBL_AT" columnIndex="22"/>
+		<result property="fileAtchPosblAt" column="FILE_ATCH_POSBL_AT" columnIndex="23"/>
+		<result property="posblAtchFileNumber" column="POSBL_ATCH_FILE_NUMBER" columnIndex="24"/>
+		<result property="bbsNm" column="BBS_NM" columnIndex="25"/>
+		<result property="exChk" column="EX_CHK" columnIndex="26"/>
+		<result property="exChkTm" column="EX_CHK_TM" columnIndex="27"/>
+		<result property="exDt" column="EX_DT" columnIndex="28"/>
+		<result property="exHm" column="EX_HM" columnIndex="29"/>
+		<result property="prjId" column="PRJ_ID" columnIndex="30"/>
+		<result property="prjCd" column="PRJ_CD" columnIndex="31"/>
+		<result property="prjNm" column="PRJ_NM" columnIndex="32"/>
+		<result property="orgnztId" column="ORGNZT_ID" columnIndex="33"/>
+		<result property="orgnztNm" column="ORGNZT_NM" columnIndex="34"/>
+		<result property="ntcrOrgnztId" column="NTCR_ORGNZT_ID" columnIndex="35"/>
+		<result property="ntcrOrgnztNm" column="NTCR_ORGNZT_NM" columnIndex="36"/>
+		<result property="lastUpdusrPnttm" column="LAST_UPDUSR_PNTTM" columnIndex="37"/>
+		<result property="frstRegisterUserId" column="FRST_REGISTER_USER_ID" columnIndex="10"/>
+	</resultMap>
+	
+	
+	<resultMap id="suggestList" class="kms.com.support.service.SuggestVO">
+		<result property="nttId" column="NTT_ID" columnIndex="1"/>
+		<result property="bbsId" column="BBS_ID" columnIndex="2"/>
+		<result property="userNo" column="USER_NO" columnIndex="3"/>
+		<result property="userNm" column="USER_NM" columnIndex="4"/>
+		<result property="userId" column="USER_ID" columnIndex="5"/>
+		<result property="sgstSt" column="SGST_ST" columnIndex="6"/>
+		<result property="regDt" column="REG_DT" columnIndex="7"/>
+		<result property="note" column="NOTE" columnIndex="8"/>
+	</resultMap>
+
+
+ 	<select id="KmsBBSManageDAO.selectMaxNttId" resultClass="java.lang.Long">
+ 		<![CDATA[
+			SELECT IFNULL(MAX(NTT_ID),0)+1 AS NTT_ID  FROM COMTNBBS
+ 		]]>
+ 	</select>
+ 	
+	<insert id="KmsBBSManageDAO.insertBoardArticle" parameterClass="Board2" >
+		<selectKey resultClass="java.lang.Long" keyProperty="nttNo">
+			SELECT IFNULL(MAX(SORT_ORDR),0)+1 AS NTT_NO  FROM COMTNBBS
+			WHERE BBS_ID = #bbsId#
+		</selectKey>
+		<![CDATA[
+			INSERT INTO COMTNBBS
+			(NTT_ID, BBS_ID, NTT_SJ, NTT_CN, SORT_ORDR, 
+			 NTCR_ID, NTCR_NM, PASSWORD, INQIRE_CO, 
+			 NTCE_BGNDE, NTCE_ENDDE, REPLY_AT,  			   
+			 PARNTS, NTT_NO, REPLY_LC, ATCH_FILE_ID,
+			 FRST_REGISTER_ID, FRST_REGISTER_PNTTM, USE_AT,
+			 LAST_UPDUSR_ID, LAST_UPDUSR_PNTTM,
+			 EX_CHK, EX_DT, EX_HM,
+			 ORGNZT_ID, PRJ_ID
+			 )
+			VALUES
+			( #nttId#, #bbsId#, #nttSj#, #nttCn#, #nttNo#, 
+			  #ntcrId#, #ntcrNm#, #password#, #inqireCo#, 
+			  #ntceBgnde#, #ntceEndde#, #replyAt#, 
+			  #parnts#, 1, #replyLc#, #atchFileId#,
+			  #frstRegisterId#, SYSDATE(), 'Y',
+			  #frstRegisterId#, SYSDATE(),
+			  #exChk#, #exDt#, #exHm#,
+			  #orgnztId#, #prjId#
+			 )			
+		]]>
+	</insert>
+	
+	<insert id="KmsBBSManageDAO.replyBoardArticle" parameterClass="Board2" >
+		<selectKey resultClass="java.lang.Long" keyProperty="nttNo">
+			SELECT IFNULL(MAX(NTT_NO),0)+1 AS NTT_NO  FROM COMTNBBS
+			WHERE BBS_ID = #bbsId# AND SORT_ORDR = #sortOrdr#
+		</selectKey>			
+		<![CDATA[
+			INSERT INTO COMTNBBS
+			(NTT_ID, BBS_ID, NTT_SJ, NTT_CN, SORT_ORDR, 
+			 NTCR_ID, NTCR_NM, PASSWORD, INQIRE_CO, 
+			 NTCE_BGNDE, NTCE_ENDDE, REPLY_AT,  			   
+			 PARNTS, NTT_NO, REPLY_LC, ATCH_FILE_ID,
+			 FRST_REGISTER_ID, FRST_REGISTER_PNTTM, USE_AT,
+			 LAST_UPDUSR_ID, LAST_UPDUSR_PNTTM,
+			 EX_CHK, EX_DT, EX_HM
+			 )
+			VALUES
+			( #nttId#, #bbsId#, #nttSj#, #nttCn#, #sortOrdr#, 
+			  #ntcrId#, #ntcrNm#, #password#, #inqireCo#, 
+			  #ntceBgnde#, #ntceEndde#, #replyAt#, 
+			  #parnts#, 1, #replyLc#, #atchFileId#,
+			  #frstRegisterId#, SYSDATE(), 'Y',
+			  #frstRegisterId#, SYSDATE(),
+			  #exChk#, #exDt#, #exHm#
+			 )
+		]]>
+	</insert>	
+	
+
+	<select id="KmsBBSManageDAO.selectBoardArticleList" parameterClass="BoardVO2" resultMap="boardList" >
+		<![CDATA[
+			SELECT
+				a.NTT_ID, a.NTT_SJ, a.FRST_REGISTER_ID, b.USER_NM AS FRST_REGISTER_NM,
+				DATE_FORMAT(a.FRST_REGISTER_PNTTM, '%Y.%m.%d %H:%i') AS FRST_REGISTER_PNTTM,
+				a.INQIRE_CO, a.PARNTS, a.REPLY_AT, a.REPLY_LC, a.USE_AT, a.ATCH_FILE_ID,
+				a.BBS_ID, a.NTCE_BGNDE, a.NTCE_ENDDE
+				,(SELECT COUNT(*) FROM COMTNCOMMENT d WHERE a.NTT_ID = d.NTT_ID AND a.BBS_ID = d.BBS_ID AND d.USE_AT = 'Y') AS COMMENT_COUNT
+				,(
+					CASE
+						WHEN (SELECT COUNT(*) FROM TBL_BBSREAD c WHERE a.NTT_ID = c.NTT_ID AND a.BBS_ID = c.BBS_ID AND c.USER_NO = #frstRegisterId#) > 0 THEN 'Y'
+						WHEN d.BBS_ATTRB_CODE = 'DISCUS' AND a.EX_CHK = 'N' THEN 'N'
+						WHEN DATEDIFF(SYSDATE() ,a.LAST_UPDUSR_PNTTM) >=7 THEN 'Y'
+						ELSE 'N'
+					END
+				) AS READ_BOOL
+				, a.EX_CHK, DATE_FORMAT(a.EX_CHK_TM, '%Y.%m.%d %H:%i') AS EX_CHK_TM, a.EX_DT, a.EX_HM
+				, b.USER_ID AS NTCR_ID, b.USER_NM AS NTCR_NM
+				,a.PRJ_ID, f.PRJ_CD, f.PRJ_NM, a.ORGNZT_ID, e.ORGNZT_NM
+			FROM
+				COMTNBBS a
+				LEFT JOIN TBL_USERINFO b ON a.FRST_REGISTER_ID = b.NO
+				LEFT JOIN COMTNBBSMASTER d ON a.BBS_ID = d.BBS_ID
+				LEFT JOIN TBL_ORGNZT e ON a.ORGNZT_ID = e.ORGNZT_ID
+				LEFT JOIN TBL_PRJ f ON a.PRJ_ID = f.PRJ_ID
+			WHERE
+				a.BBS_ID = #bbsId#
+				AND a.USE_AT = 'Y'
+		]]>
+			<isEqual prepend="AND" property="searchCnd" compareValue="0">
+				<![CDATA[	a.NTT_SJ LIKE CONCAT('%', #searchWrd#,'%') 		]]>
+			</isEqual>
+			<isEqual prepend="AND" property="searchCnd" compareValue="1">
+				<![CDATA[	(a.NTT_SJ LIKE CONCAT('%', #searchWrd#,'%') OR a.NTT_CN LIKE CONCAT('%', #searchWrd#,'%')) 		]]>
+			</isEqual>	
+			<isEqual prepend="AND" property="searchCnd" compareValue="2">
+				<![CDATA[	CONCAT(b.USER_NM, '(', b.USER_ID, ')') LIKE CONCAT('%', #searchWrd#,'%') 		]]>
+			</isEqual>				
+			<isNotEmpty prepend="AND" property="searchBgnDe">
+				<![CDATA[	DATEDIFF(a.FRST_REGISTER_PNTTM,#searchBgnDe#) >= 0 		]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchEndDe">
+				<![CDATA[	DATEDIFF(a.FRST_REGISTER_PNTTM,#searchEndDe#) <= 0 		]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="exChk">
+				<![CDATA[	EX_CHK = #exChk# 		]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="exChk">
+				<![CDATA[	EX_CHK = #exChk# 		]]>
+			</isNotEmpty>
+			<isEqual property="searchCondition" compareValue="0">
+				<isNotEmpty prepend="AND" property="searchOrgId">
+					<iterate prepend="a.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+						#searchOrgIdList[]#
+					</iterate>
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="searchCondition" compareValue="1">
+				<isNotEmpty prepend="AND" property="searchKeyword">
+					a.NTT_SJ LIKE CONCAT('%', #searchKeyword#, '%')
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="searchCondition" compareValue="2">
+				<isNotEmpty prepend="AND" property="searchKeyword">
+					(
+						a.NTT_SJ LIKE CONCAT('%', #searchKeyword#, '%')
+						OR a.NTT_CN LIKE CONCAT('%', #searchKeyword#, '%')
+					)
+				</isNotEmpty>
+			</isEqual>
+			<isEqual property="searchCondition" compareValue="3">
+				<isNotEmpty prepend="AND" property="searchUserNm">
+					CONCAT(b.USER_NM, '(', b.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+				</isNotEmpty>
+			</isEqual>
+			<isNotEmpty prepend="AND" property="prjId">
+				(
+					a.PRJ_ID = #prjId#
+					<isEqual prepend="OR" property="includeUnderPrj" compareValue="Y">
+						CONCAT('/',FN_PRJ_TREE(a.PRJ_ID),'/') LIKE CONCAT('%/', #prjId#, '/%')
+					</isEqual>
+				)
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="orgnztId">
+					a.ORGNZT_ID = #orgnztId#
+			</isNotEmpty>
+		<![CDATA[			
+			ORDER BY
+				CASE
+					WHEN a.BBS_ID = 'BBSMSTR_000000000029' AND a.EX_CHK = 'N' THEN 1
+					WHEN a.BBS_ID = 'BBSMSTR_000000000029' AND a.EX_CHK = 'Y' THEN 2
+					ELSE 0
+				END ASC
+				,CASE
+					WHEN a.BBS_ID = 'BBSMSTR_000000000030' THEN CONCAT(a.EX_DT, LPAD(IFNULL(a.EX_HM, ''), 2, '0'))
+					ELSE 0
+				END DESC
+				,CASE
+					WHEN a.BBS_ID = 'BBSMSTR_000000000061' AND READ_BOOL = 'N' THEN 0
+					WHEN a.BBS_ID = 'BBSMSTR_000000000061' AND READ_BOOL = 'Y' THEN 1
+					ELSE 0
+				END ASC
+				,CASE
+					WHEN a.BBS_ID = 'BBSMSTR_000000000062' AND READ_BOOL = 'N' THEN 0
+					WHEN a.BBS_ID = 'BBSMSTR_000000000062' AND a.EX_CHK = 'R' THEN 1
+					WHEN a.BBS_ID = 'BBSMSTR_000000000062' AND a.EX_CHK = 'C' THEN 2
+					WHEN a.BBS_ID = 'BBSMSTR_000000000062' AND a.EX_CHK = 'H' THEN 3
+					WHEN a.BBS_ID = 'BBSMSTR_000000000062' AND a.EX_CHK = 'E' THEN 4
+					WHEN a.BBS_ID = 'BBSMSTR_000000000062' AND a.EX_CHK = 'F' THEN 5
+					ELSE 0
+				END ASC
+				,CASE
+					WHEN a.BBS_ID = 'BBSMSTR_000000000080' AND READ_BOOL = 'N' THEN 0
+					WHEN a.BBS_ID = 'BBSMSTR_000000000080' AND a.EX_CHK = 'R' THEN 1
+					WHEN a.BBS_ID = 'BBSMSTR_000000000080' AND a.EX_CHK = 'C' THEN 2
+					WHEN a.BBS_ID = 'BBSMSTR_000000000080' AND a.EX_CHK = 'H' THEN 3
+					WHEN a.BBS_ID = 'BBSMSTR_000000000080' AND a.EX_CHK = 'E' THEN 4
+					WHEN a.BBS_ID = 'BBSMSTR_000000000080' AND a.EX_CHK = 'F' THEN 5
+					ELSE 0
+				END ASC
+				,CASE
+					WHEN a.BBS_ID = 'BBSMSTR_000000000071' THEN a.EX_DT
+					ELSE 0
+				END DESC, a.SORT_ORDR DESC, NTT_NO ASC
+			LIMIT #recordCountPerPage# OFFSET #firstIndex#
+		]]>
+	</select>
+
+	<select id="KmsBBSManageDAO.selectUnreadBoardArticleList" parameterClass="BoardVO2" resultMap="unreadBoardList" >		
+		SELECT
+			a.NTT_ID, a.NTT_SJ, a.FRST_REGISTER_ID, b.USER_NM AS FRST_REGISTER_NM,
+			DATE_FORMAT(a.FRST_REGISTER_PNTTM, '%Y.%m.%d %H:%i') AS FRST_REGISTER_PNTTM,
+			a.INQIRE_CO, a.PARNTS, a.REPLY_AT, a.REPLY_LC, a.USE_AT, a.ATCH_FILE_ID,
+			a.BBS_ID, a.NTCE_BGNDE, a.NTCE_ENDDE
+			,(SELECT COUNT(*) FROM COMTNCOMMENT d WHERE a.NTT_ID = d.NTT_ID AND a.BBS_ID = d.BBS_ID AND d.USE_AT = 'Y') AS COMMENT_COUNT
+			, a.EX_CHK, DATE_FORMAT(a.EX_CHK_TM, '%Y.%m.%d %H:%i') AS EX_CHK_TM, a.EX_DT, a.EX_HM
+			, b.USER_ID AS NTCR_ID, b.USER_NM AS NTCR_NM, c.BBS_NM, c.BBS_TY_CODE
+		FROM
+			COMTNBBS a
+			LEFT JOIN TBL_USERINFO b ON a.FRST_REGISTER_ID = b.NO
+			LEFT JOIN COMTNBBSMASTER c ON a.BBS_ID = c.BBS_ID
+		WHERE
+			a.USE_AT = 'Y'
+			AND a.BBS_ID NOT IN ('BBSMSTR_000000000082')  <!-- 아침인사는 미열람 게시글에 비노출 -->
+			AND c.USE_AT = 'Y'				
+			
+			<isNotEmpty prepend="AND" property="bbsTyCode">
+				c.BBS_TY_CODE in (#bbsTyCode#)
+			</isNotEmpty>
+			<isNotEmpty property="bbsTyCodeArray">
+				<iterate prepend="AND c.BBS_TY_CODE IN " open="(" close=")" conjunction="," property="bbsTyCodeArray">
+					#bbsTyCodeArray[]#
+				</iterate>
+			</isNotEmpty>
+						
+		<isNotEmpty prepend="AND" property="bbsAttrbCode">
+			C.BBS_ATTRB_CODE = #bbsAttrbCode#
+		</isNotEmpty>
+		<isEqual prepend="AND" property="isAdmin" compareValue="N">
+			C.BBS_ID != 'BBSMSTR_000000000033'
+		</isEqual>
+				AND NOT (SELECT COUNT(*) FROM TBL_BBSREAD e WHERE a.NTT_ID = e.NTT_ID AND a.BBS_ID = e.BBS_ID AND e.USER_NO = #frstRegisterId#) > 0
+				AND (
+					(c.BBS_ATTRB_CODE = 'DISCUS' AND a.EX_CHK = 'N')
+					OR NOT (DATEDIFF(SYSDATE() ,a.LAST_UPDUSR_PNTTM) >= 7)
+				)
+			ORDER BY a.FRST_REGISTER_PNTTM DESC
+			LIMIT #recordCountPerPage# OFFSET #firstIndex#		
+	</select>
+
+	<select id="KmsBBSManageDAO.selectBoardInfo" parameterClass="BoardVO2" resultMap="boardInfo" >
+		<![CDATA[
+			SELECT
+				BBS_ID, BBS_TY_CODE, BBS_ATTRB_CODE
+			FROM
+				COMTNBBSMASTER
+			WHERE
+				BBS_ID = #bbsId#
+		]]>				
+	</select>
+	
+	<select id="KmsBBSManageDAO.selectBoardArticleListCnt" parameterClass="BoardVO2" resultClass="java.lang.Integer" >
+		<![CDATA[
+			SELECT
+				COUNT(a.NTT_ID)
+			FROM
+				COMTNBBS a
+				LEFT JOIN TBL_USERINFO b ON a.FRST_REGISTER_ID = b.NO
+				LEFT JOIN COMTNBBSMASTER d ON a.BBS_ID = d.BBS_ID
+			WHERE
+				a.BBS_ID = #bbsId#
+				AND a.USE_AT = 'Y'
+		]]>
+			<isEqual prepend="AND" property="searchCnd" compareValue="0">
+				<![CDATA[	a.NTT_SJ LIKE CONCAT('%', #searchWrd#,'%') 		]]>
+			</isEqual>
+			<isEqual prepend="AND" property="searchCnd" compareValue="1">
+				<![CDATA[	(a.NTT_SJ LIKE CONCAT('%', #searchWrd#,'%') OR a.NTT_CN LIKE CONCAT('%', #searchWrd#,'%')) 		]]>
+			</isEqual>	
+			<isEqual prepend="AND" property="searchCnd" compareValue="2">
+				<![CDATA[	CONCAT(b.USER_NM, '(', b.USER_ID, ')') LIKE CONCAT('%', #searchWrd#,'%') 		]]>
+			</isEqual>
+			<isNotEmpty prepend="AND" property="searchBgnDe">
+				<![CDATA[	DATEDIFF(a.FRST_REGISTER_PNTTM,#searchBgnDe#) >= 0 		]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchEndDe">
+				<![CDATA[	DATEDIFF(a.FRST_REGISTER_PNTTM,#searchEndDe#) <= 0 		]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="exChk">
+				<![CDATA[	EX_CHK = #exChk# 		]]>
+			</isNotEmpty>
+	</select>	
+	
+	<select id="KmsBBSManageDAO.selectUnreadBoardArticleListCnt" parameterClass="BoardVO2" resultClass="java.lang.Integer" >
+		
+			SELECT
+				COUNT(a.NTT_ID)
+			FROM
+				COMTNBBS a
+				LEFT JOIN TBL_USERINFO b ON a.FRST_REGISTER_ID = b.NO
+				LEFT JOIN COMTNBBSMASTER c ON a.BBS_ID = c.BBS_ID
+			WHERE
+				a.USE_AT = 'Y'
+				AND a.BBS_ID NOT IN ('BBSMSTR_000000000082')
+				AND c.USE_AT = 'Y'
+				
+				<isNotEmpty prepend="AND" property="bbsTyCode">
+					c.BBS_TY_CODE in (#bbsTyCode#)
+				</isNotEmpty>
+				<isNotEmpty property="bbsTyCodeArray">
+				<iterate prepend="AND c.BBS_TY_CODE IN " open="(" close=")" conjunction="," property="bbsTyCodeArray">
+					#bbsTyCodeArray[]#
+				</iterate>
+				</isNotEmpty>
+				
+
+					
+			
+				AND NOT (SELECT COUNT(*) FROM TBL_BBSREAD d WHERE a.NTT_ID = d.NTT_ID AND a.BBS_ID = d.BBS_ID AND d.USER_NO = #frstRegisterId#) <![CDATA[>]]> 0
+				AND (
+					(c.BBS_ATTRB_CODE = 'DISCUS' AND a.EX_CHK = 'N')
+					OR NOT (DATEDIFF(SYSDATE() ,a.LAST_UPDUSR_PNTTM) <![CDATA[>=]]> 7)
+				)
+		
+	</select>	
+ 
+ 
+	<select id="KmsBBSManageDAO.selectBoardArticle" parameterClass="BoardVO2" resultMap="boardDetail" >		
+		SELECT
+			a.NTT_SJ, b.USER_ID AS NTCR_ID, b.USER_NM AS NTCR_NM, a.NTT_NO, a.NTT_CN,
+			a.PASSWORD, a.FRST_REGISTER_ID, b.USER_NM as FRST_REGISTER_NM, b.USER_ID as FRST_REGISTER_USER_ID,
+			DATE_FORMAT(a.FRST_REGISTER_PNTTM, '%Y.%m.%d %H:%i') as FRST_REGISTER_PNTTM,
+			DATE_FORMAT(a.LAST_UPDUSR_PNTTM, '%Y.%m.%d %H:%i') as LAST_UPDUSR_PNTTM,
+			a.NTCE_BGNDE, a.NTCE_ENDDE, a.INQIRE_CO, 
+			a.USE_AT, a.ATCH_FILE_ID, a.BBS_ID, a.NTT_ID,
+			a.PARNTS, a.REPLY_AT, a.REPLY_LC, a.SORT_ORDR,
+			c.BBS_TY_CODE, c.BBS_ATTRB_CODE, c.REPLY_POSBL_AT, 
+			c.FILE_ATCH_POSBL_AT, c.POSBL_ATCH_FILE_NUMBER, c.BBS_NM
+			, a.EX_CHK, DATE_FORMAT(a.EX_CHK_TM, '%Y.%m.%d %H:%i') AS EX_CHK_TM, a.EX_DT, a.EX_HM
+			, a.PRJ_ID, e.PRJ_CD, e.PRJ_NM, a.ORGNZT_ID, d.ORGNZT_NM
+			, b.ORGNZT_ID AS NTCR_ORGNZT_ID, FN_CREATE_ORGAN_FNM(b.ORGNZT_ID) AS NTCR_ORGNZT_NM
+		FROM
+			COMTNBBS a
+			LEFT OUTER JOIN TBL_USERINFO b ON a.FRST_REGISTER_ID = b.NO
+			LEFT OUTER JOIN COMTNBBSMASTER c ON a.BBS_ID = c.BBS_ID
+			LEFT JOIN TBL_ORGNZT d ON a.ORGNZT_ID = d.ORGNZT_ID
+			LEFT JOIN TBL_PRJ e ON a.PRJ_ID = e.PRJ_ID
+			LEFT JOIN TBL_ORGNZT f ON b.ORGNZT_ID = f.ORGNZT_ID
+		WHERE
+			a.BBS_ID = #bbsId#	
+		AND
+			a.NTT_ID = #nttId#						
+	</select> 
+	
+	<select id="KmsBBSManageDAO.getBoardArticleRead" parameterClass="BoardVO2" resultClass="java.lang.String">		
+		SELECT
+			CASE
+				WHEN (SELECT COUNT(*) FROM TBL_BBSREAD c WHERE a.NTT_ID = c.NTT_ID AND a.BBS_ID = c.BBS_ID AND c.USER_NO = #frstRegisterId#) > 0 THEN 'Y'
+				WHEN d.BBS_ATTRB_CODE = 'DISCUS' AND a.EX_CHK = 'N' THEN 'N'
+				WHEN DATEDIFF(SYSDATE() ,a.LAST_UPDUSR_PNTTM) >= 7 THEN 'Y'
+				ELSE 'N'
+			END AS READ_BOOL
+		FROM
+			COMTNBBS a
+			LEFT JOIN COMTNBBSMASTER d ON a.BBS_ID = d.BBS_ID
+		WHERE
+			a.NTT_ID = #nttId#
+			AND a.BBS_ID = #bbsId#
+	</select>
+	
+	<insert id="KmsBBSManageDAO.setBoardArticleRead" parameterClass="BoardVO2">
+		INSERT INTO TBL_BBSREAD
+			( NTT_ID, BBS_ID, USER_NO, READTIME )
+		VALUES
+			( #nttId#, #bbsId#, #frstRegisterId#, SYSDATE() )	
+	</insert>
+ 
+ 	<update id="KmsBBSManageDAO.updateBoardArticle" parameterClass="Board2">
+		UPDATE COMTNBBS SET 
+			NTT_SJ = #nttSj#,
+			NTT_CN = #nttCn#, 
+			NTCR_ID = #ntcrId#,
+			NTCR_NM = #ntcrNm#,
+			PASSWORD = #password#,
+			NTCE_BGNDE = #ntceBgnde#,		
+			NTCE_ENDDE = #ntceEndde#,
+			LAST_UPDUSR_ID = #lastUpdusrId#,
+			ATCH_FILE_ID = #atchFileId#,
+			LAST_UPDUSR_PNTTM = SYSDATE()
+		<isNotEmpty prepend="," property="exDt">
+			EX_DT = #exDt#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="exHm">
+			EX_Hm = #exHm#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="orgnztId">
+			ORGNZT_ID = #orgnztId#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="prjId">
+			PRJ_ID = #prjId#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="frstRegisterId">
+			FRST_REGISTER_ID = #frstRegisterId#
+		</isNotEmpty>
+		WHERE BBS_ID = #bbsId#
+		AND NTT_ID = #nttId#
+ 	</update>
+
+ 	<update id="KmsBBSManageDAO.deleteBoardArticle" parameterClass="Board2">
+ 		<![CDATA[
+			UPDATE COMTNBBS SET 
+				NTT_SJ = #nttSj#,
+				USE_AT = 'N',
+				LAST_UPDUSR_ID = #lastUpdusrId#,
+				LAST_UPDUSR_PNTTM = SYSDATE()
+			WHERE BBS_ID = #bbsId#
+			AND NTT_ID = #nttId#
+ 		]]>
+ 	</update>
+
+ 	<select id="KmsBBSManageDAO.selectMaxInqireCo" resultClass="java.lang.Integer" parameterClass="BoardVO2">
+ 		<![CDATA[
+			SELECT IFNULL(MAX(INQIRE_CO),0)+1 AS INQIRE_CO FROM COMTNBBS
+			WHERE BBS_ID = #bbsId#
+			AND NTT_ID = #nttId#
+ 		]]>
+ 	</select>
+ 	
+	<select id="KmsBBSManageDAO.getParentNttNo" parameterClass="Board2" resultClass="java.lang.Long">
+		<![CDATA[
+			SELECT NTT_NO FROM COMTNBBS
+			WHERE BBS_ID = #bbsId# AND NTT_ID = #parnts#			
+		]]>
+	</select>
+	
+ 	<update id="KmsBBSManageDAO.updateOtherNttNo" parameterClass="Board2">
+ 		<![CDATA[
+			UPDATE COMTNBBS SET 
+				NTT_NO = NTT_NO + 1
+			WHERE BBS_ID = #bbsId# AND SORT_ORDR = #sortOrdr#
+			AND NTT_NO > #nttNo#
+ 		]]>
+ 	</update>
+ 	
+ 	<update id="KmsBBSManageDAO.updateNttNo" parameterClass="Board2">
+ 		<![CDATA[
+			UPDATE COMTNBBS SET 
+				NTT_NO = #nttNo#
+			WHERE BBS_ID = #bbsId# 
+			AND NTT_ID = #nttId#
+ 		]]>
+ 	</update>
+	
+ 	<update id="KmsBBSManageDAO.updateInqireCo" parameterClass="BoardVO2">
+ 		UPDATE COMTNBBS SET 
+			INQIRE_CO = #inqireCo#			
+		WHERE BBS_ID = #bbsId#
+			AND NTT_ID = #nttId# 		
+ 	</update>
+ 	
+ 	<update id="KmsBBSManageDAO.updateInqireCoOld" parameterClass="BoardVO2"> 		
+		UPDATE COMTNBBS SET 
+			INQIRE_CO = #inqireCo#,
+			LAST_UPDUSR_ID = #lastUpdusrId#,
+			LAST_UPDUSR_PNTTM = SYSDATE()
+		WHERE BBS_ID = #bbsId#
+			AND NTT_ID = #nttId#
+ 	</update>
+ 	
+ 	<select id="KmsBBSManageDAO.selectNewFreeList" parameterClass="MemberVO" resultMap="boardList">
+ 		SELECT
+			a.NTT_ID, a.NTT_SJ, a.FRST_REGISTER_ID, b.USER_NM AS FRST_REGISTER_NM,
+			DATE_FORMAT(a.FRST_REGISTER_PNTTM, '%Y.%m.%d %H:%i') AS FRST_REGISTER_PNTTM,
+			a.INQIRE_CO, a.PARNTS, a.REPLY_AT, a.REPLY_LC, a.USE_AT, a.ATCH_FILE_ID,
+			a.BBS_ID, a.NTCE_BGNDE, a.NTCE_ENDDE
+			,(SELECT COUNT(*) FROM COMTNCOMMENT d WHERE a.NTT_ID = d.NTT_ID AND a.BBS_ID = d.BBS_ID AND d.USE_AT = 'Y') AS COMMENT_COUNT
+			,(
+				CASE
+					WHEN (SELECT COUNT(*) FROM TBL_BBSREAD c WHERE a.NTT_ID = c.NTT_ID AND a.BBS_ID = c.BBS_ID AND c.USER_NO = #no#) > 0 THEN 'Y'
+					WHEN d.BBS_ATTRB_CODE = 'DISCUS' AND a.EX_CHK = 'N' THEN 'N'
+					WHEN DATEDIFF(SYSDATE() ,a.LAST_UPDUSR_PNTTM) >=7 THEN 'Y'
+					ELSE 'N'
+				END
+			) AS READ_BOOL
+			, a.EX_CHK, DATE_FORMAT(a.EX_CHK_TM, '%Y.%m.%d %H:%i') AS EX_CHK_TM, a.EX_DT, a.EX_HM
+			, b.USER_ID AS NTCR_ID, b.USER_NM AS NTCR_NM
+			,a.PRJ_ID, f.PRJ_CD, f.PRJ_NM, a.ORGNZT_ID, e.ORGNZT_NM
+		FROM
+			COMTNBBS a
+			LEFT JOIN TBL_USERINFO b ON a.FRST_REGISTER_ID = b.NO
+			LEFT JOIN COMTNBBSMASTER d ON a.BBS_ID = d.BBS_ID
+			LEFT JOIN TBL_ORGNZT e ON a.ORGNZT_ID = e.ORGNZT_ID
+			LEFT JOIN TBL_PRJ f ON a.PRJ_ID = f.PRJ_ID
+		WHERE
+			d.BBS_ID = 'BBSMSTR_000000000001'
+			AND a.USE_AT = 'Y'
+		ORDER BY READ_BOOL ASC, a.SORT_ORDR DESC, NTT_NO ASC
+		LIMIT 5 OFFSET 0
+ 	</select>
+ 	<select id="KmsBBSManageDAO.selectNewDiscussList" parameterClass="MemberVO" resultMap="boardList">
+ 		SELECT
+			a.NTT_ID, a.NTT_SJ, a.FRST_REGISTER_ID, b.USER_NM AS FRST_REGISTER_NM,
+			DATE_FORMAT(a.FRST_REGISTER_PNTTM, '%Y.%m.%d %H:%i') AS FRST_REGISTER_PNTTM,
+			a.INQIRE_CO, a.PARNTS, a.REPLY_AT, a.REPLY_LC, a.USE_AT, a.ATCH_FILE_ID,
+			a.BBS_ID, a.NTCE_BGNDE, a.NTCE_ENDDE
+			,(SELECT COUNT(*) FROM COMTNCOMMENT d WHERE a.NTT_ID = d.NTT_ID AND a.BBS_ID = d.BBS_ID AND d.USE_AT = 'Y') AS COMMENT_COUNT
+			,(
+				CASE
+					WHEN (SELECT COUNT(*) FROM TBL_BBSREAD c WHERE a.NTT_ID = c.NTT_ID AND a.BBS_ID = c.BBS_ID AND c.USER_NO = #no#) > 0 THEN 'Y'
+					WHEN d.BBS_ATTRB_CODE = 'DISCUS' AND a.EX_CHK = 'N' THEN 'N'
+					WHEN DATEDIFF(SYSDATE() ,a.LAST_UPDUSR_PNTTM) >=7 THEN 'Y'
+					ELSE 'N'
+				END
+			) AS READ_BOOL
+			, a.EX_CHK, DATE_FORMAT(a.EX_CHK_TM, '%Y.%m.%d %H:%i') AS EX_CHK_TM, a.EX_DT, a.EX_HM
+			, b.USER_ID AS NTCR_ID, b.USER_NM AS NTCR_NM
+			,a.PRJ_ID, f.PRJ_CD, f.PRJ_NM, a.ORGNZT_ID, e.ORGNZT_NM
+		FROM
+			COMTNBBS a
+			LEFT JOIN TBL_USERINFO b ON a.FRST_REGISTER_ID = b.NO
+			LEFT JOIN COMTNBBSMASTER d ON a.BBS_ID = d.BBS_ID
+			LEFT JOIN TBL_ORGNZT e ON a.ORGNZT_ID = e.ORGNZT_ID
+			LEFT JOIN TBL_PRJ f ON a.PRJ_ID = f.PRJ_ID
+		WHERE
+			d.BBS_ATTRB_CODE = 'DISCUS'
+			AND a.USE_AT = 'Y'
+		ORDER BY READ_BOOL ASC, a.SORT_ORDR DESC, NTT_NO ASC
+		LIMIT 5 OFFSET 0
+ 	</select>
+
+	<delete id="KmsBBSManageDAO.deleteReadHistory" >
+		DELETE
+		FROM TBL_BBSREAD
+		WHERE
+			BBS_ID = #bbsId#
+			AND NTT_ID = #nttId#
+	</delete>
+	
+	<update id="KmsBBSManageDAO.setDiscussState" parameterClass="BoardVO2">
+		UPDATE COMTNBBS
+		SET
+			EX_CHK = #exChk#,
+			EX_CHK_TM = SYSDATE()
+		WHERE
+			BBS_ID = #bbsId#
+			AND NTT_ID = #nttId#
+	</update>
+
+	<select id="KmsBBSManageDAO.selectSuggestSummary" resultClass="egovMap">
+		SELECT
+			EX_CHK, COUNT(*) AS EX_CHK_CNT
+		FROM
+			COMTNBBS a
+			LEFT JOIN TBL_USERINFO b ON a.FRST_REGISTER_ID = b.NO
+		WHERE
+			BBS_ID = #bbsId#
+			AND a.USE_AT = 'Y'
+			<isEqual prepend="AND" property="searchCnd" compareValue="0">
+				<![CDATA[	a.NTT_SJ LIKE CONCAT('%', #searchWrd#,'%') 		]]>
+			</isEqual>
+			<isEqual prepend="AND" property="searchCnd" compareValue="1">
+				<![CDATA[	(a.NTT_SJ LIKE CONCAT('%', #searchWrd#,'%') OR a.NTT_CN LIKE CONCAT('%', #searchWrd#,'%')) 		]]>
+			</isEqual>	
+			<isEqual prepend="AND" property="searchCnd" compareValue="2">
+				<![CDATA[	CONCAT(b.USER_NM, '(', b.USER_ID, ')') LIKE CONCAT('%', #searchWrd#,'%') 		]]>
+			</isEqual>
+			<isNotEmpty prepend="AND" property="searchBgnDe">
+				<![CDATA[	DATEDIFF(a.FRST_REGISTER_PNTTM,#searchBgnDe#) >= 0 		]]>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchEndDe">
+				<![CDATA[	DATEDIFF(a.FRST_REGISTER_PNTTM,#searchEndDe#) <= 0 		]]>
+			</isNotEmpty>
+		GROUP BY EX_CHK
+	</select>
+
+	<select id="KmsBBSManageDAO.selectSuggestHistory" resultMap="suggestList">
+		SELECT
+			a.NTT_ID, a.BBS_ID, a.USER_NO, b.USER_NM, b.USER_ID, a.SGST_ST, DATE_FORMAT(a.REG_DT, '%Y.%m.%d %H:%i') AS REG_DT, a.NOTE
+		FROM
+			TBL_SUGGEST_HISTORY a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+		WHERE
+			a.NTT_ID = #nttId#
+			AND a.BBS_ID = #bbsId#
+		ORDER BY a.REG_DT DESC
+	</select>
+
+	<insert id="KmsBBSManageDAO.insertSuggestHistory">
+		INSERT INTO TBL_SUGGEST_HISTORY
+		(
+			NTT_ID, BBS_ID, USER_NO, SGST_ST, REG_DT, NOTE
+		) VALUES (
+			#nttId#, #bbsId#, #userNo#, #sgstSt#, SYSDATE(), #note#
+		)
+	</insert>
+	
+	
+	<update id="KmsBBSManageDAO.updateBbsId">
+		UPDATE
+			COMTNBBS
+		SET
+			BBS_ID = #bbsIdTo#
+		WHERE
+			BBS_ID = #bbsIdFrom#
+			AND NTT_ID = #nttId#
+	</update>
+	
+	<update id="KmsBBSManageDAO.updateBbsIdComment">
+		UPDATE
+			COMTNCOMMENT
+		SET
+			BBS_ID = #bbsIdTo#
+		WHERE
+			BBS_ID = #bbsIdFrom#
+			AND NTT_ID = #nttId#
+	</update>
+	
+	<select id="KmsBBSManageDAO.selectPrjBoardMain" resultClass="egovMap">
+		SELECT
+			a.PRJ_ID, a.PRJ_CD, a.PRJ_NM, a.STAT, a.ORGNZT_ID, b.ORGNZT_NM,
+			SUM(IF(d.USE_AT='Y',1,0)) - SUM(IF(e.READTIME IS NOT NULL OR DATEDIFF(SYSDATE(), d.LAST_UPDUSR_PNTTM) >= 7, 1, 0)) AS UNREAD_CNT,
+			SUM(IF(d.USE_AT='Y',1,0)) AS ALL_CNT,
+			IF(PRJ_INPUT_NO IS NOT NULL,'Y','N') AS IS_MY_PRJ
+		FROM
+			TBL_PRJ a
+			LEFT JOIN TBL_ORGNZT b ON a.ORGNZT_ID = b.ORGNZT_ID
+			LEFT JOIN TBL_PRJ_INPUT c ON a.PRJ_ID = c.PRJ_ID AND c.YEAR = YEAR(SYSDATE()) AND c.MONTH = MONTH(SYSDATE()) AND c.USER_NO = #frstRegisterId#
+			LEFT JOIN COMTNBBS d ON a.PRJ_ID = d.PRJ_ID AND d.BBS_ID = #bbsId# AND d.USE_AT='Y'
+			LEFT JOIN TBL_BBSREAD e ON d.BBS_ID = e.BBS_ID AND d.NTT_ID = e.NTT_ID AND e.USER_NO = #frstRegisterId#
+		<dynamic prepend="WHERE">
+			<isNotEmpty prepend="AND" property="searchStatList">
+				<iterate prepend="a.STAT IN " open="(" close=")" conjunction="," property="searchStatList">
+					#searchStatList[]#
+				</iterate>
+			</isNotEmpty>
+			<isNotEmpty prepend="AND" property="searchOrgIdList">
+				<iterate prepend="a.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+					#searchOrgIdList[]#
+				</iterate>
+			</isNotEmpty>
+		</dynamic>
+		GROUP BY a.PRJ_ID
+	</select>
+
+	<select id="KmsBBSManageDAO.selectOrgBoardMain" resultClass="egovMap">
+		SELECT
+			o.ORGNZT_ID, o.ORGNZT_NM,
+			'0' AS UNREAD_CNT,
+			'0' AS ALL_CNT,
+			IF(u.NO IS NOT NULL, 'Y', 'N') AS IS_MY_ORG
+		FROM
+			TBL_ORGNZT o
+			LEFT OUTER JOIN tbl_userinfo u 
+			ON o.ORG_TREE LIKE CONCAT('%', u.ORGNZT_ID, '%')
+			AND u.no = #searchKeyword#
+		WHERE o.USE_YN = 'Y'
+		AND SUBSTR(o.ORGNZT_ID, 7, 1) = '0'
+	</select>
+
+	<select id="KmsBBSManageDAO.selectBoardListHeadSearch" resultMap="unreadBoardList">
+		SELECT
+			a.NTT_ID, a.NTT_SJ, a.FRST_REGISTER_ID, b.USER_NM AS FRST_REGISTER_NM,
+			DATE_FORMAT(a.FRST_REGISTER_PNTTM, '%Y.%m.%d %H:%i') AS FRST_REGISTER_PNTTM,
+			a.INQIRE_CO, a.PARNTS, a.REPLY_AT, a.REPLY_LC, a.USE_AT, a.ATCH_FILE_ID,
+			a.BBS_ID, a.NTCE_BGNDE, a.NTCE_ENDDE
+			,(SELECT COUNT(*) FROM COMTNCOMMENT d WHERE a.NTT_ID = d.NTT_ID AND a.BBS_ID = d.BBS_ID AND d.USE_AT = 'Y') AS COMMENT_COUNT
+			, a.EX_CHK, DATE_FORMAT(a.EX_CHK_TM, '%Y.%m.%d %H:%i') AS EX_CHK_TM, a.EX_DT, a.EX_HM
+			, b.USER_ID AS NTCR_ID, b.USER_NM AS NTCR_NM, c.BBS_NM, c.BBS_TY_CODE
+		FROM
+			COMTNBBS a
+			LEFT JOIN TBL_USERINFO b ON a.FRST_REGISTER_ID = b.NO
+			LEFT JOIN COMTNBBSMASTER c ON a.BBS_ID = c.BBS_ID
+		WHERE
+			a.USE_AT = 'Y'
+			AND c.USE_AT = 'Y'
+			AND (
+				a.NTT_SJ LIKE CONCAT('%',#searchKeyword#,'%')
+				OR a.NTT_CN LIKE CONCAT('%',#searchKeyword#,'%')
+				OR b.USER_NM LIKE CONCAT('%',#searchKeyword#,'%')
+				OR c.BBS_NM LIKE CONCAT('%',#searchKeyword#,'%')
+			)
+		ORDER BY a.SORT_ORDR DESC, NTT_NO ASC
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<select id="KmsBBSManageDAO.selectBoardListHeadSearchTotCnt" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			COMTNBBS a
+			LEFT JOIN TBL_USERINFO b ON a.FRST_REGISTER_ID = b.NO
+			LEFT JOIN COMTNBBSMASTER c ON a.BBS_ID = c.BBS_ID
+		WHERE
+			a.USE_AT = 'Y'
+			AND c.USE_AT = 'Y'
+			AND (
+				a.NTT_SJ LIKE CONCAT('%',#searchKeyword#,'%')
+				OR a.NTT_CN LIKE CONCAT('%',#searchKeyword#,'%')
+				OR b.USER_NM LIKE CONCAT('%',#searchKeyword#,'%')
+				OR c.BBS_NM LIKE CONCAT('%',#searchKeyword#,'%')
+			)
+	</select>
+
+
+</sqlMap>

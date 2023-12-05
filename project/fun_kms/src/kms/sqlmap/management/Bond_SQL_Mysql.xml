@@ -1,0 +1,713 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsBondDAO">
+
+	<typeAlias alias="egovMap"
+		type="egovframework.rte.psl.dataaccess.util.EgovMap" />
+		
+	<typeAlias alias="bondVO" type="kms.com.management.service.BondVO" />
+
+	<resultMap id="bondList" class="kms.com.management.service.BondVO">
+		<result property="orgnztNm"			column="ORGNZT_NM"			columnIndex="1" />
+		<result property="orgnztId"			column="ORGNZT_ID"			columnIndex="2" />
+		<result property="prjNm"			column="PRJ_NM"				columnIndex="3" />
+		<result property="prjId"			column="PRJ_ID"				columnIndex="4" />
+		<result property="prjCd"			column="PRJ_CD"				columnIndex="5" />
+		<result property="bondPrjNo"		column="BOND_PRJ_NO"		columnIndex="6" />
+		<result property="sumExpense"		column="SUM_EXPENSE"		columnIndex="7" />
+		<result property="sumWillCollect"	column="SUM_WILL_COLLECT"	columnIndex="8" />
+		<result property="sumCollection"	column="SUM_COLLECTION"		columnIndex="9" />
+		<result property="accSumExpense"	column="ACC_SUM_EXPENSE"	columnIndex="10" />
+		<result property="accSumWillCollect"	column="ACC_SUM_WILL_COLLECT"	columnIndex="11" />
+		<result property="accSumCollection"	column="ACC_SUM_COLLECTION"	columnIndex="12" />
+		<result property="accSumSales"		column="ACC_SUM_SALES"		columnIndex="13" />
+		<result property="companyNm"		column="CODE_DC"			columnIndex="14" />
+		<result property="publishDate"		column="PUBLISH_DATE"		columnIndex="15" />
+		<result property="custNm"			column="CUST_NM"			columnIndex="16" />
+		<result property="sumSales"			column="SUM_SALES"			columnIndex="17" />
+		<result property="prjStat"			column="PRJ_STAT"			columnIndex="18" />
+	</resultMap>
+	
+	<resultMap id="bondListAll" class="kms.com.management.service.BondVO">
+		<result property="bondId"			column="BOND_ID"			columnIndex="1" />
+		<result property="publishDate"		column="PUBLISH_DATE"		columnIndex="2" />
+		<result property="custNm"			column="CUST_NM"			columnIndex="3" />
+		<result property="bondPrjNo"		column="BOND_PRJ_NO"		columnIndex="4" />
+		<result property="sumExpense"		column="SUM_EXPENSE"		columnIndex="5" />
+		<result property="sumWillCollect"	column="SUM_WILL_COLLECT"	columnIndex="6" />
+		<result property="sumCollection"	column="SUM_COLLECTION"		columnIndex="7" />
+		<result property="accSumExpense"	column="ACC_SUM_EXPENSE"	columnIndex="8" />
+		<result property="accSumWillCollect"	column="ACC_SUM_WILL_COLLECT"	columnIndex="9" />
+		<result property="accSumCollection"	column="ACC_SUM_COLLECTION"	columnIndex="10" />
+		<result property="companyNm"		column="CODE_DC"			columnIndex="11" />
+		<result property="bondSalesCnt"		column="BOND_SALES_CNT"		columnIndex="12" />
+	</resultMap>
+	
+	<resultMap id="collectionList" class="kms.com.management.service.BondVO">
+		<result property="bondColNo"		column="no"					columnIndex="1" />
+		<result property="bondPrjNo"		column="bond_prj_no"		columnIndex="2" />
+		<result property="collectionDate"	column="collection_date"	columnIndex="3" />
+		<result property="expense"			column="expense"			columnIndex="4" />
+		<result property="note"				column="note"				columnIndex="5" />
+		<result property="useAt"			column="use_at"				columnIndex="6" />
+	</resultMap>
+
+	<select id="KmsBondDAO.selectBondOrgSumList" resultMap="bondList" parameterClass="bondVO" >
+		SELECT
+			a.ORGNZT_NM AS ORGNZT_NM,
+			a.ORGNZT_ID AS ORGNZT_ID,
+			'' AS PRJ_NM,
+			'' AS PRJ_ID,
+			'' AS PRJ_CD,
+			'' AS PRJ_STAT,
+			'' AS CODE_DC,
+			'' AS BOND_PRJ_NO,
+			IFNULL(publishSum.SUM_PUBLISH, 0) AS SUM_EXPENSE,
+			IFNULL(publishSum.SUM_WILL_COLLECT, 0) AS SUM_WILL_COLLECT,
+			IFNULL(collectSum.SUM_COLLECT, 0) AS SUM_COLLECTION,
+			IFNULL(salesSum.SUM_SALES, 0) AS SUM_SALES,
+			IFNULL(publishSum.ACC_SUM_PUBLISH, 0) AS ACC_SUM_EXPENSE,
+			IFNULL(publishSum.ACC_SUM_WILL_COLLECT, 0) AS ACC_SUM_WILL_COLLECT,
+			IFNULL(collectSum.ACC_SUM_COLLECT, 0) AS ACC_SUM_COLLECTION,
+			IFNULL(salesSum.ACC_SUM_SALES, 0) AS ACC_SUM_SALES,
+			'' AS PUBLISH_DATE,
+			'' AS CUST_NM
+		FROM
+			(
+				TBL_ORGNZT a,
+				(SELECT ORGNZT_ID FROM TBL_USERINFO WHERE NO = #searchUserNo#) usr
+			)
+			LEFT JOIN (
+				SELECT
+					sales.PRJ_ID AS PRJ_ID,
+					prj.ORGNZT_ID AS ORG_ID,
+					SUM(IFNULL(sales.COST, 0)) AS ACC_SUM_SALES,
+					SUM(IF(sales.SALES_DT >= #startDate# 
+							AND #endDate# >= sales.SALES_DT
+							, IFNULL(sales.COST, 0), 0)) AS SUM_SALES
+				FROM
+					TBL_SALES sales
+					INNER JOIN TBL_EAPP_DOC doc
+						ON sales.DOC_ID = doc.DOC_ID
+						AND doc.DOC_STAT IN ('APP004', 'APP005')
+						AND doc.NEW_AT = 1
+					INNER JOIN TBL_PRJ prj
+						ON sales.PRJ_ID = prj.PRJ_ID
+					INNER JOIN TBL_ORGNZT org
+						ON prj.ORGNZT_ID = org.ORGNZT_ID
+				WHERE
+					sales.BOND_MANAGE_YN = 'Y'
+					AND	SALES.DECIDE_YN = 'Y'
+					AND	SALES.COST != 1 
+					AND PRJ.BOND_YN = 'Y'
+				GROUP BY
+					prj.ORGNZT_ID
+			) salesSum
+				ON a.ORGNZT_ID = salesSum.ORG_ID
+			LEFT JOIN (
+				SELECT
+					bondPrj.PRJ_ID AS PRJ_ID,
+					prj.ORGNZT_ID AS ORG_ID,
+					SUM(IF(bond.PUBLISH_DATE >= #startDate# 
+							AND #endDate# >= bond.PUBLISH_DATE
+							, IFNULL(bondPrj.EXPENSE, 0), 0)) AS SUM_PUBLISH,
+					SUM(IF(bond.PUBLISH_DATE >= #startDate# 
+							AND #endDate# >= bond.PUBLISH_DATE
+							, IFNULL(ROUND(IF(bond.ZERO_TAX_RATE='Y',bondPrj.EXPENSE, bondPrj.EXPENSE * 1.1)), 0), 0)) AS SUM_WILL_COLLECT,
+					SUM(IFNULL(bondPrj.EXPENSE, 0)) AS ACC_SUM_PUBLISH,
+					SUM(IFNULL(ROUND(IF(bond.ZERO_TAX_RATE='Y',bondPrj.EXPENSE, bondPrj.EXPENSE * 1.1)), 0)) AS ACC_SUM_WILL_COLLECT
+				FROM
+					TBL_BOND bond
+					INNER JOIN TBL_BOND_PRJ bondPrj
+						ON bond.BOND_ID = bondPrj.BOND_ID
+						AND bondPrj.USE_AT = 'Y'
+					INNER JOIN TBL_PRJ prj
+						ON bondPrj.PRJ_ID = prj.PRJ_ID
+					INNER JOIN TBL_ORGNZT org
+						ON prj.ORGNZT_ID = org.ORGNZT_ID
+				WHERE
+					bond.BOND_STAT = 'Y'
+					AND bond.USE_AT = 'Y'
+					AND PRJ.BOND_YN = 'Y'
+				GROUP BY
+					prj.ORGNZT_ID
+			) publishSum
+				ON a.ORGNZT_ID = publishSum.ORG_ID
+			LEFT JOIN (
+				SELECT
+					bondPrj.PRJ_ID AS PRJ_ID,
+					prj.ORGNZT_ID AS ORG_ID,
+					SUM(IF(bond.PUBLISH_DATE >= #startDate# 
+							AND #endDate# >= bond.PUBLISH_DATE
+							, IFNULL(col.EXPENSE, 0), 0)) AS SUM_COLLECT,
+					SUM(IFNULL(col.EXPENSE, 0)) AS ACC_SUM_COLLECT
+				FROM
+					TBL_BOND bond
+					INNER JOIN TBL_BOND_PRJ bondPrj
+						ON bond.BOND_ID = bondPrj.BOND_ID
+						AND bondPrj.USE_AT = 'Y'
+					INNER JOIN TBL_BOND_COLLECTION col
+						ON bondPrj.NO = col.BOND_PRJ_NO
+						AND col.USE_AT = 'Y'
+					INNER JOIN TBL_PRJ prj
+						ON bondPrj.PRJ_ID = prj.PRJ_ID
+					INNER JOIN TBL_ORGNZT org
+						ON prj.ORGNZT_ID = org.ORGNZT_ID
+				WHERE
+					bond.BOND_STAT = 'Y'
+					AND bond.USE_AT = 'Y'
+					AND PRJ.BOND_YN = 'Y'
+				GROUP BY
+					prj.ORGNZT_ID
+			) collectSum
+				ON a.ORGNZT_ID = collectSum.ORG_ID
+		WHERE
+			IFNULL(publishSum.SUM_PUBLISH, 0) != 0
+			OR IFNULL(collectSum.SUM_COLLECT, 0) != 0
+			OR IFNULL(publishSum.ACC_SUM_PUBLISH, 0) != 0
+			OR IFNULL(collectSum.ACC_SUM_COLLECT, 0) != 0
+			OR IFNULL(salesSum.ACC_SUM_SALES, 0) != 0
+		ORDER BY
+			CASE
+				WHEN a.ORGNZT_ID = usr.ORGNZT_ID THEN 1
+				WHEN a.ORG_TREE LIKE CONCAT('%', FN_ORGAN_TREE(usr.ORGNZT_ID), '%') THEN 2
+				WHEN FN_ORGAN_TREE(usr.ORGNZT_ID) LIKE CONCAT('%', a.ORG_TREE, '%') THEN 3
+				ELSE 9
+			END ASC,
+			a.ORG_TREE
+	</select>
+	
+	<select id="KmsBondDAO.selectBondPrjSumList" resultMap="bondList" parameterClass="bondVO" >	
+		SELECT
+			b.ORGNZT_NM AS ORGNZT_NM,
+			a.ORGNZT_ID AS ORGNZT_ID,
+			a.PRJ_NM AS PRJ_NM,
+			a.PRJ_ID AS PRJ_ID,
+			a.PRJ_CD AS PRJ_CD,
+			a.STAT AS PRJ_STAT,
+			'' AS CODE_DC,
+			'' AS BOND_PRJ_NO,
+			IFNULL(publishSum.SUM_PUBLISH, 0) AS SUM_EXPENSE,
+			IFNULL(publishSum.SUM_WILL_COLLECT, 0) AS SUM_WILL_COLLECT,
+			IFNULL(collectSum.SUM_COLLECT, 0) AS SUM_COLLECTION,
+			IFNULL(salesSum.SUM_SALES, 0) AS SUM_SALES,
+			IFNULL(publishSum.ACC_SUM_PUBLISH, 0) AS ACC_SUM_EXPENSE,
+			IFNULL(publishSum.ACC_SUM_WILL_COLLECT, 0) AS ACC_SUM_WILL_COLLECT,
+			IFNULL(collectSum.ACC_SUM_COLLECT, 0) AS ACC_SUM_COLLECTION,
+			IFNULL(salesSum.ACC_SUM_SALES, 0) AS ACC_SUM_SALES,
+			'' AS PUBLISH_DATE,
+			'' AS CUST_NM
+		FROM (
+				TBL_PRJ a,
+				(SELECT ORGNZT_ID FROM TBL_USERINFO WHERE NO = #searchUserNo#) usr
+			)
+			INNER JOIN TBL_ORGNZT b
+				ON a.ORGNZT_ID = b.ORGNZT_ID	
+				<isNotEmpty prepend="AND" property="searchOrgId">
+					<iterate prepend="b.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+						#searchOrgIdList[]#
+					</iterate>
+				</isNotEmpty>
+			LEFT JOIN (
+				SELECT
+					sales.PRJ_ID AS PRJ_ID,
+					prj.ORGNZT_ID AS ORG_ID,
+					SUM(IFNULL(sales.COST, 0)) AS ACC_SUM_SALES,
+					SUM(IF(sales.SALES_DT >= #startDate# 
+							AND #endDate# >= sales.SALES_DT  
+							,IFNULL(sales.COST, 0), 0)) AS SUM_SALES
+				FROM
+					TBL_SALES sales
+					INNER JOIN TBL_EAPP_DOC doc
+						ON sales.DOC_ID = doc.DOC_ID
+						AND doc.DOC_STAT IN ('APP004', 'APP005')
+						AND doc.NEW_AT = 1
+					INNER JOIN TBL_PRJ prj
+						ON sales.PRJ_ID = prj.PRJ_ID						
+					INNER JOIN TBL_ORGNZT org
+						ON prj.ORGNZT_ID = org.ORGNZT_ID
+						<isNotEmpty prepend="AND" property="searchOrgId">
+							<iterate prepend="org.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+								#searchOrgIdList[]#
+							</iterate>
+						</isNotEmpty>
+				WHERE
+					sales.BOND_MANAGE_YN = 'Y'
+					AND	SALES.DECIDE_YN = 'Y' 
+					AND SALES.COST != 1
+					AND PRJ.BOND_YN = 'Y'
+				GROUP BY
+					sales.PRJ_ID
+			) salesSum
+				ON a.PRJ_ID = salesSum.PRJ_ID
+			LEFT JOIN (
+				SELECT
+					bondPrj.PRJ_ID AS PRJ_ID,
+					prj.ORGNZT_ID AS ORG_ID,
+					SUM(IF(bond.PUBLISH_DATE >= #startDate# 
+							AND #endDate# >= bond.PUBLISH_DATE 
+							, IFNULL(bondPrj.EXPENSE, 0), 0)) AS SUM_PUBLISH,
+					SUM(IF(bond.PUBLISH_DATE >= #startDate# 
+							AND #endDate# >= bond.PUBLISH_DATE 
+							, IFNULL(ROUND(IF(bond.ZERO_TAX_RATE='Y',bondPrj.EXPENSE, bondPrj.EXPENSE * 1.1)), 0), 0)) AS SUM_WILL_COLLECT,
+					SUM(IFNULL(bondPrj.EXPENSE, 0)) AS ACC_SUM_PUBLISH,
+					SUM(IFNULL(ROUND(IF(bond.ZERO_TAX_RATE='Y',bondPrj.EXPENSE, bondPrj.EXPENSE * 1.1)), 0)) AS ACC_SUM_WILL_COLLECT
+				FROM
+					TBL_BOND bond
+					INNER JOIN TBL_BOND_PRJ bondPrj
+						ON bond.BOND_ID = bondPrj.BOND_ID
+						AND bondPrj.USE_AT = 'Y'
+					INNER JOIN TBL_PRJ prj
+						ON bondPrj.PRJ_ID = prj.PRJ_ID
+					INNER JOIN TBL_ORGNZT org
+						ON prj.ORGNZT_ID = org.ORGNZT_ID
+						<isNotEmpty prepend="AND" property="searchOrgId">
+							<iterate prepend="org.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+								#searchOrgIdList[]#
+							</iterate>
+						</isNotEmpty>
+				WHERE
+					bond.BOND_STAT = 'Y'
+					AND bond.USE_AT = 'Y'
+					AND PRJ.BOND_YN = 'Y'
+				GROUP BY
+					bondPrj.PRJ_ID
+			) publishSum
+				ON a.PRJ_ID = publishSum.PRJ_ID
+			LEFT JOIN (
+				SELECT
+					bondPrj.PRJ_ID AS PRJ_ID,
+					prj.ORGNZT_ID AS ORG_ID,
+					SUM(IF(bond.PUBLISH_DATE >= #startDate# 
+							AND #endDate# >= bond.PUBLISH_DATE 
+							, IFNULL(col.EXPENSE, 0), 0)) AS SUM_COLLECT,
+					SUM(IFNULL(col.EXPENSE, 0)) AS ACC_SUM_COLLECT
+				FROM
+					TBL_BOND bond
+					INNER JOIN TBL_BOND_PRJ bondPrj
+						ON bond.BOND_ID = bondPrj.BOND_ID
+						AND bondPrj.USE_AT = 'Y'
+					INNER JOIN TBL_BOND_COLLECTION col
+						ON bondPrj.NO = col.BOND_PRJ_NO
+						AND col.USE_AT = 'Y'
+					INNER JOIN TBL_PRJ prj
+						ON bondPrj.PRJ_ID = prj.PRJ_ID
+					INNER JOIN TBL_ORGNZT org
+						ON prj.ORGNZT_ID = org.ORGNZT_ID
+						<isNotEmpty prepend="AND" property="searchOrgId">
+							<iterate prepend="org.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+								#searchOrgIdList[]#
+							</iterate>
+						</isNotEmpty>
+				WHERE
+					bond.BOND_STAT = 'Y'
+					AND bond.USE_AT = 'Y'
+					AND PRJ.BOND_YN = 'Y'
+				GROUP BY
+					bondPrj.PRJ_ID
+			) collectSum
+				ON a.PRJ_ID = collectSum.PRJ_ID
+		WHERE
+			(
+			   IFNULL(publishSum.SUM_PUBLISH, 0) != 0
+			OR IFNULL(collectSum.SUM_COLLECT, 0) != 0
+			OR IFNULL(publishSum.ACC_SUM_PUBLISH, 0) != 0
+			OR IFNULL(collectSum.ACC_SUM_COLLECT, 0) != 0
+			OR IFNULL(salesSum.ACC_SUM_SALES, 0) != 0
+			)
+		<!-- [2015/02/06, dwkim] 사장님 지시로, 세금계산서 발행예정액과 미수금이 둘다 1000원 미만인 경우가 default로 조회토록 수정 -->
+		<isEmpty prepend="AND" property="searchIncMngd">
+			(
+				( IFNULL(salessum.acc_sum_sales, 0) - IFNULL(publishsum.acc_sum_publish, 0) ) > 1000
+			OR
+				( IFNULL(publishsum.acc_sum_will_collect, 0) - IFNULL(collectsum.acc_sum_collect, 0) ) > 1000
+			)
+		</isEmpty>
+		ORDER BY
+			IFNULL(publishsum.SUM_WILL_COLLECT, 0)  - IFNULL(collectsum.SUM_COLLECT, 0) DESC,
+			CASE
+				WHEN a.ORGNZT_ID = usr.ORGNZT_ID THEN 1
+				WHEN FN_ORGAN_TREE(a.ORGNZT_ID) LIKE CONCAT('%', FN_ORGAN_TREE(usr.ORGNZT_ID), '%') THEN 2
+				WHEN FN_ORGAN_TREE(usr.ORGNZT_ID) LIKE CONCAT('%', FN_ORGAN_TREE(a.ORGNZT_ID), '%') THEN 3
+				ELSE 9
+			END ASC
+			, PRJ_CD
+	</select>
+
+	<select id="KmsBondDAO.selectBondPrjSum" resultMap="bondList" parameterClass="bondVO" >
+	<![CDATA[
+		SELECT
+			'' AS ORGNZT_NM,
+			'' AS ORGNZT_ID,
+			a.PRJ_NM AS PRJ_NM,
+			a.PRJ_ID AS PRJ_ID,
+			a.PRJ_CD AS PRJ_CD,
+			'' AS PRJ_STAT,
+			'' AS CODE_DC,
+			'' AS BOND_PRJ_NO,
+			'' AS SUM_EXPENSE,
+			'' AS SUM_WILL_COLLECT,
+			'' AS SUM_COLLECTION,
+			IFNULL(publishSum.ACC_SUM_PUBLISH, 0) AS ACC_SUM_EXPENSE,
+			IFNULL(publishSum.ACC_SUM_WILL_COLLECT, 0) AS ACC_SUM_WILL_COLLECT,
+			'' ACC_SUM_COLLECTION,
+			IFNULL(salesSum.ACC_SUM_SALES, 0) AS ACC_SUM_SALES,
+			'' AS PUBLISH_DATE,
+			'' AS CUST_NM,
+			'' AS SUM_SALES
+		FROM
+			TBL_PRJ a
+			LEFT JOIN (
+				SELECT
+					sales.PRJ_ID AS PRJ_ID,
+					SUM(IFNULL(sales.COST, 0)) AS ACC_SUM_SALES
+				FROM
+					TBL_SALES sales
+					INNER JOIN TBL_EAPP_DOC doc
+						ON sales.DOC_ID = doc.DOC_ID
+						AND doc.DOC_STAT IN ('APP004', 'APP005')
+						AND doc.NEW_AT = 1
+				WHERE
+					sales.BOND_MANAGE_YN = 'Y'
+					AND sales.PRJ_ID = #prjId#
+			) salesSum
+				ON a.PRJ_ID = salesSum.PRJ_ID
+			LEFT JOIN (
+				SELECT
+					bondPrj.PRJ_ID AS PRJ_ID,
+					SUM(IFNULL(bondPrj.EXPENSE, 0)) AS ACC_SUM_PUBLISH,
+					SUM(IFNULL(ROUND(IF(bond.ZERO_TAX_RATE='Y',bondPrj.EXPENSE, bondPrj.EXPENSE * 1.1)), 0)) AS ACC_SUM_WILL_COLLECT
+				FROM
+					TBL_BOND bond
+					INNER JOIN TBL_BOND_PRJ bondPrj
+						ON bond.BOND_ID = bondPrj.BOND_ID
+						AND bondPrj.USE_AT = 'Y'
+						AND bondPrj.PRJ_ID = #prjId#
+				WHERE
+					bond.BOND_STAT = 'Y'
+					AND bond.USE_AT = 'Y'
+			) publishSum
+				ON a.PRJ_ID = publishSum.PRJ_ID
+		WHERE
+			a.PRJ_ID = #prjId#
+		]]>
+	</select>
+
+	<select id="KmsBondDAO.selectBondCollectionSum" resultMap="bondList" parameterClass="bondVO" >	
+		SELECT
+			'' AS ORGNZT_NM,
+			'' AS ORGNZT_ID,
+			prj.PRJ_NM AS PRJ_NM,
+			bondPrj.PRJ_ID AS PRJ_ID,
+			prj.PRJ_CD AS PRJ_CD,
+			'' AS PRJ_STAT,
+			'' AS CODE_DC,
+			IFNULL(bondPrj.NO, 0) AS BOND_PRJ_NO,
+			CAST(SUM(IFNULL(bondPrj.EXPENSE, 0)) / COUNT(bondPrj.NO) AS UNSIGNED) AS SUM_EXPENSE,
+			CAST(SUM(IFNULL(ROUND(IF(bond.ZERO_TAX_RATE='Y',bondPrj.EXPENSE, bondPrj.EXPENSE * 1.1)), 0)) / COUNT(bondPrj.NO) AS UNSIGNED) AS SUM_WILL_COLLECT,
+			SUM(IFNULL(col.EXPENSE, 0)) AS SUM_COLLECTION,
+			'' AS ACC_SUM_EXPENSE,
+			'' AS ACC_SUM_WILL_COLLECT,
+			'' AS ACC_SUM_COLLECTION,
+			'' AS ACC_SUM_SALES,
+			bond.PUBLISH_DATE AS PUBLISH_DATE,
+			bond.CUST_NM AS CUST_NM,
+			'' AS SUM_SALES
+		FROM
+			TBL_BOND_PRJ bondPrj
+			INNER JOIN TBL_BOND bond
+				ON bondPrj.BOND_ID = bond.BOND_ID
+				AND bond.BOND_STAT = 'Y'
+				AND bond.USE_AT = 'Y'
+			LEFT JOIN TBL_BOND_COLLECTION col
+				ON bondPrj.NO = col.BOND_PRJ_NO
+				AND col.USE_AT = 'Y'
+			LEFT JOIN TBL_PRJ prj
+				ON bondPrj.PRJ_ID = prj.PRJ_ID
+		WHERE
+			bondPrj.NO = #bondPrjNo#
+			AND bondPrj.USE_AT = 'Y'
+	</select>
+
+	
+	<select id="KmsBondDAO.selectBondList" resultMap="bondListAll" parameterClass="bondVO" >
+		
+		SELECT
+			<![CDATA[
+			bond.BOND_ID AS BOND_ID
+			, bond.PUBLISH_DATE AS PUBLISH_DATE
+			, bond.CUST_NM AS CUST_NM
+			, IFNULL(bondPrj.NO, 0) AS BOND_PRJ_NO
+			, CAST(SUM(IF(bond.PUBLISH_DATE >= #startDate# AND bond.PUBLISH_DATE <= #endDate#, IFNULL(bondPrj.EXPENSE, 0), 0)) 
+			/ IF(COUNT(DISTINCT col.NO) = 0, 1, COUNT(DISTINCT col.NO)) AS SIGNED) AS SUM_EXPENSE
+			, CAST(SUM(IF(bond.PUBLISH_DATE >= #startDate# AND bond.PUBLISH_DATE <= #endDate#, IFNULL(ROUND(IF(bond.ZERO_TAX_RATE='Y',bondPrj.EXPENSE, bondPrj.EXPENSE * 1.1)), 0), 0)) 
+			/ IF(COUNT(DISTINCT col.NO) = 0, 1, COUNT(DISTINCT col.NO)) AS SIGNED) AS SUM_WILL_COLLECT
+			, SUM(IF(bond.PUBLISH_DATE >= #startDate# AND bond.PUBLISH_DATE <= #endDate#, IFNULL(col.EXPENSE, 0), 0)) AS SUM_COLLECTION
+			, SUM(IFNULL(bondPrj.EXPENSE, 0)) AS ACC_SUM_EXPENSE
+			, SUM(IFNULL(ROUND(IF(bond.ZERO_TAX_RATE='Y',bondPrj.EXPENSE, bondPrj.EXPENSE * 1.1)), 0)) AS ACC_SUM_WILL_COLLECT
+			, SUM(IFNULL(col.EXPENSE, 0)) AS ACC_SUM_COLLECTION
+			, cod.CODE_DC AS CODE_DC
+			, (SELECT COUNT(DOC_ID) FROM TBL_SALES_BOND WHERE BOND_PRJ_NO = bondPrj.NO) BOND_SALES_CNT
+			]]>
+		FROM
+			TBL_BOND_PRJ bondPrj
+			INNER JOIN TBL_BOND bond
+				ON bondPrj.BOND_ID = bond.BOND_ID
+				AND bond.BOND_STAT = 'Y'
+				AND bond.USE_AT = 'Y'
+			<isEqual property="searchMappingFlag" compareValue="DETAIL">
+			INNER JOIN TBL_SALES_BOND salBond
+				ON bondPrj.NO = salBond.BOND_PRJ_NO
+				AND salBond.DOC_ID = #docId#
+			</isEqual>
+			LEFT JOIN TBL_BOND_COLLECTION col
+				ON bondPrj.NO = col.BOND_PRJ_NO
+				AND col.USE_AT = 'Y'
+			LEFT JOIN COMTCCMMNDETAILCODE cod
+				ON cod.CODE_ID = 'KMS007'
+				AND cod.CODE = bond.COMPANY_CD
+		WHERE
+			bondPrj.PRJ_ID = #prjId#
+			AND bondPrj.USE_AT = 'Y'
+			<isEqual prepend="AND" property="searchMappingFlag" compareValue="LIST">
+				(SELECT COUNT(BOND_PRJ_NO) FROM TBL_SALES_BOND WHERE BOND_PRJ_NO = bondPrj.NO) = 0
+			</isEqual>
+		GROUP BY
+			IFNULL(bondPrj.NO, 0)
+		<!--AND (SELECT COUNT(BOND_PRJ_NO) FROM TBL_SALES_BOND WHERE BOND_PRJ_NO = bondPrj.NO) = 0-->
+		<isNotEmpty property="noColOnly"><isEqual property="noColOnly" compareValue="Y">
+		HAVING
+			SUM_WILL_COLLECT - SUM_COLLECTION != 0
+		</isEqual></isNotEmpty>
+		ORDER BY publish_date DESC, bondPrj.bond_id DESC
+	</select>
+
+	
+	<select id="KmsBondDAO.selectCollectionList" resultMap="collectionList" parameterClass="bondVO" >
+	<![CDATA[
+		SELECT
+			NO
+			, bond_prj_no
+			, collection_date
+			, expense
+			, note
+			, use_at
+		FROM
+			tbl_bond_collection
+		WHERE
+			TRUE
+			AND use_at = 'Y'
+			AND bond_prj_no = #bondPrjNo#
+		ORDER BY
+			collection_date DESC
+	]]>
+	</select>
+	
+	<insert id="KmsBondDAO.insertCollection" parameterClass="bondVO" >
+	<![CDATA[
+		INSERT INTO tbl_bond_collection
+		(
+			bond_prj_no, collection_date, expense, note
+		)
+		VALUES
+		(
+			#bondPrjNo#, #collectionDate#, #expense#, #note#
+		)
+	]]>
+	</insert>
+	
+	<select id="KmsBondDAO.selectCollection" resultClass="bondVO">
+	<![CDATA[
+		SELECT
+			no AS bondColNo
+			, bond_prj_no AS bondPrjNo
+			, collection_date AS collectionDate
+			, expense
+			, note
+		FROM
+			tbl_bond_collection
+		WHERE
+			no = #bondColNo#
+	]]>
+	</select>
+	
+	<update id="KmsBondDAO.updateCollection" >
+	<![CDATA[
+		UPDATE
+			tbl_bond_collection
+		SET
+			bond_prj_no = #bondPrjNo#
+			, collection_date = #collectionDate#
+			, expense = #expense#
+			, note = #note#
+		WHERE
+			no = #bondColNo#
+	]]>
+	</update>
+	
+	<update id="KmsBondDAO.deleteCollection" >
+	<![CDATA[
+		UPDATE
+			tbl_bond_collection
+		SET
+			use_at = 'N'
+		WHERE
+			no = #bondColNo#
+	]]>
+	</update>
+
+	<select id="KmsBondDAO.selecCollectionFullList" resultClass="egovMap" >
+	<![CDATA[
+	SELECT
+		col.no AS col_no
+		, col.bond_prj_no
+		, col.expense
+		, col.collection_date
+		, bond.bond_id
+		, bond.cust_nm
+		, bond.publish_date
+		, prj.prj_id
+		, prj.prj_nm
+		, prj.prj_cd
+		, org.orgnzt_nm
+	FROM
+		tbl_bond_collection col
+		INNER JOIN tbl_bond_prj bondPrj
+		ON col.bond_prj_no = bondPrj.no
+		INNER JOIN tbl_bond bond
+		ON bond.bond_id = bondPrj.bond_id
+		INNER JOIN tbl_prj prj
+		ON bondPrj.prj_id = prj.prj_id
+		INNER JOIN tbl_orgnzt org
+		ON prj.orgnzt_id = org.orgnzt_id
+	WHERE
+		col.use_at = 'Y'
+		AND bondPrj.use_at = 'Y'
+		AND bond.use_at = 'Y'
+		AND bond.bond_stat = 'Y'
+	]]>
+		<isNotEmpty prepend="AND" property="searchOrgId">
+			<iterate prepend="org.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+				#searchOrgIdList[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="startDate">
+			col.collection_date >= #startDate#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="endDate">
+			#endDate# >= col.collection_date
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchCustNm">
+			bond.cust_nm like CONCAT('%', #searchCustNm#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchPrjId">
+			bondPrj.prj_id = #searchPrjId#
+		</isNotEmpty>
+	ORDER BY
+		col.no DESC
+	LIMIT
+		#recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<select id="KmsBondDAO.selecCollectionFullListCnt" resultClass="java.lang.Integer" >
+	<![CDATA[
+	SELECT
+		COUNT(*)
+	FROM
+		tbl_bond_collection col
+		INNER JOIN tbl_bond_prj bondPrj
+		ON col.bond_prj_no = bondPrj.no
+		INNER JOIN tbl_bond bond
+		ON bond.bond_id = bondPrj.bond_id
+		INNER JOIN tbl_prj prj
+		ON bondPrj.prj_id = prj.prj_id
+		INNER JOIN tbl_orgnzt org
+		ON prj.orgnzt_id = org.orgnzt_id
+	WHERE
+		col.use_at = 'Y'
+		AND bondPrj.use_at = 'Y'
+		AND bond.use_at = 'Y'
+		AND bond.bond_stat = 'Y'
+	]]>
+		<isNotEmpty prepend="AND" property="searchOrgId">
+			<iterate prepend="org.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+				#searchOrgIdList[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="startDate">
+			col.collection_date >= #startDate#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="endDate">
+			#endDate# >= col.collection_date
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchCustNm">
+			bond.cust_nm like CONCAT('%', #searchCustNm#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchPrjId">
+			bondPrj.prj_id = #searchPrjId#
+		</isNotEmpty>
+	</select>
+	
+	<select id="KmsBondDAO.selecCollectionFullListSum" resultClass="java.lang.Long" >
+	<![CDATA[
+	SELECT
+		IFNULL(SUM(col.expense), 0)
+	FROM
+		tbl_bond_collection col
+		INNER JOIN tbl_bond_prj bondPrj
+		ON col.bond_prj_no = bondPrj.no
+		INNER JOIN tbl_bond bond
+		ON bond.bond_id = bondPrj.bond_id
+		INNER JOIN tbl_prj prj
+		ON bondPrj.prj_id = prj.prj_id
+		INNER JOIN tbl_orgnzt org
+		ON prj.orgnzt_id = org.orgnzt_id
+	WHERE
+		col.use_at = 'Y'
+		AND bondPrj.use_at = 'Y'
+		AND bond.use_at = 'Y'
+		AND bond.bond_stat = 'Y'
+	]]>
+		<isNotEmpty prepend="AND" property="searchOrgId">
+			<iterate prepend="org.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+				#searchOrgIdList[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="startDate">
+			col.collection_date >= #startDate#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="endDate">
+			#endDate# >= col.collection_date
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchCustNm">
+			bond.cust_nm like CONCAT('%', #searchCustNm#, '%')
+		</isNotEmpty><isNotEmpty prepend="AND" property="searchPrjId">
+			bondPrj.prj_id = #searchPrjId#
+		</isNotEmpty>
+	</select>
+
+	<insert id="KmsBondDAO.insertSalesBond" parameterClass="bondVO" >
+	<![CDATA[
+		INSERT INTO TBL_SALES_BOND
+		(
+			DOC_ID, BOND_PRJ_NO, REG_USER_NO, REG_DT
+		)
+		VALUES
+		(
+			#docId#, #bondPrjNo#, #regUserNo#, now()
+		)
+	]]>
+	</insert>
+	
+	<delete id="KmsBondDAO.deleteSalesBond" parameterClass="bondVO" >
+		DELETE FROM TBL_SALES_BOND
+		WHERE FALSE
+		<isNotEmpty prepend="OR" property="docId">
+			DOC_ID = #docId#
+		</isNotEmpty>
+		<isNotEmpty prepend="OR" property="bondPrjNo">
+			BOND_PRJ_NO = #bondPrjNo#
+		</isNotEmpty>
+	</delete>
+</sqlMap>

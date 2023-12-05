@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsBanner">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="BannerVO" type="kms.com.common.service.BannerVO"/>
+
+	<resultMap id="bannerList" class="kms.com.common.service.BannerVO">
+		<result property="bnrId"		column="BNR_ID"			columnIndex="1"/>
+		<result property="bnrFileId"	column="BNR_FILE_ID"	columnIndex="2"/>
+		<result property="bnrSj"		column="BNR_SJ"			columnIndex="3"/>
+		<result property="ntceSdt"		column="NTCE_SDT"		columnIndex="4"/>
+		<result property="ntceEdt"		column="NTCE_EDT"		columnIndex="5"/>
+		<result property="useAt"		column="USE_AT"			columnIndex="6"/>
+		<result property="regDt"		column="REG_DT"			columnIndex="7"/>
+		<result property="linkUrl"		column="LINK_URL"		columnIndex="8"/>
+		<result property="popYn"		column="POP_YN"			columnIndex="9"/>
+		<result property="bnrCn"		column="BNR_CN"			columnIndex="10"/>
+		<result property="popWidth"		column="POP_WIDTH"		columnIndex="11"/>
+		<result property="popHeight"	column="POP_HEIGHT"		columnIndex="12"/>
+		<result property="ordNo"		column="ORD_NO"			columnIndex="13"/>
+	</resultMap>
+	<resultMap id="banner" class="kms.com.common.service.BannerVO">
+		<result property="bnrId"		column="BNR_ID"			columnIndex="1"/>
+		<result property="bnrFileId"	column="BNR_FILE_ID"	columnIndex="2"/>
+		<result property="bnrSj"		column="BNR_SJ"			columnIndex="3"/>
+		<result property="ntceSdt"		column="NTCE_SDT"		columnIndex="4"/>
+		<result property="ntceEdt"		column="NTCE_EDT"		columnIndex="5"/>
+		<result property="useAt"		column="USE_AT"			columnIndex="6"/>
+		<result property="regDt"		column="REG_DT"			columnIndex="7"/>
+		<result property="linkUrl"		column="LINK_URL"		columnIndex="8"/>
+		<result property="popYn"		column="POP_YN"			columnIndex="9"/>
+		<result property="bnrCn"		column="BNR_CN"			columnIndex="10"/>
+		<result property="popWidth"		column="POP_WIDTH"		columnIndex="11"/>
+		<result property="popHeight"	column="POP_HEIGHT"		columnIndex="12"/>
+	</resultMap>
+	
+	
+	<select id="BannerDAO.selectAllBannerList" resultMap="bannerList">
+		SELECT
+			BNR_ID, BNR_FILE_ID, BNR_SJ, NTCE_SDT, NTCE_EDT, USE_AT, DATE_FORMAT(REG_DT, '%Y.%m.%d') AS REG_DT,
+			LINK_URL, POP_YN, BNR_CN, POP_WIDTH, POP_HEIGHT, ORD_NO
+		FROM
+			TBL_BANNER
+		ORDER BY
+			CASE USE_AT
+				WHEN 'Y' THEN 0
+				ELSE 1
+			END ASC
+			, ORD_NO DESC
+			, BNR_ID ASC
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<select id="BannerDAO.selectAllBannerListTotCnt" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			TBL_BANNER
+	</select>
+	
+	
+	
+	<select id="BannerDAO.selectBannerList" resultMap="bannerList">
+		<![CDATA[
+			SELECT
+				BNR_ID, BNR_FILE_ID, BNR_SJ, NTCE_SDT, NTCE_EDT, USE_AT, DATE_FORMAT(REG_DT, '%Y.%m.%d') AS REG_DT,
+				LINK_URL, POP_YN, BNR_CN, POP_WIDTH, POP_HEIGHT, ORD_NO
+			FROM
+				TBL_BANNER
+			WHERE
+				USE_AT = 'Y'
+				AND NTCE_SDT <= DATE_FORMAT(SYSDATE(), '%Y%m%d')
+				AND NTCE_EDT >= DATE_FORMAT(SYSDATE(), '%Y%m%d')
+			ORDER BY ORD_NO DESC, BNR_ID ASC
+			LIMIT #recordCountPerPage# OFFSET #firstIndex#
+		]]>
+	</select>
+	
+	<select id="BannerDAO.selectBannerListTotCnt" resultClass="java.lang.Integer">
+		<![CDATA[
+			SELECT
+				COUNT(*)
+			FROM
+				TBL_BANNER
+			WHERE
+				USE_AT = 'Y'
+				AND NTCE_SDT <= DATE_FORMAT(SYSDATE(), '%Y%m%d')
+				AND NTCE_EDT >= DATE_FORMAT(SYSDATE(), '%Y%m%d')
+		]]>
+	</select>
+	
+	<select id="BannerDAO.selectBanner" resultMap="banner">
+		SELECT
+			BNR_ID, BNR_FILE_ID, BNR_SJ, NTCE_SDT, NTCE_EDT, USE_AT, DATE_FORMAT(REG_DT, '%Y.%m.%d') AS REG_DT,
+			LINK_URL, POP_YN, BNR_CN, POP_WIDTH, POP_HEIGHT
+		FROM
+			TBL_BANNER
+		WHERE
+			BNR_ID = #bnrId#
+	</select>
+	
+	
+	<insert id="BannerDAO.insertBanner">
+		INSERT INTO TBL_BANNER
+		(
+			BNR_ID, BNR_FILE_ID, BNR_SJ, NTCE_SDT, NTCE_EDT, USE_AT, REG_DT,
+			LINK_URL, POP_YN, BNR_CN, POP_WIDTH, POP_HEIGHT
+		) VALUES (
+			#bnrId#, #bnrFileId#, #bnrSj#, #ntceSdt#, #ntceEdt#, 'Y', SYSDATE(),
+			#linkUrl#, #popYn#, #bnrCn#, #popWidth#, #popHeight#
+		)
+	</insert>
+	
+	<update id="BannerDAO.updateBanner">
+		UPDATE TBL_BANNER
+		SET
+			BNR_SJ = #bnrSj#,
+			NTCE_SDT = #ntceSdt#,
+			NTCE_EDT = #ntceEdt#,
+			USE_AT = #useAt#,
+			LINK_URL = #linkUrl#,
+			POP_YN = #popYn#,
+			BNR_CN = #bnrCn#,
+			POP_WIDTH = #popWidth#,
+			POP_HEIGHT = #popHeight#
+		WHERE
+			BNR_ID = #bnrId#
+	</update>
+
+	<update id="BannerDAO.changeBannerOrder">
+		UPDATE TBL_BANNER
+		SET
+			ORD_NO = #ordNo#
+		WHERE
+			BNR_ID = #bnrId#
+	</update>
+	
+	
+</sqlMap>

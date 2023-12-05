@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="TblScore">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="scoreVO" type="kms.com.admin.score.service.ScoreVO"/>
+	<typeAlias  alias="scoreDetailVO" type="kms.com.admin.score.service.ScoreDetailVO"/>
+	
+	<resultMap id="scoreVOALL" class="kms.com.admin.score.service.ScoreVO">
+		<result property="scoreId" column="SCORE_ID" columnIndex="1"/>
+		<result property="category" column="CATEGORY" columnIndex="2"/>
+		<result property="code" column="CODE" columnIndex="3"/>
+		<result property="act" column="ACT" columnIndex="4"/>
+		<result property="point" column="POINT" columnIndex="5"/>
+	</resultMap>
+	
+	<select id="scoreDAO.selectSocePolicyList" resultClass="egovMap">
+	SELECT
+		code_nm
+		, code_dc
+		, code_id
+		, code
+	FROM
+		comtccmmndetailcode
+	WHERE
+		code_id = 'KMS019'
+		AND code IN ('C1', 'C2', 'R1', 'R2')
+	</select>
+	
+	<update id="scoreDAO.updateScorePolicy">
+	UPDATE
+		comtccmmndetailcode
+	SET
+		code_dc = #codeDc#
+	WHERE
+		code = #code#
+		AND code_id = 'KMS019'
+	</update>
+	
+	<select id="scoreDAO.selectRankList" resultClass="egovMap">
+	<![CDATA[
+	SELECT
+		@rownum := @rownum + 1 AS row
+		, @rank := IF(@prev_val !=
+	]]>
+		<isNotEmpty property="order">
+			<isEqual property="order" compareValue="community">
+				community_total_point
+			</isEqual>
+			<isEqual property="order" compareValue="report">
+				report_total_point
+			</isEqual>
+			<isEqual property="order" compareValue="game">
+				game_total_point
+			</isEqual>
+		</isNotEmpty>
+		<isEmpty property="order">
+			total_point
+		</isEmpty>
+	<![CDATA[
+		 , @rownum, @rank) AS rank
+		, @prev_val := 
+	]]>
+		<isNotEmpty property="order">
+			<isEqual property="order" compareValue="community">
+				community_total_point
+			</isEqual>
+			<isEqual property="order" compareValue="report">
+				report_total_point
+			</isEqual>
+			<isEqual property="order" compareValue="game">
+				game_total_point
+			</isEqual>
+		</isNotEmpty>
+		<isEmpty property="order">
+			total_point
+		</isEmpty>
+	<![CDATA[
+		 AS uxp
+		, IF(IF(its_me = 1, @shw := 5, IF(@shw != 0, @shw := @shw - 1, 0)) != 0, 1, 0) AS shw
+		, result.*
+	FROM
+	(
+		SELECT
+			usr.*
+			, CAST(IFNULL(community.cnt, 0) + IFNULL(report.cnt, 0) + IFNULL(game.cnt, 0) AS UNSIGNED) AS total_point
+			, CAST(IFNULL(community.cnt, 0) AS UNSIGNED) AS community_total_point
+			, CAST(IFNULL(community.att1_cnt, 0) AS UNSIGNED) AS community_att1_point
+			, CAST(IFNULL(community.att2_cnt, 0) AS UNSIGNED) AS community_att2_point
+			, CAST(IFNULL(report.cnt, 0) AS UNSIGNED) AS report_total_point
+			, CAST(IFNULL(report.att1_cnt, 0) AS UNSIGNED) AS report_att1_point
+			, CAST(IFNULL(report.att2_cnt, 0) AS UNSIGNED) AS report_att2_point
+			, CAST(IFNULL(game.cnt, 0) AS UNSIGNED) AS game_total_point
+			, CAST(IFNULL(game.att1_cnt, 0) AS UNSIGNED) AS game_att1_point
+			, CAST(IFNULL(game.att2_cnt, 0) AS UNSIGNED) AS game_att2_point
+		FROM
+			(
+				SELECT
+					a.no AS user_no
+					, a.user_nm
+					, a.user_id
+					, IF(a.no = #userNo#, TRUE, FALSE) AS its_me
+				FROM
+					tbl_userinfo a
+					INNER JOIN tbl_attend_check b
+					ON a.no = b.user_no
+				WHERE
+					a.ghost = '0'
+					AND a.compin_dt IS NOT NULL
+					AND DATE_FORMAT(b.attend_dt, '%Y%m%d') >= #searchStartDate#
+					AND #searchEndDate# >= DATE_FORMAT(b.attend_dt, '%Y%m%d')
+				GROUP BY
+					a.no
+			) usr
+			LEFT JOIN (
+				SELECT
+					SUM(IF(bbs.typ = '01', 1, 0)) * pol.code_dc + SUM(IF(bbs.typ = '02', 1, 0)) * pol2.code_dc AS cnt
+					, SUM(IF(bbs.typ = '01', 1, 0)) * pol.code_dc AS att1_cnt
+					, SUM(IF(bbs.typ = '02', 1, 0)) * pol2.code_dc AS att2_cnt
+					, bbs.user_no
+				FROM
+					(
+						(
+						SELECT
+							ntt_id AS art_id
+							, frst_register_id AS user_no
+							, '01' AS typ
+						FROM
+							comtnbbs
+						WHERE
+							DATE_FORMAT(frst_register_pnttm, '%Y%m%d') >= #searchStartDate#
+							AND #searchEndDate# >= DATE_FORMAT(frst_register_pnttm, '%Y%m%d')
+						) UNION (
+						SELECT
+							comment_no AS art_id
+							, wrter_no AS user_no
+							, '02' AS typ
+						FROM
+							comtncomment
+						WHERE
+							DATE_FORMAT(frst_register_pnttm, '%Y%m%d') >= #searchStartDate#
+							AND #searchEndDate# >= DATE_FORMAT(frst_register_pnttm, '%Y%m%d')
+						)
+					) bbs
+					LEFT JOIN comtccmmndetailcode pol
+					ON pol.code_id = 'KMS019'
+					AND pol.code = 'C1'
+					LEFT JOIN comtccmmndetailcode pol2
+					ON pol2.code_id = 'KMS019'
+					AND pol2.code = 'C2'
+				GROUP BY
+					bbs.user_no
+			) community
+			ON usr.user_no = community.user_no
+			LEFT JOIN (
+				SELECT
+					SUM(IF(com.over = 1, 1, 0)) * pol2.code_dc + SUM(IF(com.over = 0, 1, 0)) * pol.code_dc AS cnt
+					, SUM(IF(com.over = 1, 1, 0)) * pol2.code_dc AS att1_cnt
+					, SUM(IF(com.over = 0, 1, 0)) * pol.code_dc AS att2_cnt
+					, com.user_no
+					, '03' AS typ
+				FROM
+					(
+						SELECT
+							NO AS art_id
+							, user_no AS user_no
+							, IF(LENGTH(day_report_cn) >= 300, TRUE, FALSE) AS over
+						FROM
+							tbl_day_report
+						WHERE
+							CAST(day_report_dt AS UNSIGNED) + 1 >= CAST(DATE_FORMAT(reg_dt, '%Y%m%d') AS UNSIGNED)
+							AND DATE_FORMAT(day_report_dt, '%Y%m%d') >= #searchStartDate#
+							AND #searchEndDate# >= DATE_FORMAT(day_report_dt, '%Y%m%d')
+					) com
+					LEFT JOIN comtccmmndetailcode pol
+					ON pol.code_id = 'KMS019'
+					AND pol.code = 'R1'
+					LEFT JOIN comtccmmndetailcode pol2
+					ON pol2.code_id = 'KMS019'
+					AND pol2.code = 'R2'
+				GROUP BY
+					com.user_no
+			) report
+			ON usr.user_no = report.user_no
+			LEFT JOIN (
+				SELECT 
+					CAST(IFNULL(MAX(sum), 0) * 0.5 AS UNSIGNED) AS cnt
+					, CAST(IFNULL(MAX(sum), 0) * 0.5 AS UNSIGNED) * 0.2 AS att1_cnt
+					, CAST(IFNULL(MAX(sum), 0) * 0.5 AS UNSIGNED) * 0.2 AS att2_cnt
+					, no AS user_no
+				FROM
+					tbl_gamescore
+				WHERE
+					DATE_FORMAT(start_tm, '%Y%m%d') >= #searchStartDate#
+					AND #searchEndDate# >= DATE_FORMAT(start_tm, '%Y%m%d')
+				GROUP BY
+					no
+			) game
+			ON usr.user_no = game.user_no
+		, (SELECT @rownum := 0, @rank := 1, @prev_val := NULL) r
+	]]>
+		ORDER BY
+			<isNotEmpty property="order">
+				0
+			<isEqual prepend="+" property="order" compareValue="community">
+				community_total_point
+			</isEqual>
+			<isEqual prepend="+" property="order" compareValue="report">
+				report_total_point
+			</isEqual>
+			<isEqual prepend="+" property="order" compareValue="game">
+				game_total_point
+			</isEqual>
+			</isNotEmpty>
+			<isEmpty property="order">
+				total_point
+			</isEmpty>
+			DESC
+	) result
+	</select>
+
+</sqlMap>

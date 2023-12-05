@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsSchedule">
+
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="Schedule" type="kms.com.community.service.Schedule"/>
+	<typeAlias  alias="ScheduleVO" type="kms.com.community.service.ScheduleVO"/>
+
+	<resultMap id="scheduleList" class="kms.com.community.service.ScheduleVO">
+		<result property="scheId"		column="SCHE_ID"		columnIndex="1"/>
+		<result property="userId"		column="USER_ID"		columnIndex="2"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="3"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="4"/>
+		<result property="scheTyp"		column="SCHE_TYP"		columnIndex="5"/>
+		<result property="scheOrgnztId"	column="SCHE_ORGNZT_ID"	columnIndex="6"/>
+		<result property="scheOrgnztNm"	column="SCHE_ORGNZT_NM"	columnIndex="7"/>
+		<result property="scheYear"		column="SCHE_YEAR"		columnIndex="8"/>
+		<result property="scheMonth"	column="SCHE_MONTH"		columnIndex="9"/>
+		<result property="scheDate"		column="SCHE_DATE"		columnIndex="10"/>
+		<result property="scheTmTyp"	column="SCHE_TM_TYP"	columnIndex="11"/>
+		<result property="scheTmFrom"	column="SCHE_TM_FROM"	columnIndex="12"/>
+		<result property="scheTmTo"		column="SCHE_TM_TO"		columnIndex="13"/>
+		<result property="scheSj"		column="SCHE_SJ"		columnIndex="14"/>
+		<result property="scheCn"		column="SCHE_CN"		columnIndex="15"/>
+	</resultMap>
+	
+	<resultMap id="schedule" class="kms.com.community.service.ScheduleVO">
+		<result property="scheId"		column="SCHE_ID"		columnIndex="1"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="2"/>
+		<result property="scheTyp"		column="SCHE_TYP"		columnIndex="3"/>
+		<result property="scheYear"		column="SCHE_YEAR"		columnIndex="4"/>
+		<result property="scheMonth"	column="SCHE_MONTH"		columnIndex="5"/>
+		<result property="scheDate"		column="SCHE_DATE"		columnIndex="6"/>
+		<result property="scheTmTyp"	column="SCHE_TM_TYP"	columnIndex="7"/>
+		<result property="scheTmFrom"	column="SCHE_TM_FROM"	columnIndex="8"/>
+		<result property="scheTmTo"		column="SCHE_TM_TO"		columnIndex="9"/>
+		<result property="scheSj"		column="SCHE_SJ"		columnIndex="10"/>
+		<result property="scheCn"		column="SCHE_CN"		columnIndex="11"/>
+		<result property="userId"		column="USER_ID"		columnIndex="12"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="13"/>
+		<result property="scheOrgnztId"	column="SCHE_ORGNZT_ID"	columnIndex="14"/>
+		<result property="scheOrgnztNm"	column="SCHE_ORGNZT_NM"	columnIndex="15"/>
+		<result property="scheSharedOrgnztId"	column="SCHE_SHARED_ORGNZT_ID"	columnIndex="14"/>
+		<result property="scheSharedOrgnztNm"	column="SCHE_SHARED_ORGNZT_NM"	columnIndex="15"/>
+	</resultMap>
+
+
+ 	<select id="scheduleDAO.selectScheduleList" parameterClass="ScheduleVO" resultMap="scheduleList">
+		SELECT
+			a.SCHE_ID, b.USER_ID, b.USER_NM, a.USER_NO, a.SCHE_TYP,
+			a.SCHE_ORGNZT_ID, c.ORGNZT_NM AS SCHE_ORGNZT_NM,
+			a.SCHE_YEAR, a.SCHE_MONTH, a.SCHE_DATE,
+			a.SCHE_TM_TYP, a.SCHE_TM_FROM, a.SCHE_TM_TO, a.SCHE_SJ, a.SCHE_CN
+		FROM
+			TBL_SCHEDULE a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+			LEFT JOIN TBL_ORGNZT c ON a.SCHE_ORGNZT_ID = c.ORGNZT_ID
+		WHERE
+			a.DELETE_YN = 'N'
+			AND	
+			(
+				(
+					a.SCHE_TYP = 'C'
+				) OR (
+					a.SCHE_TYP = 'T'
+					AND (
+						CONCAT('/',FN_ORGAN_TREE(#orgnztId#),'/') LIKE CONCAT('%/',a.SCHE_ORGNZT_ID,'/%')
+					 OR a.SCHE_SHARED_ORGNZT_ID LIKE CONCAT('%',#orgnztId#,'%')
+					) 
+				) OR (
+					a.SCHE_TYP = 'P'
+					AND a.USER_NO = #userNo#
+				) OR (
+					a.SCHE_TYP IN ('H','I','J')
+				)
+			)
+		<isNotEmpty prepend="AND" property="scheYear">
+			( a.SCHE_YEAR = #scheYear# OR a.SCHE_YEAR IS NULL )
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="scheMonth">
+			a.SCHE_MONTH = #scheMonth#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="scheDate">
+			a.SCHE_DATE = #scheDate#
+		</isNotEmpty>
+		ORDER BY a.SCHE_DATE ASC, a.SCHE_TM_TYP ASC, a.SCHE_TM_FROM ASC
+ 	</select>
+ 	
+ 	<insert id="scheduleDAO.addSchedule">
+ 		INSERT INTO TBL_SCHEDULE
+ 		(
+ 			SCHE_ID, USER_NO, SCHE_TYP, SCHE_YEAR, SCHE_MONTH, SCHE_DATE,
+ 			SCHE_TM_TYP, SCHE_TM_FROM, SCHE_TM_TO, SCHE_SJ, SCHE_CN,
+ 			SCHE_ORGNZT_ID, SCHE_SHARED_ORGNZT_ID, SCHE_SHARED_ORGNZT_NM
+ 		) VALUES (
+ 			#scheId#, #userNo#, #scheTyp#, #scheYear#, #scheMonth#, #scheDate#,
+ 			#scheTmTyp#, #scheTmFrom#, #scheTmTo#, #scheSj#, #scheCn#,
+ 			#scheOrgnztId#, #scheSharedOrgnztId#, #scheSharedOrgnztNm#
+ 		)
+ 	</insert>
+
+	<select id="scheduleDAO.selectSchedule" parameterClass="ScheduleVO" resultMap="schedule">
+		SELECT
+			a.SCHE_ID, a.USER_NO, a.SCHE_TYP, a.SCHE_YEAR, a.SCHE_MONTH, a.SCHE_DATE,
+			a.SCHE_TM_TYP, a.SCHE_TM_FROM, a.SCHE_TM_TO, a.SCHE_SJ, a.SCHE_CN,
+			b.USER_ID, b.USER_NM,
+			a.SCHE_ORGNZT_ID, c.ORGNZT_NM AS SCHE_ORGNZT_NM,
+			a.SCHE_SHARED_ORGNZT_ID, a.SCHE_SHARED_ORGNZT_NM 
+		FROM
+			TBL_SCHEDULE a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+			LEFT JOIN TBL_ORGNZT c ON a.SCHE_ORGNZT_ID = c.ORGNZT_ID
+		WHERE
+			a.SCHE_ID = #scheId#
+	</select>
+
+	<update id="scheduleDAO.deleteSchedule">
+		UPDATE TBL_SCHEDULE SET
+			DELETE_YN = 'Y'
+		WHERE
+			SCHE_ID = #scheId#
+	</update>
+
+	<update id="scheduleDAO.updateSchedule">
+		UPDATE TBL_SCHEDULE SET
+			SCHE_TYP = #scheTyp#,
+			SCHE_YEAR = #scheYear#,
+			SCHE_MONTH = #scheMonth#,
+			SCHE_DATE = #scheDate#,
+			SCHE_TM_TYP = #scheTmTyp#,
+			SCHE_TM_FROM = #scheTmFrom#,
+			SCHE_TM_TO = #scheTmTo#,
+			SCHE_SJ = #scheSj#,
+			SCHE_CN = #scheCn#,
+ 			SCHE_ORGNZT_ID = #scheOrgnztId#,
+ 			SCHE_SHARED_ORGNZT_ID = #scheSharedOrgnztId#,
+ 			SCHE_SHARED_ORGNZT_NM = #scheSharedOrgnztNm#
+		WHERE
+			SCHE_ID = #scheId#
+	</update>
+
+
+	<select id="scheduleDAO.selectHolidayList" resultMap="scheduleList">
+		SELECT
+			a.SCHE_ID, b.USER_ID, b.USER_NM, a.USER_NO, a.SCHE_TYP,
+			a.SCHE_ORGNZT_ID, c.ORGNZT_NM AS SCHE_ORGNZT_NM,
+			a.SCHE_YEAR, a.SCHE_MONTH, a.SCHE_DATE,
+			a.SCHE_TM_TYP, a.SCHE_TM_FROM, a.SCHE_TM_TO, a.SCHE_SJ, a.SCHE_CN
+		FROM
+			TBL_SCHEDULE a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+			LEFT JOIN TBL_ORGNZT c ON a.SCHE_ORGNZT_ID = c.ORGNZT_ID
+		WHERE
+			a.DELETE_YN = 'N'
+			AND a.SCHE_TYP IN ('H','I','J')
+		<isNotEmpty prepend="AND" property="scheTyp">
+			a.SCHE_TYP = #scheTyp#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchKeyword">
+			a.SCHE_SJ LIKE CONCAT('%', #searchKeyword#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="scheYear">
+			a.SCHE_YEAR = #scheYear#
+		</isNotEmpty>
+		ORDER BY a.SCHE_YEAR DESC, a.SCHE_MONTH ASC, a.SCHE_DATE ASC, a.SCHE_TM_TYP ASC, a.SCHE_TM_FROM ASC
+	</select>
+
+	<select id="scheduleDAO.selectScheduleListStatusBoard" resultMap="scheduleList">
+		SELECT
+			a.SCHE_ID, b.USER_ID, b.USER_NM, a.USER_NO, a.SCHE_TYP,
+			a.SCHE_ORGNZT_ID, c.ORGNZT_NM AS SCHE_ORGNZT_NM,
+			a.SCHE_YEAR, a.SCHE_MONTH, a.SCHE_DATE,
+			a.SCHE_TM_TYP, a.SCHE_TM_FROM, a.SCHE_TM_TO, a.SCHE_SJ, a.SCHE_CN
+		FROM
+			TBL_SCHEDULE a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+			LEFT JOIN TBL_ORGNZT c ON a.SCHE_ORGNZT_ID = c.ORGNZT_ID
+		WHERE
+			a.DELETE_YN = 'N'
+			AND	
+			(
+				(
+					a.SCHE_TYP = 'C'
+				) OR (
+					a.SCHE_TYP = 'T'
+					AND CONCAT('/',FN_ORGAN_TREE(#orgnztId#),'/') LIKE CONCAT('%/',a.SCHE_ORGNZT_ID,'/%')
+				) OR (
+					a.SCHE_TYP = 'P'
+					AND a.USER_NO = #userNo#
+				)
+			)
+			AND DATEDIFF(A.SCHE_DATE_ALL, SYSDATE()) >= 0
+		ORDER BY A.SCHE_DATE_ALL ASC, a.SCHE_TM_TYP ASC, a.SCHE_TM_FROM ASC
+		LIMIT 5
+	</select>
+
+</sqlMap>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<bean id="propertyConfigurer"
+        class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:/egovframework/egovProps/globals.properties</value>
+                <!-- value>file:/product/jeus/egovProps/globals.properties</value-->
+            </list>
+        </property>
+    </bean>
+    
+	<!-- DataSource -->
+	<alias name="dataSource-${Globals.DbType}" alias="dataSource" />
+
+	<!-- MySQL -->
+	<bean id="dataSource-mysql" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="net.sf.log4jdbc.DriverSpy"/>
+		<!--  Real 
+		<property name="url" value="jdbc:mysql://172.16.30.160/KMS"/>
+		-->
+		
+		<!--  Dev  
+		<property name="url" value="jdbc:mysql://172.16.30.135/KMS"/>
+		-->
+		
+		<!--  Test Server 
+		<property name="url" value="jdbc:mysql://172.16.33.35/KMS"/>
+ 		<property name="username" value="skms"/>
+		<property name="password" value="skms"/>
+		-->
+		
+		<!--  localhost -->
+		<property name="url" value="jdbc:mysql://211.253.25.233:13306/fun_kms?characterEncoding=UTF-8"/>
+ 		<property name="username" value="funnet"/>
+		<property name="password" value="vjsspxm1!"/>
+		
+	
+	</bean>
+	
+	<!-- Oracle -->
+	<!-- No Used 
+	<bean id="dataSource-oracle" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+		<property name="url" value="jdbc:oracle:thin:@192.168.200.22:1521:egovfrm" />
+		<property name="username" value="com"/>
+		<property name="password" value="com01"/>
+	</bean>
+	 -->
+</beans>

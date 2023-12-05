@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="bpManual">
+	<typeAlias alias="bpmVO" type="kms.com.support.service.BPManualVO"/>
+	
+	<!-- 리스트맵 -->
+	<resultMap id="bpmList" class="kms.com.support.service.BPManualVO">
+		<result property="bpmNo" column="BPM_NO" columnIndex="1"/>
+		<result property="subject" column="SUBJECT" columnIndex="2"/>
+		<result property="useStatus" column="USE_STATUS" columnIndex="3"/>
+		<result property="suggestStatus" column="SUGGEST_STATUS" columnIndex="4"/>
+		<result property="readCount" column="READ_COUNT" columnIndex="5"/>
+		<result property="commentCount" column="COMMENT_COUNT" columnIndex="6"/>
+		<result property="readYn" column="READ_YN" columnIndex="7"/>
+		<result property="userNm" column="USER_NM" columnIndex="8"/>
+		<result property="userNo" column="NO" columnIndex="9"/>
+		<result property="chgDate" column="CHG_DATE" columnIndex="10"/>
+		<result property="gubunNm" column="GUBUN_NAME" columnIndex="11"/>
+		<result property="hiddenYn" column="HIDDEN_YN" columnIndex="12"/>
+	</resultMap>
+	
+	<!-- 상세보기 맵 -->
+	<resultMap id="detailMap" class="kms.com.support.service.BPManualVO">
+		<result property="bpmNo" column="BPM_NO" columnIndex="1"/>
+		<result property="subject" column="SUBJECT" columnIndex="2"/>
+		<result property="content" column="CONTENT" columnIndex="3"/>
+		<result property="useStatus" column="USE_STATUS" columnIndex="4"/>
+		<result property="suggestStatus" column="SUGGEST_STATUS" columnIndex="5"/>
+		<result property="instDate" column="INST_DATE" columnIndex="6"/>
+		<result property="chgDate" column="CHG_DATE" columnIndex="7"/>
+		<result property="atchFileId" column="ATCH_FILE_ID" columnIndex="8"/>
+		<result property="atchFileId2" column="ATCH_FILE_ID2" columnIndex="9"/>
+		<result property="instNm" column="INST_NM" columnIndex="10"/>
+		<result property="instNo" column="INST_NO" columnIndex="11"/>
+		<result property="chgNm" column="CHG_NM" columnIndex="12"/>
+		<result property="chgNo" column="CHG_NO" columnIndex="13"/>
+		<result property="gubunNo" column="GUBUN_NO" columnIndex="14"/>
+		<result property="gubunNm" column="GUBUN_NAME" columnIndex="15"/>
+		<result property="instUser" column="INST_USER" columnIndex="16"/>
+		<result property="authUsers" column="AUTH_USERS" columnIndex="17"/>
+		<result property="hiddenYn" column="HIDDEN_YN" columnIndex="18"/>
+	</resultMap>
+	
+	<!-- 댓글 맵 -->
+	<resultMap id="commentMap" class="kms.com.support.service.BPManualVO">
+		<result property="commentNo" column="COMMENT_NO" columnIndex="1"/>
+		<result property="comment" column="COMMENT" columnIndex="2"/>
+		<result property="chgDate" column="CHG_DATE" columnIndex="3"/>
+		<result property="userNm" column="USER_NM" columnIndex="4"/>
+		<result property="userNo" column="NO" columnIndex="5"/>
+		<result property="userId" column="USER_ID" columnIndex="6"/>
+	</resultMap>
+	
+	<!-- 건의 맵 -->
+	<resultMap id="suggestMap" class="kms.com.support.service.BPManualVO">
+		<result property="suggestNo" column="SUGGEST_NO" columnIndex="1"/>
+		<result property="content" column="CONTENT" columnIndex="2"/>
+		<result property="suggestStatus" column="SUGGEST_STATUS" columnIndex="3"/>
+		<result property="instDate" column="INST_DATE" columnIndex="4"/>
+		<result property="userNm" column="USER_NM" columnIndex="5"/>
+		<result property="userNo" column="NO" columnIndex="6"/>
+		<result property="userId" column="USER_ID" columnIndex="7"/>
+	</resultMap>
+	
+	<!-- 리스트 페이징 -->
+	<select id="BPManualDAO.selectManualList" parameterClass="bpmVO" resultMap="bpmList">
+		SELECT A.BPM_NO, A.SUBJECT, A.USE_STATUS, A.SUGGEST_STATUS, A.CHG_DATE, A.READ_COUNT, C.GUBUN_NAME, A.HIDDEN_YN,
+			   IF(B.COMMENT_NO IS NULL, 0, B.COMMENT_NO) AS COMMENT_COUNT,
+			   USERINFO.USER_NM, USERINFO.NO,
+			   IF(BPMREAD.READ_TIME IS NULL, 'N', 'Y') AS READ_YN
+		  FROM TBL_BUSINESS_PROCESS_MANUAL A
+		  LEFT JOIN (SELECT COUNT(COMMENT_NO) AS COMMENT_NO, BPM_NO FROM TBL_BUSINESS_PROCESS_MANUAL_COMMENT GROUP BY BPM_NO) B ON A.BPM_NO = B.BPM_NO
+		  LEFT JOIN TBL_BUSINESS_PROCESS_MANUAL_GUBUN C ON A.GUBUN_NO = C.GUBUN_NO
+		  LEFT JOIN TBL_USERINFO USERINFO ON A.INST_ID = USERINFO.USER_ID
+		  LEFT JOIN (SELECT BPM_NO, USER_ID, READ_TIME 
+		  			   FROM TBL_BUSINESS_PROCESS_MANUAL_READ
+		  			  WHERE USER_ID = #userId#) BPMREAD ON A.BPM_NO = BPMREAD.BPM_NO
+		 WHERE A.DEL_YN = 'N'
+		 <isEqual property="adminYn" compareValue="N">
+		 	AND (A.HIDDEN_YN = 'N' OR A.INST_ID = #userId#)
+		 </isEqual>
+		 <isEqual property="searchCheck" compareValue="Y">
+		   AND A.USE_STATUS = #searchCheck#
+		 </isEqual>
+		 <isNotEmpty property="searchGubunNo" prepend="AND">
+		 	A.GUBUN_NO = #searchGubunNo#
+		 </isNotEmpty>
+		 <isNotEmpty property="searchKeyword">
+			 <isEqual property="searchCondition" compareValue="0">
+			   AND A.SUBJECT LIKE CONCAT ('%', #searchKeyword#, '%')
+			 </isEqual>
+			 <isEqual property="searchCondition" compareValue="1">
+			   AND (A.SUBJECT LIKE CONCAT ('%', #searchKeyword#, '%') 
+			    OR A.CONTENT LIKE CONCAT ('%', #searchKeyword#, '%'))
+			 </isEqual>
+			 <isEqual property="searchCondition" compareValue="2">
+			   AND USERINFO.USER_NM LIKE CONCAT ('%', #searchKeyword#, '%')
+			 </isEqual>
+		 </isNotEmpty>
+		 
+		 ORDER BY A.SUGGEST_STATUS DESC, READ_YN, CHG_DATE DESC
+		 LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	<!-- 게시글 카운트 -->
+	<select id="BPManualDAO.getCountManualList" parameterClass="bpmVO" resultClass="java.lang.Integer">
+		SELECT COUNT(A.BPM_NO)
+		  FROM TBL_BUSINESS_PROCESS_MANUAL A
+		  LEFT JOIN TBL_USERINFO USERINFO ON A.CHG_ID = USERINFO.USER_ID
+		 WHERE A.DEL_YN = 'N'
+		 <isEqual property="adminYn" compareValue="N">
+		 	AND (A.HIDDEN_YN = 'N' OR A.INST_ID = #userId#)
+		 </isEqual>
+		 <isEqual property="searchCheck" compareValue="Y">
+		   AND A.USE_STATUS = #searchCheck#
+		 </isEqual>
+		 <isNotEmpty property="searchGubunNo" prepend="AND">
+		 	A.GUBUN_NO = #searchGubunNo#
+		 </isNotEmpty>
+		 <isNotEmpty property="searchKeyword">
+			 <isEqual property="searchCondition" compareValue="0">
+			   AND A.SUBJECT LIKE CONCAT ('%', #searchKeyword#, '%')
+			 </isEqual>
+			 <isEqual property="searchCondition" compareValue="1">
+			   AND (A.SUBJECT LIKE CONCAT ('%', #searchKeyword#, '%') 
+			    OR A.CONTENT LIKE CONCAT ('%', #searchKeyword#, '%'))
+			 </isEqual>
+			 <isEqual property="searchCondition" compareValue="2">
+			   AND USERINFO.USER_NM LIKE CONCAT ('%', #searchKeyword#, '%')
+			 </isEqual>
+		 </isNotEmpty>
+	</select>
+	
+	<!-- 상세보기 -->
+	<select id="BPManualDAO.getDetailView" parameterClass="bpmVO" resultMap="detailMap">
+		SELECT A.BPM_NO, A.SUBJECT, A.CONTENT, A.USE_STATUS, A.SUGGEST_STATUS, A.INST_DATE, A.CHG_DATE, A.ATCH_FILE_ID, A.ATCH_FILE_ID2, A.GUBUN_NO, B.GUBUN_NAME, A.HIDDEN_YN,
+			   USERINFO1.USER_NM AS INST_NM, USERINFO1.NO AS INST_NO,
+			   USERINFO2.USER_NM AS CHG_NM, USERINFO2.NO AS CHG_NO,
+			   CONCAT(USERINFO2.USER_NM, '(', USERINFO2.USER_ID, ')') AS INST_USER,
+			   AUTHUSER.USER_COMPLEXS AS AUTH_USERS
+		  FROM TBL_BUSINESS_PROCESS_MANUAL A
+		  LEFT JOIN TBL_BUSINESS_PROCESS_MANUAL_GUBUN B ON A.GUBUN_NO = B.GUBUN_NO
+		  LEFT JOIN TBL_USERINFO USERINFO1 ON A.INST_ID = USERINFO1.USER_ID
+		  LEFT JOIN TBL_USERINFO USERINFO2 ON A.CHG_ID = USERINFO2.USER_ID
+		  LEFT JOIN (SELECT GROUP_CONCAT(CONCAT(USER_NM,"(",USER_ID,")") SEPARATOR ',') AS USER_COMPLEXS
+        			FROM TBL_AUTH AS AA
+        			LEFT OUTER JOIN TBL_USER_AUTH AS BB
+					INNER JOIN TBL_USERINFO AS CC
+						ON BB.USER_NO = CC.NO
+						ON AA.AUTH_CODE = BB.AUTH_CODE
+					WHERE AA.AUTH_CODE = 'bpmboard' 
+					GROUP BY AA.AUTH_CODE) AUTHUSER ON 1=1
+		 WHERE A.BPM_NO = #bpmNo#
+	</select>
+	
+	<!-- 댓글보기 -->
+	<select id="BPManualDAO.getDetailViewComment" parameterClass="bpmVO" resultMap="commentMap">
+		SELECT COMMENT_NO, COMMENT, CHG_DATE,
+			   USERINFO.USER_NM, USERINFO.NO, USERINFO.USER_ID
+		  FROM TBL_BUSINESS_PROCESS_MANUAL_COMMENT A
+		  LEFT JOIN TBL_USERINFO USERINFO ON A.CHG_ID = USERINFO.USER_ID
+		 WHERE BPM_NO = #bpmNo#
+		 ORDER BY COMMENT_NO
+	</select>
+	
+	<!-- 건의사항 리스트 -->
+	<select id="BPManualDAO.selectSuggestList" parameterClass="bpmVO" resultMap="suggestMap">
+		SELECT SUGGEST_NO, CONTENT, SUGGEST_STATUS, INST_DATE,
+			   USERINFO.USER_NM, USERINFO.NO, USERINFO.USER_ID
+		  FROM TBL_BUSINESS_PROCESS_MANUAL_SUGGEST A
+		  LEFT JOIN TBL_USERINFO USERINFO ON A.CHG_ID = USERINFO.USER_ID
+		 WHERE BPM_NO = #bpmNo#
+		 ORDER BY SUGGEST_NO
+	</select>
+	
+	<!-- 업무절차 등록 -->
+	<insert id="BPManualDAO.insertManual" parameterClass="bpmVO">
+	<selectKey resultClass="java.lang.Integer" keyProperty="bpmNo">
+		SELECT IFNULL(MAX(BPM_NO),0)+1 AS BPM_NO  FROM TBL_BUSINESS_PROCESS_MANUAL
+	</selectKey>
+		INSERT INTO TBL_BUSINESS_PROCESS_MANUAL 
+		(
+			BPM_NO,
+			SUBJECT,
+			USE_STATUS,
+			SUGGEST_STATUS,
+			CONTENT,
+			ATCH_FILE_ID,
+			ATCH_FILE_ID2,
+			READ_COUNT,
+			GUBUN_NO,
+			INST_ID,
+			INST_DATE,
+			CHG_ID,
+			CHG_DATE,
+			DEL_YN,
+			HIDDEN_YN
+		)
+		VALUES
+		(
+			#bpmNo#,
+			#subject#,
+			'Y',
+			'N',
+			#content#,
+			#atchFileId#,
+			#atchFileId2#,
+			0,
+			#gubunNo#,
+			#userId#,
+			SYSDATE(),
+			#userId#,
+			SYSDATE(),
+			'N',
+			'Y'
+		)
+	</insert>
+	
+	<!-- 기존에 읽었던 글이였는지 여부 -->
+	<select id="BPManualDAO.checkReadThisData" parameterClass="bpmVO" resultClass="java.lang.Integer">
+		SELECT COUNT( READ_NO )
+		  FROM TBL_BUSINESS_PROCESS_MANUAL_READ
+		 WHERE BPM_NO = #bpmNo# 
+		   AND USER_ID = #userId#
+	</select>
+	<!-- 읽음 표시 -->
+	<insert id="BPManualDAO.insertReadContent" parameterClass="bpmVO">
+	<selectKey resultClass="java.lang.Integer" keyProperty="readNo">
+		SELECT IFNULL(MAX(READ_NO),0)+1 AS READ_NO FROM TBL_BUSINESS_PROCESS_MANUAL_READ
+	</selectKey>
+		INSERT INTO TBL_BUSINESS_PROCESS_MANUAL_READ
+		(READ_NO, BPM_NO, READ_TIME, USER_ID)
+		VALUES
+		(#readNo#, #bpmNo#, SYSDATE(), #userId#)
+	</insert>
+	
+	<!-- 조회수 증가 -->
+	<update id="BPManualDAO.updateReadcountContent" parameterClass="bpmVO">
+		UPDATE TBL_BUSINESS_PROCESS_MANUAL SET
+			   READ_COUNT = READ_COUNT+1
+		 WHERE BPM_NO = #bpmNo#
+	</update>
+	
+	<!-- 업무절차 수정 -->
+	<update id="BPManualDAO.updateManual" parameterClass="bpmVO">
+		UPDATE TBL_BUSINESS_PROCESS_MANUAL SET
+			   SUBJECT = #subject#,
+			   CONTENT = #content#,
+			   USE_STATUS = #useStatus#,
+			   ATCH_FILE_ID = #atchFileId#,
+			   ATCH_FILE_ID2 = #atchFileId2#,
+			   GUBUN_NO = #gubunNo#,
+			   CHG_ID = #userId#,
+			   CHG_DATE = SYSDATE()
+		 WHERE BPM_NO = #bpmNo#
+	</update>
+	<delete id="BPManualDAO.deleteManualRead" parameterClass="bpmVO">
+		DELETE FROM TBL_BUSINESS_PROCESS_MANUAL_READ
+		 WHERE BPM_NO = #bpmNo#
+	</delete>
+	
+	<!-- 업무절차 삭제 -->
+	<!-- 
+	<update id="BPManualDAO.deleteManual1" parameterClass="bpmVO">
+		UPDATE TBL_BUSINESS_PROCESS_MANUAL SET
+			   DEL_YN = 'Y',
+			   CHG_ID = #userId#,
+			   CHG_DATE = SYSDATE()
+		 WHERE BPM_NO = #bpmNo#
+	</update>
+	 -->
+	<delete id="BPManualDAO.deleteManual" parameterClass="bpmVO">
+		DELETE FROM TBL_BUSINESS_PROCESS_MANUAL
+		 WHERE BPM_NO = #bpmNo# 
+	</delete>
+	
+	<delete id="BPManualDAO.deleteManualsComment" parameterClass="bpmVO">
+		DELETE FROM TBL_BUSINESS_PROCESS_MANUAL_COMMENT
+		 WHERE BPM_NO = #bpmNo# 
+	</delete>
+	
+	<delete id="BPManualDAO.deleteManualsSuggest" parameterClass="bpmVO">
+		DELETE FROM TBL_BUSINESS_PROCESS_MANUAL_SUGGEST
+		 WHERE BPM_NO = #bpmNo# 
+	</delete>
+	
+	
+	<!-- 댓글 입력 -->
+	<insert id="BPManualDAO.insertComment" parameterClass="bpmVO">
+	<selectKey resultClass="java.lang.Integer" keyProperty="commentNo">
+		SELECT IFNULL(MAX(COMMENT_NO),0)+1 AS COMMENT_NO FROM TBL_BUSINESS_PROCESS_MANUAL_COMMENT
+	</selectKey>
+		INSERT INTO TBL_BUSINESS_PROCESS_MANUAL_COMMENT
+		(
+			COMMENT_NO, BPM_NO, COMMENT, INST_ID, INST_DATE, CHG_ID, CHG_DATE
+		)VALUES(
+			#commentNo#, #bpmNo#, #comment#, #userId#, SYSDATE(), #userId#, SYSDATE()
+		)
+	</insert>
+	<!-- 댓글 삭제 -->
+	<delete id="BPManualDAO.deleteComment" parameterClass="bpmVO">
+		DELETE FROM TBL_BUSINESS_PROCESS_MANUAL_COMMENT
+		      WHERE COMMENT_NO = #commentNo#
+	</delete>
+	<!-- 댓글 수정할 내용 가져옴 -->
+	<select id="BPManualDAO.getmodifyComment" parameterClass="bpmVO" resultClass="bpmVO">
+		SELECT COMMENT AS comment
+		  FROM TBL_BUSINESS_PROCESS_MANUAL_COMMENT
+		 WHERE COMMENT_NO = #commentNo# 
+	</select>
+	<!-- 댓글 수정 -->
+	<update id="BPManualDAO.modifyComment" parameterClass="bpmVO">
+		UPDATE TBL_BUSINESS_PROCESS_MANUAL_COMMENT SET
+		 	   COMMENT = #comment#,
+		 	   CHG_ID = #userId#,
+		 	   CHG_DATE = SYSDATE()
+		 WHERE COMMENT_NO = #commentNo#
+	</update>
+	
+	
+	
+	<!-- 건의사항 입력 -->
+	<insert id="BPManualDAO.insertSuggestAsk" parameterClass="bpmVO">
+	<selectKey resultClass="java.lang.Integer" keyProperty="suggestNo">
+		SELECT IFNULL(MAX(SUGGEST_NO),0)+1 AS SUGGEST_NO FROM TBL_BUSINESS_PROCESS_MANUAL_SUGGEST
+	</selectKey>
+		INSERT INTO TBL_BUSINESS_PROCESS_MANUAL_SUGGEST
+		(
+			SUGGEST_NO, BPM_NO, CONTENT, SUGGEST_STATUS, INST_ID, INST_DATE, CHG_ID, CHG_DATE
+		)VALUES(
+			#suggestNo#, #bpmNo#, #content#, #suggestStatus#, #userId#, SYSDATE(), #userId#, SYSDATE()
+		)
+	</insert>
+	<!-- 업무절차 건의중으로 바꿈 -->
+	<update id="BPManualDAO.updateSuggestAsk" parameterClass="bpmVO">
+		UPDATE TBL_BUSINESS_PROCESS_MANUAL SET
+		 	   SUGGEST_STATUS = 'Y'
+		 WHERE BPM_NO = #bpmNo#
+	</update>
+	<!-- 업무절차 상태 바꿈 -->
+	<update id="BPManualDAO.updateSuggestComplete" parameterClass="bpmVO">
+		UPDATE TBL_BUSINESS_PROCESS_MANUAL SET
+		 	   SUGGEST_STATUS = 'N'
+		 WHERE BPM_NO = #bpmNo#
+	</update>
+	<!-- 건의 삭제 -->
+	<delete id="BPManualDAO.deleteSuggest" parameterClass="bpmVO">
+		DELETE FROM TBL_BUSINESS_PROCESS_MANUAL_SUGGEST
+		      WHERE SUGGEST_NO = #suggestNo#
+	</delete>
+	<!-- 건의수정데이터 -->
+	<select id="BPManualDAO.getModifySuggest" parameterClass="bpmVO" resultClass="bpmVO">
+		SELECT CONTENT as content
+		  FROM TBL_BUSINESS_PROCESS_MANUAL_SUGGEST
+		 WHERE SUGGEST_NO = #suggestNo#
+	</select>
+	<!-- 건의 수정 -->
+	<update id="BPManualDAO.updateSuggest" parameterClass="bpmVO">
+		UPDATE TBL_BUSINESS_PROCESS_MANUAL_SUGGEST SET
+			   CONTENT = #content#
+		 WHERE SUGGEST_NO = #suggestNo#
+	</update>
+	<select id="BPManualDAO.countSuggest" parameterClass="bpmVO" resultClass="java.lang.Integer">
+		SELECT COUNT(SUGGEST_NO)
+		  FROM TBL_BUSINESS_PROCESS_MANUAL_SUGGEST
+		 WHERE BPM_NO = #bpmNo#
+	</select>
+	
+	
+	<!-- 업무구분 리스트 -->
+	<select id="BPManualDAO.selectBPManualGubunList" resultClass="bpmVO">
+		SELECT GUBUN_NO AS gubunNo, GUBUN_NAME as gubunNm
+		  FROM TBL_BUSINESS_PROCESS_MANUAL_GUBUN
+	</select>
+	<!-- 업무구분 갯수 -->
+	<select id="BPManualDAO.countBPManualGubunList" parameterClass="bpmVO" resultClass="java.lang.Integer">
+		SELECT COUNT(GUBUN_NO)
+		  FROM TBL_BUSINESS_PROCESS_MANUAL_GUBUN
+	</select>
+	<!-- 사용중 여부 -->
+	<select id="BPManualDAO.checkBPManualGubunUsed" parameterClass="bpmVO" resultClass="java.lang.Integer">
+		SELECT COUNT(BPM_NO)
+		  FROM TBL_BUSINESS_PROCESS_MANUAL
+		 WHERE GUBUN_NO = #gubunNo#
+	</select>
+	<!-- 업무구분 중복체크 -->
+	<select id="BPManualDAO.checkBPManualGubunListBeforeInsert" parameterClass="bpmVO" resultClass="java.lang.Integer">
+		SELECT COUNT(GUBUN_NO)
+		  FROM TBL_BUSINESS_PROCESS_MANUAL_GUBUN
+		 WHERE GUBUN_NAME = #gubunNm#
+	</select>
+	<!-- 업무구분 등록 -->
+	<insert id="BPManualDAO.insertBPManualGubun" parameterClass="bpmVO">
+	<selectKey resultClass="java.lang.Integer" keyProperty="gubunNo">
+		SELECT IFNULL(MAX(GUBUN_NO),0)+1 AS GUBUN_NO  FROM TBL_BUSINESS_PROCESS_MANUAL_GUBUN
+	</selectKey>
+		INSERT INTO TBL_BUSINESS_PROCESS_MANUAL_GUBUN
+		(
+			GUBUN_NO, GUBUN_NAME
+		)VALUES(
+			#gubunNo#, #gubunNm#
+		)
+	</insert>
+	<!-- 업무구분 수정 -->
+	<update id="BPManualDAO.updateBPManualGubun" parameterClass="bpmVO">
+		UPDATE TBL_BUSINESS_PROCESS_MANUAL_GUBUN SET
+			   GUBUN_NAME = #gubunNm#
+		 WHERE GUBUN_NO = #gubunNo#
+	</update>
+	<!-- 업무구분 삭제 -->
+	<delete id="BPManualDAO.deleteBPManualGubun" parameterClass="bpmVO">
+		DELETE FROM TBL_BUSINESS_PROCESS_MANUAL_GUBUN
+		 WHERE GUBUN_NO = #gubunNo#
+	</delete>
+	
+	<select id="BPManualDAO.getBoardAuthUser" parameterClass="bpmVO">
+		SELECT a.AUTH_CODE, a.AUTH_NM,  a.AUTH_DESC,
+			   GROUP_CONCAT(CONCAT(USER_NM,"(",USER_ID,")") SEPARATOR ',') AS USER_COMPLEXS
+			FROM
+				TBL_AUTH AS a
+				LEFT OUTER JOIN
+				TBL_USER_AUTH AS b
+				INNER JOIN TBL_USERINFO AS c
+				ON b.USER_NO = c.NO
+				ON a.AUTH_CODE = b.AUTH_CODE
+			WHERE a.AUTH_CODE = 'board'
+			GROUP BY a.AUTH_CODE
+	</select>
+	
+	<!-- 조회수 증가 -->
+	<update id="BPManualDAO.updateShowOrHiddenContent" parameterClass="bpmVO">
+		UPDATE TBL_BUSINESS_PROCESS_MANUAL SET
+			   HIDDEN_YN = #hiddenYn#
+		 WHERE BPM_NO = #bpmNo#
+	</update>
+</sqlMap>

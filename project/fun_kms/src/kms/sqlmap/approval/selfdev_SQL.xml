@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="TblSelfdev">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="selfdevVO" type="kms.com.app.service.SelfdevVO"/>
+	
+	<resultMap id="selfdevCmmList" class="kms.com.app.service.SelfdevVO">
+		<result property="selfdevNo" column="SELFDEV_NO" columnIndex="1"/>
+		<result property="month" column="MONTH" columnIndex="3"/>
+		<result property="full" column="FULL" columnIndex="3"/>
+		<result property="half" column="HALF" columnIndex="3"/>
+	</resultMap>
+	
+	<resultMap id="selfdevUsr" class="kms.com.app.service.SelfdevVO">
+		<result property="userNo" column="USER_NO" columnIndex="1"/>
+		<result property="userNm" column="USER_NM" columnIndex="1"/>
+		<result property="userId" column="USER_ID" columnIndex="1"/>
+		<result property="selfdevNo" column="SELFDEV_NO" columnIndex="1"/>
+		<result property="full" column="FULL" columnIndex="3"/>
+		<result property="half" column="HALF" columnIndex="3"/>
+		<result property="spendSum" column="SPEND_SUM" columnIndex="3"/>
+	
+	</resultMap>
+	<insert id="selfdevDAO.insertSelfDev">
+		<![CDATA[
+			INSERT INTO TBL_SELFDEV 
+				(  MONTH
+				  , FULL
+				  , HALF
+				 )
+			VALUES (#month#
+				  , #full#
+				  , #half#
+				 )
+		]]>
+	</insert>
+	
+	<update id="selfdevDAO.updateSelfDev">
+		<![CDATA[
+			UPDATE TBL_SELFDEV
+			SET
+				USER_NO = (SELECT NO FROM TBL_USERINFO WHERE USER_ID = #userId#)
+				, MONTH=#month#
+				, FULL=#full#
+				, HALF=#half#
+			WHERE SELFDEV_NO=#selfdevNo#
+		]]>
+	</update>
+	
+	<delete id="selfdevDAO.deleteSelfDev">
+		<![CDATA[
+			DELETE FROM TBL_SELFDEV 
+			WHERE SELFDEV_NO=#selfdevNo#
+		]]>
+	</delete>
+	
+	
+	<select id="selfdevDAO.selectSelfdevUsrInfo" resultMap="selfdevUsr">
+		SELECT DEV.SELFDEV_NO
+			, NO USER_NO
+			, USER_NM
+			, USER_ID
+			, CAST(IF(SDU.PERCENT IS NULL,FULL, FULL * SDU.PERCENT / 100) + (IFNULL(SDU.EXTRA_CHARGE,0)/2) AS UNSIGNED) AS FULL
+			, CAST(IF(SDU.PERCENT IS NULL,HALF, HALF * SDU.PERCENT / 100) + (IFNULL(SDU.EXTRA_CHARGE,0)/2) AS UNSIGNED) AS HALF
+			, IFNULL(a.SPEND_SUM,0) SPEND_SUM
+
+		FROM
+			TBL_USERINFO USR 
+			INNER JOIN TBL_SELFDEV DEV
+				ON IF(YEAR(CURDATE())=YEAR(IFNULL(ACCEPT_COMPIN_DT,COMPIN_DT)),MONTH(IFNULL(ACCEPT_COMPIN_DT,COMPIN_DT)),1) = DEV.MONTH AND DEV.YEAR = #year#
+			LEFT OUTER JOIN (
+				SELECT 
+					WRITER_NO  USER_NO, SUM(EXP_SPEND) SPEND_SUM 
+				FROM 
+					TBL_EAPP_DOC  DOC
+				INNER JOIN 
+					TBL_EAPP_EXP EXP
+					ON DOC.DOC_ID = EXP.DOC_ID 
+					<!--  
+					지출일자가 당해년도인 자개비만 SUM 해야 하는데 이 SUM을 상인 일만 체크하고 있어 지출일자 체크를 추가
+					-->
+					AND DATE_FORMAT(EXP.EXP_DT ,'%Y') = #year#	
+				
+				WHERE 1=1
+				AND DOC.TEMPLT_ID = 11
+				AND (
+					(DOC.NEW_AT = 0 AND DOC.DOC_STAT IN ("APP001","APP002","APP003")) 
+					OR
+					(DOC.NEW_AT = 1 AND DOC.DOC_STAT IN ("APP004","APP005"))
+					)
+				AND WRITER_NO = #userNo#
+				AND DATE_FORMAT(DOC_DT ,'%Y') = #year#
+			) a
+				ON USR.NO = a.USER_NO
+			LEFT OUTER JOIN TBL_SELFDEV_USR SDU
+				ON USR.NO = SDU.USER_NO
+				AND SDU.YEAR = #year#
+		WHERE
+			USR.NO = #userNo#
+			AND USR.GHOST = '0'			
+	</select>
+	
+	<select id="selfdevDAO.selectSelfdevCmmList" parameterClass="selfdevVO" resultMap="selfdevCmmList">
+			SELECT
+				SELFDEV_NO
+				, YEAR
+				, MONTH
+				, FULL
+				, HALF
+			FROM TBL_SELFDEV
+			WHERE 
+				YEAR = #year#
+			ORDER BY
+				MONTH
+	</select>	
+	<select id="selfdevDAO.selectSelfdevUsrList" parameterClass="selfdevVO" resultClass="egovMap">
+		SELECT 
+			USR.USER_NM
+			, USR.USER_ID
+			, CONCAT(USR.USER_NM,"(",USR.USER_ID,")") USER_MIX
+			, USR.SABUN
+			, SDU.USER_NO
+			, ORG.ORGNZT_NM
+			, ORG.ORGNZT_ID
+			, SDU.PERCENT  
+			, SDU.DESCRIPTION
+			, IFNULL(SDU.EXTRA_CHARGE,0) as extraCharge
+			, SDU.YEAR
+			, SDU.SELFDEV_USR_NO
+		FROM TBL_SELFDEV_USR SDU
+			INNER JOIN TBL_USERINFO USR
+			ON SDU.USER_NO = USR.NO
+			INNER JOIN TBL_ORGNZT ORG
+			ON USR.ORGNZT_ID = ORG.ORGNZT_ID
+		WHERE
+			YEAR = #year#
+	</select>	
+
+
+
+	
+	<select id="selfdevDAO.selectSelfdevCmmCnt" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(*)
+		FROM
+			TBL_SELFDEV
+		WHERE
+			YEAR = #year#
+			AND MONTH = #month#	
+	</select>
+	
+	<insert id="selfdevDAO.insertSelfdevCmm">
+		<![CDATA[
+			INSERT INTO TBL_SELFDEV 
+				( 
+				    YEAR
+				  , MONTH
+				  , FULL
+				  , HALF
+				 )
+			VALUES (
+			        #year#
+			      , #month#
+				  , #full#
+				  , #half#
+				 )
+		]]>
+	</insert>
+	
+	<update id="selfdevDAO.updateSelfdevCmm">
+		<![CDATA[
+			UPDATE TBL_SELFDEV
+			SET
+				 FULL=#full#
+				, HALF=#half#
+			WHERE 
+			YEAR = #year#
+			AND MONTH = #month#					 
+
+		]]>
+	</update>
+		
+	<select id="selfdevDAO.selectSelfdevUsrView" parameterClass="selfdevVO" resultClass="selfdevVO">
+		SELECT 
+			USR.USER_NM userNm
+			, USR.USER_ID userId
+			, CONCAT(USR.USER_NM,"(",USR.USER_ID,")") userMix
+			, SDU.USER_NO userNo
+			, ORG.ORGNZT_NM orgnztNm
+			, ORG.ORGNZT_ID orgnztId
+			, SDU.PERCENT  percent
+			, SDU.DESCRIPTION as description
+			, IFNULL(SDU.EXTRA_CHARGE,0) as extraCharge
+			, SDU.YEAR year
+			, SDU.SELFDEV_USR_NO selfdevUsrNo
+		FROM TBL_SELFDEV_USR SDU
+			INNER JOIN TBL_USERINFO USR
+				ON SDU.USER_NO = USR.NO
+			INNER JOIN TBL_ORGNZT ORG 
+				ON USR.ORGNZT_ID = ORG.ORGNZT_ID
+		WHERE
+			SDU.SELFDEV_USR_NO =#selfdevUsrNo#
+	</select>		
+		
+	
+	<insert id="selfdevDAO.insertSelfdevUsr" parameterClass="selfdevVO">
+		<![CDATA[
+			INSERT INTO TBL_SELFDEV_USR
+				(  USER_NO
+				  , YEAR
+				  , PERCENT
+				  , DESCRIPTION
+				  , EXTRA_CHARGE
+				  , REG_DT
+				 )
+			VALUES (
+					(SELECT NO FROM TBL_USERINFO WHERE USER_ID = #userId#)
+				  , #year#
+				  , #percent#
+				  , #description#
+				  , #extraCharge#
+				  , SYSDATE()
+				 )
+		]]>
+	</insert>
+	
+	<update id="selfdevDAO.updateSelfdevUsr" parameterClass="selfdevVO">
+		<![CDATA[
+			UPDATE TBL_SELFDEV_USR
+			SET
+			   YEAR = #year#
+			  , PERCENT = #percent#
+			  , DESCRIPTION = #description#
+			  , EXTRA_CHARGE = #extraCharge#
+			 WHERE
+				 SELFDEV_USR_NO = #selfdevUsrNo#
+		]]>
+	</update>
+		
+	<delete id="selfdevDAO.deleteSelfdevUsr">
+		<![CDATA[
+			DELETE 
+			FROM TBL_SELFDEV_USR
+			WHERE SELFDEV_USR_NO = #selfdevUsrNo#
+		]]>
+	</delete>
+	
+	
+
+</sqlMap>

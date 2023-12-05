@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC 
+    "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1//EN" 
+    "http://jakarta.apache.org/commons/dtds/validator_1_1.dtd">
+
+<form-validation>
+
+    <formset>
+		<form name="stockItemFrm">
+			<field property="itemCode" depends="required">
+        		<arg0 key="품목코드" />
+			</field>
+			<field property="serialCode" depends="required, minlength">
+        		<arg0 key="시리얼코드" />
+        		<arg1 key="4" resource="false"/>
+				<var>
+					<var-name>minlength</var-name>
+					<var-value>4</var-value>
+				</var>
+			</field>
+			<field property="itemName" depends="required">
+        		<arg0 key="품목명" />
+			</field>
+			<field property="price" depends="required">
+        		<arg0 key="단가" />
+			</field>
+		</form>
+    </formset>
+
+</form-validation>

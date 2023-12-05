@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC 
+		"-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1//EN" 
+		"http://jakarta.apache.org/commons/dtds/validator_1_1.dtd">
+
+<form-validation>
+
+	<formset>
+	<form name="prjReg">
+		<field property="orgnztId" depends="required">
+			<arg0 key="주관부서" />
+		</field>
+		<field property="prjNm" depends="required,minlength, maxlength">
+			<arg0 key="프로젝트명" />
+			<arg1 key="2" resource="false"/>
+			<var>
+				<var-name>minlength</var-name>
+				<var-value>2</var-value>
+			</var>
+			<arg2 key="100" resource="false"/>
+			<var>
+				<var-name>maxlength</var-name>
+				<var-value>100</var-value>
+			</var>
+		</field>
+		<field property="leaderMix" depends="required">
+			<arg0 key="담당자" />
+			<arg1 key="2" resource="false"/>
+		</field>
+		<field property="stat" depends="required">
+			<arg0 key="진행상태" />
+		</field>
+		<field property="dayReportRule" depends="required">
+			<arg0 key="업무실적등록" />
+		</field>
+		<field property="manageCostRule" depends="required">
+			<arg0 key="비용지출" />
+		</field>
+		<field property="budgetExceedRule" depends="required">
+			<arg0 key="예산초과관리" />
+		</field>
+		<field property="stDt" depends="required,minlength,maxlength,integer">
+			<arg0 key="시작일" />
+			<arg1 key="8" resource="false"/>
+			<var>
+				<var-name>minlength</var-name>
+				<var-value>8</var-value>
+			</var>
+			<arg2 key="8" resource="false"/>
+			<var>
+				<var-name>maxlength</var-name>
+				<var-value>8</var-value>
+			</var>
+		</field>
+		<field property="compDueDt" depends="required,minlength,maxlength,integer">
+			<arg0 key="완료예정일" />
+			<arg1 key="8" resource="false"/>
+			<var>
+				<var-name>minlength</var-name>
+				<var-value>8</var-value>
+			</var>
+			<arg2 key="8" resource="false"/>
+			<var>
+				<var-name>maxlength</var-name>
+				<var-value>8</var-value>
+			</var>
+		</field>
+		<field property="prjCn" depends="maxlength">
+			<arg0 key="4000" resource="false"/>
+			<var>
+				<var-name>maxlength</var-name>
+				<var-value>4000</var-value>
+			</var>
+		</field>
+	</form>
+	</formset>
+
+</form-validation>

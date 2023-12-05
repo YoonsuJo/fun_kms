@@ -1,0 +1,633 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsMeetingRoomDAO">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="meetingRoom" type="kms.com.cooperation.service.MeetingRoom"/>
+	<typeAlias  alias="meetingRoomVO" type="kms.com.cooperation.service.MeetingRoomVO"/>
+	<typeAlias  alias="meetingRoomComment" type="kms.com.cooperation.service.MeetingRoomComment"/>
+	<typeAlias  alias="meetingRoomRecieve" type="kms.com.cooperation.service.MeetingRoomRecieve"/>
+	
+	
+	<resultMap id="meetingRoomList" class="kms.com.cooperation.service.MeetingRoomVO">
+		<result property="mtId"			column="MT_ID"			columnIndex="1"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="2"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="3"/>
+		<result property="userId"		column="USER_ID"		columnIndex="4"/>
+		<result property="prjId"		column="PRJ_ID"			columnIndex="5"/>
+		<result property="prjNm"		column="PRJ_NM"			columnIndex="6"/>
+		<result property="prjCd"		column="PRJ_CD"			columnIndex="7"/>
+		<result property="mtSj"			column="MT_SJ"			columnIndex="8"/>
+		<result property="regDt"		column="REG_DT"			columnIndex="9"/>
+		<result property="interestYn"	column="INTEREST_YN"	columnIndex="10"/>
+		<result property="modDt"		column="MOD_DT"			columnIndex="11"/>
+		<result property="commentCnt"	column="COMMENT_CNT"	columnIndex="12"/>
+		<result property="readStat"		column="READ_STAT"		columnIndex="13"/>
+		<result property="readYn"		column="READ_YN"		columnIndex="14"/>
+		<result property="attachFileId"	column="ATTACH_FILE_ID"	columnIndex="15"/>
+		<result property="redYn"		column="RED_YN"			columnIndex="16"/>
+		<result property="mtPlaceTyp"	column="MT_PLACE_TYP"	columnIndex="17"/>
+		<result property="mtPlace"		column="MT_PLACE"		columnIndex="18"/>
+	</resultMap> 
+	
+
+	<resultMap id="meetingRoomInfo" class="kms.com.cooperation.service.MeetingRoomVO">
+		<result property="mtId"			column="MT_ID"			columnIndex="1"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="2"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="3"/>
+		<result property="userId"		column="USER_ID"		columnIndex="4"/>
+		<result property="prjId"		column="PRJ_ID"			columnIndex="5"/>
+		<result property="prjNm"		column="PRJ_NM"			columnIndex="6"/>
+		<result property="prjCd"		column="PRJ_CD"			columnIndex="7"/>
+		<result property="mtSj"			column="MT_SJ"			columnIndex="8"/>
+		<result property="mtCn"			column="MT_CN"			columnIndex="9"/>
+		<result property="regDt"		column="REG_DT"			columnIndex="10"/>
+		<result property="modDt"		column="MOD_DT"			columnIndex="11"/>
+		<result property="attachFileId"	column="ATTACH_FILE_ID"	columnIndex="12"/>
+		<result property="useAt"		column="USE_AT"			columnIndex="13"/>
+		<result property="mtDate"		column="MT_DATE"		columnIndex="14"/>
+		<result property="mtPlace"		column="MT_PLACE"		columnIndex="15"/>
+		<result property="mtFrTm"		column="MT_FRTM"		columnIndex="16"/>
+		<result property="mtToTm"		column="MT_TOTM"		columnIndex="17"/>
+		<result property="mtPurpose"	column="MT_PURPOSE"		columnIndex="18"/>
+		<result property="mtResult"		column="MT_RESULT"		columnIndex="19"/>
+		<result property="pushYn1"		column="PUSH_YN1"		columnIndex="20"/>
+		<result property="pushYn2"		column="PUSH_YN2"		columnIndex="21"/>
+		<result property="leaderNo"		column="LEADER_NO"		columnIndex="22"/>
+		<result property="mtResultWrNo"	column="MT_RESULT_WR"	columnIndex="23"/>
+		<result property="mtResultWrId"	column="MT_RESULT_WR_ID" columnIndex="24"/>
+		<result property="mtResultWrNm"	column="MT_RESULT_WR_NM" columnIndex="25"/>
+		<result property="mtResultDt"	column="MT_RESULT_DT"	columnIndex="26"/>
+		<result property="mtPlaceTyp"	column="MT_PLACE_TYP"	columnIndex="27"/>
+	</resultMap>
+	
+	
+	<resultMap id="meetingRoomRecieveList" class="kms.com.cooperation.service.MeetingRoomRecieve">
+		<result property="no"			column="NO"				columnIndex="1"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="2"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="3"/>
+		<result property="userId"		column="USER_ID"		columnIndex="4"/>
+		<result property="mtId"			column="MT_ID"			columnIndex="5"/>
+		<result property="recieveTyp"	column="RECIEVE_TYP"	columnIndex="6"/>
+		<result property="readtime"		column="READTIME"		columnIndex="7"/>
+	</resultMap>
+	
+	
+	<resultMap id="meetingRoomCommentList" class="kms.com.cooperation.service.MeetingRoomComment">
+		<result property="no"			column="NO"				columnIndex="1"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="2"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="3"/>
+		<result property="userId"		column="USER_ID"		columnIndex="4"/>
+		<result property="mtId"			column="MT_ID"			columnIndex="5"/>
+		<result property="mtCommentCn"	column="MT_COMMENT_CN"	columnIndex="6"/>
+		<result property="attachFileId"	column="ATTACH_FILE_ID"	columnIndex="7"/>
+		<result property="regDt"		column="REG_DT"			columnIndex="8"/>
+		<result property="udtDt"		column="UDT_DT"			columnIndex="9"/>
+	</resultMap>
+	
+	
+	
+	<sql id="SQL_selectmeetingRoomList">
+		FROM
+			TBL_MEETING_ROOM a			 
+		<isEqual property="ajax" compareValue="Y">
+			LEFT OUTER JOIN 
+		</isEqual>
+		<isNotEqual property="ajax" compareValue="Y">
+			INNER JOIN
+		</isNotEqual>	
+					  TBL_MEETING_ROOM_RECIEVE b ON a.MT_ID = b.MT_ID AND b.RECIEVE_TYP = 'WR'
+			LEFT JOIN TBL_USERINFO c ON b.USER_NO = c.NO
+			LEFT JOIN TBL_PRJ d ON a.PRJ_ID = d.PRJ_ID
+			LEFT JOIN TBL_MEETING_ROOM_COMMENT e ON a.MT_ID = e.MT_ID AND e.USE_AT = 'Y'
+			LEFT JOIN TBL_MEETING_ROOM_RECIEVE f ON a.MT_ID = f.MT_ID
+			LEFT JOIN TBL_MEETING_ROOM_RECIEVE g ON a.MT_ID = g.MT_ID
+		WHERE
+			a.USE_AT = 'Y'
+			AND g.USER_NO = #userNo#
+		<isEqual property="searchCondition" compareValue="0">
+			<isNotEmpty prepend="AND" property="searchKeyword">
+				MT_SJ LIKE CONCAT('%', #searchKeyword#, '%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchCondition" compareValue="1">
+			<isNotEmpty prepend="AND" property="searchKeyword">
+				(
+					MT_SJ LIKE CONCAT('%', #searchKeyword#, '%')
+					OR MT_CN LIKE CONCAT('%', #searchKeyword#, '%')
+				)
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchCondition" compareValue="2">
+			<isNotEmpty prepend="AND" property="searchUserNm">
+				CONCAT(c.USER_NM, '(', c.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+			</isNotEmpty>
+		</isEqual>
+		<isNotEmpty prepend="AND" property="searchPrjId">
+			(
+				a.PRJ_ID = #searchPrjId#
+			<isEqual prepend="OR" property="includeUnderProject" compareValue="Y">
+				CONCAT('/',FN_PRJ_TREE(a.PRJ_ID),'/') LIKE CONCAT('%/', #searchPrjId#, '/%')
+			</isEqual>
+			)
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchYear">
+			a.REG_DT LIKE CONCAT('%', #searchYear#, '%')
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="readYn">
+			IF(g.READTIME IS NOT NULL, 'Y', 'N') = #readYn#
+		</isNotEmpty>
+	</sql>
+	
+	<select id="MeetingRoomDAO.selectMeetingRoomList" resultMap="meetingRoomList">
+		SELECT
+			 a.MT_ID
+			,b.USER_NO, c.USER_NM, c.USER_ID
+			,a.PRJ_ID, d.PRJ_NM, d.PRJ_CD
+			,a.MT_SJ
+			,DATE_FORMAT(a.REG_DT, '%Y.%m.%d %H:%i') AS REG_DT
+			,g.INTEREST_YN
+			,DATE_FORMAT(IF(MAX(e.REG_DT) > a.MOD_DT, MAX(e.REG_DT),a.MOD_DT), '%Y.%m.%d %H:%i') AS MOD_DT
+			,COUNT(DISTINCT e.NO) AS COMMENT_CNT
+			,IF(COUNT(DISTINCT f.NO) = COUNT(DISTINCT CONCAT(f.NO, f.READTIME)),'C','P') AS READ_STAT
+			,IF(g.READTIME IS NOT NULL,'Y','N') AS READ_YN,a.ATTACH_FILE_ID
+			,CASE WHEN CONCAT(a.MT_DATE,a.MT_TOTM) > DATE_FORMAT(SYSDATE(), '%Y%m%d%H') THEN 'Y' ELSE 'N' END AS RED_YN
+			,a.MT_PLACE_TYP
+			,a.MT_PLACE
+			,IF(g.READTIME IS NULL, 0, IF(g.INTEREST_YN = 'Y', '1', '2')) AS SORT
+		<include refid="SQL_selectmeetingRoomList"/>
+		GROUP BY a.MT_ID
+		ORDER BY
+<!-- 			CASE IF(g.READTIME IS NOT NULL,'Y','N')
+				WHEN 'N' THEN 0
+				WHEN 'Y' THEN 1
+			END 
+ -->			SORT ASC
+			,a.MOD_DT DESC
+			,a.REG_DT DESC
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	<select id="MeetingRoomDAO.selectMeetingRoomListTotCnt" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(DISTINCT a.MT_ID)
+		<include refid="SQL_selectmeetingRoomList"/>
+	</select>
+	
+	<select id="MeetingRoomDAO.selectMeetingRoom" resultMap="meetingRoomInfo">
+		SELECT
+			a.MT_ID, 
+			b.USER_NO, 
+			c.USER_NM, 
+			c.USER_ID,
+			a.PRJ_ID, 
+			d.PRJ_NM, 
+			d.PRJ_CD, 
+			a.MT_SJ, 
+			a.MT_CN, 
+			DATE_FORMAT(a.REG_DT, '%Y.%m.%d %H:%i') AS REG_DT,
+			DATE_FORMAT(IF(MAX(e.REG_DT) > a.MOD_DT, MAX(e.REG_DT),a.MOD_DT), '%Y.%m.%d %H:%i') AS MOD_DT,
+			a.ATTACH_FILE_ID, 
+			a.USE_AT,
+			a.MT_DATE,
+			a.MT_PLACE,
+			a.MT_FRTM,
+			a.MT_TOTM,
+			a.MT_PURPOSE,
+			a.MT_RESULT,
+			a.PUSH_YN1,
+			a.PUSH_YN2,
+			D.LEADER_NO,
+			IFNULL(a.MT_RESULT_WR, 99999999) AS MT_RESULT_WR,
+			g.USER_ID AS MT_RESULT_WR_ID,
+			g.USER_NM AS MT_RESULT_WR_NM,
+			DATE_FORMAT(a.MT_RESULT_DT, '%Y.%m.%d %H:%i') AS MT_RESULT_DT,
+			a.MT_PLACE_TYP
+		FROM
+			TBL_MEETING_ROOM a
+			LEFT JOIN TBL_MEETING_ROOM_RECIEVE b 
+				ON a.MT_ID = b.MT_ID 
+				AND b.RECIEVE_TYP = 'WR'
+			LEFT JOIN TBL_USERINFO c 
+				ON b.USER_NO = c.NO
+			LEFT JOIN TBL_PRJ d 
+				ON a.PRJ_ID = d.PRJ_ID
+			LEFT JOIN TBL_MEETING_ROOM_COMMENT e 
+				ON a.MT_ID = e.MT_ID 
+				AND e.USE_AT = 'Y'
+			LEFT JOIN TBL_MEETING_ROOM_RECIEVE f 
+				ON a.MT_ID = f.MT_ID 
+				AND f.USER_NO = #userNo#
+			LEFT JOIN TBL_USERINFO g
+				ON a.MT_RESULT_WR = g.NO 
+		WHERE
+			a.USE_AT = 'Y'
+			AND a.MT_ID = #mtId#
+	</select>
+	
+	<select id="MeetingRoomDAO.selectMeetingRoomRecieve" resultMap="meetingRoomRecieveList">
+		SELECT
+			a.NO, 
+			a.USER_NO, 
+			b.USER_NM, 
+			b.USER_ID, 
+			a.MT_ID, 
+			a.RECIEVE_TYP,
+			DATE_FORMAT(a.READTIME, '%Y.%m.%d %H:%i') AS READTIME
+		FROM
+			TBL_MEETING_ROOM_RECIEVE a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+		WHERE
+			a.MT_ID = #mtId#
+	</select>
+	
+	<insert id="MeetingRoomDAO.insertMeetingRoom">
+		INSERT INTO TBL_MEETING_ROOM
+		(
+			 MT_ID
+			,PRJ_ID
+			,MT_SJ
+			,MT_CN
+			,ATTACH_FILE_ID
+			,MT_DATE
+			,MT_PLACE
+			,MT_FRTM
+			,MT_TOTM
+			,MT_RESULT
+			,MT_PURPOSE
+			,PUSH_YN1
+			,PUSH_YN2
+			,REG_DT
+			,MOD_DT
+			,USE_AT
+			,MT_PLACE_TYP
+		) VALUES (
+			 #mtId#
+			,#prjId#
+			,#mtSj#
+			,#mtCn#
+			,#attachFileId#
+			,#mtDate#
+			,#mtPlace#
+			,#mtFrTm#
+			,#mtToTm#
+			,#mtResult#
+			,#mtPurpose#
+			,IFNULL(#pushYn1#, 'N')
+			,IFNULL(#pushYn2#, 'N')
+			,SYSDATE()
+			,SYSDATE()
+			,'Y'
+			,#mtPlaceTyp#
+		)
+	</insert>
+	
+	<update id="MeetingRoomDAO.updateMeetingRoom">
+		UPDATE TBL_MEETING_ROOM
+		SET
+			MOD_DT = SYSDATE()
+		<isNotEmpty prepend="," property="prjId">
+			PRJ_ID = #prjId#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="mtSj">
+			MT_SJ = #mtSj#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="mtCn">
+			MT_CN = #mtCn#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="attachFileId">
+			ATTACH_FILE_ID = #attachFileId#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="mtDate">
+			MT_DATE = #mtDate#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="mtPlace">
+			MT_PLACE = #mtPlace#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="mtFrTm">
+			MT_FRTM = #mtFrTm#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="mtResult">
+			MT_RESULT = #mtResult#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="mtPurpose">
+			MT_PURPOSE = #mtPurpose#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="pushYn1">
+			PUSH_YN1 = #pushYn1#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="mtFrTm">
+			MT_FRTM = #mtFrTm#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="mtToTm">
+			MT_TOTM = #mtToTm#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="pushYn2">
+			PUSH_YN2 = #pushYn2#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="useAt">
+			USE_AT = #useAt#
+		</isNotEmpty>
+		<isNotEmpty prepend="," property="mtPlaceTyp">
+			MT_PLACE_TYP = #mtPlaceTyp#
+		</isNotEmpty>
+		WHERE MT_ID = #mtId#
+	</update>
+
+
+	<update id="MeetingRoomDAO.updateMeetingResult">
+		UPDATE TBL_MEETING_ROOM
+		SET MT_RESULT = #mtResult#,
+			MT_RESULT_WR = #mtResultWrNo#,
+			MT_RESULT_DT = SYSDATE()
+		WHERE MT_ID = #mtId#
+	</update>
+	
+	<update id="MeetingRoomDAO.updateMeetingReadTime">
+		UPDATE TBL_MEETING_ROOM_RECIEVE SET READTIME = NULL WHERE MT_ID = #mtId#
+	</update>
+		
+	<insert id="MeetingRoomDAO.insertMeetingRoomRecieve">
+		INSERT INTO TBL_MEETING_ROOM_RECIEVE
+		(
+			USER_NO
+			,MT_ID
+			,RECIEVE_TYP
+		) (
+			SELECT
+				USER_NO
+				,MT_ID
+				,RECIEVE_TYP
+			FROM (
+				SELECT
+					#userNo# AS USER_NO, #mtId# AS MT_ID, 'WR' AS RECIEVE_TYP
+				UNION
+				SELECT
+					NO AS USER_NO, #mtId# AS MT_ID, 'RE' AS RECIEVE_TYP
+				FROM TBL_USERINFO
+				<iterate prepend="WHERE USER_ID IN " open="(" conjunction="," close=")" property="recUserIdList">
+					#recUserIdList[]#
+				</iterate>
+			<isNotEmpty property="refUserIdList" prepend=" UNION ">
+				SELECT
+					NO AS USER_NO, #mtId# AS MT_ID, 'RF' AS RECIEVE_TYP
+				FROM TBL_USERINFO
+				<iterate prepend="WHERE USER_ID IN " open="(" conjunction="," close=")" property="refUserIdList">
+					#refUserIdList[]#
+				</iterate>
+			</isNotEmpty>
+			) K
+		)
+	</insert>
+
+	<update id="MeetingRoomDAO.updateMeetingRoomWriter">
+		UPDATE 
+			TBL_MEETING_ROOM_RECIEVE
+		SET
+			USER_NO = #no#
+		WHERE
+			MT_ID = #mtId#
+			AND RECIEVE_TYP = 'WR'
+	</update>
+	
+	<update id="MeetingRoomDAO.updateMeetingRoomRecieve">
+		UPDATE 
+			TBL_MEETING_ROOM_RECIEVE
+		SET
+			INTEREST_YN = #interestYn#
+		WHERE
+			MT_ID = #mtId#
+			AND USER_NO = #userNo#
+	</update>
+	
+	<delete id="MeetingRoomDAO.deleteMeetingRoomRecieve">
+		DELETE FROM TBL_MEETING_ROOM_RECIEVE
+		WHERE
+			MT_ID = #mtId#
+	</delete>
+
+	<update id="MeetingRoomDAO.setReadtime">
+		UPDATE TBL_MEETING_ROOM_RECIEVE
+		SET
+			READTIME = SYSDATE()
+		WHERE
+			MT_ID = #mtId#
+			AND USER_NO = #userNo#
+	</update>
+	
+	<update id="MeetingRoomDAO.deleteReadtime">
+		UPDATE TBL_MEETING_ROOM_RECIEVE
+		SET
+			READTIME = NULL
+		WHERE
+			MT_ID = #mtId#
+	</update>
+
+
+	
+	<select id="MeetingRoomDAO.selectMeetingRoomCommentList" resultMap="meetingRoomCommentList">
+		SELECT
+			a.NO, a.USER_NO, b.USER_NM, b.USER_ID, a.MT_ID, a.MT_COMMENT_CN,
+			a.ATTACH_FILE_ID, DATE_FORMAT(a.REG_DT, '%Y.%m.%d %H:%i:%s') AS REG_DT
+			, DATE_FORMAT(a.UDT_DT, '%Y.%m.%d %H:%i:%s') AS UDT_DT
+		FROM
+			TBL_MEETING_ROOM_COMMENT a
+			LEFT JOIN TBL_USERINFO b ON a.USER_NO = b.NO
+		WHERE
+			a.USE_AT = 'Y'
+			AND a.MT_ID = #mtId#
+		<isNotEmpty prepend="AND" property="no">
+			a.NO = #no#
+		</isNotEmpty>
+		<!-- 2013.08.13 덧긋 정렬 순서 -->
+		ORDER BY IFNULL(a.UDT_DT,a.REG_DT) DESC
+		
+	</select>
+	
+	<insert id="MeetingRoomDAO.insertMeetingRoomComment">
+		INSERT INTO TBL_MEETING_ROOM_COMMENT
+		(
+			USER_NO, MT_ID, MT_COMMENT_CN, ATTACH_FILE_ID, REG_DT, USE_AT
+		) VALUES (
+			#userNo#, #mtId#, #mtCommentCn#, #attachFileId#, SYSDATE(), 'Y'
+		)
+	</insert>
+	
+	<update id="MeetingRoomDAO.updateMeetingRoomComment">
+		UPDATE TBL_MEETING_ROOM_COMMENT
+		<dynamic prepend="SET">
+			<isNotEmpty prepend="," property="attachFileId">
+				ATTACH_FILE_ID = #attachFileId#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="mtCommentCn">
+				MT_COMMENT_CN = #mtCommentCn#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="useAt">
+				USE_AT = #useAt#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="no">
+				UDT_DT = SYSDATE()
+			</isNotEmpty>
+		</dynamic>
+		WHERE
+			NO = #no#
+	</update>
+	
+	<select id="MeetingRoomDAO.selectMeetingRoomListHeadSearch" resultMap="meetingRoomList">
+		SELECT
+			a.MT_ID
+			,b.USER_NO, c.USER_NM, c.USER_ID
+			,a.PRJ_ID, d.PRJ_NM, d.PRJ_CD
+			,a.MT_SJ
+			,DATE_FORMAT(a.REG_DT, '%Y.%m.%d %H:%i') AS REG_DT
+			,g.INTEREST_YN
+			,DATE_FORMAT(IF(MAX(e.REG_DT) > a.MOD_DT, MAX(e.REG_DT),a.MOD_DT), '%Y.%m.%d %H:%i') AS MOD_DT
+			,COUNT(DISTINCT e.NO) AS COMMENT_CNT
+			,IF(COUNT(DISTINCT f.NO) = COUNT(DISTINCT CONCAT(f.NO, f.READTIME)),'C','P') AS READ_STAT
+			,IF(g.READTIME IS NOT NULL,'Y','N') AS READ_YN,a.ATTACH_FILE_ID
+			,CASE WHEN CONCAT(a.MT_DATE,a.MT_TOTM) > DATE_FORMAT(SYSDATE(), '%Y%m%d%H') THEN 'Y' ELSE 'N' END AS RED_YN
+		FROM
+			TBL_MEETING_ROOM a
+			LEFT JOIN TBL_MEETING_ROOM_RECIEVE b ON a.MT_ID = b.MT_ID AND b.RECIEVE_TYP = 'WR'
+			LEFT JOIN TBL_USERINFO c ON b.USER_NO = c.NO
+			LEFT JOIN TBL_PRJ d ON a.PRJ_ID = d.PRJ_ID
+			LEFT JOIN TBL_MEETING_ROOM_COMMENT e ON a.MT_ID = e.MT_ID AND e.USE_AT = 'Y'
+			LEFT JOIN TBL_MEETING_ROOM_RECIEVE f ON a.MT_ID = f.MT_ID
+			LEFT JOIN TBL_MEETING_ROOM_RECIEVE g ON a.MT_ID = g.MT_ID AND g.USER_NO = #userNo#
+		WHERE
+			a.USE_AT = 'Y'
+			AND (
+				a.MT_SJ LIKE CONCAT('%', #searchKeyword#, '%')
+				OR a.MT_CN LIKE CONCAT('%', #searchKeyword#, '%')
+				OR c.USER_NM LIKE CONCAT('%',#searchKeyword#,'%')
+				OR c.USER_ID LIKE CONCAT('%',#searchKeyword#,'%')
+				OR CONCAT(c.USER_NM, '(', c.USER_ID, ')') LIKE CONCAT('%', #searchKeyword#, '%')
+			)
+		GROUP BY a.MT_ID
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<select id="MeetingRoomDAO.selectMeetingRoomListTotCntHeadSearch" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(DISTINCT a.MT_ID)
+		FROM
+			TBL_MEETING_ROOM a
+			LEFT JOIN TBL_MEETING_ROOM_RECIEVE b ON a.MT_ID = b.MT_ID AND b.RECIEVE_TYP = 'WR'
+			LEFT JOIN TBL_USERINFO c ON b.USER_NO = c.NO
+			LEFT JOIN TBL_PRJ d ON a.PRJ_ID = d.PRJ_ID
+			LEFT JOIN TBL_MEETING_ROOM_COMMENT e ON a.MT_ID = e.MT_ID AND e.USE_AT = 'Y'
+			LEFT JOIN TBL_MEETING_ROOM_RECIEVE f ON a.MT_ID = f.MT_ID
+			LEFT JOIN TBL_MEETING_ROOM_RECIEVE g ON a.MT_ID = g.MT_ID AND g.USER_NO = #userNo#
+		WHERE
+			a.USE_AT = 'Y'
+			AND (
+				a.MT_SJ LIKE CONCAT('%', #searchKeyword#, '%')
+				OR a.MT_CN LIKE CONCAT('%', #searchKeyword#, '%')
+				OR c.USER_NM LIKE CONCAT('%',#searchKeyword#,'%')
+				OR c.USER_ID LIKE CONCAT('%',#searchKeyword#,'%')
+				OR CONCAT(c.USER_NM, '(', c.USER_ID, ')') LIKE CONCAT('%', #searchKeyword#, '%')
+			)
+	</select>
+	
+	
+	
+	<select id="MeetingRoomDAO.selectInterestUserNoList" resultClass="java.lang.Integer">
+		SELECT
+			USER_NO
+		FROM
+			TBL_MEETING_ROOM_RECIEVE
+		WHERE
+			MT_ID = #mtId#
+			AND INTEREST_YN = 'Y'
+	</select>
+	
+	<update id="MeetingRoomDAO.setInterestBc">
+		<isNotEmpty property="userList">
+		UPDATE TBL_MEETING_ROOM_RECIEVE
+		SET
+			INTEREST_YN = 'Y'
+		WHERE
+			MT_ID = #mtId#
+		<iterate prepend="AND USER_NO IN " open="(" conjunction="," close=")" property="userList">
+			#userList[]#
+		</iterate>
+		</isNotEmpty>
+		<isEmpty property="userList">
+		UPDATE TBL_MEETING_ROOM_RECIEVE
+		SET
+			INTEREST_YN = INTEREST_YN
+		WHERE
+			MT_ID = #mtId#
+		</isEmpty>
+	</update>
+	
+	<!-- [2015/02/26, dwkim] 모든 회의실 목록보기, 임시로 추가(김태연 부장님, 박현준과장님) -->
+	<sql id="SQL_tmpSelectmeetingRoomList">
+		FROM
+			TBL_MEETING_ROOM a			 
+			INNER JOIN
+			TBL_MEETING_ROOM_RECIEVE b ON a.MT_ID = b.MT_ID AND b.RECIEVE_TYP = 'WR'
+			LEFT JOIN TBL_USERINFO c ON b.USER_NO = c.NO
+			LEFT JOIN TBL_PRJ d ON a.PRJ_ID = d.PRJ_ID
+			LEFT JOIN TBL_MEETING_ROOM_COMMENT e ON a.MT_ID = e.MT_ID AND e.USE_AT = 'Y'
+		WHERE
+			a.USE_AT = 'Y'
+		<isEqual property="searchCondition" compareValue="0">
+			<isNotEmpty prepend="AND" property="searchKeyword">
+				MT_SJ LIKE CONCAT('%', #searchKeyword#, '%')
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchCondition" compareValue="1">
+			<isNotEmpty prepend="AND" property="searchKeyword">
+				(
+					MT_SJ LIKE CONCAT('%', #searchKeyword#, '%')
+					OR MT_CN LIKE CONCAT('%', #searchKeyword#, '%')
+				)
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchCondition" compareValue="2">
+			<isNotEmpty prepend="AND" property="searchUserNm">
+				CONCAT(c.USER_NM, '(', c.USER_ID, ')') LIKE CONCAT('%', #searchUserNm#, '%')
+			</isNotEmpty>
+		</isEqual>
+		<isNotEmpty prepend="AND" property="searchPrjId">
+			(
+				a.PRJ_ID = #searchPrjId#
+			<isEqual prepend="OR" property="includeUnderProject" compareValue="Y">
+				CONCAT('/',FN_PRJ_TREE(a.PRJ_ID),'/') LIKE CONCAT('%/', #searchPrjId#, '/%')
+			</isEqual>
+			)
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchYear">
+			a.REG_DT LIKE CONCAT('%', #searchYear#, '%')
+		</isNotEmpty>
+	</sql>
+	
+	<select id="MeetingRoomDAO.tmpSelectMeetingRoomList" resultMap="meetingRoomList">
+		SELECT
+			 a.MT_ID
+			,b.USER_NO, c.USER_NM, c.USER_ID
+			,a.PRJ_ID, d.PRJ_NM, d.PRJ_CD
+			,a.MT_SJ
+			,DATE_FORMAT(a.REG_DT, '%Y.%m.%d %H:%i') AS REG_DT
+			,'' as INTEREST_YN 
+			,DATE_FORMAT(IF(MAX(e.REG_DT) > a.MOD_DT, MAX(e.REG_DT),a.MOD_DT), '%Y.%m.%d %H:%i') AS MOD_DT
+			,COUNT(DISTINCT e.NO) AS COMMENT_CNT
+			,'' AS READ_STAT
+			,'' AS READ_YN, a.ATTACH_FILE_ID
+			,CASE WHEN CONCAT(a.MT_DATE,a.MT_TOTM) > DATE_FORMAT(SYSDATE(), '%Y%m%d%H') THEN 'Y' ELSE 'N' END AS RED_YN
+			,a.MT_PLACE_TYP
+			,a.MT_PLACE
+		<include refid="SQL_tmpSelectmeetingRoomList"/>
+		GROUP BY a.MT_ID
+		ORDER BY
+			a.MOD_DT DESC
+			,a.REG_DT DESC
+		LIMIT #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	<select id="MeetingRoomDAO.tmpSelectMeetingRoomListTotCnt" resultClass="java.lang.Integer">
+		SELECT
+			COUNT(DISTINCT a.MT_ID)
+		<include refid="SQL_tmpSelectmeetingRoomList"/>
+	</select>
+</sqlMap>

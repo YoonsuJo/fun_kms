@@ -1,0 +1,1193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsSalesDAO">
+
+	<typeAlias alias="egovMap"
+		type="egovframework.rte.psl.dataaccess.util.EgovMap" />
+	<typeAlias alias="salesVO" type="kms.com.management.service.SalesVO" />
+
+	<resultMap id="innerSaelsList" class="kms.com.management.service.InnerSalesVO">
+		<result property="salesPrjId" column="SALES_PRJ_ID"
+			columnIndex="1" />
+		<result property="salesPrjCd" column="SALES_PRJ_CD"
+			columnIndex="2" />
+		<result property="salesPrjNm" column="SALES_PRJ_NM"
+			columnIndex="3" />
+		<result property="salesOrgId" column="SALES_ORG_ID"
+			columnIndex="4" />
+		<result property="salesOrgNm" column="SALES_ORG_NM"
+			columnIndex="5" />
+		<result property="purchasePrjId" column="PURCHASE_PRJ_ID"
+			columnIndex="6" />
+		<result property="purchasePrjCd" column="PURCHASE_PRJ_CD"
+			columnIndex="7" />
+		<result property="purchasePrjNm" column="PURCHASE_PRJ_NM"
+			columnIndex="8" />
+		<result property="purchaseOrgId" column="PURCHASE_ORG_ID"
+			columnIndex="9" />
+		<result property="purchaseOrgNm" column="PURCHASE_ORG_NM"
+			columnIndex="10" />
+		<result property="cost" column="COST" columnIndex="11" />
+	</resultMap>
+
+	<resultMap id="innerSaelsDetailList" class="kms.com.management.service.InnerSalesDetailVO">
+		<result property="docId" column="DOC_ID" columnIndex="1" />
+		<result property="templtId" column="TEMPLT_ID" columnIndex="2" />
+		<result property="templtNm" column="TEMPLT_NM" columnIndex="3" />
+		<result property="subject" column="SUBJECT" columnIndex="4" />
+		<result property="userNo" column="USER_NO" columnIndex="5" />
+		<result property="userNm" column="USER_NM" columnIndex="6" />
+		<result property="userId" column="USER_ID" columnIndex="7" />
+		<result property="docDt" column="DOC_DT" columnIndex="8" />
+		<result property="salesPrjId" column="SALES_PRJ_ID"
+			columnIndex="9" />
+		<result property="salesPrjCd" column="SALES_PRJ_CD"
+			columnIndex="10" />
+		<result property="salesPrjNm" column="SALES_PRJ_NM"
+			columnIndex="11" />
+		<result property="purchasePrjId" column="PURCHASE_PRJ_ID"
+			columnIndex="12" />
+		<result property="purchasePrjCd" column="PURCHASE_PRJ_CD"
+			columnIndex="13" />
+		<result property="purchasePrjNm" column="PURCHASE_PRJ_NM"
+			columnIndex="14" />
+		<result property="cost" column="COST" columnIndex="15" />
+	</resultMap>
+
+	<resultMap id="salesList" class="kms.com.management.service.SalesVO">
+		<result property="docId" column="DOC_ID" columnIndex="1" />
+		<result property="writerNo" column="WRITER_NO" columnIndex="1" />
+		<result property="prjId" column="PRJ_ID" columnIndex="2" />
+		<result property="prjNm" column="PRJ_NM" columnIndex="3" />
+		<result property="prjCd" column="PRJ_CD" columnIndex="4" />
+		<result property="prjSn" column="PRJ_SN" columnIndex="5" />
+		<result property="decideYn" column="DECIDE_YN" columnIndex="6" />
+		<result property="salesDt" column="SALES_DT" columnIndex="7" />
+		<result property="salesCt" column="SALES_CT" columnIndex="7" />
+		<result property="salesSum" column="SALES_SUM" columnIndex="8" />
+		<result property="sales" column="SALES" columnIndex="9" />
+		<result property="purchaseOut" column="PURCHASE_OUT" columnIndex="10" />
+		<result property="purchaseIn" column="PURCHASE_IN" columnIndex="11" />
+		<result property="orgnztNm" column="ORGNZT_NM" columnIndex="12" />
+		<result property="orgTreeOrd" column="ORG_TREE_ORD" columnIndex="13" />
+		<result property="orgnztUpNm" column="ORGNZT_UP_NM" columnIndex="14" />
+	</resultMap>
+
+	<resultMap id="mapMonthSalesList" 	class="kms.com.management.vo.MonthResultVO">
+		<result property="prjId" 				column="PRJ_ID" 				/>
+		<result property="prjCode" 			column="PRJ_CD" 				/>
+		<result property="prjName" 			column="PRJ_NM" 				/>
+		<result property="docId" 				column="DOC_ID" 				/>
+		<result property="subject" 			column="SUBJECT" 				/>
+		<result property="writerNo" 			column="WRITER_NO" 		/>
+		<result property="writerName" 		column="WRITER_NAME"		/>
+		<result property="amount" 			column="AMOUNT" 			/>
+	</resultMap>
+
+	<resultMap id="mapMonthLaborList" 	class="kms.com.management.vo.MonthResultVO">
+		<result property="prjId" 				column="PRJ_ID" 					/>
+		<result property="prjCode" 			column="PRJ_CD" 					/>
+		<result property="prjName" 			column="PRJ_NM" 					/>
+		<result property="writerNo" 			column="WRITER_NO" 			/>
+		<result property="writerName" 		column="WRITER_NAME"			/>
+		<result property="amount" 			column="AMOUNT" 				/>
+		<result property="workHour" 		column="WORK_HOUR" 			/>
+		<result property="workRate" 			column="WORK_RATE" 			/>
+	</resultMap>
+
+	<resultMap id="mapMonthExpenseList" 	class="kms.com.management.vo.MonthResultVO">
+		<result property="prjId" 				column="PRJ_ID" 					/>
+		<result property="prjCode" 			column="PRJ_CD" 					/>
+		<result property="prjName" 			column="PRJ_NM" 					/>
+		<result property="writerNo" 			column="WRITER_NO" 			/>
+		<result property="writerName" 		column="WRITER_NAME"			/>
+		<result property="amount" 			column="AMOUNT" 				/>
+	</resultMap>
+
+	<resultMap id="innerSaelsList" 				class="kms.com.management.service.InnerSalesVO">
+		<result property="salesPrjId" 				column="SALES_PRJ_ID"				/>
+		<result property="salesPrjCd" 			column="SALES_PRJ_CD"				/>
+		<result property="salesPrjNm" 			column="SALES_PRJ_NM"				/>
+		<result property="salesOrgId" 			column="SALES_ORG_ID"				/>
+		<result property="salesOrgNm" 			column="SALES_ORG_NM"			/>
+		<result property="purchasePrjId" 		column="PURCHASE_PRJ_ID"			/>
+		<result property="purchasePrjCd" 		column="PURCHASE_PRJ_CD"			/>
+		<result property="purchasePrjNm" 		column="PURCHASE_PRJ_NM"		/>
+		<result property="purchaseOrgId" 		column="PURCHASE_ORG_ID"			/>
+		<result property="purchaseOrgNm" 	column="PURCHASE_ORG_NM"		/>
+		<result property="cost" 					column="COST" 						/>
+	</resultMap>
+	
+	<resultMap id="outerPurchaseList" class="kms.com.management.service.OuterPurchaseVO">
+		<result property="salesDocId" 	column="SALES_DOC_ID" 	columnIndex="1" />
+		<result property="salesSj" 		column="SALES_SJ" 		columnIndex="2" />
+		<result property="prjId" 		column="PRJ_ID" 		columnIndex="3" />
+		<result property="prjCd" 		column="PRJ_CD" 		columnIndex="4" />
+		<result property="prjNm" 		column="PRJ_NM" 		columnIndex="5" />
+		<result property="orgId" 		column="ORGNZT_ID" 		columnIndex="6" />
+		<result property="orgNm" 		column="ORGNZT_NM" 		columnIndex="7" />
+		<result property="sales" 		column="SALES"			columnIndex="8" />
+		<result property="purchaseOut" 	column="PURCHASE_OUT" 	columnIndex="9" />
+		<result property="expSpend" 	column="EXP_SPEND" 		columnIndex="10" />
+		<result property="expDocStat" 	column="EXP_DOC_STAT" 	columnIndex="11" />
+		<result property="expDocId" 	column="EXP_DOC_ID" 	columnIndex="12" />
+		<result property="expSj" 		column="EXP_SJ" 		columnIndex="13" />
+	</resultMap>
+	
+	<resultMap id="outerPurchaseSumList" class="kms.com.management.service.OuterPurchaseVO">
+		<result property="salesDocId" 	column="SALES_DOC_ID" 	columnIndex="1" />
+		<result property="salesSj" 		column="SALES_SJ" 		columnIndex="2" />
+		<result property="prjId" 		column="PRJ_ID" 		columnIndex="3" />
+		<result property="prjCd" 		column="PRJ_CD" 		columnIndex="4" />
+		<result property="prjNm" 		column="PRJ_NM" 		columnIndex="5" />
+		<result property="orgId" 		column="ORGNZT_ID" 		columnIndex="6" />
+		<result property="orgNm" 		column="ORGNZT_NM" 		columnIndex="7" />
+		<result property="sales" 		column="SALES"			columnIndex="8" />
+		<result property="purchaseOut" 	column="PURCHASE_OUT" 	columnIndex="9" />
+		<result property="expSpend" 	column="EXP_SPEND" 		columnIndex="10" />
+	</resultMap>
+	
+	<select id="KmsSalesDAO.selectInnerSalesList" resultMap="innerSaelsList">
+		SELECT
+		a.SALES_PRJ_ID, c.PRJ_CD AS SALES_PRJ_CD, c.PRJ_NM AS SALES_PRJ_NM,
+		c.ORGNZT_ID AS SALES_ORG_ID, d.ORGNZT_NM AS SALES_ORG_NM,
+		a.PURCHASE_PRJ_ID, e.PRJ_CD AS PURCHASE_PRJ_CD, e.PRJ_NM AS PURCHASE_PRJ_NM,
+		e.ORGNZT_ID AS PURCHASE_ORG_ID, f.ORGNZT_NM AS PURCHASE_ORG_NM,
+		SUM(IFNULL(a.COST,0)) AS COST
+		FROM
+		V_PURCHASE_IN a
+		INNER JOIN TBL_EAPP_DOC b ON a.DOC_ID = b.DOC_ID AND b.NEW_AT = 1
+		INNER JOIN TBL_PRJ c ON a.SALES_PRJ_ID = c.PRJ_ID
+		INNER JOIN TBL_ORGNZT d ON c.ORGNZT_ID = d.ORGNZT_ID
+		INNER JOIN TBL_PRJ e ON a.PURCHASE_PRJ_ID = e.PRJ_ID
+		INNER JOIN TBL_ORGNZT f ON e.ORGNZT_ID = f.ORGNZT_ID
+		WHERE		
+		/* 반려문서 제외 */
+		B.DOC_STAT != 'APP099'
+		AND
+		(b.TEMPLT_ID - b.TEMPLT_ID%10)/10 = 2
+			AND LEFT(a.PURCHASE_IN_DT,6) = CONCAT(#searchYear#, LPAD(#searchMonth#, 2, '0'))
+			AND a.DECIDE_YN IN ('Y'<isEqual property="includeResult" compareValue="Y">,'N'</isEqual>)
+		<isEqual property="searchConditionSales" compareValue="0">
+			<isNotEmpty prepend="AND" property="searchOrgIdSalesList">
+				<iterate prepend="c.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdSalesList">
+					#searchOrgIdSalesList[]#
+				</iterate>
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchConditionSales" compareValue="1">
+			<isNotEmpty prepend="AND" property="searchPrjIdSales">
+				(
+					a.SALES_PRJ_ID = #searchPrjIdSales#
+				<isEqual prepend="OR" property="includeUnderPrjSales" compareValue="Y">
+					CONCAT('/',FN_PRJ_TREE(a.SALES_PRJ_ID),'/') LIKE CONCAT('%/', #searchPrjIdSales#, '/%')
+				</isEqual>
+				)
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchConditionPurchase" compareValue="0">
+			<isNotEmpty prepend="AND" property="searchOrgIdPurchaseList">
+				<iterate prepend="e.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdPurchaseList">
+					#searchOrgIdPurchaseList[]#
+				</iterate>
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchConditionPurchase" compareValue="1">
+			<isNotEmpty prepend="AND" property="searchPrjIdPurchase">
+				(
+					a.PURCHASE_PRJ_ID = #searchPrjIdPurchase#
+				<isEqual prepend="OR" property="includeUnderPrjPurchase" compareValue="Y">
+					CONCAT('/',FN_PRJ_TREE(a.PURCHASE_PRJ_ID),'/') LIKE CONCAT('%/', #searchPrjIdPurchase#, '/%')
+				</isEqual>
+				)
+			</isNotEmpty>
+		</isEqual>
+		AND a.COST > 0
+		GROUP BY f.ORG_TREE_ORD, a.PURCHASE_PRJ_ID, d.ORG_TREE_ORD, a.SALES_PRJ_ID
+	</select>
+	
+	<select id="KmsSalesDAO.selectInnerSalesDetailList" resultMap="innerSaelsDetailList">
+		SELECT
+			a.DOC_ID,
+			a.TEMPLT_ID, f.DOC_SJ AS TEMPLT_NM,
+			a.SUBJECT,
+			a.WRITER_NO AS USER_NO, c.USER_NM, c.USER_ID,
+			a.DOC_DT,
+			b.SALES_PRJ_ID, d.PRJ_CD AS SALES_PRJ_CD, d.PRJ_NM AS SALES_PRJ_NM,
+			b.PURCHASE_PRJ_ID, e.PRJ_CD AS PURCHASE_PRJ_CD, e.PRJ_NM AS PURCHASE_PRJ_NM,
+			SUM(b.COST) COST
+		FROM
+			TBL_EAPP_DOC a
+			LEFT JOIN V_PURCHASE_IN b ON a.DOC_ID = b.DOC_ID AND b.DECIDE_YN IN ('Y'<isEqual property="includeResult" compareValue="Y">,'N'</isEqual>)
+			INNER JOIN TBL_USERINFO c ON a.WRITER_NO = c.NO
+			INNER JOIN TBL_PRJ d ON b.SALES_PRJ_ID = d.PRJ_ID
+			INNER JOIN TBL_PRJ e ON b.PURCHASE_PRJ_ID = e.PRJ_ID
+			INNER JOIN TBL_EAPP_DOCTYP f ON a.TEMPLT_ID = f.TEMPLT_ID
+		WHERE
+			(a.TEMPLT_ID - a.TEMPLT_ID%10)/10 = 2
+			AND a.NEW_AT = 1
+			AND LEFT(b.PURCHASE_IN_DT,6) = CONCAT(#searchYear#, LPAD(#searchMonth#, 2, '0'))
+		<isNotEmpty prepend="AND" property="salesPrjId">
+			b.SALES_PRJ_ID = #salesPrjId#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="purchasePrjId">
+			b.PURCHASE_PRJ_ID = #purchasePrjId#
+		</isNotEmpty>
+		GROUP BY a.DOC_ID
+			,b.SALES_PRJ_ID
+			,b.PURCHASE_PRJ_ID
+	</select>
+	
+	<select id="KmsSalesDAO.selectSalesList" resultMap="salesList">
+	SELECT 
+		a.DOC_ID
+		,a.WRITER_NO
+		,b.SALES_CT
+		,b.PRJ_ID
+		,b.PRJ_CD
+		,b.PRJ_NM
+		,b.PRJ_SN
+		,b.DECIDE_YN
+		,c.SALES_DT
+		,IFNULL(b.COST,0) SALES_SUM
+		,IFNULL(c.COST,0) SALES
+		,IFNULL(d.COST,0) PURCHASE_OUT
+		,IFNULL(e.COST,0) PURCHASE_IN
+		,'' AS ORGNZT_NM
+		,g.ORG_TREE_ORD
+		,'' AS ORGNZT_UP_NM
+	FROM 
+		TBL_EAPP_DOC a		
+		INNER JOIN (
+			SELECT 
+				(SUM(cost)) COST
+				, DOC_ID
+				, SALES_CT
+				, b.PRJ_ID
+				, b.PRJ_NM
+				, b.PRJ_CD
+				, b.PRJ_TREE PRJ_SN
+				, b.ORGNZT_ID
+				, DECIDE_YN
+			FROM 
+				TBL_SALES a
+				INNER JOIN TBL_PRJ b
+					ON a.PRJ_ID = b.PRJ_ID
+			WHERE
+				a.DECIDE_YN IN ('Y'<isEqual property="includeResult" compareValue="Y">,'N'</isEqual>)
+				<isNotEmpty prepend="AND" property="searchOrgIdList">
+					<iterate prepend="ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+						#searchOrgIdList[]#
+					</iterate>
+				</isNotEmpty>
+			GROUP BY DOC_ID
+		) b
+			ON a.DOC_ID = b.DOC_ID		
+		INNER JOIN TBL_SALES c
+			ON a.DOC_ID = c.DOC_ID
+			AND LEFT(c.SALES_DT,6) = CONCAT(#searchYear#, LPAD(#searchMonth#,2,"0"))		
+		LEFT OUTER JOIN (
+			SELECT 
+				(SUM(cost)) COST
+				, DOC_ID
+			FROM 
+				TBL_PURCHASE_OUT
+			WHERE
+				LEFT(PURCHASE_OUT_DT,6) = CONCAT(#searchYear#, LPAD(#searchMonth#,2,"0"))
+			GROUP BY DOC_ID
+		) d
+			ON a.DOC_ID = d.DOC_ID		
+		LEFT OUTER JOIN (
+			SELECT 
+				(SUM(cost)) COST
+				, DOC_ID
+			FROM 
+				V_PURCHASE_IN
+			WHERE
+				LEFT(PURCHASE_IN_DT,6) = CONCAT(#searchYear#, LPAD(#searchMonth#,2,"0"))
+			GROUP BY DOC_ID
+		) e
+			ON a.DOC_ID = e.DOC_ID
+		LEFT OUTER JOIN TBL_ORGNZT g
+			ON b.ORGNZT_ID = g.ORGNZT_ID
+	WHERE 
+		a.NEW_AT = 1
+		
+	UNION ALL
+		
+	SELECT 
+		NULL
+		,NULL
+		,NULL
+		,f.PRJ_ID
+		,f.PRJ_CD
+		,f.PRJ_NM
+		,CONCAT(SUBSTR(b.PRJ_SN,1,20),"_")
+		,NULL
+		,NULL
+		
+		,IFNULL(SUM(b.COST),0) SALES_SUM
+		,IFNULL(SUM(c.COST),0) SALES
+		,IFNULL(SUM(d.COST),0) PURCHASE_OUT
+		,IFNULL(SUM(e.COST),0) PURCHASE_IN
+		
+		,'' AS ORGNZT_NM
+		,g.ORG_TREE_ORD
+		,'' AS ORGNZT_UP_NM
+	FROM 
+		TBL_EAPP_DOC a		
+		INNER JOIN (
+			SELECT 
+				(SUM(cost)) COST
+				, DOC_ID
+				, SALES_CT
+				, b.PRJ_ID
+				, b.PRJ_NM
+				, b.PRJ_CD
+				, b.PRJ_TREE PRJ_SN
+				, b.ORGNZT_ID
+				, DECIDE_YN
+			FROM 
+				TBL_SALES a
+				INNER JOIN TBL_PRJ b
+					ON a.PRJ_ID = b.PRJ_ID
+			WHERE 
+				a.DECIDE_YN IN ('Y'<isEqual property="includeResult" compareValue="Y">,'N'</isEqual>)			 
+			<isNotEmpty prepend="AND" property="searchOrgIdList">
+				<iterate prepend="ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+					#searchOrgIdList[]#
+				</iterate>
+			</isNotEmpty>			
+			GROUP BY DOC_ID
+		) b
+			ON a.DOC_ID = b.DOC_ID		
+		INNER JOIN TBL_PRJ f
+			ON SUBSTR(b.PRJ_SN,1,20) = f.PRJ_ID		
+		INNER JOIN TBL_SALES c
+			ON a.DOC_ID = c.DOC_ID
+			AND LEFT(c.SALES_DT,6) = CONCAT(#searchYear#, LPAD(#searchMonth#,2,"0"))		
+		LEFT OUTER JOIN (
+			SELECT 
+				(SUM(cost)) COST
+				, DOC_ID
+			FROM 
+				TBL_PURCHASE_OUT
+			WHERE
+				LEFT(PURCHASE_OUT_DT,6) = CONCAT(#searchYear#, LPAD(#searchMonth#,2,"0"))				
+			GROUP BY DOC_ID
+		) d
+			ON a.DOC_ID = d.DOC_ID		
+		LEFT OUTER JOIN (
+			SELECT 
+				(SUM(cost)) COST
+				, DOC_ID
+			FROM 
+				V_PURCHASE_IN
+			WHERE
+				LEFT(PURCHASE_IN_DT,6) = CONCAT(#searchYear#, LPAD(#searchMonth#,2,"0"))
+			GROUP BY DOC_ID
+		) e
+			ON a.DOC_ID = e.DOC_ID
+		LEFT OUTER JOIN TBL_ORGNZT g
+			ON b.ORGNZT_ID = g.ORGNZT_ID
+	WHERE
+		a.NEW_AT = 1
+	GROUP BY 
+		SUBSTR(b.PRJ_SN,1,20)
+			
+	ORDER BY 
+		ORG_TREE_ORD, PRJ_SN, SALES_DT	
+	</select>
+	
+	<select id="KmsSalesDAO.selectSalesSum" resultMap="salesList">
+	SELECT 
+		a.DOC_ID
+		,a.WRITER_NO
+		,b.SALES_CT
+		,b.PRJ_ID
+		,b.PRJ_CD
+		,b.PRJ_NM
+		,b.PRJ_SN
+		,b.DECIDE_YN
+		,c.SALES_DT
+		,IFNULL(SUM(b.COST),0) SALES_SUM
+		,IFNULL(SUM(c.COST),0) SALES
+		,IFNULL(SUM(d.COST),0) PURCHASE_OUT
+		,IFNULL(SUM(e.COST),0) PURCHASE_IN
+		
+		FROM TBL_EAPP_DOC a
+		
+		INNER JOIN
+		
+		(
+			SELECT (SUM(cost)) COST
+			, DOC_ID
+			, SALES_CT
+			, b.PRJ_ID
+			, b.PRJ_NM
+			, b.PRJ_CD
+			, b.PRJ_TREE PRJ_SN
+			, b.ORGNZT_ID
+			, DECIDE_YN
+			FROM TBL_SALES a
+			INNER JOIN TBL_PRJ b
+			ON a.PRJ_ID = b.PRJ_ID
+			WHERE
+				a.DECIDE_YN IN ('Y'<isEqual property="includeResult" compareValue="Y">,'N'</isEqual>)
+				<isNotEmpty prepend="AND" property="searchOrgIdList">
+				<iterate prepend="ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+					#searchOrgIdList[]#
+				</iterate>
+			</isNotEmpty>
+			GROUP BY DOC_ID
+		) b
+		ON a.DOC_ID = b.DOC_ID
+		
+		INNER JOIN TBL_SALES c
+		ON a.DOC_ID = c.DOC_ID
+		AND LEFT(c.SALES_DT,6) = CONCAT(#searchYear#, LPAD(#searchMonth#,2,"0"))
+		
+		LEFT OUTER JOIN 
+		
+		(
+			SELECT (SUM(cost)) COST
+			, DOC_ID
+			FROM TBL_PURCHASE_OUT
+			WHERE
+				LEFT(PURCHASE_OUT_DT,6) = CONCAT(#searchYear#, LPAD(#searchMonth#,2,"0"))
+			GROUP BY DOC_ID
+		) d
+		ON a.DOC_ID = d.DOC_ID
+		
+		LEFT OUTER JOIN 
+		(
+			SELECT (SUM(cost)) COST
+			, DOC_ID
+			FROM V_PURCHASE_IN
+			WHERE
+				LEFT(PURCHASE_IN_DT,6) = CONCAT(#searchYear#, LPAD(#searchMonth#,2,"0"))
+			GROUP BY DOC_ID
+		) e
+		ON a.DOC_ID = e.DOC_ID
+		
+		WHERE a.NEW_AT = 1
+		
+	
+	</select>
+	
+	<select id="KmsSalesDAO.selectSalesDeptSum" resultMap="salesList">
+	SELECT 
+		a.DOC_ID
+		,a.WRITER_NO
+		,b.SALES_CT
+		,b.PRJ_ID
+		,b.PRJ_CD
+		,b.PRJ_NM
+		,b.PRJ_SN
+		,b.DECIDE_YN
+		,c.SALES_DT
+		,IFNULL(SUM(b.COST),0) SALES_SUM
+		,IFNULL(SUM(c.COST),0) SALES
+		,IFNULL(SUM(d.COST),0) PURCHASE_OUT
+		,IFNULL(SUM(e.COST),0) PURCHASE_IN
+<![CDATA[
+		,	CASE 
+			WHEN i.LV<=2 THEN CONCAT(g.ORGNZT_NM,' 공통')
+			WHEN i.LV>2 THEN g.ORGNZT_NM END           AS ORGNZT_NM
+		,g.ORG_TREE_ORD
+		,	CASE 
+			WHEN i.LV<=2 THEN g.ORGNZT_NM
+			WHEN i.LV>2 THEN h.ORGNZT_NM END           AS ORGNZT_UP_NM
+]]>
+		FROM TBL_EAPP_DOC a
+		
+		INNER JOIN
+		
+		(
+			SELECT (SUM(cost)) COST
+			, DOC_ID
+			, SALES_CT
+			, b.PRJ_ID
+			, b.PRJ_NM
+			, b.PRJ_CD
+			, b.PRJ_TREE PRJ_SN
+			, b.ORGNZT_ID
+			, DECIDE_YN
+			FROM TBL_SALES a
+			INNER JOIN TBL_PRJ b
+			ON a.PRJ_ID = b.PRJ_ID
+			WHERE
+				a.DECIDE_YN IN ('Y'<isEqual property="includeResult" compareValue="Y">,'N'</isEqual>)
+				<isNotEmpty prepend="AND" property="searchOrgIdList">
+				<iterate prepend="ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+					#searchOrgIdList[]#
+				</iterate>
+			</isNotEmpty>
+			GROUP BY DOC_ID
+		) b
+		ON a.DOC_ID = b.DOC_ID
+		
+		INNER JOIN TBL_SALES c
+		ON a.DOC_ID = c.DOC_ID
+		AND LEFT(c.SALES_DT,6) = CONCAT(#searchYear#, LPAD(#searchMonth#,2,"0"))
+		
+		LEFT OUTER JOIN 
+		
+		(
+			SELECT (SUM(cost)) COST
+			, DOC_ID
+			FROM TBL_PURCHASE_OUT
+			WHERE
+				LEFT(PURCHASE_OUT_DT,6) = CONCAT(#searchYear#, LPAD(#searchMonth#,2,"0"))
+			GROUP BY DOC_ID
+		) d
+		ON a.DOC_ID = d.DOC_ID
+		
+		LEFT OUTER JOIN 
+		(
+			SELECT (SUM(cost)) COST
+			, DOC_ID
+			FROM V_PURCHASE_IN
+			WHERE
+				LEFT(PURCHASE_IN_DT,6) = CONCAT(#searchYear#, LPAD(#searchMonth#,2,"0"))
+			GROUP BY DOC_ID
+		) e
+		ON a.DOC_ID = e.DOC_ID
+		
+		LEFT OUTER JOIN TBL_ORGNZT g
+		ON b.ORGNZT_ID = g.ORGNZT_ID
+		
+		LEFT OUTER JOIN TBL_ORGNZT h
+		ON g.ORG_UP = h.ORGNZT_ID
+		
+		LEFT OUTER JOIN V_PRJ_TREE i
+		ON b.ORGNZT_ID = i.ID
+		
+		WHERE a.NEW_AT = 1
+		GROUP BY g.ORGNZT_ID
+		ORDER BY ORG_TREE_ORD
+	</select>
+	
+	<sql id="SQL_selectOuterPurchaseList">
+		  FROM (
+			SELECT doc.DOC_ID, doc.SUBJECT, puo.PRJ_ID, prj.PRJ_CD, prj.PRJ_NM
+				, org.ORGNZT_ID, org.ORGNZT_NM
+				, IFNULL((SELECT SUM(COST) FROM TBL_SALES WHERE DOC_ID = doc.DOC_ID), 0) AS SALES
+				, SUM(puo.COST) AS PURCHASE_OUT
+				, prj.ORG_PRJ_TREE_ORD
+			  FROM TBL_EAPP_DOC doc
+			  INNER JOIN TBL_PURCHASE_OUT puo
+			  ON doc.DOC_ID = puo.DOC_ID
+			  INNER JOIN TBL_PRJ prj
+			  ON puo.PRJ_ID = prj.PRJ_ID
+			  INNER JOIN TBL_ORGNZT org
+			  ON prj.ORGNZT_ID = org.ORGNZT_ID
+			 WHERE doc.NEW_AT = #searchNewAt#
+			 	<isNotEqual prepend="AND" property="searchIncEndPrj" compareValue="Y">
+					prj.STAT = 'P'
+				</isNotEqual>
+			 	<isNotEmpty prepend="AND" property="searchStartDate">
+			 		doc.DOC_DT >= #searchStartDate#
+			 	</isNotEmpty>
+			 	<isNotEmpty prepend="AND" property="searchEndDate">
+			 		<![CDATA[
+			 			doc.DOC_DT <= #searchEndDate#
+			 		]]>
+			 	</isNotEmpty>
+				<isNotEmpty prepend="AND" property="searchOrgIdList">
+					<iterate prepend="org.ORGNZT_ID IN" property="searchOrgIdList" open="(" close=")" conjunction=",">
+						#searchOrgIdList[]#
+					</iterate>
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="searchPrjIdList">
+					<iterate prepend="prj.PRJ_ID IN" property="searchPrjIdList" open="(" close=")" conjunction=",">
+						#searchPrjIdList[]#
+					</iterate>
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="searchDocId">
+					doc.DOC_ID = #searchDocId#
+				</isNotEmpty>
+				<isNotEmpty prepend="AND" property="searchDecideYn">
+					puo.DECIDE_YN = #searchDecideYn#
+				</isNotEmpty>
+			GROUP BY doc.DOC_ID, puo.PRJ_ID
+			) AS a <!-- # 매출 & 사외매입 정보(사외매입이 있는 문서가 기준이기에 tbl_purchase_out으로 조인) -->
+		  LEFT OUTER JOIN (
+			SELECT innerExp.EXP_ID, innerExp.DOC_ID, expDoc.SUBJECT
+				, innerExp.COLUMN2, innerExp.EXP_SPEND, expDoc.DOC_STAT
+			  FROM TBL_EAPP_EXP innerExp
+			  INNER JOIN TBL_EAPP_DOC expDoc
+			  ON expDoc.DOC_ID = innerExp.DOC_ID
+			  AND innerExp.COLUMN2 IS NOT NULL
+			  AND expDoc.DOC_STAT IN ('APP001', 'APP002', 'APP003', 'APP004', 'APP005')
+			) AS exp <!-- # 비용 정보 -->
+		  ON a.DOC_ID = exp.COLUMN2
+	</sql>
+	
+	<select id="KmsSalesDAO.selectOuterPurchaseSumList" resultMap="outerPurchaseSumList">
+		SELECT SALES_DOC_ID
+			, SALES_SJ
+			, PRJ_ID
+			, PRJ_CD
+			, PRJ_NM	
+			, ORGNZT_ID
+			, ORGNZT_NM
+			, SUM(SALES) AS SALES
+			, SUM(PURCHASE_OUT) AS PURCHASE_OUT
+			, SUM(EXP_SPEND) AS EXP_SPEND
+		FROM (
+			SELECT SALES_DOC_ID
+				, SALES_SJ
+				, PRJ_ID
+				, PRJ_CD
+				, PRJ_NM	
+				, ORGNZT_ID
+				, ORGNZT_NM
+				, SALES
+				, PURCHASE_OUT
+				, SUM(EXP_SPEND) AS EXP_SPEND
+				, ORG_PRJ_TREE_ORD
+			  FROM (
+					SELECT a.DOC_ID AS SALES_DOC_ID, a.SUBJECT AS SALES_SJ, a.PRJ_ID, a.PRJ_CD, a.PRJ_NM, a.ORGNZT_ID, a.ORGNZT_NM
+					, a.SALES, a.PURCHASE_OUT, IFNULL(exp.EXP_SPEND, 0) AS EXP_SPEND
+					, exp.DOC_STAT AS EXP_DOC_STAT, exp.DOC_ID AS EXP_DOC_ID, exp.SUBJECT EXP_SJ
+					, ORG_PRJ_TREE_ORD
+					<include refid="SQL_selectOuterPurchaseList"/>
+				) b
+			GROUP BY SALES_DOC_ID
+			) c
+		GROUP BY 
+			<isEqual property="searchType" compareValue="ORG">ORGNZT_ID</isEqual>
+			<isEqual property="searchType" compareValue="PRJ">PRJ_ID</isEqual>
+			<isEqual property="searchType" compareValue="DOC">SALES_DOC_ID</isEqual>
+		<isNotEqual prepend="HAVING" property="searchIncAllTarget" compareValue="Y">
+			PURCHASE_OUT * 1.1 > EXP_SPEND
+		</isNotEqual>
+		ORDER BY ORG_PRJ_TREE_ORD
+	</select>
+
+	<select id="KmsSalesDAO.selectOuterPurchaseList" resultMap="outerPurchaseList">
+		SELECT a.DOC_ID AS SALES_DOC_ID, a.SUBJECT AS SALES_SJ, a.PRJ_ID, a.PRJ_CD, a.PRJ_NM, a.ORGNZT_ID, a.ORGNZT_NM
+				, a.SALES, a.PURCHASE_OUT, IFNULL(exp.EXP_SPEND, 0) AS EXP_SPEND
+				, exp.DOC_STAT AS EXP_DOC_STAT, exp.DOC_ID AS EXP_DOC_ID, exp.SUBJECT EXP_SJ
+		<include refid="SQL_selectOuterPurchaseList"/>
+		ORDER BY a.ORG_PRJ_TREE_ORD, a.DOC_ID, exp.EXP_ID
+	</select>		
+	
+<!-- 	==========================================================================   -->
+<!-- 	==========================================================================   -->
+<!-- 	 TENY_170504 월간사업실적에서 실적부분을 Popup으로 띄우는 기능들.													-->
+<!--	 TENY_170504 월별 매출목록만을 조회																							-->
+<!-- 	 TENY_170503 월매출 매출목록조회 속도향상을 위하여 단순화 함. 														-->
+	<select id="KmsSalesDAO.selectMonthSalesOutList" 			resultMap="mapMonthSalesList">
+	SELECT 
+		p.PRJ_ID					AS PRJ_ID, 
+		p.PRJ_CD					AS PRJ_CD, 
+		p.PRJ_NM					AS PRJ_NM, 
+		d.DOC_ID					AS DOC_ID, 
+		d.SUBJECT 				AS SUBJECT,
+		u.NO						AS WRITER_NO, 
+		u.USER_NM				AS WRITER_NAME, 
+		SUM(s.COST)				AS AMOUNT
+	FROM tbl_sales s
+		JOIN tbl_eapp_doc d
+			ON s.DOC_ID = d.DOC_ID 
+				AND d.NEW_AT = 1
+		JOIN tbl_userinfo u
+			ON d.WRITER_NO = u.NO
+		JOIN tbl_prj p
+			ON s.PRJ_ID = p.PRJ_ID 
+		<isNotEmpty prepend="AND" property="searchOrgnztIdList">
+			<iterate prepend="p.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgnztIdList">
+				#searchOrgnztIdList[]#
+			</iterate>
+		</isNotEmpty>
+	WHERE 
+		s.DECIDE_YN = 'Y'
+		<isNotEmpty prepend="AND" property="searchYM">
+		SUBSTR(s.SALES_DT, 1, 6) = SUBSTR(#searchYM#, 1, 6)
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchYMTo">
+<![CDATA[
+		((SUBSTR(s.SALES_DT, 1, 4) = SUBSTR(#searchYMTo#, 1, 4))
+		AND (SUBSTR(s.SALES_DT, 1, 6) <= SUBSTR(#searchYMTo#, 1, 6)))
+]]>
+		</isNotEmpty>
+	GROUP BY d.DOC_ID
+	ORDER BY AMOUNT DESC
+	</select>
+	
+<!-- 	 TENY_170507 월매출 사내매출 목록조회 속도향상을 위하여 단순화 함. 														-->
+	<select id="KmsSalesDAO.selectMonthSalesInList" 			resultMap="mapMonthSalesList">
+	SELECT 
+		PRJ_ID, 
+		PRJ_CD, 
+		PRJ_NM, 
+		DOC_ID,
+		SUBJECT,
+		WRITER_NO, 
+		WRITER_NAME,
+		SUM(AMOUNT)				AS AMOUNT
+	FROM (
+		SELECT 
+			pp.PRJ_ID 						AS PRJ_ID, 
+			pp.PRJ_CD 						AS PRJ_CD, 
+			pp.PRJ_NM 						AS PRJ_NM, 
+			d.DOC_ID							AS DOC_ID,
+			d.SUBJECT 						AS SUBJECT,
+			pin.PURCHASE_IN_DT 			AS SALES_DT,
+			SUM(pin.COST) 					AS AMOUNT,
+			u.NO								AS WRITER_NO, 
+			u.USER_NM						AS WRITER_NAME
+		FROM tbl_purchase_in_labor pin
+			JOIN tbl_eapp_doc d
+				ON pin.DOC_ID = d.DOC_ID 
+					AND d.NEW_AT = 1
+					AND  d.DOC_STAT != 'APP099'
+				JOIN tbl_userinfo u
+					ON d.WRITER_NO = u.NO
+			JOIN tbl_prj pp
+				ON pin.PURCHASE_PRJ_ID = pp.PRJ_ID
+		<isNotEmpty prepend="AND" property="searchOrgnztIdList">
+			<iterate prepend="pp.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgnztIdList">
+				#searchOrgnztIdList[]#
+			</iterate>
+		</isNotEmpty>
+		WHERE
+			pin.DECIDE_YN = 'Y'
+		<isNotEmpty prepend="AND" property="searchYM">
+			SUBSTR(pin.PURCHASE_IN_DT, 1, 6) = SUBSTR(#searchYM#, 1, 6)
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchYMTo">
+<![CDATA[
+		((SUBSTR(pin.PURCHASE_IN_DT, 1, 4) = SUBSTR(#searchYMTo#, 1, 4))
+		AND (SUBSTR(pin.PURCHASE_IN_DT, 1, 6) <= SUBSTR(#searchYMTo#, 1, 6)))
+]]>
+		</isNotEmpty>
+		GROUP BY pin.DOC_ID
+		
+		UNION ALL
+		
+		SELECT 
+			pp.PRJ_ID 						AS PRJ_ID, 
+			pp.PRJ_CD 						AS PRJ_CD, 
+			pp.PRJ_NM 						AS PRJ_NM, 
+			d.DOC_ID							AS DOC_ID,
+			d.SUBJECT 						AS SUBJECT,
+			pin.PURCHASE_IN_DT 			AS SALES_DT,
+			SUM(pin.COST) 					AS AMOUNT,
+			u.NO								AS WRITER_NO, 
+			u.USER_NM						AS WRITER_NAME
+		FROM tbl_purchase_in pin
+			JOIN tbl_eapp_doc d
+				ON pin.DOC_ID = d.DOC_ID 
+					AND d.NEW_AT = 1
+					AND  d.DOC_STAT != 'APP099'
+				JOIN tbl_userinfo u
+					ON d.WRITER_NO = u.NO
+			JOIN tbl_prj pp
+				ON pin.PURCHASE_PRJ_ID = pp.PRJ_ID
+		<isNotEmpty prepend="AND" property="searchOrgnztIdList">
+			<iterate prepend="pp.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgnztIdList">
+				#searchOrgnztIdList[]#
+			</iterate>
+		</isNotEmpty>
+		WHERE
+			pin.DECIDE_YN = 'Y'
+		<isNotEmpty prepend="AND" property="searchYM">
+			SUBSTR(pin.PURCHASE_IN_DT, 1, 6) = SUBSTR(#searchYM#, 1, 6)
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchYMTo">
+<![CDATA[
+		((SUBSTR(pin.PURCHASE_IN_DT, 1, 4) = SUBSTR(#searchYMTo#, 1, 4))
+		AND (SUBSTR(pin.PURCHASE_IN_DT, 1, 6) <= SUBSTR(#searchYMTo#, 1, 6)))
+]]>
+		</isNotEmpty>
+		GROUP BY pin.DOC_ID
+	) t
+	GROUP BY DOC_ID
+	ORDER BY AMOUNT DESC
+	</select>
+	
+<!-- 	 TENY_170507 월매출의 사외매입 상세내역 목록조회  														-->
+	<select id="KmsSalesDAO.selectMonthPurchaseOutList" 			resultMap="mapMonthSalesList">
+		SELECT 
+			pp.PRJ_ID 						AS PRJ_ID, 
+			pp.PRJ_CD 						AS PRJ_CD, 
+			pp.PRJ_NM 						AS PRJ_NM, 
+			d.DOC_ID							AS DOC_ID,
+			d.SUBJECT 						AS SUBJECT,
+			u.NO								AS WRITER_NO, 
+			u.USER_NM						AS WRITER_NAME,
+			SUM(pout.COST) 				AS AMOUNT
+		FROM tbl_purchase_out pout
+			JOIN tbl_eapp_doc d
+				ON pout.DOC_ID = d.DOC_ID 
+					AND d.NEW_AT = 1
+					AND  d.DOC_STAT != 'APP099'
+				JOIN tbl_userinfo u
+					ON d.WRITER_NO = u.NO
+			JOIN tbl_prj pp
+				ON pout.PRJ_ID = pp.PRJ_ID
+		<isNotEmpty prepend="AND" property="searchOrgnztIdList">
+			<iterate prepend="pp.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgnztIdList">
+				#searchOrgnztIdList[]#
+			</iterate>
+		</isNotEmpty>
+		WHERE
+			pout.DECIDE_YN = 'Y'
+		<isNotEmpty prepend="AND" property="searchYM">
+			SUBSTR(pout.PURCHASE_OUT_DT, 1, 6) = SUBSTR(#searchYM#, 1, 6)
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchYMTo">
+<![CDATA[
+		((SUBSTR(pout.PURCHASE_OUT_DT, 1, 4) = SUBSTR(#searchYMTo#, 1, 4))
+		AND (SUBSTR(pout.PURCHASE_OUT_DT, 1, 6) <= SUBSTR(#searchYMTo#, 1, 6)))
+]]>
+		</isNotEmpty>
+		GROUP BY pout.DOC_ID
+		ORDER BY AMOUNT DESC
+	</select>
+
+<!-- 	 TENY_170507 월매출 사내매입 목록조회 														-->
+	<select id="KmsSalesDAO.selectMonthPurchaseInList" 			resultMap="mapMonthSalesList">
+	SELECT 
+		PRJ_ID, 
+		PRJ_CD, 
+		PRJ_NM, 
+		DOC_ID,
+		SUBJECT,
+		WRITER_NO, 
+		WRITER_NAME,
+		SUM(AMOUNT)				AS AMOUNT
+	FROM (
+		SELECT 
+			pp.PRJ_ID 						AS PRJ_ID, 
+			pp.PRJ_CD 						AS PRJ_CD, 
+			pp.PRJ_NM 						AS PRJ_NM, 
+			d.DOC_ID							AS DOC_ID,
+			d.SUBJECT 						AS SUBJECT,
+			pin.PURCHASE_IN_DT 			AS SALES_DT,
+			SUM(pin.COST) 					AS AMOUNT,
+			u.NO								AS WRITER_NO, 
+			u.USER_NM						AS WRITER_NAME
+		FROM tbl_purchase_in_labor pin
+			JOIN tbl_eapp_doc d
+				ON pin.DOC_ID = d.DOC_ID 
+					AND d.NEW_AT = 1
+					AND  d.DOC_STAT != 'APP099'
+				JOIN tbl_userinfo u
+					ON d.WRITER_NO = u.NO
+			JOIN tbl_prj pp
+				ON pin.SALES_PRJ_ID = pp.PRJ_ID
+		<isNotEmpty prepend="AND" property="searchOrgnztIdList">
+			<iterate prepend="pp.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgnztIdList">
+				#searchOrgnztIdList[]#
+			</iterate>
+		</isNotEmpty>
+		WHERE
+			pin.DECIDE_YN = 'Y'
+		<isNotEmpty prepend="AND" property="searchYM">
+			SUBSTR(pin.PURCHASE_IN_DT, 1, 6) = SUBSTR(#searchYM#, 1, 6)
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchYMTo">
+<![CDATA[
+		((SUBSTR(pin.PURCHASE_IN_DT, 1, 4) = SUBSTR(#searchYMTo#, 1, 4))
+		AND (SUBSTR(pin.PURCHASE_IN_DT, 1, 6) <= SUBSTR(#searchYMTo#, 1, 6)))
+]]>
+		</isNotEmpty>
+		GROUP BY pin.DOC_ID
+		
+		UNION ALL
+		
+		SELECT 
+			pp.PRJ_ID 						AS PRJ_ID, 
+			pp.PRJ_CD 						AS PRJ_CD, 
+			pp.PRJ_NM 						AS PRJ_NM, 
+			d.DOC_ID							AS DOC_ID,
+			d.SUBJECT 						AS SUBJECT,
+			pin.PURCHASE_IN_DT 			AS SALES_DT,
+			SUM(pin.COST) 					AS AMOUNT,
+			u.NO								AS WRITER_NO, 
+			u.USER_NM						AS WRITER_NAME
+		FROM tbl_purchase_in pin
+			JOIN tbl_eapp_doc d
+				ON pin.DOC_ID = d.DOC_ID 
+					AND d.NEW_AT = 1
+					AND  d.DOC_STAT != 'APP099'
+				JOIN tbl_userinfo u
+					ON d.WRITER_NO = u.NO
+			JOIN tbl_prj pp
+				ON pin.SALES_PRJ_ID = pp.PRJ_ID
+		<isNotEmpty prepend="AND" property="searchOrgnztIdList">
+			<iterate prepend="pp.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgnztIdList">
+				#searchOrgnztIdList[]#
+			</iterate>
+		</isNotEmpty>
+		WHERE
+			pin.DECIDE_YN = 'Y'
+		<isNotEmpty prepend="AND" property="searchYM">
+			SUBSTR(pin.PURCHASE_IN_DT, 1, 6) = SUBSTR(#searchYM#, 1, 6)
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchYMTo">
+<![CDATA[
+		((SUBSTR(pin.PURCHASE_IN_DT, 1, 4) = SUBSTR(#searchYMTo#, 1, 4))
+		AND (SUBSTR(pin.PURCHASE_IN_DT, 1, 6) <= SUBSTR(#searchYMTo#, 1, 6)))
+]]>
+		</isNotEmpty>
+		GROUP BY pin.DOC_ID
+	) t
+	GROUP BY DOC_ID
+	ORDER BY AMOUNT DESC
+	</select>
+
+<!-- 	 TENY_170508 월매출 인건비 투입 세부목록조회 													-->
+	<select id="KmsSalesDAO.selectMonthLaborList" 			resultMap="mapMonthLaborList">
+	SELECT 
+		t.PRJ_CD									AS PRJ_CD,
+		t.PRJ_ID									AS PRJ_ID,
+		t.PRJ_NM									AS PRJ_NM,			
+		t.WRITER_NO								AS WRITER_NO,
+		t.WRITER_NAME							AS WRITER_NAME,
+		t.P_WORK_HOUR						AS WORK_HOUR,
+		SUM(t.P_WORK_HOUR/u.T_WORK_HOUR* us.SALARY1) AS AMOUNT,
+		(t.P_WORK_HOUR * 100 / u.T_WORK_HOUR) AS WORK_RATE
+	FROM (
+		SELECT
+			p.PRJ_CD								AS PRJ_CD,
+			dr.PRJ_ID								AS PRJ_ID,
+			p.PRJ_NM								AS PRJ_NM,
+			dr.WRITER_NO						AS WRITER_NO,
+			u.USER_NM							AS WRITER_NAME,
+			SUM(dr.WORK_HOUR)				AS P_WORK_HOUR,
+			SUBSTR(dr.WRITE_DATE, 1, 6) AS YM
+		FROM hm_daily_result dr
+				JOIN tbl_prj p
+					ON dr.PRJ_ID = p.PRJ_ID
+		<isNotEmpty prepend="AND" property="searchOrgnztIdList">
+			<iterate prepend="p.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgnztIdList">
+				#searchOrgnztIdList[]#
+			</iterate>
+		</isNotEmpty>
+				JOIN tbl_userinfo u
+					ON dr.WRITER_NO = u.NO
+				WHERE
+					TRUE 
+		<isNotEmpty prepend="AND" property="searchYM">
+				SUBSTR(dr.WRITE_DATE, 1, 6) = SUBSTR(#searchYM#, 1, 6)
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchYMTo">
+<![CDATA[
+					SUBSTR(dr.WRITE_DATE, 1, 4) = SUBSTR(#searchYMTo#, 1, 4)
+					AND SUBSTR(dr.WRITE_DATE, 1, 6) <= SUBSTR(#searchYMTo#, 1, 6)
+]]>
+		</isNotEmpty>
+		GROUP BY YM, PRJ_ID, WRITER_NO 
+		) t
+			JOIN tbl_user_salary us
+				ON t.WRITER_NO = us.USER_NO  
+					AND t.YM = us.YM
+			JOIN (
+				SELECT
+					dr.WRITER_NO								AS WRITER_NO,
+					SUM(dr.WORK_HOUR)						AS T_WORK_HOUR,
+					SUBSTR(dr.WRITE_DATE, 1, 6) 			AS YM
+				FROM hm_daily_result dr
+				WHERE 
+					TRUE 
+		<isNotEmpty prepend="AND" property="searchYM">
+				SUBSTR(dr.WRITE_DATE, 1, 6) = SUBSTR(#searchYM#, 1, 6)
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchYMTo">
+<![CDATA[
+					SUBSTR(dr.WRITE_DATE, 1, 4) = SUBSTR(#searchYMTo#, 1, 4)
+					AND SUBSTR(dr.WRITE_DATE, 1, 6) <= SUBSTR(#searchYMTo#, 1, 6)
+]]>
+		</isNotEmpty>
+				GROUP BY YM, WRITER_NO
+			)u
+			ON t.WRITER_NO = u.WRITER_NO
+				AND t.YM = u.YM
+	GROUP BY t.PRJ_ID
+	ORDER BY t.PRJ_ID
+	</select>
+	
+<!-- 	 TENY_170608 특정프로젝트에 투입된 인원 및 인건비 세부목록조회 													-->
+	<select id="KmsSalesDAO.selectMonthLaborOfProject" 			resultMap="mapMonthLaborList">
+	SELECT 
+		t.PRJ_CD									AS PRJ_CD,
+		t.PRJ_ID									AS PRJ_ID,
+		t.PRJ_NM									AS PRJ_NM,			
+		t.WRITER_NO								AS WRITER_NO,
+		t.WRITER_NAME							AS WRITER_NAME,
+		t.P_WORK_HOUR						AS WORK_HOUR,
+		SUM(t.P_WORK_HOUR/u.T_WORK_HOUR* us.SALARY1) AS AMOUNT,
+		(t.P_WORK_HOUR * 100 / u.T_WORK_HOUR) AS WORK_RATE
+	FROM (
+		SELECT
+			p.PRJ_CD								AS PRJ_CD,
+			dr.PRJ_ID								AS PRJ_ID,
+			p.PRJ_NM								AS PRJ_NM,
+			dr.WRITER_NO						AS WRITER_NO,
+			u.USER_NM							AS WRITER_NAME,
+			SUM(dr.WORK_HOUR)				AS P_WORK_HOUR,
+			SUBSTR(dr.WRITE_DATE, 1, 6) AS YM
+		FROM hm_daily_result dr
+				JOIN tbl_prj p
+					ON dr.PRJ_ID = p.PRJ_ID
+		<isNotEmpty prepend="AND" property="searchPrjId">
+				dr.PRJ_ID = #searchPrjId#
+		</isNotEmpty>
+				JOIN tbl_userinfo u
+					ON dr.WRITER_NO = u.NO
+				WHERE
+					TRUE 
+		<isNotEmpty prepend="AND" property="searchYM">
+				SUBSTR(dr.WRITE_DATE, 1, 6) = SUBSTR(#searchYM#, 1, 6)
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchYMTo">
+<![CDATA[
+					SUBSTR(dr.WRITE_DATE, 1, 4) = SUBSTR(#searchYMTo#, 1, 4)
+					AND SUBSTR(dr.WRITE_DATE, 1, 6) <= SUBSTR(#searchYMTo#, 1, 6)
+]]>
+		</isNotEmpty>
+		GROUP BY YM, PRJ_ID, WRITER_NO 
+		) t
+			JOIN tbl_user_salary us
+				ON t.WRITER_NO = us.USER_NO  
+					AND t.YM = us.YM
+			JOIN (
+				SELECT
+					dr.WRITER_NO								AS WRITER_NO,
+					SUM(dr.WORK_HOUR)						AS T_WORK_HOUR,
+					SUBSTR(dr.WRITE_DATE, 1, 6) 			AS YM
+				FROM hm_daily_result dr
+				WHERE 
+					TRUE 
+		<isNotEmpty prepend="AND" property="searchYM">
+				SUBSTR(dr.WRITE_DATE, 1, 6) = SUBSTR(#searchYM#, 1, 6)
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchYMTo">
+<![CDATA[
+					SUBSTR(dr.WRITE_DATE, 1, 4) = SUBSTR(#searchYMTo#, 1, 4)
+					AND SUBSTR(dr.WRITE_DATE, 1, 6) <= SUBSTR(#searchYMTo#, 1, 6)
+]]>
+		</isNotEmpty>
+				GROUP BY YM, WRITER_NO
+			)u
+			ON t.WRITER_NO = u.WRITER_NO
+				AND t.YM = u.YM
+	GROUP BY t.WRITER_NO
+	ORDER BY t.PRJ_ID
+	</select>
+
+<!-- 	 TENY_170608 특정인원이 투입된 프로젝트별 인건비, 투입시간 세부목록조회 													-->
+	<select id="KmsSalesDAO.selectMonthLaborOfUser" 			resultMap="mapMonthLaborList">
+	SELECT 
+		t.PRJ_CD									AS PRJ_CD,
+		t.PRJ_ID									AS PRJ_ID,
+		t.PRJ_NM									AS PRJ_NM,			
+		t.WRITER_NO								AS WRITER_NO,
+		t.WRITER_NAME							AS WRITER_NAME,
+		t.P_WORK_HOUR						AS WORK_HOUR,
+		SUM(t.P_WORK_HOUR/u.T_WORK_HOUR* us.SALARY1) AS AMOUNT,
+		(t.P_WORK_HOUR * 100 / u.T_WORK_HOUR) AS WORK_RATE
+	FROM (
+		SELECT
+			p.PRJ_CD								AS PRJ_CD,
+			dr.PRJ_ID								AS PRJ_ID,
+			p.PRJ_NM								AS PRJ_NM,
+			dr.WRITER_NO						AS WRITER_NO,
+			u.USER_NM							AS WRITER_NAME,
+			SUM(dr.WORK_HOUR)				AS P_WORK_HOUR,
+			SUBSTR(dr.WRITE_DATE, 1, 6) AS YM
+		FROM hm_daily_result dr
+				JOIN tbl_prj p
+					ON dr.PRJ_ID = p.PRJ_ID
+				JOIN tbl_userinfo u
+					ON dr.WRITER_NO = u.NO
+				WHERE
+				dr.WRITER_NO = #searchUserNo#
+		<isNotEmpty prepend="AND" property="searchYM">
+				SUBSTR(dr.WRITE_DATE, 1, 6) = SUBSTR(#searchYM#, 1, 6)
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchYMTo">
+<![CDATA[
+					SUBSTR(dr.WRITE_DATE, 1, 4) = SUBSTR(#searchYMTo#, 1, 4)
+					AND SUBSTR(dr.WRITE_DATE, 1, 6) <= SUBSTR(#searchYMTo#, 1, 6)
+]]>
+		</isNotEmpty>
+		GROUP BY YM, PRJ_ID
+		) t
+			JOIN tbl_user_salary us
+				ON t.WRITER_NO = us.USER_NO  
+					AND t.YM = us.YM
+			JOIN (
+				SELECT
+					dr.WRITER_NO								AS WRITER_NO,
+					SUM(dr.WORK_HOUR)						AS T_WORK_HOUR,
+					SUBSTR(dr.WRITE_DATE, 1, 6) 			AS YM
+				FROM hm_daily_result dr
+				WHERE 
+					TRUE
+		<isNotEmpty prepend="AND" property="searchYM">
+				SUBSTR(dr.WRITE_DATE, 1, 6) = SUBSTR(#searchYM#, 1, 6)
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchYMTo">
+<![CDATA[
+					SUBSTR(dr.WRITE_DATE, 1, 4) = SUBSTR(#searchYMTo#, 1, 4)
+					AND SUBSTR(dr.WRITE_DATE, 1, 6) <= SUBSTR(#searchYMTo#, 1, 6)
+]]>
+		</isNotEmpty>
+				GROUP BY YM, WRITER_NO
+			)u
+			ON t.WRITER_NO = u.WRITER_NO
+				AND t.YM = u.YM
+	GROUP BY t.PRJ_ID
+	ORDER BY t.PRJ_ID
+
+	</select>
+
+<!-- 	 TENY_170508 월매출 판관비 사용 세부목록(프로젝트별)조회 													-->
+	<select id="KmsSalesDAO.selectMonthExpenseList" 			resultMap="mapMonthExpenseList">
+	SELECT
+		ee.PRJ_ID							AS PRJ_ID,
+		p.PRJ_CD							AS PRJ_CD,
+		p.PRJ_NM							AS PRJ_NM,
+		p.LEADER_NO 					AS WRITER_NO,
+		u.USER_NM						AS WRITER_NAME,
+		SUM(EE.EXP_SPEND)			AS AMOUNT
+	FROM tbl_eapp_exp ee
+		JOIN tbl_eapp_doc d
+			ON ee.DOC_ID = d.DOC_ID
+				AND d.NEW_AT = '1'
+				AND d.DOC_STAT != 'APP099'
+		JOIN tbl_prj p
+			ON ee.PRJ_ID = p.PRJ_ID
+		JOIN tbl_userinfo u
+			ON p.LEADER_NO = u.NO
+		JOIN tbl_account a
+			ON ee.ACC_ID = a.ACC_ID
+				AND a.PRNT_TYP = 'E'
+	WHERE
+		TRUE
+		<isNotEmpty prepend="AND" property="searchOrgnztIdList">
+			<iterate prepend="p.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgnztIdList">
+				#searchOrgnztIdList[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchYM">
+				SUBSTR(ee.EXP_DT, 1, 6) = SUBSTR(#searchYM#, 1, 6)
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchYMTo">
+<![CDATA[
+				SUBSTR(ee.EXP_DT, 1, 4) = SUBSTR(#searchYMTo#, 1, 4)
+				AND SUBSTR(ee.EXP_DT, 1, 6) <= SUBSTR(#searchYMTo#, 1, 6)
+]]>
+		</isNotEmpty>
+	GROUP BY ee.PRJ_ID
+	ORDER BY AMOUNT DESC
+	</select>
+
+</sqlMap>

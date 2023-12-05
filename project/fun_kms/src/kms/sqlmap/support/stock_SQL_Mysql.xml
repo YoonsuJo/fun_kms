@@ -1,0 +1,1096 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsStockDAO">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="stockVO" type="kms.com.support.service.StockVO"/>
+		
+	<resultMap id="stockStatusList" class="kms.com.support.service.StockVO">
+		<result property="itemCode"			column="itemCode"			columnIndex="1"/>
+		<result property="itemName"			column="itemName"			columnIndex="2"/>
+		<result property="categoryCode"		column="categoryCode"		columnIndex="3"/>
+		<result property="itemPrice"		column="itemPrice"			columnIndex="4"/>
+		<result property="categoryName"		column="categoryName"		columnIndex="5"/>
+		<result property="division"			column="division"			columnIndex="6"/>
+		<result property="count1"			column="count1"				columnIndex="7"/>
+		<result property="count2"			column="count2"				columnIndex="8"/>
+		<result property="count3"		    column="count3"			    columnIndex="9"/>
+		<result property="count4"		    column="count4"			    columnIndex="10"/>
+		<result property="count5"		    column="count5"			    columnIndex="11"/>
+		<result property="totalPrice"		column="totalPrice"			columnIndex="12"/>
+		<result property="avgPrice"			column="avg_price"		columnIndex="13"/>
+	</resultMap>
+	
+	<select id="KmsStockDAO.selectStock" resultClass="egovMap">
+	SELECT
+		stock.*
+		, item.item_name
+		, usr.no AS user_no
+		, usr.user_nm
+		, usr.user_id
+		, history.s_date AS release_date
+		, history.note AS release_note
+		, usr2.no AS release_user_no
+		, usr2.user_nm AS release_user_nm
+		, usr2.user_id AS release_user_id
+		, cod.code_nm AS status_nm
+	FROM
+		tbl_stock stock
+		LEFT JOIN tbl_stock_item item
+		ON stock.item_no = item.no
+		LEFT JOIN tbl_userinfo usr
+		ON stock.input_user_no = usr.no
+		LEFT JOIN tbl_stock_history history
+		ON stock.no = history.stock_no
+		AND history.e_date IS NULL
+		LEFT JOIN tbl_userinfo usr2
+		ON history.user_no = usr2.no
+		LEFT JOIN comtccmmndetailcode cod
+		ON cod.code_id = 'KMS026'
+		AND stock.status = cod.code
+	WHERE
+		TRUE
+		<isNotEmpty prepend="AND" property="stockNo">
+			stock.no = #stockNo#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="tempSaverNo">
+			stock.temp_saver_no = #tempSaverNo#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchPrjId">
+			stock.prj_id = #searchPrjId#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchUserName">
+			usr.user_nm = #searchUserName#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchCategoryNo">
+			item.category_no = #searchCategoryNo#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchItemNo">
+			stock.item_no = #searchItemNo#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchInputDate">
+			stock.input_date = #searchInputDate#
+		</isNotEmpty>
+		<isNotEmpty prepend="AND" property="searchStatusList">
+			<iterate prepend="stock.status IN" open="(" close=")" conjunction="," property="searchStatusList">
+				#searchStatusList[]#
+			</iterate>
+		</isNotEmpty>
+		<isNotEmpty property="searchType">
+			<isEqual prepend="AND" property="searchType" compareValue="N">
+				FALSE
+			</isEqual>
+		</isNotEmpty>
+	</select>
+	
+	<insert id="KmsStockDAO.insertStock">
+	INSERT INTO
+		tbl_stock
+		(
+			input_user_no, item_no, input_date, serial_no, expense, input_place, note
+		)
+		SELECT
+			#inputUserNo# AS input_user_no
+			, #itemNo# AS item_no
+			, #inputDate# AS input_date
+			, CONCAT(#serialNo#, IFNULL(
+				LPAD(CAST(IFNULL(MAX(SUBSTR(serial_no, -3)), '000') AS UNSIGNED) + 1, 3, '0')
+				, '0')) AS serial_no
+			, #expense# AS expense
+			, #inputPlace# AS input_place
+			, #note# AS note
+		FROM
+			tbl_stock
+		WHERE
+			input_date = #inputDate#
+			AND item_no = #itemNo#
+	</insert>
+	
+	<update id="KmsStockDAO.updateStock">
+	UPDATE
+		tbl_stock
+	SET
+		status = #status#
+		<isNotEmpty property="itemNo">
+			, item_no = #itemNo#
+		</isNotEmpty>
+		<isNotEmpty property="inputDate">
+			, input_date = #inputDate#
+		</isNotEmpty>
+		<isNotEmpty property="note">
+			, note = #note#
+		</isNotEmpty>
+		<isNotEmpty property="serialNo">
+			, serial_no = #serialNo#
+		</isNotEmpty>
+		<isNotEmpty property="prjId">
+			, prj_id = #prjId#
+		</isNotEmpty>
+		<isNotEmpty property="tempSaverNo">
+			, temp_saver_no = #tempSaverNo#
+		</isNotEmpty>
+		<isNotEmpty property="expId">
+			, exp_id = #expId#
+		</isNotEmpty>
+	WHERE
+		<isNotEmpty property="stockNo">
+		no = #stockNo#
+		</isNotEmpty>
+		<isNotEmpty property="tmpSaveStockList">
+			<iterate prepend="no IN" open="(" close=")" conjunction="," property="tmpSaveStockList">
+				#tmpSaveStockList[]#
+			</iterate>
+		</isNotEmpty>
+	</update>
+	
+	<update id="KmsStockDAO.deleteSavedStock">
+	UPDATE
+		tbl_stock
+	SET
+		temp_saver_no = -1
+		, status = 0
+	WHERE
+		<iterate prepend="no IN " open="(" close=")" conjunction="," property="stockNo">
+			#stockNo[]#
+		</iterate>
+	</update>
+	
+	<insert id="KmsStockDAO.insertStockHistory">
+	INSERT INTO
+		tbl_stock_history
+		(
+			stock_no, user_no, s_date, status, reseller, enduser, install_place,<isNotEmpty property="prjId"> prj_id,</isNotEmpty> note, reg_date
+		)
+		VALUES
+		(
+			<isNotEmpty property="stockNo">
+			#stockNo#
+			</isNotEmpty>
+			<isEmpty property="stockNo">
+			(
+				SELECT
+					MAX(no) AS stock_no
+				FROM
+					tbl_stock
+				LIMIT
+					1
+			)
+			</isEmpty>
+			, #userNo#, #sDate#, #status#, #reseller#, #enduser#, #installPlace#,<isNotEmpty property="prjId"> #prjId#,</isNotEmpty> #note#, SYSDATE()
+		)
+	</insert>
+	
+	<update id="KmsStockDAO.updateStockHistory">
+	UPDATE
+		tbl_stock_history
+	SET
+		e_date = DATE_FORMAT(SYSDATE(), '%Y%m%d')
+	WHERE
+		stock_no = #stockNo#
+		AND e_date IS NULL
+	</update>
+	
+	<select id="KmsStockDAO.selectStockCategory" resultClass="egovMap">
+	SELECT
+		*
+	FROM
+		tbl_stock_category
+	WHERE
+		use_at = 'Y'
+	<isNotEmpty prepend="AND" property="categoryNo">
+			no = #categoryNo#
+	</isNotEmpty>
+	ORDER BY
+		division ASC
+		, category_name ASC
+		, no ASC
+	</select>
+	
+	<insert id="KmsStockDAO.insertStockCategory">
+	INSERT INTO
+		tbl_stock_category
+		(
+			category_code, category_name, division
+		)
+		VALUES
+		(
+			#categoryCode#, #categoryName#, #division#
+		)
+	</insert>
+	
+	<update id="KmsStockDAO.updateStockCategory">
+	UPDATE
+		tbl_stock_category
+	SET
+		category_code = #categoryCode#
+		, category_name = #categoryName#
+		, division = #division#
+	WHERE
+		no = #categoryNo#
+	</update>
+	
+	<update id="KmsStockDAO.deleteStockCategory">
+	UPDATE
+		tbl_stock_category
+	SET
+		use_at = 'N'
+	WHERE
+		no = #categoryNo#
+	</update>
+	
+	<select id="KmsStockDAO.selectStockItem" resultClass="egovMap">
+	SELECT
+		item.*
+		, category.category_name
+	FROM
+		tbl_stock_item item
+		LEFT JOIN tbl_stock_category category
+		ON category.no = item.category_no
+	WHERE
+		item.use_at = 'Y'
+		<isNotEmpty prepend="AND" property="itemNo">
+			item.no = #itemNo#
+		</isNotEmpty>
+	ORDER BY
+		category.division ASC
+		, category.category_name ASC
+		, item.no ASC
+	</select>
+	
+	<insert id="KmsStockDAO.insertStockItem">
+	INSERT INTO
+		tbl_stock_item
+		(
+			item_code, item_name, category_no, price, avg_price, note, serial_code
+		)
+		VALUES
+		(
+			#itemCode#, #itemName#, #categoryNo#, #price#, #price#, #note#, #serialCode#
+		)
+	</insert>
+	
+	<update id="KmsStockDAO.updateStockItem">
+	UPDATE
+		tbl_stock_item
+	SET
+		item_code = #itemCode#
+		, item_name = #itemName#
+		, category_no = #categoryNo#
+		, price = #price#
+		, note = #note#
+		, serial_code = #serialCode#
+	WHERE
+		no = #itemNo#
+	</update>
+	
+	<update id="KmsStockDAO.updateStockItemPrice">
+	UPDATE
+		tbl_stock_item
+	SET
+		avg_price = #avgPrice#
+		, input_cnt = #inputCnt#
+	WHERE
+		no = #itemNo#
+	</update>
+	
+	<update id="KmsStockDAO.deleteStockItem">
+	UPDATE
+		tbl_stock_item
+	SET
+		use_at = 'N'
+	WHERE
+		no = #itemNo#
+	</update>
+	
+	<select id="KmsStockDAO.selectStockAjax" resultClass="egovMap" >
+	SELECT
+		stock.*
+		, item.item_name
+		, usr.user_nm
+		, category.division
+	FROM
+		tbl_stock stock
+		LEFT JOIN tbl_eapp_exp exp
+		ON stock.exp_id = exp.exp_id
+		LEFT JOIN tbl_eapp_doc doc
+		ON exp.doc_id = doc.doc_id
+		AND doc.doc_stat IN ('APP000', 'APP099', NULL)
+		INNER JOIN tbl_stock_item item
+		ON stock.item_no = item.no
+		INNER JOIN tbl_stock_category category
+		ON item.category_no = category.no
+		INNER JOIN tbl_userinfo usr
+		ON stock.input_user_no = usr.no
+	WHERE
+		TRUE
+		AND stock.status IN (0, 5)
+		AND stock.temp_saver_no = -1
+	ORDER BY
+		category.division ASC
+		, category.category_name ASC
+		, item.no ASC
+	</select>
+
+	<select id="KmsStockDAO.selectStockState" resultClass="egovMap">
+	SELECT
+		c.*
+		, CAST(c.avg_price * count4 AS UNSIGNED) AS total_price
+		, CAST(c.avg_price * count2 AS UNSIGNED) AS total_sale
+	FROM
+		(
+			SELECT
+				item.no AS item_no
+				, item.item_code
+				, item.item_name
+				, category.no AS category_no
+				, category.category_code
+				, category.category_name
+				, category.division
+				, SUM(IF(history.status = 0, 1, 0)) AS count1 <!-- 구입 -->
+				, SUM(IF(history.status = 1, 1, 0)) AS count2 <!-- 판매 -->
+				, SUM(IF(stock.temp_saver_no != -1, 1, 0)) AS count3 <!-- 임시저장 -->
+				, SUM(IF(history.status = 0, 1, 0)) - SUM(IF(history.status = 1, 1, 0)) - SUM(IF(stock.temp_saver_no != -1, 1, 0)) AS count4 <!-- 창고재고 -->
+				, SUM(IF(history.status = 0, 1, 0)) - SUM(IF(history.status = 1, 1, 0)) AS count5 <!-- 재산재고 -->
+				, CAST(IFNULL(AVG(stock.expense), 0) AS UNSIGNED) AS avg_price
+			FROM
+				tbl_stock_item item
+				INNER JOIN tbl_stock_category category
+				ON item.category_no = category.no
+				LEFT JOIN tbl_stock stock
+				ON stock.item_no = item.no
+				LEFT JOIN tbl_stock_history history
+				ON stock.no = history.stock_no
+			WHERE
+				TRUE
+			<isNotEmpty prepend="AND" property="division">
+				category.division = #division#
+			</isNotEmpty>
+			GROUP BY
+				item.no
+			ORDER BY
+				category.division
+		) c
+	WHERE
+		TRUE
+	</select>
+
+	<select id="KmsStockDAO.selectOldStockStateTotal" resultClass="egovMap">
+<![CDATA[	
+	SELECT a.itemCode
+	      ,a.itemName
+	      ,a.categoryCode
+	      ,a.itemPrice
+	      ,a.categoryName
+	      ,a.division
+	      ,a.BUY AS count1
+	      ,a.count1 AS count2
+	      ,(a.count2 + a.count3 + a.count4) AS count3
+	      ,(a.BUY - (a.count1 + a.count3)) AS count4
+	      ,(a.BUY - a.count1) AS count5
+	      ,ROUND(a.count5 / a.BUY) AS avgPrice
+	  FROM(      
+		SELECT i.itemCode, i.itemName, i.categoryCode, i.itemPrice, c.categoryName, c.division,
+		       (SELECT COUNT(*) 
+		          FROM NK_STOCK_INPUT2 ipt 
+		         WHERE ipt.categoryCode = i.categoryCode 
+		           AND ipt.itemCode = i.itemCode 
+		           AND SUBSTRING(ipt.inputDate,1,7) <= DATE_FORMAT(SYSDATE(),'%Y-%m')) AS BUY,
+		       (SELECT IFNULL(SUM(CASE WHEN PRO.status = 1 THEN 1 ELSE 0 END),0)
+			  FROM NK_STOCK_PRODUCT AS PRO
+			       INNER JOIN NK_STOCK_INPUT2 AS INP ON PRO.p_idx = INP.stockIdx
+			 WHERE ((SUBSTRING(PRO.inputDate,1,7) <= DATE_FORMAT(SYSDATE(),'%Y-%m') 
+			       AND SUBSTRING(PRO.outputDate,1,7) > DATE_FORMAT(SYSDATE(),'%Y-%m'))
+			       OR (SUBSTRING(PRO.inputDate,1,7) <= DATE_FORMAT(SYSDATE(),'%Y-%m') AND PRO.outputDate IS NULL ))
+			   AND PRO.outputDate IS NULL 
+			   AND INP.itemCode = i.itemCode) AS count1,
+		       (SELECT IFNULL(SUM(CASE WHEN PRO.status = 2 THEN 1 ELSE 0 END),0)
+			  FROM NK_STOCK_PRODUCT AS PRO
+			       INNER JOIN NK_STOCK_INPUT2 AS INP ON PRO.p_idx = INP.stockIdx
+			 WHERE ((SUBSTRING(PRO.inputDate,1,7) <= DATE_FORMAT(SYSDATE(),'%Y-%m') 
+			       AND SUBSTRING(PRO.outputDate,1,7) > DATE_FORMAT(SYSDATE(),'%Y-%m'))
+			       OR (SUBSTRING(PRO.inputDate,1,7) <= DATE_FORMAT(SYSDATE(),'%Y-%m') AND PRO.outputDate IS NULL ))
+			   AND PRO.outputDate IS NULL 
+			   AND INP.itemCode = i.itemCode
+			   AND PRO.categoryCode = i.categoryCode) AS count2,
+		       (SELECT IFNULL(SUM(CASE WHEN PRO.status = 3 THEN 1 ELSE 0 END),0)
+			  FROM NK_STOCK_PRODUCT AS PRO
+			       INNER JOIN NK_STOCK_INPUT2 AS INP ON PRO.p_idx = INP.stockIdx
+			 WHERE ((SUBSTRING(PRO.inputDate,1,7) <= DATE_FORMAT(SYSDATE(),'%Y-%m') 
+			       AND SUBSTRING(PRO.outputDate,1,7) > DATE_FORMAT(SYSDATE(),'%Y-%m'))
+			       OR (SUBSTRING(PRO.inputDate,1,7) <= DATE_FORMAT(SYSDATE(),'%Y-%m') AND PRO.outputDate IS NULL ))
+			   AND PRO.outputDate IS NULL 
+			   AND INP.itemCode = i.itemCode
+			   AND PRO.categoryCode = i.categoryCode) AS count3,
+		       (SELECT IFNULL(SUM(CASE WHEN PRO.status = 4 THEN 1 ELSE 0 END),0)
+			  FROM NK_STOCK_PRODUCT AS PRO
+			       INNER JOIN NK_STOCK_INPUT2 AS INP ON PRO.p_idx = INP.stockIdx
+			 WHERE ((SUBSTRING(PRO.inputDate,1,7) <= DATE_FORMAT(SYSDATE(),'%Y-%m') 
+			       AND SUBSTRING(PRO.outputDate,1,7) > DATE_FORMAT(SYSDATE(),'%Y-%m'))
+			       OR (SUBSTRING(PRO.inputDate,1,7) <= DATE_FORMAT(SYSDATE(),'%Y-%m') AND PRO.outputDate IS NULL ))
+			   AND PRO.outputDate IS NULL 
+			   AND INP.itemCode = i.itemCode
+			   AND PRO.categoryCode = i.categoryCode) AS count4,
+	               (SELECT SUM(inp.itemPrice)
+			  FROM NK_STOCK_INPUT2 inp
+			 WHERE inp.categoryCode = i.categoryCode 
+			   AND inp.itemCode = i.itemCode
+			   AND SUBSTRING(inp.inputDate,1,7) <= DATE_FORMAT(SYSDATE(),'%Y-%m')
+			 GROUP BY itemCode) AS count5 		   
+		  FROM NK_STOCK_ITEM i, NK_STOCK_CATEGORY c
+		 WHERE i.categoryCode = c.categoryCode
+]]>		 
+		 <isNotEmpty prepend="AND" property="flag"> c.division = #flag#</isNotEmpty>
+		 ORDER BY c.division ASC, i.categoryCode ASC, i.itemCode ASC) a	
+	</select>
+	
+	<select id="KmsStockDAO.selectStockStatisticMonthly" resultClass="egovMap">
+	SELECT
+		item.item_name
+		, SUM(IF(history.no IS NOT NULL AND SUBSTR(history.s_date, 5, 2) = '01', 1, 0)) AS cnt01
+		, SUM(IF(history.no IS NOT NULL AND SUBSTR(history.s_date, 5, 2) = '01', stock.expense, 0)) AS price01
+		, SUM(IF(history.no IS NOT NULL AND SUBSTR(history.s_date, 5, 2) = '02', 1, 0)) AS cnt02
+		, SUM(IF(history.no IS NOT NULL AND SUBSTR(history.s_date, 5, 2) = '02', stock.expense, 0)) AS price02
+		, SUM(IF(history.no IS NOT NULL AND SUBSTR(history.s_date, 5, 2) = '03', 1, 0)) AS cnt03
+		, SUM(IF(history.no IS NOT NULL AND SUBSTR(history.s_date, 5, 2) = '03', stock.expense, 0)) AS price03
+		, SUM(IF(history.no IS NOT NULL AND SUBSTR(history.s_date, 5, 2) = '04', 1, 0)) AS cnt04
+		, SUM(IF(history.no IS NOT NULL AND SUBSTR(history.s_date, 5, 2) = '04', stock.expense, 0)) AS price04
+		, SUM(IF(history.no IS NOT NULL AND SUBSTR(history.s_date, 5, 2) = '05', 1, 0)) AS cnt05
+		, SUM(IF(history.no IS NOT NULL AND SUBSTR(history.s_date, 5, 2) = '05', stock.expense, 0)) AS price05
+		, SUM(IF(history.no IS NOT NULL AND SUBSTR(history.s_date, 5, 2) = '06', 1, 0)) AS cnt06
+		, SUM(IF(history.no IS NOT NULL AND SUBSTR(history.s_date, 5, 2) = '06', stock.expense, 0)) AS price06
+		, SUM(IF(history.no IS NOT NULL AND SUBSTR(history.s_date, 5, 2) = '07', 1, 0)) AS cnt07
+		, SUM(IF(history.no IS NOT NULL AND SUBSTR(history.s_date, 5, 2) = '07', stock.expense, 0)) AS price07
+		, SUM(IF(history.no IS NOT NULL AND SUBSTR(history.s_date, 5, 2) = '08', 1, 0)) AS cnt08
+		, SUM(IF(history.no IS NOT NULL AND SUBSTR(history.s_date, 5, 2) = '08', stock.expense, 0)) AS price08
+		, SUM(IF(history.no IS NOT NULL AND SUBSTR(history.s_date, 5, 2) = '09', 1, 0)) AS cnt09
+		, SUM(IF(history.no IS NOT NULL AND SUBSTR(history.s_date, 5, 2) = '09', stock.expense, 0)) AS price09
+		, SUM(IF(history.no IS NOT NULL AND SUBSTR(history.s_date, 5, 2) = '10', 1, 0)) AS cnt10
+		, SUM(IF(history.no IS NOT NULL AND SUBSTR(history.s_date, 5, 2) = '10', stock.expense, 0)) AS price10
+		, SUM(IF(history.no IS NOT NULL AND SUBSTR(history.s_date, 5, 2) = '11', 1, 0)) AS cnt11
+		, SUM(IF(history.no IS NOT NULL AND SUBSTR(history.s_date, 5, 2) = '11', stock.expense, 0)) AS price11
+		, SUM(IF(history.no IS NOT NULL AND SUBSTR(history.s_date, 5, 2) = '12', 1, 0)) AS cnt12
+		, SUM(IF(history.no IS NOT NULL AND SUBSTR(history.s_date, 5, 2) = '12', stock.expense, 0)) AS price12
+		, SUM(IF(history.no IS NOT NULL, 1, 0)) AS cnt
+		, SUM(IF(history.no IS NOT NULL, stock.expense, 0)) AS price
+	FROM
+		tbl_stock_item item
+		LEFT JOIN tbl_stock stock
+		ON item.no = stock.item_no
+		LEFT JOIN tbl_stock_history history
+		ON stock.no = history.stock_no
+		<isEqual property="type" compareValue="stock" prepend="AND">
+			stock.status = 0
+		</isEqual>
+		<isEqual property="type" compareValue="buy" prepend="AND">
+			history.status = 0
+		</isEqual>
+		<isEqual property="type" compareValue="sale" prepend="AND">
+			history.status = 1
+		</isEqual>
+		AND SUBSTR(history.s_date, 1, 4) = #searchYear#
+	GROUP BY
+		item.no
+	</select>
+
+	<select id="KmsStockDAO.selectStockStatsStock" resultClass="egovMap">
+		SELECT
+			a.itemName
+			, a.cnt01 - b.cnt01 AS cnt01
+			, ROUND((a.price01 - b.price01) / 1000) AS price01
+			, a.cnt02 - b.cnt02 AS cnt02
+			, ROUND((a.price02 - b.price02) / 1000) AS price02
+			, a.cnt03 - b.cnt03 AS cnt03
+			, ROUND((a.price03 - b.price03) / 1000) AS price03
+			, a.cnt04 - b.cnt04 AS cnt04
+			, ROUND((a.price04 - b.price04) / 1000) AS price04
+			, a.cnt05 - b.cnt05 AS cnt05
+			, ROUND((a.price05 - b.price05) / 1000) AS price05
+			, a.cnt06 - b.cnt06 AS cnt06
+			, ROUND((a.price06 - b.price06) / 1000) AS price06
+			, a.cnt07 - b.cnt07 AS cnt07
+			, ROUND((a.price07 - b.price07) / 1000) AS price07
+			, a.cnt08 - b.cnt08 AS cnt08
+			, ROUND((a.price08 - b.price08) / 1000) AS price08
+			, a.cnt09 - b.cnt09 AS cnt09
+			, ROUND((a.price09 - b.price09) / 1000) AS price09
+			, a.cnt10 - b.cnt10 AS cnt10
+			, ROUND((a.price10 - b.price10) / 1000) AS price10
+			, a.cnt11 - b.cnt11 AS cnt11
+			, ROUND((a.price11 - b.price11) / 1000) AS price11
+			, a.cnt12 - b.cnt12 AS cnt12
+			, ROUND((a.price12 - b.price12) / 1000) AS price12
+			, a.cnt - b.cnt AS cnt
+			, ROUND((a.price - b.price) / 1000) AS price
+		FROM
+		(
+			SELECT	b.itemName
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#,'01') and CONCAT(#year#,'01') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN 1 ELSE 0 END) AS cnt01
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#,'01') AND CONCAT(#year#,'01') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN a.itemPrice ELSE 0 END) AS price01
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#,'02') AND CONCAT(#year#,'02') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN 1 ELSE 0 END) AS cnt02
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#,'02') AND CONCAT(#year#,'02') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN a.itemPrice ELSE 0 END) AS price02
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#,'03') AND CONCAT(#year#,'03') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN 1 ELSE 0 END) AS cnt03
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#,'03') AND CONCAT(#year#,'03') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN a.itemPrice ELSE 0 END) AS price03
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#,'04') AND CONCAT(#year#,'04') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN 1 ELSE 0 END) AS cnt04
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#,'04') AND CONCAT(#year#,'04') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN a.itemPrice ELSE 0 END) AS price04
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#,'05') AND CONCAT(#year#,'05') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN 1 ELSE 0 END) AS cnt05
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#,'05') AND CONCAT(#year#,'05') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN a.itemPrice ELSE 0 END) AS price05
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#,'06') AND CONCAT(#year#,'06') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN 1 ELSE 0 END) AS cnt06
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#,'06') AND CONCAT(#year#,'06') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN a.itemPrice ELSE 0 END) AS price06
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#,'07') AND CONCAT(#year#,'07') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN 1 ELSE 0 END) AS cnt07
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#,'07') AND CONCAT(#year#,'07') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN a.itemPrice ELSE 0 END) AS price07
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#,'08') AND CONCAT(#year#,'08') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN 1 ELSE 0 END) AS cnt08
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#,'08') AND CONCAT(#year#,'08') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN a.itemPrice ELSE 0 END) AS price08
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#,'09') AND CONCAT(#year#,'09') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN 1 ELSE 0 END) AS cnt09
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#,'09') AND CONCAT(#year#,'09') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN a.itemPrice ELSE 0 END) AS price09
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#,'10') AND CONCAT(#year#,'10') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN 1 ELSE 0 END) AS cnt10
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#,'10') AND CONCAT(#year#,'10') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN a.itemPrice ELSE 0 END) AS price10
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#,'11') AND CONCAT(#year#,'11') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN 1 ELSE 0 END) AS cnt11
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#,'11') AND CONCAT(#year#,'11') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN a.itemPrice ELSE 0 END) AS price11
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#,'12') AND CONCAT(#year#,'12') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN 1 ELSE 0 END) AS cnt12
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#,'12') AND CONCAT(#year#,'12') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN a.itemPrice ELSE 0 END) AS price12
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y') <![CDATA[<=]]> #year# THEN 1 ELSE 0 END) AS cnt
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y') <![CDATA[<=]]> #year# THEN a.itemPrice ELSE 0 END) AS price
+			FROM 	NK_STOCK_INPUT2 a, NK_STOCK_ITEM b
+			WHERE 	a.itemCode = b.itemCode
+			GROUP BY a.itemCode
+			ORDER BY a.itemCode
+		) a,
+		(
+			SELECT	b.itemName
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#, '01') AND CONCAT(#year#,'01') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt01
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#, '01') AND CONCAT(#year#,'01') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) AS price01
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#, '02') AND CONCAT(#year#,'02') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt02
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#, '02') AND CONCAT(#year#,'02') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) AS price02
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#, '03') AND CONCAT(#year#,'03') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt03
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#, '03') AND CONCAT(#year#,'03') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) AS price03
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#, '04') AND CONCAT(#year#,'04') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt04
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#, '04') AND CONCAT(#year#,'04') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) AS price04
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#, '05') AND CONCAT(#year#,'05') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt05
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#, '05') AND CONCAT(#year#,'05') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) AS price05
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#, '06') AND CONCAT(#year#,'06') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt06
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#, '06') AND CONCAT(#year#,'06') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) AS price06
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#, '07') AND CONCAT(#year#,'07') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt07
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#, '07') AND CONCAT(#year#,'07') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) AS price07
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#, '08') AND CONCAT(#year#,'08') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt08
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#, '08') AND CONCAT(#year#,'08') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) AS price08
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#, '09') AND CONCAT(#year#,'09') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt09
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#, '09') AND CONCAT(#year#,'09') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) AS price09
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#, '10') AND CONCAT(#year#,'10') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt10
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#, '10') AND CONCAT(#year#,'10') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) AS price10
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#, '11') AND CONCAT(#year#,'11') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt11
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#, '11') AND CONCAT(#year#,'11') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) AS price11
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#, '12') AND CONCAT(#year#,'12') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt12
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y%m') <![CDATA[<=]]> CONCAT(#year#, '12') AND CONCAT(#year#,'12') <![CDATA[<=]]> DATE_FORMAT(NOW(), '%Y%m') THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) AS price12
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y') <![CDATA[<=]]> #year# THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt
+				, SUM(CASE WHEN DATE_FORMAT(a.inputDate, '%Y') <![CDATA[<=]]> #year# THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) AS price
+			FROM 	NK_STOCK_PRODUCT a, NK_STOCK_ITEM b
+			WHERE 	a.itemCode IS NOT NULL
+			AND 	a.outputDate IS NULL
+			AND	a.itemCode != ''
+			AND	a.itemCode = b.itemCode
+			GROUP BY a.itemCode
+			ORDER BY a.itemCode
+		) b
+		WHERE a.itemName = b.itemName
+	</select>
+	
+	<select id="KmsStockDAO.selectStockStatsBuy" resultClass="egovMap">
+		SELECT
+			b.itemName
+			, SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '01' THEN 1 ELSE 0 END) AS cnt01
+			, ROUND(SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '01' THEN a.itemPrice ELSE 0 END) / 1000) AS price01
+			, SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '02' THEN 1 ELSE 0 END) AS cnt02
+			, ROUND(SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '02' THEN a.itemPrice ELSE 0 END) / 1000) AS price02
+			, SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '03' THEN 1 ELSE 0 END) AS cnt03
+			, ROUND(SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '03' THEN a.itemPrice ELSE 0 END) / 1000) AS price03
+			, SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '04' THEN 1 ELSE 0 END) AS cnt04
+			, ROUND(SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '04' THEN a.itemPrice ELSE 0 END) / 1000) AS price04
+			, SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '05' THEN 1 ELSE 0 END) AS cnt05
+			, ROUND(SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '05' THEN a.itemPrice ELSE 0 END) / 1000) AS price05
+			, SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '06' THEN 1 ELSE 0 END) AS cnt06
+			, ROUND(SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '06' THEN a.itemPrice ELSE 0 END) / 1000) AS price06
+			, SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '07' THEN 1 ELSE 0 END) AS cnt07
+			, ROUND(SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '07' THEN a.itemPrice ELSE 0 END) / 1000) AS price07
+			, SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '08' THEN 1 ELSE 0 END) AS cnt08
+			, ROUND(SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '08' THEN a.itemPrice ELSE 0 END) / 1000) AS price08
+			, SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '09' THEN 1 ELSE 0 END) AS cnt09
+			, ROUND(SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '09' THEN a.itemPrice ELSE 0 END) / 1000) AS price09
+			, SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '10' THEN 1 ELSE 0 END) AS cnt10
+			, ROUND(SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '10' THEN a.itemPrice ELSE 0 END) / 1000) AS price10
+			, SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '11' THEN 1 ELSE 0 END) AS cnt11
+			, ROUND(SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '11' THEN a.itemPrice ELSE 0 END) / 1000) AS price11
+			, SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '12' THEN 1 ELSE 0 END) AS cnt12
+			, ROUND(SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '12' THEN a.itemPrice ELSE 0 END) / 1000) AS price12
+			, SUM(1) AS cnt
+			, ROUND(SUM(a.itemPrice) / 1000) AS price
+		FROM
+		 	NK_STOCK_INPUT2 a, NK_STOCK_ITEM b
+		WHERE
+		 	DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%Y') = #year#
+			AND	a.itemCode = b.itemCode 
+		GROUP BY
+			a.itemCode
+		ORDER BY
+			a.itemCode
+	</select>
+	
+	<select id="KmsStockDAO.selectStockStatsSell" resultClass="egovMap">
+		SELECT	b.itemName
+			, SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '01' THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt01
+			, ROUND(SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '01' THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) / 1000) AS price01
+			, SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '02' THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt02
+			, ROUND(SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '02' THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) / 1000) AS price02
+			, SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '03' THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt03
+			, ROUND(SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '03' THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) / 1000) AS price03
+			, SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '04' THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt04
+			, ROUND(SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '04' THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) / 1000) AS price04
+			, SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '05' THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt05
+			, ROUND(SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '05' THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) / 1000) AS price05
+			, SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '06' THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt06
+			, ROUND(SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '06' THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) / 1000) AS price06
+			, SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '07' THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt07
+			, ROUND(SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '07' THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) / 1000) AS price07
+			, SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '08' THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt08
+			, ROUND(SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '08' THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) / 1000) AS price08
+			, SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '09' THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt09
+			, ROUND(SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '09' THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) / 1000) AS price09
+			, SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '10' THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt10
+			, ROUND(SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '10' THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) / 1000) AS price10
+			, SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '11' THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt11
+			, ROUND(SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '11' THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) / 1000) AS price11
+			, SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '12' THEN CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END ELSE 0 END) AS cnt12
+			, ROUND(SUM(CASE WHEN DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%m') = '12' THEN CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END ELSE 0 END) / 1000) AS price12
+			, SUM(CASE STATUS WHEN 1 THEN 1 WHEN 5 THEN -1 ELSE 0 END) AS cnt
+			, ROUND(SUM(CASE STATUS WHEN 1 THEN a.itemPrice WHEN 5 THEN a.itemPrice * -1 ELSE 0 END) / 1000) AS price
+		FROM 	NK_STOCK_PRODUCT a, NK_STOCK_ITEM b
+		WHERE 	DATE_FORMAT(STR_TO_DATE(a.inputDate, '%Y-%m-%d'), '%Y') = #year#
+		AND	a.itemCode IS NOT NULL
+		AND	a.itemCode != ''
+		AND	a.itemCode = b.itemCode
+		GROUP BY a.itemCode
+		ORDER BY a.itemCode
+	</select>
+
+	<select id="KmsStockDAO.selectStockStatusList" resultMap="stockStatusList" >
+		SELECT a.itemCode
+	      ,a.itemName
+	      ,a.categoryCode
+	      ,a.itemPrice
+	      ,a.categoryName
+	      ,a.division
+	      ,a.count1
+	      ,a.count2
+	      ,(a.count2 + a.count3 + a.count4) AS count3
+	      ,(a.BUY - (a.count1 + a.count3)) AS count4
+	      ,a.count5
+	      ,IFNULL(a.totalPrice,0) AS totalPrice
+	      ,IFNULL(ROUND(a.totalPrice / a.buy),0) AS avg_price
+	  FROM(
+		SELECT i.itemCode, i.itemName, i.categoryCode, i.itemPrice, c.categoryName, c.division,
+	            (SELECT COUNT(*)
+		          FROM NK_STOCK_INPUT2 INP
+		         WHERE INP.categoryCode = i.categoryCode
+		           AND INP.itemCode = i.itemCode ) AS BUY,
+	            (SELECT IFNULL(SUM(CASE WHEN INP.STATUS = 1 THEN 1 ELSE 0 END),0)
+			      FROM NK_STOCK_INPUT2 INP
+	             WHERE INP.itemCode = I.itemCode
+	             AND INP.categoryCode = C.categoryCode) AS count1,
+		       (SELECT IFNULL(SUM(CASE WHEN INP.STATUS = 2 THEN 1 ELSE 0 END),0)
+			      FROM NK_STOCK_INPUT2 INP
+	             WHERE INP.itemCode = I.itemCode
+	             AND INP.categoryCode = C.categoryCode) AS count2,
+	             (SELECT IFNULL(SUM(CASE WHEN INP.STATUS = 3 THEN 1 ELSE 0 END),0)
+			      FROM NK_STOCK_INPUT2 INP
+	             WHERE INP.itemCode = I.itemCode
+	             AND INP.categoryCode = C.categoryCode) AS count3,
+	             (SELECT IFNULL(SUM(CASE WHEN INP.STATUS = 4 THEN 1 ELSE 0 END),0)
+			      FROM NK_STOCK_INPUT2 INP
+	             WHERE INP.itemCode = I.itemCode
+	             AND INP.categoryCode = C.categoryCode) AS count4,
+	             (SELECT IFNULL(SUM(CASE WHEN INP.STATUS = 5 THEN 1 ELSE 0 END),0)
+			      FROM NK_STOCK_INPUT2 INP
+	             WHERE INP.itemCode = I.itemCode
+	              AND INP.categoryCode = C.categoryCode) AS count5,
+	              (SELECT SUM(INP.itemPrice)
+			      FROM NK_STOCK_INPUT2 INP
+	             WHERE INP.itemCode = I.itemCode
+	              AND INP.categoryCode = C.categoryCode
+	              AND STATUS != 1) AS totalPrice
+		  FROM NK_STOCK_ITEM i, NK_STOCK_CATEGORY c
+		 WHERE i.categoryCode = c.categoryCode
+		 ORDER BY c.division ASC, i.categoryCode ASC, i.itemCode ASC) a
+	</select>
+	
+	<select id="KmsStockDAO.selectStockSalesList" resultMap="stockStatusList" >
+		SELECT a.itemCode
+	      ,a.itemName
+	      ,a.categoryCode
+	      ,a.itemPrice
+	      ,a.categoryName
+	      ,a.division
+	      ,a.count1
+	      ,a.count2
+	      ,(a.count2 + a.count3 + a.count4) AS count3
+	      ,(a.BUY - (a.count1 + a.count3)) AS count4
+	      ,a.count5
+	      ,IFNULL(a.totalPrice,0) AS totalPrice
+	      ,IFNULL(ROUND(a.totalPrice / a.buy),0) AS avg_price
+	  FROM(
+		SELECT i.itemCode, i.itemName, i.categoryCode, i.itemPrice, c.categoryName, c.division,
+	            (SELECT COUNT(*)
+		          FROM NK_STOCK_INPUT2 INP
+		         WHERE INP.categoryCode = i.categoryCode
+		           AND INP.itemCode = i.itemCode ) AS BUY,
+	            (SELECT IFNULL(SUM(CASE WHEN INP.STATUS = 1 THEN 1 ELSE 0 END),0)
+			      FROM NK_STOCK_INPUT2 INP
+	             WHERE INP.itemCode = I.itemCode
+	             AND INP.categoryCode = C.categoryCode) AS count1,
+		       (SELECT IFNULL(SUM(CASE WHEN INP.STATUS = 2 THEN 1 ELSE 0 END),0)
+			      FROM NK_STOCK_INPUT2 INP
+	             WHERE INP.itemCode = I.itemCode
+	             AND INP.categoryCode = C.categoryCode) AS count2,
+	             (SELECT IFNULL(SUM(CASE WHEN INP.STATUS = 3 THEN 1 ELSE 0 END),0)
+			      FROM NK_STOCK_INPUT2 INP
+	             WHERE INP.itemCode = I.itemCode
+	             AND INP.categoryCode = C.categoryCode) AS count3,
+	             (SELECT IFNULL(SUM(CASE WHEN INP.STATUS = 4 THEN 1 ELSE 0 END),0)
+			      FROM NK_STOCK_INPUT2 INP
+	             WHERE INP.itemCode = I.itemCode
+	             AND INP.categoryCode = C.categoryCode) AS count4,
+	             (SELECT IFNULL(SUM(CASE WHEN INP.STATUS = 5 THEN 1 ELSE 0 END),0)
+			      FROM NK_STOCK_INPUT2 INP
+	             WHERE INP.itemCode = I.itemCode
+	              AND INP.categoryCode = C.categoryCode) AS count5,
+	              (SELECT SUM(INP.itemPrice)
+			      FROM NK_STOCK_INPUT2 INP
+	             WHERE INP.itemCode = I.itemCode
+	              AND INP.categoryCode = C.categoryCode
+	              AND STATUS = 1) AS totalPrice
+		  FROM NK_STOCK_ITEM i, NK_STOCK_CATEGORY c
+		 WHERE i.categoryCode = c.categoryCode
+		 ORDER BY c.division ASC, i.categoryCode ASC, i.itemCode ASC) a
+	</select>
+	
+	<select id="KmsStockDAO.selectStockDetailList" parameterClass="stockVO" resultClass="egovMap">
+	SELECT
+		t.*
+		, cod.code_nm AS sw_nm1
+		, sw.serial_no AS sw_serial_no1
+		, cod2.code_nm AS sw_nm2
+		, sw2.serial_no AS sw_serial_no2
+		, cod3.code_nm AS sw_nm3
+		, sw3.serial_no AS sw_serial_no3
+		, cod4.code_nm AS sw_nm4
+		, sw4.serial_no AS sw_serial_no4
+	FROM
+		(
+			SELECT
+				stock.no AS stock_no
+				, stock.serial_no
+				, CASE category.division
+					WHEN 'H' THEN 'H/W'
+					ELSE 'S/W'
+				END AS type
+				, item.item_name
+				, '' AS install_product
+				, stock.input_date
+				, history.s_date AS output_date
+				, history.enduser AS end_user
+				, history.install_place
+				, history.status
+				, stock.temp_saver_no
+				, cod.code_nm AS status_nm
+				, history.note
+			FROM
+				tbl_stock stock
+				INNER JOIN tbl_stock_item item
+				ON stock.item_no = item.no
+				INNER JOIN tbl_stock_category category
+				ON item.category_no = category.no
+				INNER JOIN comtccmmndetailcode cod
+				ON cod.code_id = 'KMS026'
+				AND stock.status = cod.code
+				LEFT JOIN tbl_stock_history history
+				ON stock.no = history.stock_no
+				AND history.e_date IS NULL
+				AND history.status != 0 
+			WHERE
+				TRUE
+				<isNotEmpty property="itemCode">
+				AND CASE #itemCode#
+					WHEN 'all' THEN TRUE
+					ELSE item.no = #itemCode#
+					END
+				</isNotEmpty>
+				<isNotEmpty property="type">
+				AND CASE #type#
+					WHEN 'sell' THEN stock.status = 1
+					WHEN 'stock' THEN stock.status != 1
+					ELSE TRUE
+					END
+				</isNotEmpty>
+			GROUP BY
+				stock.no
+			LIMIT  #recordCountPerPage# OFFSET #firstIndex#
+		) t
+		LEFT JOIN tbl_stock_install ins
+		ON t.stock_no = ins.hw_no
+		AND ins.typ = 1
+		AND ins.use_at = 'Y'
+		LEFT JOIN tbl_stock sw
+		ON ins.sw_no = sw.no
+		LEFT JOIN comtccmmndetailcode cod
+		ON cod.code_id = 'KMS031'
+		AND ins.typ = cod.code
+		
+		LEFT JOIN tbl_stock_install ins2
+		ON t.stock_no = ins2.hw_no
+		AND ins2.typ = 2
+		AND ins2.use_at = 'Y'
+		LEFT JOIN tbl_stock sw2
+		ON ins2.sw_no = sw2.no
+		LEFT JOIN comtccmmndetailcode cod2
+		ON cod2.code_id = 'KMS031'
+		AND ins2.typ = cod2.code
+		
+		LEFT JOIN tbl_stock_install ins3
+		ON t.stock_no = ins3.hw_no
+		AND ins3.typ = 3
+		AND ins3.use_at = 'Y'
+		LEFT JOIN tbl_stock sw3
+		ON ins3.sw_no = sw3.no
+		LEFT JOIN comtccmmndetailcode cod3
+		ON cod3.code_id = 'KMS031'
+		AND ins3.typ = cod3.code
+		
+		LEFT JOIN tbl_stock_install ins4
+		ON t.stock_no = ins4.hw_no
+		AND ins4.typ = 4
+		AND ins4.use_at = 'Y'
+		LEFT JOIN tbl_stock sw4
+		ON ins4.sw_no = sw4.no
+		LEFT JOIN comtccmmndetailcode cod4
+		ON cod4.code_id = 'KMS031'
+		AND ins4.typ = cod4.code
+	GROUP BY
+		t.stock_no
+	</select>
+	
+	<select id="KmsStockDAO.selectOldStockDetailList" parameterClass="stockVO" resultClass="egovMap">
+		SELECT 	
+			CASE INP.categoryCode 
+				WHEN 5000 THEN 'S/W' 
+				ELSE 'H/W' END 						AS TYPE
+			, IFNULL(ITM.itemName, '') 				AS itemName
+			, IFNULL(INP.serialNo, '') 				AS serialNo
+			, CASE INP.categoryCode 
+				WHEN 5000	THEN INS.hwSerialNo 
+							ELSE INS.swSerialNo 
+				END 								AS installProduct
+			, IFNULL(INP.inputDate, '') 			AS inputDate
+			, IFNULL(PRO.inputDate, '')				AS outputDate  
+			, IFNULL(PRO.endUser, '') 				AS endUser
+			, IFNULL(PRO.installPlace, '') 			AS installPlace
+			, CASE INP.STATUS 
+				WHEN 0	THEN '재고' 
+				WHEN 1	THEN '판매' 
+				WHEN 2	THEN '데모' 
+				WHEN 3	THEN 'RMA' 
+				WHEN 5	THEN '재입고' 
+						ELSE '기타' 
+				END 								AS STATUS
+			, IFNULL(INP.note, '') 					AS note
+		FROM 	
+			NK_STOCK_INPUT2 INP 
+			INNER JOIN NK_STOCK_ITEM ITM		ON INP.itemCode = ITM.itemCode 
+			INNER JOIN NK_STOCK_CATEGORY CAT	ON INP.categoryCode = CAT.categoryCode 
+			INNER JOIN NK_STOCK_PRODUCT PRO 	ON INP.stockIdx = PRO.p_idx 
+			LEFT JOIN NK_STOCK_INSTALL INS		ON INP.serialNo = CASE WHEN INP.categoryCode = 5000 THEN INS.swSerialNo ELSE INS.hwSerialNo END
+		WHERE 	
+			outputDate IS NULL 
+			AND CASE #itemCode# 
+					WHEN 'all' 	THEN INP.itemCode = INP.itemCode 
+								ELSE INP.itemCode = #itemCode#
+					END
+			AND CASE #type# 
+					WHEN 'sell'		THEN INP.status = 1 
+					WHEN 'stock'	THEN INP.STATUS != 1 
+									ELSE 1 = 1
+					END
+		ORDER BY 
+			itemName
+			, STATUS DESC
+			, outputDate DESC
+			, inputDate DESC
+			, serialNo DESC
+		LIMIT  #recordCountPerPage# OFFSET #firstIndex#
+	</select>
+	
+	<select id="KmsStockDAO.selectStockDetailListCount" parameterClass="stockVO" resultClass="egovMap">
+	SELECT
+		COUNT(k.stock_no) AS cnt
+	FROM
+	(
+		SELECT
+			stock.no AS stock_no
+		FROM
+			tbl_stock stock
+			INNER JOIN tbl_stock_item item
+			ON stock.item_no = item.no
+			INNER JOIN tbl_stock_category category
+			ON item.category_no = category.no
+			INNER JOIN comtccmmndetailcode cod
+			ON cod.code_id = 'KMS026'
+			AND stock.status = cod.code
+			LEFT JOIN tbl_stock_history history
+			ON stock.no = history.stock_no
+			AND history.e_date IS NULL
+			AND history.status != 0 
+		WHERE
+			TRUE
+			<isNotEmpty property="itemCode">
+			AND CASE #itemCode#
+				WHEN 'all' THEN TRUE
+				ELSE item.no = #itemCode#
+				END
+			</isNotEmpty>
+			<isNotEmpty property="type">
+			AND CASE #type#
+				WHEN 'sell' THEN stock.status = 1
+				WHEN 'stock' THEN stock.status != 1
+				ELSE TRUE
+				END
+			</isNotEmpty>
+		GROUP BY
+			stock.no
+	) k
+	</select>
+	
+	<select id="KmsStockDAO.selectOldStockDetailListCount" parameterClass="stockVO" resultClass="egovMap">
+		SELECT 	
+			COUNT(1) AS cnt
+		FROM 	
+			NK_STOCK_INPUT2 INP 
+			INNER JOIN NK_STOCK_ITEM ITM		ON INP.itemCode = ITM.itemCode 
+			INNER JOIN NK_STOCK_CATEGORY CAT	ON INP.categoryCode = CAT.categoryCode 
+			INNER JOIN NK_STOCK_PRODUCT PRO 	ON INP.stockIdx = PRO.p_idx 
+			LEFT JOIN NK_STOCK_INSTALL INS		ON INP.serialNo = CASE WHEN INP.categoryCode = 5000 THEN INS.swSerialNo ELSE INS.hwSerialNo END
+		WHERE 	
+			outputDate IS NULL 
+			AND CASE #itemCode# 
+					WHEN 'all' 	THEN INP.itemCode = INP.itemCode 
+								ELSE INP.itemCode = #itemCode#
+					END
+			AND CASE #type# 
+					WHEN 'sell'		THEN INP.status = 1 
+					WHEN 'stock'	THEN INP.STATUS != 1 
+									ELSE 1 = 1
+					END
+	</select>
+	
+	<select id="KmsStockDAO.selectItemInfo" resultClass="egovMap">
+	SELECT
+		item.no AS item_no
+		, item.item_name
+		, category.division
+		, category.category_name
+		, IFNULL(AVG(stock.expense), 0) AS expense_avg
+	FROM
+		tbl_stock_item item
+		LEFT JOIN tbl_stock_category category
+		ON item.category_no = category.no
+		LEFT JOIN tbl_stock stock
+		ON item.no = stock.item_no
+	WHERE
+		item.no = #itemCode#
+	GROUP BY
+		item.no
+	</select>
+	
+	<select id="KmsStockDAO.selectStockInfo" resultClass="egovMap">
+	SELECT
+		stock.*
+		, usr.user_nm
+	FROM
+		tbl_stock stock
+		LEFT JOIN tbl_userinfo usr
+		ON stock.input_user_no = usr.no
+	WHERE
+		stock.no = #stockNo#
+	</select>
+	
+	<select id="KmsStockDAO.selectHistoryList" resultClass="egovMap">
+	SELECT
+		history.*
+		, usr.user_nm
+		, cod.code_nm AS status_nm
+	FROM
+		tbl_stock_history history
+		LEFT JOIN tbl_userinfo usr
+		ON history.user_no = usr.no
+		LEFT JOIN comtccmmndetailcode cod
+		ON history.status = cod.code
+		AND cod.code_id = 'KMS026'
+	WHERE
+		history.stock_no = #stockNo#
+	ORDER BY
+		history.reg_date ASC
+	</select>
+	
+	<select id="KmsStockDAO.checkStockSerialNo" resultClass="java.lang.Integer">
+	SELECT
+		COUNT(*)
+	FROM
+		TBL_STOCK
+	WHERE
+		SERIAL_NO = #serialNo#
+	</select>
+	
+	<insert id="KmsStockDAO.insertStockInstall">
+	INSERT
+		tbl_stock_install
+		(
+			hw_no, sw_no, typ
+		)
+		VALUES
+		(
+			#hwNo#, #swNo#, #typ#
+		)
+	</insert>
+	
+	<update id="KmsStockDAO.deleteStockInstall">
+	UPDATE
+		tbl_stock_install
+	SET
+		use_at = 'N'
+	WHERE
+		NO = #installNo#
+	</update>
+	
+	<select id="KmsStockDAO.selectStockInstallL" resultClass="egovMap">
+	SELECT
+		ins.no AS install_no
+		, sw.no AS swNo
+		, item.item_name
+		, sw.serial_no
+		, ins.typ
+		, cod.code_nm AS typ_nm
+	FROM
+		tbl_stock hw
+		INNER JOIN tbl_stock_install ins
+		ON ins.hw_no = hw.no
+		AND ins.use_at = 'Y'
+		INNER JOIN tbl_stock sw
+		ON ins.sw_no = sw.no
+		INNER JOIN tbl_stock_item item
+		ON sw.item_no = item.no
+		INNER JOIN comtccmmndetailcode cod
+		ON cod.code_id = 'KMS031'
+		AND ins.typ = cod.code
+	WHERE
+		hw.no = #stockNo#
+	ORDER BY
+		ins.typ
+	</select>
+</sqlMap>

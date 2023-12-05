@@ -1,0 +1,462 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>(주)도전하는사람들 KMS-지식관리시스템</title>
+<link rel="stylesheet" href="../common/css/default.css" type="text/css" media="all" />
+<script type="text/javascript" src="../common/js/default.js"></script>
+<script type="text/javascript" src="../common/js/smenu.js"></script>
+</head>
+
+<body>
+
+<div id="wrap">
+	<!-- S: header -->
+	<div id="header">
+		<div id="logo_util">
+			<h1><img src="${path.imagePath}/inc/top_logo.gif" alt="KMS 지식관리시스템"/></h1>
+
+			<div class="search">
+				<ul>
+					<li class="option_txt">사원<span class="pL7"></span><input type="radio" name="search" value="employee"><span class="pL7"></span>정보<span class="pL7"></span><input type="radio" name="search" value="information" checked></li>
+					<li class="search_box"><input type="text" name="search_txt" class="search_txt"/></li>
+					<li><img src="${path.imagePath}/btn/btn_search.gif" alt="검색"/></li>
+				</ul>
+			</div>
+
+			<div class="utility">
+				<ul>
+					<li><img src="${path.imagePath}/inc/util_admin.gif" alt="관리자페이지"/></li>
+					<li><img src="${path.imagePath}/inc/util_mail.gif" alt="웹메일"/></li>
+					<li><img src="${path.imagePath}/inc/util_video.gif" alt="화상회의"/></li>
+					<li><img src="${path.imagePath}/inc/util_logo.gif" alt="도사/새하페이지"/></li>
+				</ul>
+			</div>
+		</div>
+		<div id="gnb_menu">
+			<!-- S: GNB -->
+			<ul id="gnbmenu">
+				<li class="gnb_first"><a href="#" id="top1m1"><img src="${path.imagePath}/inc/gnb/gnb01.gif" alt="현황판" /></a>
+					<div id="snbmenu_m1">
+						<ul>
+							<li class="snb_topBg"></li>
+							<li class="snb_cenBg">
+								<ul class="snbmenu_txt">
+									<li id="snbmenu01m1">기안하기</li>
+									<li id="snbmenu01m2">결재하기</li>
+									<li id="snbmenu01m3">결재현황보기</li>
+									<li id="snbmenu01m4">완료문서보기</li>
+									<li id="snbmenu01m5">보관된문서</li>
+								</ul>
+							</li>
+							<li class="snb_botBg"></li>
+						</ul>
+					</div>
+				</li>
+				<li><a href="#" id="top1m2"><img src="${path.imagePath}/inc/gnb/gnb02.gif" alt="업무공유" /></a>
+					<div id="snbmenu_m2">
+						<ul>
+							<li class="snb_topBg"></li>
+							<li class="snb_cenBg">
+								<ul class="snbmenu_txt">
+									<li id="snbmenu02m1">기안하기</li>
+									<li id="snbmenu02m2">결재하기</li>
+									<li id="snbmenu02m3">결재현황보기</li>
+									<li id="snbmenu02m4">완료문서보기</li>
+									<li id="snbmenu02m5">보관된문서</li>
+								</ul>
+							</li>
+							<li class="snb_botBg"></li>
+						</ul>
+					</div>				
+				</li>
+				<li><a href="#" id="top1m3"><img src="${path.imagePath}/inc/gnb/gnb03.gif" alt="전자결제" /></a>
+					<div id="snbmenu_m3">
+						<ul>
+							<li class="snb_topBg"></li>
+							<li class="snb_cenBg">
+								<ul class="snbmenu_txt">
+									<li id="snbmenu03m1">기안하기</li>
+									<li id="snbmenu03m2">결재하기</li>
+									<li id="snbmenu03m3">결재현황보기</li>
+									<li id="snbmenu03m4">완료문서보기</li>
+									<li id="snbmenu03m5">보관된문서</li>
+								</ul>
+							</li>
+							<li class="snb_botBg"></li>
+						</ul>
+					</div>
+				</li>
+				<li><a href="#" id="top1m4"><img src="${path.imagePath}/inc/gnb/gnb04.gif" alt="커뮤니티" /></a>
+					<div id="snbmenu_m4">
+						<ul>
+							<li class="snb_topBg"></li>
+							<li class="snb_cenBg">
+								<ul class="snbmenu_txt">
+									<li id="snbmenu04m1">게시판</li>
+									<li id="snbmenu04m2">일정공유</li>
+									<li id="snbmenu04m3">사내메일</li>
+									<li id="snbmenu04m4">쪽지</li>
+								</ul>
+							</li>
+							<li class="snb_botBg"></li>
+						</ul>
+					</div>
+				</li>
+				<li><a href="#" id="top1m5"><img src="${path.imagePath}/inc/gnb/gnb05.gif" alt="경영정보" /></a>
+					<div id="snbmenu_m5">
+						<ul>
+							<li class="snb_topBg"></li>
+							<li class="snb_cenBg">
+								<ul class="snbmenu_txt">
+									<li id="snbmenu05m1">기안하기</li>
+									<li id="snbmenu05m2">결재하기</li>
+									<li id="snbmenu05m3">결재현황보기</li>
+									<li id="snbmenu05m4">완료문서보기</li>
+									<li id="snbmenu05m5">보관된문서</li>
+								</ul>
+							</li>
+							<li class="snb_botBg"></li>
+						</ul>
+					</div>				
+				</li>
+				<li><a href="#" id="top1m6"><img src="${path.imagePath}/inc/gnb/gnb06.gif" alt="업무지원" /></a>
+					<div id="snbmenu_m6">
+						<ul>
+							<li class="snb_topBg"></li>
+							<li class="snb_cenBg">
+								<ul class="snbmenu_txt">
+									<li id="snbmenu06m1">자원관리</li>
+									<li id="snbmenu06m2">각종신청</li>
+									<li id="snbmenu06m3">회사생활안내</li>
+									<li id="snbmenu06m4">운영참여</li>
+								</ul>
+							</li>
+							<li class="snb_botBg"></li>
+						</ul>
+					</div>				
+				</li>
+				<li class="gnb_last"><a href="#" id="top1m7"><img src="${path.imagePath}/inc/gnb/gnb07.gif" alt="인사정보" /></a>
+					<div id="snbmenu_m7">
+						<ul>
+							<li class="snb_topBg"></li>
+							<li class="snb_cenBg">
+								<ul class="snbmenu_txt">
+									<li id="snbmenu07m1">사원정보</li>
+									<li id="snbmenu07m2">근무현황</li>
+									<li id="snbmenu07m3">복리후생</li>
+									<li id="snbmenu07m4">근태정보</li>
+								</ul>
+							</li>
+							<li class="snb_botBg"></li>
+						</ul>
+					</div>				
+				</li>
+			</ul>
+			<script type="text/javascript">//메뉴시작위치선정
+         
+			var sMenuTopMain = "";
+			var sMenuTopSub = "";
+			 
+			</script><noscript></noscript>
+			 
+			<script type="text/javascript">initTopMenu();//1,2차메뉴롤오버함수할당</script><noscript></noscript>
+			<script type="text/javascript">top2menuHide(4);//페이지로드시현재위치1차메뉴활성</script><noscript></noscript>
+
+			<!-- E: GNB -->
+			<!-- S: LOGIN_INFO -->
+			<ul class="login_info">
+				<li class="mem_txt">문성숙님</li>
+				<li class="login_time">(08:00)</li>
+				<li><img src="${path.imagePath}/btn/btn_mypage.gif" alt="MYPAGE"/></li>
+				<li><img src="${path.imagePath}/btn/btn_logout.gif" alt="LOGOUT"/></li>
+			</ul>
+			<!-- E: LOGIN_INFO -->
+		</div>
+	</div>
+	<!-- E: header -->
+
+	<!-- S: container -->
+	<div id="container">
+		<ul class="container_bg">
+			<li class="container_left"></li>
+			<li class="container_right"></li>
+		</ul>
+		<!-- S: contents -->
+		<div id="contents">
+
+			<!-- S: left -->
+			<div id="left">
+				<!--체크리스트-->				
+				<div class="left_chk">
+					<h2>체크리스트 <div class="replay"><img src="${path.imagePath}/btn/btn_replay.gif" alt="새로고침"/></div></h2>
+					<ul class="chk_menu">
+						<li>업무연락 <span class="txt_blue">[3]</span> <img src="${path.imagePath}/btn/btn_write01.gif" alt="글쓰기"/></li>
+						<li>전자결재 <span class="txt_blue">[1]</span> <img src="${path.imagePath}/btn/btn_write01.gif" alt="글쓰기"/></li>
+						<li>사내메일 <span class="txt_blue">[0]</span> <img src="${path.imagePath}/btn/btn_write01.gif" alt="글쓰기"/></li>
+						<li>커뮤니티 <span class="txt_blue">[2]</span> <img src="${path.imagePath}/btn/btn_write01.gif" alt="글쓰기"/></li>
+					</ul>
+				</div>
+				<ul class="left_bg">
+					<li class="left_bg_left"></li>
+					<li class="left_bg_right"></li>
+				</ul>
+				<div class="left_menu">
+					<h3>커뮤니티<div class="arrow_down"><img src="${path.imagePath}/inc/arrow_down01.gif" alt="화살표"/></div></h3>
+					<ul class="menu_list">
+						<li>커뮤니티현황</li>
+						<li>게시판
+							<ul class="smenu">
+								<li>미열람게시물 [00]</li>
+								<li>자유게시판 <img src="${path.imagePath}/btn/btn_write01.gif" alt="글쓰기"/></li>
+								<li>토론 <img src="${path.imagePath}/btn/btn_write01.gif" alt="글쓰기"/></li>
+								<li>경조 <img src="${path.imagePath}/btn/btn_write01.gif" alt="글쓰기"/></li>
+							</ul>
+						</li>
+						<li>일정공유</li>
+					</ul>
+				</div>
+			</div>
+			<!-- E: left -->
+
+			<!-- S: center -->
+			<div id="center">
+				<div class="path_navi">
+					<ul>
+						<li class="stitle">커뮤니티 현황</li>
+						<li class="navi">홈 > 커뮤니티 > 커뮤니티현황</li>
+					</ul>
+				</div>
+				
+				<span class="stxt">커뮤니티의 게시물 현황을 확인할 수 있습니다.</span>
+
+				<!-- S: section -->
+				<div class="section01">
+
+					<p class="th_stitle">자유게시판 최근/미열람 목록 <span class="th_plus">더보기</span></p>
+					<div class="boardList mB20">
+						<table cellpadding="0" cellspacing="0" summary="각 게시물의 번호,제목,작성자,등록일,첨부,조회를 볼수 있고 제목 링크를 통해서 게시물 상세 내용으로 이동합니다.">
+						<caption>공지사항</caption>
+						<colgroup><col class="col5" /><col class="col40" /><col width="px" /><col class="col120" /><col class="col90" /><col class="col50" /><col class="col5" /></colgroup>
+						<thead>
+							<tr>
+							<th class="th_left"> </th>
+							<th scope="col">번호</th>
+							<th scope="col">제목</th>
+							<th scope="col">작성자</th>
+							<th scope="col">등록일</th>
+							<th scope="col">조회수</th>
+							<th class="th_right"> </th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td colspan="2">1</td>
+								<td>제목입니다</td>
+								<td>주도전(dosanet)</td>
+								<td>2011.00.31</td>
+								<td colspan="2">10</td>
+							</tr>
+							<tr>
+								<td colspan="2">1</td>
+								<td>제목입니다</td>
+								<td>주도전(dosanet)</td>
+								<td>2011.00.31</td>
+								<td colspan="2">10</td>
+							</tr>
+							<tr>
+								<td colspan="2">1</td>
+								<td>제목입니다</td>
+								<td>주도전(dosanet)</td>
+								<td>2011.00.31</td>
+								<td colspan="2">10</td>
+							</tr>
+							<tr>
+								<td colspan="2">1</td>
+								<td>제목입니다</td>
+								<td>주도전(dosanet)</td>
+								<td>2011.00.31</td>
+								<td colspan="2">10</td>
+							</tr>
+							<tr>
+								<td colspan="2">1</td>
+								<td>제목입니다</td>
+								<td>주도전(dosanet)</td>
+								<td>2011.00.31</td>
+								<td colspan="2">10</td>
+							</tr>
+						</tbody>
+						</table>
+					</div>
+
+					<p class="th_stitle">사내메일 최근/미열람 목록 <span class="th_plus">더보기</span></p>
+					<div class="boardList">
+						<table cellpadding="0" cellspacing="0" summary="각 게시물의 번호,제목,작성자,등록일,첨부,조회를 볼수 있고 제목 링크를 통해서 게시물 상세 내용으로 이동합니다.">
+						<caption>공지사항</caption>
+						<colgroup><col class="col5" /><col class="col120" /><col width="px" /><col class="col120" /><col class="col5" /></colgroup>
+						<thead>
+							<tr>
+							<th class="th_left"> </th>
+							<th scope="col">보낸사람</th>
+							<th scope="col">제목</th>
+							<th scope="col">수신일자</th>
+							<th class="th_right"> </th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td colspan="2">주도전(dosanet)</td>
+								<td>제목입니다</td>
+								<td colspan="2">2011.00.31</td>
+							</tr>
+							<tr>
+								<td colspan="2">주도전(dosanet)</td>
+								<td>제목입니다</td>
+								<td colspan="2">2011.00.31</td>
+							</tr>
+							<tr>
+								<td colspan="2">주도전(dosanet)</td>
+								<td>제목입니다</td>
+								<td colspan="2">2011.00.31</td>
+							</tr>
+							<tr>
+								<td colspan="2">주도전(dosanet)</td>
+								<td>제목입니다</td>
+								<td colspan="2">2011.00.31</td>
+							</tr>
+							<tr>
+								<td colspan="2">주도전(dosanet)</td>
+								<td>제목입니다</td>
+								<td colspan="2">2011.00.31</td>
+							</tr>
+						</tbody>
+						</table>
+					</div>
+					<!-- 하단 숫자 시작 -->
+					<div class="paginate">
+	                		<a href="#"><img src="${path.imagePath}/btn/btn_first.gif" alt="처음페이지" /></a>
+	                		<a href="#" class="pR10"><img src="${path.imagePath}/btn/btn_prev.gif" alt="이전 페이지"></a>
+	                		 1 2 3 4 5 6 7 8 9 10
+							<a href="#" class="pL10"><img src="${path.imagePath}/btn/btn_next.gif" alt="다음 페이지"></a>
+	                		<a href="#"><img src="${path.imagePath}/btn/btn_end.gif" alt="마지막 페이지"></a>
+					</div>
+					<!-- 하단 숫자 끝 -->
+
+					<!-- 하단 검색창 시작 -->
+					<fieldset>
+					<legend>하단 검색</legend>
+	                    <div class="bot_search mT20">
+							<ul>
+								<li class="option_txt">사원<span class="pL7"></span><input type="radio" name="search" value="employee"><span class="pL7"></span>정보<span class="pL7"></span><input type="radio" name="search" value="information" checked></li>
+								<li class="search_box"><input type="text" name="search_txt" class="search_txt02"/></li>
+								<li><img src="${path.imagePath}/btn/btn_search02.gif" alt="검색"/></li>
+                        	</ul>
+	                    </div>
+	                </fieldset>
+	                <!-- 하단 검색창 끝 -->
+
+				</div>
+				<!-- E: section -->
+
+			</div>
+			<!-- E: center -->				
+
+			<span id="right_arrow"><a href="#" onclick="javascript:hidden_right()"><img src="${path.imagePath}/inc/arrow_right.gif"/></a></span>
+			<!-- S: right -->
+			<div id="right" style="display:block">
+				<!--달력-->
+				<div class="calendar">
+					<img src="${path.imagePath}/inc/calendar.gif"/>
+				</div>
+				<!--일정/할일-->
+				<div class="schedule">
+					<dl>
+						<dt>2011.08.04 (목) <div class="arrow_down02"><img src="${path.imagePath}/inc/arrow_down02.gif"></div></dt>
+						<dd>
+							<ul class="detail_schedule">
+								<li>일정
+									<ul class="sdetail">
+										<li> - 바비큐파티</li>
+										<li> - 건강검진</li>
+									</ul>
+								</li>
+								<li>할일
+									<ul class="sdetail">
+										<li> - KMS 화면설계</li>
+										<li> - 파일서버 정리</li>
+									</ul>
+								</li>
+							</ul>
+						</dd>
+					</dl>
+				</div>
+				<!--확장기능-->
+				<div class="skill">
+					<dl>
+						<dt>
+							<ul class="right_title">
+								<li class="title_txt">확장기능</li>
+								<li class="btn_plus"><img src="${path.imagePath}/btn/btn_plus.gif"/></li>
+							</ul>
+						</dt>
+						<dd>
+							<dl class="skill_bn">
+								<dt><img src="${path.imagePath}/inc/bn01.gif"/></dt>
+								<dd>지인관리</dd>
+							</dl>
+							<dl class="skill_bn">
+								<dt><img src="${path.imagePath}/inc/bn02.gif"/></dt>
+								<dd>경영통계</dd>
+							</dl>
+							<dl class="skill_bn">
+								<dt><img src="${path.imagePath}/inc/bn03.gif"/></dt>
+								<dd>상담관리</dd>
+							</dl>
+						</dd>
+						<dd class="2ndline">
+							<dl class="skill_bn">
+								<dt><img src="${path.imagePath}/inc/bn04.gif"/></dt>
+								<dd>당직일지</dd>
+							</dl>
+							<dl class="skill_bn">
+								<dt><img src="${path.imagePath}/inc/bn05.gif"/></dt>
+								<dd>KMS교육</dd>
+							</dl>
+							<dl class="skill_bn">
+								<dt><img src="${path.imagePath}/inc/bn06.gif"/></dt>
+								<dd>업적평가</dd>
+							</dl>
+						</dd>
+					</dl>
+				</div>
+				<!--나의메뉴-->
+				<div class="mymenu">
+					<dl>
+						<dt>
+							<ul class="right_title">
+								<li class="title_txt">나의메뉴</li>
+								<li class="btn_plus"><img src="${path.imagePath}/btn/btn_plus.gif"/></li>
+							</ul>
+						</dt>
+						<dd>나의업무보고</dd>
+						<dd>업무연락</dd>
+						<dd>전자결재작성</dd>
+						<dd>자유게시판</dd>
+					</dl>
+				</div>
+			</div>
+			<!-- E: right -->
+		</div>
+		<!-- E: contents -->
+
+	</div>
+	<!-- E: container -->
+
+	<!-- S: footer -->
+	<div id="footer">
+		<img src="${path.imagePath}/inc/bot_copy.gif"/>
+	</div>
+	<!-- E: footer -->
+</div>
+</body>
+</html>

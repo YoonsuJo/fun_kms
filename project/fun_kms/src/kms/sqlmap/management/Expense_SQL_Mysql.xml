@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="KmsExpenseDAO">
+	
+	<typeAlias  alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+	<typeAlias  alias="expense" type="kms.com.management.service.Expense"/>
+	<typeAlias  alias="expenseVO" type="kms.com.management.service.ExpenseVO"/>
+	<typeAlias  alias="expenseDetail" type="kms.com.management.service.ExpenseDetail"/>
+	
+	<resultMap id="expenseList" class="kms.com.management.service.ExpenseVO">
+		<result property="accId"	column="ACC_ID"		columnIndex="1"/>
+		<result property="accNm"	column="ACC_NM"		columnIndex="2"/>
+		<result property="exp01"	column="EXP_01"		columnIndex="3"/>
+		<result property="exp02"	column="EXP_02"		columnIndex="4"/>
+		<result property="exp03"	column="EXP_03"		columnIndex="5"/>
+		<result property="exp04"	column="EXP_04"		columnIndex="6"/>
+		<result property="exp05"	column="EXP_05"		columnIndex="7"/>
+		<result property="exp06"	column="EXP_06"		columnIndex="8"/>
+		<result property="exp07"	column="EXP_07"		columnIndex="9"/>
+		<result property="exp08"	column="EXP_08"		columnIndex="10"/>
+		<result property="exp09"	column="EXP_09"		columnIndex="11"/>
+		<result property="exp10"	column="EXP_10"		columnIndex="12"/>
+		<result property="exp11"	column="EXP_11"		columnIndex="13"/>
+		<result property="exp12"	column="EXP_12"		columnIndex="14"/>
+		<result property="sum"		column="SUM"		columnIndex="15"/>
+		<result property="prntNm"	column="PRNT_NM"	columnIndex="16"/>
+	</resultMap>
+	
+	<resultMap id="expenseDetailList" class="kms.com.management.service.ExpenseDetail">
+		<result property="docId"		column="DOC_ID"			columnIndex="1"/>
+		<result property="accId"		column="ACC_ID"			columnIndex="2"/>
+		<result property="accNm"		column="ACC_NM"			columnIndex="3"/>
+		<result property="prjId"		column="PRJ_ID"			columnIndex="4"/>
+		<result property="prjCd"		column="PRJ_CD"			columnIndex="5"/>
+		<result property="prjNm"		column="PRJ_NM"			columnIndex="6"/>
+		<result property="companyCd"	column="COMPANY_CD"		columnIndex="7"/>
+		<result property="userNo"		column="USER_NO"		columnIndex="8"/>
+		<result property="userNm"		column="USER_NM"		columnIndex="9"/>
+		<result property="userId"		column="USER_ID"		columnIndex="10"/>
+		<result property="expDt"		column="EXP_DT"			columnIndex="11"/>
+		<result property="expSpend"		column="EXP_SPEND"		columnIndex="12"/>
+		<result property="expSpendTyp"	column="EXP_SPEND_TYP"	columnIndex="13"/>
+		<result property="cardId"		column="CARD_ID"		columnIndex="14"/>
+		<result property="expCt"		column="EXP_CT"			columnIndex="15"/>
+		<result property="prntNm"		column="PRNT_NM"		columnIndex="16"/>
+	</resultMap>
+	
+		
+	<select id="ExpenseDAO.selectExpenseStatistic" resultMap="expenseList">
+		SELECT
+			a.ACC_ID, a.ACC_NM,
+			SUM(IF(SUBSTRING(b.EXP_DT,5,2) = '01',b.EXP_SPEND,0)) AS EXP_01,
+			SUM(IF(SUBSTRING(b.EXP_DT,5,2) = '02',b.EXP_SPEND,0)) AS EXP_02,
+			SUM(IF(SUBSTRING(b.EXP_DT,5,2) = '03',b.EXP_SPEND,0)) AS EXP_03,
+			SUM(IF(SUBSTRING(b.EXP_DT,5,2) = '04',b.EXP_SPEND,0)) AS EXP_04,
+			SUM(IF(SUBSTRING(b.EXP_DT,5,2) = '05',b.EXP_SPEND,0)) AS EXP_05,
+			SUM(IF(SUBSTRING(b.EXP_DT,5,2) = '06',b.EXP_SPEND,0)) AS EXP_06,
+			SUM(IF(SUBSTRING(b.EXP_DT,5,2) = '07',b.EXP_SPEND,0)) AS EXP_07,
+			SUM(IF(SUBSTRING(b.EXP_DT,5,2) = '08',b.EXP_SPEND,0)) AS EXP_08,
+			SUM(IF(SUBSTRING(b.EXP_DT,5,2) = '09',b.EXP_SPEND,0)) AS EXP_09,
+			SUM(IF(SUBSTRING(b.EXP_DT,5,2) = '10',b.EXP_SPEND,0)) AS EXP_10,
+			SUM(IF(SUBSTRING(b.EXP_DT,5,2) = '11',b.EXP_SPEND,0)) AS EXP_11,
+			SUM(IF(SUBSTRING(b.EXP_DT,5,2) = '12',b.EXP_SPEND,0)) AS EXP_12,
+			SUM(IFNULL(b.EXP_SPEND,0)) AS SUM,
+			prnt.ACC_NM AS PRNT_NM
+		FROM
+			TBL_ACCOUNT a
+			INNER JOIN TBL_ACCOUNT aa ON a.ACC_ID = aa.ACC_ID AND a.ACC_ID != aa.PRNT_ACC_ID
+			LEFT JOIN V_EAPP_EXP b ON a.ACC_ID = b.ACC_ID AND LEFT(b.EXP_DT, 4) = #searchYear#
+			LEFT JOIN TBL_EAPP_DOC c ON b.DOC_ID = c.DOC_ID
+			LEFT JOIN TBL_USERINFO d ON c.WRITER_NO = d.NO
+			LEFT JOIN TBL_PRJ e ON b.PRJ_ID = e.PRJ_ID
+			INNER JOIN TBL_ACCOUNT prnt
+				ON
+					a.PRNT_ACC_ID = prnt.ACC_ID
+					<dynamic prepend="AND prnt.PRNT_TYP IN " open="(" close=")">
+						<isEqual prepend="," property="includeCost" compareValue="Y">
+							'C'
+						</isEqual>
+						<isEqual prepend="," property="includeExp" compareValue="Y">
+							'E'
+						</isEqual>
+					</dynamic>
+		WHERE 1=1
+		<isEqual property="searchCondition" compareValue="0">
+			<isNotEmpty prepend="AND" property="searchCompanyCd">
+				(
+					b.COMPANY_CD = #searchCompanyCd#
+					OR b.COMPANY_CD IS NULL
+				)
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchCondition" compareValue="1">
+			<isNotEmpty prepend="AND" property="searchUserId">
+				(
+				<iterate prepend="d.USER_ID IN " open="(" close=")" conjunction="," property="searchUserId">
+					#searchUserId[]#
+				</iterate>
+					OR d.USER_ID IS NULL
+				)
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchCondition" compareValue="2">
+			<isNotEmpty prepend="AND" property="searchOrgId">
+				(
+					<iterate prepend="e.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+						#searchOrgIdList[]#
+					</iterate>
+					OR e.ORGNZT_ID IS NULL
+				)
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchCondition" compareValue="3">
+			<isNotEmpty prepend="AND" property="searchPrjId">
+				(
+					CONCAT('/',FN_PRJ_TREE(b.PRJ_ID),'/') LIKE CONCAT('%/', #searchPrjId#, '/%')
+					OR b.PRJ_ID IS NULL
+				)
+			</isNotEmpty>
+		</isEqual>
+			AND (
+				(c.NEW_AT = 1 AND c.DOC_STAT IN ('APP004', 'APP005'))
+				<isEqual prepend="OR" property="includeNew" compareValue="Y">
+					(c.NEW_AT = 0 AND c.DOC_STAT IN ('APP001', 'APP002', 'APP003'))
+				</isEqual>
+			)
+		GROUP BY a.ACC_ID
+		ORDER BY a.ACC_ID, a.PRNT_ACC_ID ASC, a.ACC_LV ASC, a.ACC_ORD ASC
+	</select>
+	
+	
+	<select id="ExpenseDAO.selectExpenseDetailList" resultMap="expenseDetailList">
+		SELECT
+			a.DOC_ID
+			,a.ACC_ID, b.ACC_NM
+			,a.PRJ_ID, e.PRJ_CD, e.PRJ_NM
+			,a.COMPANY_CD
+			,c.WRITER_NO AS USER_NO, d.USER_NM, d.USER_ID
+			,a.EXP_DT
+			,a.EXP_SPEND
+			,a.EXP_SPEND_TYP
+			,f.CARD_ID
+			,a.EXP_CT
+			,prnt.ACC_NM AS PRNT_NM
+		FROM
+			V_EAPP_EXP a
+			LEFT JOIN TBL_ACCOUNT b ON a.ACC_ID = b.ACC_ID
+			LEFT JOIN TBL_EAPP_DOC c ON a.DOC_ID = c.DOC_ID
+			LEFT JOIN TBL_USERINFO d ON c.WRITER_NO = d.NO
+			LEFT JOIN TBL_PRJ e ON a.PRJ_ID = e.PRJ_ID
+			LEFT JOIN TBL_CARD_SPEND f ON a.CARD_SPEND_NO = f.CARD_SPEND_NO
+			LEFT JOIN TBL_ORGNZT g ON e.ORGNZT_ID = g.ORGNZT_ID
+			INNER JOIN TBL_ACCOUNT prnt
+				ON
+					b.PRNT_ACC_ID = prnt.ACC_ID
+					<dynamic prepend="AND prnt.PRNT_TYP IN " open="(" close=")">
+						<isEqual prepend="," property="includeCost" compareValue="Y">
+							'C'
+						</isEqual>
+						<isEqual prepend="," property="includeExp" compareValue="Y">
+							'E'
+						</isEqual>
+					</dynamic>
+		WHERE
+			SUBSTRING(a.EXP_DT,1,6) = CONCAT(#searchYear#, #searchMonth#)
+		<isNotEmpty prepend="AND" property="searchAccId">
+			a.ACC_ID = #searchAccId#
+		</isNotEmpty>
+		<isEqual property="searchCondition" compareValue="0">
+			<isNotEmpty prepend="AND" property="searchCompanyCd">
+					a.COMPANY_CD = #searchCompanyCd#
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchCondition" compareValue="1">
+			<isNotEmpty prepend="AND" property="searchUserId">
+				<iterate prepend="d.USER_ID IN " open="(" close=")" conjunction="," property="searchUserId">
+					#searchUserId[]#
+				</iterate>
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchCondition" compareValue="2">
+			<isNotEmpty prepend="AND" property="searchOrgIdList">
+				<iterate prepend="e.ORGNZT_ID IN " open="(" close=")" conjunction="," property="searchOrgIdList">
+					#searchOrgIdList[]#
+				</iterate>
+			</isNotEmpty>
+		</isEqual>
+		<isEqual property="searchCondition" compareValue="3">
+			<isNotEmpty prepend="AND" property="searchPrjId">
+					CONCAT('/',FN_PRJ_TREE(a.PRJ_ID),'/') LIKE CONCAT('%/', #searchPrjId#, '/%')
+			</isNotEmpty>
+		</isEqual>
+			AND (
+				(c.NEW_AT = 1 AND c.DOC_STAT IN ('APP004', 'APP005'))
+				<isEqual prepend="OR" property="includeNew" compareValue="Y">
+					(c.NEW_AT = 0 AND c.DOC_STAT IN ('APP001', 'APP002', 'APP003'))
+				</isEqual>
+			)
+		ORDER BY g.ORG_TREE_ORD, e.ORG_PRJ_TREE_ORD, b.ACC_NM, a.EXP_DT
+	</select>
+	
+	<select id="ExpenseDAO.selectExpenseDetail" resultClass="JSONObject">
+<!--	ApprovalDAO.selectExpenseList-->
+		SELECT
+			EXP.DOC_ID docId
+			, DOC.WRITER_NO writerNo
+      		, DOC.TEMPLT_ID templtId
+			, EXP.EXP_ID expId
+			, EXP.PRESET_ID presetId
+			, PRE.PRESET_NM presetNm
+			, EXP.EXP_SPEND_TYP expSpendTyp
+			, EXP.ACC_ID accId
+			, ACC.ACC_NM accNm
+			, ACC2.ACC_NM prntAccNm
+			, ACC2.ACC_ID prntAccId
+			, EXP.PRJ_ID prjId
+			, PRJ.PRJ_CD prjCd
+			, PRJ.PRJ_NM prjNm
+			, EXP.COMPANY_CD companyCd
+			, COD.CODE_NM companyNm
+			, EXP.EXP_DT expDt
+			, EXP.EXP_SPEND expSpend
+			, EXP.EXP_CT expCt
+			, EXP.PAYING_DUE_DATE payingDueDate
+			, EXP.CARD_SPEND_NO cardSpendNo
+			, EXP.EXCEED_MANAGE exceedManage
+			, EXP.EXPIRED_DATE expiredDate
+			, B.CARD_ID cardId					
+			, EXP.COLUMN1 column1
+			, EXP.COLUMN2 column2
+			, EXP.STOCK_LIST AS stockList
+		FROM TBL_EAPP_EXP EXP
+			INNER JOIN TBL_EAPP_DOC DOC
+		        ON EXP.DOC_ID = DOC.DOC_ID
+			INNER JOIN TBL_ACCOUNT ACC
+				ON EXP.ACC_ID = ACC.ACC_ID
+			INNER JOIN TBL_ACCOUNT ACC2
+				ON ACC.PRNT_ACC_ID = ACC2.ACC_ID
+			LEFT OUTER JOIN TBL_EAPP_PRESET PRE
+				ON EXP.PRESET_ID = PRE.PRESET_ID 
+			LEFT OUTER JOIN TBL_PRJ PRJ 
+				ON EXP.PRJ_ID = PRJ.PRJ_ID			
+			LEFT OUTER JOIN COMTCCMMNDETAILCODE COD
+				ON EXP.COMPANY_CD = COD.CODE
+				AND COD.CODE_ID = 'KMS007'
+			LEFT OUTER JOIN TBL_CARD_SPEND b
+				ON EXP.CARD_SPEND_NO = b.CARD_SPEND_NO
+			LEFT OUTER JOIN TBL_CARD c
+				ON b.CARD_ID = c.CARD_ID					
+		WHERE 
+			1=1
+      		AND EXP.EXP_ID = #expId#
+		ORDER BY 
+			EXP.EXP_ID ASC
+	</select>
+	
+	<select id="ExpenseDAO.updateExpenseDetail" resultClass="JSONObject">
+	<!--보류?-->
+		SELECT
+			EXP_ID, DOC_ID, PRESET_ID, EXP_SPEND_TYP, PAYING_DUE_DATE, ACC_ID, EXP_DT, EXP_SPEND
+			, PRJ_ID, COMPANY_CD, EXP_CT, CARD_SPEND_NO, EXCEED_MANAGE, EXPIRED_DATE
+			, COLUMN1, COLUMN2, STOCK_LIST, STATUS, BUDGET_PRJ
+		FROM
+			TBL_EAPP_EXP
+		WHERE
+			EXP_ID = 'EXP_0000000000000004'
+	</select>
+	
+	
+</sqlMap>
