@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
 
 
-<title>한마음 시스템</title>
+<title>FUNNET KMS 시스템</title>
 <%@ include file="include/top_inc.jsp"%>
 <link rel="stylesheet" href="${commonPath}/css/mobile.css" type="text/css" />
 <script>
@@ -97,7 +97,7 @@ $('document').ready(function(){
 <body onload="document.loginFrm.userId.focus();">
 	<div id="content">
 		<div class="toolbar">
-			(주)도전하는 사람들 & 새하컴즈 - 한마음 시스템
+			(주)FUNNET
 		</div>
 		<div id="member_info">
 			<div class="pic">

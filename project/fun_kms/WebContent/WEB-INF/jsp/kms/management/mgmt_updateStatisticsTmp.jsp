@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>한마음 시스템</title>
+<title>FUNNET KMS 시스템</title>
 </head>
 <body>
 <form name="frm" action="${rootPath}/management/monthResultStatistic.do" method="POST">

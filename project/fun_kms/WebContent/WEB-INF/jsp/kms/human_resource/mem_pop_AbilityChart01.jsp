@@ -22,8 +22,8 @@
     
  	<div class="chart_con">
 
-	    <p class="chart_p">대상기간 | 2012년 01월 ~ 2012년 12월</p>
-	    <div class="chart_name">2011년도 능력고과표<br/><span class="T20">(팀원용)</span></div>
+	    <p class="chart_p">대상기간 | 2023년 01월 ~ 2023년 12월</p>
+	    <div class="chart_name">2023년도 능력고과표<br/><span class="T20">(팀원용)</span></div>
 	
 		<!-- 게시판 시작  -->
     	<div class="chart_tl">
@@ -49,9 +49,9 @@
                 </thead>
                 <tbody>
                   <tr>
-                    <td class="txt_center td_h50"><input type="text" value="도전하는사람들" name=""/></td>
+                    <td class="txt_center td_h50"><input type="text" value="펀네트" name=""/></td>
                     <td class="txt_center td_h50"><input type="text" value="사원" name=""/></td>
-                    <td class="txt_center td_h50 td_last"><input type="text" value="양윤정" name=""/></td>
+                    <td class="txt_center td_h50 td_last"><input type="text" value="홍길동" name=""/></td>
                   </tr>
                 </tbody>
               </table>

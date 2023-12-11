@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-<title>한마음 시스템</title>
+<title>FUNNET KMS 시스템</title>
 <%@ include file="../include/top_inc.jsp"%>
 <link rel="stylesheet" href="${commonPath}/css/admin_default.css" type="text/css" media="all" />
 <script type="text/javascript" src="<c:url value='${commonPath}/js/adminMultiFile.js'/>" ></script>

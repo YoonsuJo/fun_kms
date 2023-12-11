@@ -199,8 +199,8 @@ public class LoginController {
 		}
 		
 		// 접속IP
-		//String userIp = EgovClntInfo.getClntIP(req);
-		String userIp = req.getRemoteAddr();
+		String userIp = EgovClntInfo.getClntRealIP(req);
+		//String userIp = req.getRemoteAddr();
 		
 		// 내부 아이피 여부 (2015.11.30)
 		String innernetYn = "N";
@@ -566,8 +566,8 @@ public class LoginController {
 		}
 
 		// 접속IP
-		//String userIp = EgovClntInfo.getClntIP(req);
-		String userIp = req.getRemoteAddr();
+		String userIp = EgovClntInfo.getClntRealIP(req);
+		//String userIp = req.getRemoteAddr();
 		
 		// 내부 아이피 여부 (2015.11.30)
 		String innernetYn = "N";

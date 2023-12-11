@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-<title>한마음 시스템</title>
+<title>FUNNET KMS 시스템</title>
 <%@ include file="../include/ajax_inc.jsp"%>
 
 <p class="th_stitle">자기개발비 사용 상세내역</p>

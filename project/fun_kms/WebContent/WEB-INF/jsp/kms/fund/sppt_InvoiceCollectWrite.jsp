@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>한마음 시스템</title>
+<title>FUNNET KMS 시스템</title>
 <%@ include file="../include/top_inc.jsp"%>
 </head>
 <script type="text/javascript" src="<c:url value="${rootPath}/validator.do"/>"></script>
@@ -410,7 +410,7 @@ function deleteCollect() {
  			</colgroup>
 			<tbody>
 				<tr>
-					<td class="title" >도전하는사람들</td> 
+					<td class="title" >펀네트</td> 
 					<td class="pL10">
 					<c:forEach items="${bankBookList}" var="bankBook">
 						<c:if test="${bankBook.codeDc == 'dosanet'}">

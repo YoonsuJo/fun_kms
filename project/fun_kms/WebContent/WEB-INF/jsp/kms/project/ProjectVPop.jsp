@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-<title>한마음 시스템</title>
+<title>FUNNET KMS 시스템</title>
 <%@ include file="../include/top_inc.jsp"%>
 
 <style type="text/css" rel="stylesheet">
@@ -245,13 +245,13 @@ $(document).ready(function(){
 	// 업무연락 로딩
 	busiSearch(1,0);
 	
-	// 한마음 회의실 로딩
+	// 펀네트 회의실 로딩
 	meetSearch(1,0);
 	
 	// 관련결재문서 로딩
 	approvalSearch(1);	
 	
-	// 업무연락, 한마음회의실, 월별실적, 작업은 숨김 상태가 default //월별실적도 많이 사용해서 기본 펼치기로 변경
+	// 업무연락, 펀네트회의실, 월별실적, 작업은 숨김 상태가 default //월별실적도 많이 사용해서 기본 펼치기로 변경
 	/*
 	$('#taskD').hide();
 	$('#projectChildD').hide();
@@ -397,7 +397,7 @@ function busiSearch(pageIndex, pos) {
 	});
 }
 
-//한마음 회의실
+//펀네트 회의실
 var meetSearchYear = ${searchVO.searchYear };
 function meetSearch(pageIndex, pos) {
 	document.meetFrm.pageIndex.value = pageIndex;
@@ -767,7 +767,7 @@ function interest(prjId) {
 			</div>
 			<!--// 업무연락  끝  -->
 			
-			<!-- 한마음회의실 시작  -->
+			<!-- 펀네트회의실 시작  -->
 			<div class="subDiv">
 				<p class="th_stitle">관련 회의 <img class="btn_arrow_down cursorPointer toggleB" id="meetingTB"/></p>
 				<div id="meetingD" style="display:none;">
@@ -809,7 +809,7 @@ function interest(prjId) {
 					</div>
 				</div>
 			</div>
-			<!--// 한마음회의실  끝  -->
+			<!--// 펀네트회의실  끝  -->
 
 			<!-- 게시판 시작  -->
 			<div class="subDiv">

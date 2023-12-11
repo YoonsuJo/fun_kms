@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>한마음 시스템</title>
+<title>FUNNET KMS 시스템</title>
 <%@ include file="../include/top_inc.jsp"%>
 <script>
 function taxSearch(pageIndex) {

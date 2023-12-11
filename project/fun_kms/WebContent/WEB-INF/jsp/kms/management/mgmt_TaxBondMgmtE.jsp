@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>한마음 시스템</title>
+<title>FUNNET KMS 시스템</title>
 <%@ include file="../include/top_inc.jsp"%>
 </head>
 
@@ -87,7 +87,7 @@
 	                    	</tr>
 	                    	<tr>
 		                    	<td class="txt_center bG">공급자(*)</td>
-		                    	<td class="td_last pL10" colspan="5">도전하는사람들</td>
+		                    	<td class="td_last pL10" colspan="5">펀네트</td>
 	                    	</tr>
 	                    	<tr>
 		                    	<td class="txt_center bG" rowspan="3">공급받는자</td>

@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-<title>한마음 시스템</title>
+<title>FUNNET KMS 시스템</title>
 
 <style type="text/css">
 .decide_layer {position:absolute; border:1px solid #d7d7d7; width:220px; background-color:#fff; padding:10px;}

@@ -2,6 +2,6 @@
     pageEncoding="UTF-8"%>
 <!-- S: footer -->
 <div id="footer">
-	Copyright &copy 2012-2013 DOSANET&SAEHA. All Rights Reserved.
+	Copyright 2023 FUNNET. All Rights Reserved.
 </div>
 <!-- E: footer -->

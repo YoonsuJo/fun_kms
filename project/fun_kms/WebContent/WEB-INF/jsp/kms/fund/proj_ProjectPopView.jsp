@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-<title>한마음 시스템</title>
+<title>FUNNET KMS 시스템</title>
 <%@ include file="../include/top_inc.jsp"%>
 <script>
 
@@ -211,7 +211,7 @@ $(document).ready(function(){
 		
 	});
 
-	// 업무연락, 한마음회의실, 월별실적, 작업은 숨김 상태가 default
+	// 업무연락, 펀네트회의실, 월별실적, 작업은 숨김 상태가 default
 	$('#busiContactD').hide();
 	$('#meetingD').hide();
 	$('#taskD').hide();
@@ -591,8 +591,8 @@ function interest(prjId) {
 						<!--// 업무연락  끝  -->
 						
 						
-						<!-- 한마음회의실 시작  -->
-						<p class="th_stitle mB20">한마음회의실 <img class="btn_arrow_down cursorPointer toggleB" id="meetingTB"/></p>
+						<!-- 펀네트회의실 시작  -->
+						<p class="th_stitle mB20">펀네트회의실 <img class="btn_arrow_down cursorPointer toggleB" id="meetingTB"/></p>
 						<div id="meetingD">
 					    	<form name="meetFrm" id="meetFrm" method="POST" action="" onsubmit="meetSearch(1); return false;">
 					    	<input type="hidden" name="pageIndex"/>
@@ -622,7 +622,7 @@ function interest(prjId) {
 								</c:import>
 							</div>
 						</div>
-						<!--// 한마음회의실  끝  -->
+						<!--// 펀네트회의실  끝  -->
 						
 
 						<%-- 

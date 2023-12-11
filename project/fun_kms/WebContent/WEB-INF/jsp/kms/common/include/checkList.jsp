@@ -57,7 +57,7 @@ $(document).ready(function() {
 				$(".busiCntAppend").append(busiCntHtml);
 			}
 			
-			//한마음 회의실
+			//펀네트 회의실
 			if(result.meetUnread > 0){
 				$(".meetUnreadAppend").empty();
 				var meetUnreadHtml = '';
@@ -297,7 +297,7 @@ function writeRequest2() {
 		<a href="${rootPath}/cooperation/insertBusinessContactView.do"><img src="${imagePath}/btn/btn_write01.gif" alt="글쓰기"/></a>
 	</li>
 	<li class="line">
-		<a href="${rootPath}/cooperation/selectMeetingRoomList.do">한마음 회의실</a>
+		<a href="${rootPath}/cooperation/selectMeetingRoomList.do">펀네트 회의실</a>
 		<span class="meetUnreadAppend">			
 			<%-- <a href="${rootPath}/cooperation/selectMeetingRoomList.do"><span class="txt_blue" id="meetUnread">[0]</span></a> --%>
 		</span>

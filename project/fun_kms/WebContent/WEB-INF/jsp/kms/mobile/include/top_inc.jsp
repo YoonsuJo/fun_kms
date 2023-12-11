@@ -17,7 +17,7 @@ else if(navigator.userAgent.match(/Android/) != null) mobileOS = "Android";
 
 </script>
 <head>
-	<title>한마음 시스템 모바일 - 도전하는 사람들</title>	
+	<title>FUNNET KMS 시스템 모바일</title>	
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 	<meta name="apple-mobile-web-app-capable" content="yes">

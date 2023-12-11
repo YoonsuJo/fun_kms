@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-<title>한마음 시스템</title>
+<title>FUNNET KMS 시스템</title>
 <%@ include file="../include/top_inc.jsp"%>
 <script type="text/javascript" src="<c:url value="${rootPath}/validator.do"/>"></script>
 <validator:javascript formName="carFix" staticJavascript="false" xhtml="true" cdata="false"/>

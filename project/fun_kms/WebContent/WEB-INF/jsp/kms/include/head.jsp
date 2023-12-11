@@ -288,8 +288,8 @@ $(document).ready(function() {
 				            	<!-- mail -->
 				                <table width="100%" border="0" cellspacing="0" cellpadding="0">
 				                  <tr>
-				                    <td height="30" valign="top"><b>도전하는사람들</b></td>
-				                    <td valign="top" style="color:#1285de;">mail.dosanet.co.kr</td>
+				                    <td height="30" valign="top"><b>펀네트</b></td>
+				                    <td valign="top" style="color:#1285de;">mail.fun-net.co.kr</td>
 				                  </tr>
 				                  <tr>
 				                    <td height="30" valign="top"><b>새하컴즈</b></td>

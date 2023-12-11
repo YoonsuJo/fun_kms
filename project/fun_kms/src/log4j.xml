@@ -27,7 +27,7 @@
 	
 <!-- HANMAM 기본 로그파일 -->
 	<appender name="LOGFILE-DAILY" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="file" value="E:/WORK/HANMAM/Log/HANMAM.log"/>
+		<param name="file" value="/data/logs/fun_kms/HANMAM.log"/>
 		<param name="Append" value="true"/>
 		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
 		<layout class="org.apache.log4j.PatternLayout">
@@ -37,7 +37,7 @@
 
 <!-- TENY의 로그 파일  -->
 	<appender name="LOGFILE-TENY" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="file" value="E:/WORK/HANMAM/Log/TENY.log"/>
+		<param name="file" value="/data/logs/fun_kms/TENY.log"/>
 		<param name="Append" value="true"/>
 		<param name="DatePattern" value="yyyy-MM-dd"/>
 		<layout class="org.apache.log4j.PatternLayout">
@@ -47,7 +47,7 @@
 
 <!-- 매 날짜별 로그 파일 남기기(로그인) -->
 	<appender name="LOGFILE-DAILY-LOGIN" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="file" value="test-daily-login.log"/>
+		<param name="file" value="/data/logs/fun_kms/test-daily-login.log"/>
 		<param name="Append" value="true"/>
 		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
 		<layout class="org.apache.log4j.PatternLayout">
@@ -57,7 +57,7 @@
 
 <!-- 매 날짜별 로그 파일 남기기(가입) -->
 	<appender name="LOGFILE-DAILY-JOIN" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="file" value="test-daily-join.log"/>
+		<param name="file" value="/data/logs/fun_kms/test-daily-join.log"/>
 		<param name="Append" value="true"/>
 		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
 		<layout class="org.apache.log4j.PatternLayout">
@@ -67,7 +67,7 @@
 
 <!-- 매 날짜별 로그 파일 남기기(탈퇴) -->
 	<appender name="LOGFILE-DAILY-JOINBREAK" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="file" value="test-daily-joinbreak.log"/>
+		<param name="file" value="/data/logs/fun_kms/test-daily-joinbreak.log"/>
 		<param name="Append" value="true"/>
 		<param name="DatePattern" value="'.'yyyy-MM-dd"/>
 		<layout class="org.apache.log4j.PatternLayout">
@@ -77,7 +77,7 @@
 
 <!-- 로그 파일 100KB마다 새로 남기기 -->
 	<appender name="LOGFILE-SIZE" class="org.apache.log4j.RollingFileAppender">
-		<param name="file" value="test-Size.log"/>
+		<param name="file" value="/data/logs/fun_kms/test-Size.log"/>
 		<param name="Append" value="true"/>
 		<param name="MaxFileSize" value="100KB"/>
 		<param name="MaxBackupIndex" value="5"/> 
@@ -88,7 +88,7 @@
 
 <!-- XML 형태로 로그 파일 남기기 -->
 	<appender name="LOGFILE-XML" class="org.apache.log4j.FileAppender">
-		<param name="file" value="test-XML.log"/>
+		<param name="file" value="/data/logs/fun_kms/test-XML.log"/>
 		<param name="Append" value="true"/>
 		<layout class="org.apache.log4j.xml.XMLLayout"/>
 	</appender>

@@ -80,8 +80,8 @@
 	<bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-				<ref bean="cronTrigger1" />
-				<ref bean="cronTrigger2" />
+				<!-- <ref bean="cronTrigger1" />
+				<ref bean="cronTrigger2" /> -->
 			</list>
 		</property>
 	</bean>
@@ -90,8 +90,8 @@
 	<bean id="timerFactory" class="org.springframework.scheduling.timer.TimerFactoryBean">
 		<property name="scheduledTimerTasks">
 			<list>
-				<ref bean="updateTask" />
-				<ref bean="smsTask" />
+				<!-- <ref bean="updateTask" />
+				<ref bean="smsTask" /> -->
 				<!-- <ref bean="messageTask" /> -->
 				<!-- <ref bean="dayReportTask" /> --> <!-- 쿼츠 크론 트리거로 바꾸면서 제외 -->
 			</list>

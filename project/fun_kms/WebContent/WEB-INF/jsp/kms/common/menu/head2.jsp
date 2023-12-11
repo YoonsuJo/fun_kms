@@ -281,8 +281,8 @@ $(document).ready(function() {
 				            	<!-- mail -->
 				                <table width="100%" border="0" cellspacing="0" cellpadding="0">
 				                  <tr>
-				                    <td height="30" valign="top"><b>도전하는사람들</b></td>
-				                    <td valign="top" style="color:#1285de;">mail.dosanet.co.kr</td>
+				                    <td height="30" valign="top"><b>펀네트</b></td>
+				                    <td valign="top" style="color:#1285de;">mail.fun-net.co.kr</td>
 				                  </tr>
 				                  <tr>
 				                    <td height="30" valign="top"><b>새하컴즈</b></td>
@@ -404,7 +404,7 @@ $(document).ready(function() {
 									<li id="snbmenu01m1"><a href="${rootPath}/cooperation/selectDayReport.do">업무관리</a></li>
 									<li id="snbmenu01m2"><a href="${rootPath}/cooperation/selectProjectList2.do">프로젝트 관리</a></li>
 									<li id="snbmenu01m3"><a href="${rootPath}/cooperation/selectProjectList2.do">전자결재</a></li>
-									<li id="snbmenu01m4"><a href="${rootPath}/cooperation/selectCustomerList.do">한마음회의실</a></li>
+									<li id="snbmenu01m4"><a href="${rootPath}/cooperation/selectCustomerList.do">펀네트회의실</a></li>
 								</ul>
 							</li>
 							<li class="snb_botBg"></li>

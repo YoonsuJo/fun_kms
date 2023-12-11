@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-<title>한마음 시스템</title>
+<title>FUNNET KMS 시스템</title>
 <%@ include file="../include/top_inc.jsp"%>
 <script type="text/javascript" src="<c:url value='${commonPath}/js/BBSMng.js' />"></script>
 <script type="text/javascript" src="<c:url value='${commonPath}/js/MultiFileMod.js'/>" ></script>
@@ -177,7 +177,7 @@ function viewProject(prjId){
 					<div class="path_navi">
 						<ul>
 							<li class="stitle">회의실 읽기</li>
-							<li class="navi">홈 > 업무공유 > 협업 > 한마음 회의실</li>
+							<li class="navi">홈 > 업무공유 > 협업 > 펀네트 회의실</li>
 						</ul>
 					</div>
 					

@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-<title>한마음 시스템</title>
+<title>FUNNET KMS 시스템</title>
 <%@ include file="../include/top_inc.jsp"%>
 <c:set var="now" value="<%=new java.util.Date()%>" />
 <c:set var="sysNow"><fmt:formatDate value="${now}" pattern="yyyyMMdd" /></c:set> 

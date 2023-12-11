@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>한마음 시스템</title>
+<title>펀네트 시스템</title>
 <%@ include file="include/login_inc.jsp"%>
 
 <script>
@@ -164,7 +164,7 @@ function login(){
 					-->
 				</ul>
 			</div>			
-			<div class="login_copy">Copyright 2012-2013 DOSANET&SAEHA. All Rights Reserved.<br>
+			<div class="login_copy">Copyright 2023 FUNNET. All Rights Reserved.<br>
 <!--			Connected : ${userAgent}-->
 			</div>						
 		</div>

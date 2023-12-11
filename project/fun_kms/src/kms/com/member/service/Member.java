@@ -2,6 +2,8 @@ package kms.com.member.service;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import egovframework.com.cmm.ComDefaultCodeVO;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kms.com.common.utils.CalendarUtil;
@@ -587,7 +589,10 @@ public class Member {
 		return orgnztNmFull;
 	}
 	public String getOrgnztNmFullLong() {
-		String s = orgnztNmFull.substring(0, orgnztNmFull.length()-1).replace(" ", " > ");
+		String s = "";
+		if(StringUtils.isNotEmpty(orgnztNmFull)) {
+			s = orgnztNmFull.substring(0, orgnztNmFull.length()-1).replace(" ", " > ");
+		}
 		return s;
 	}
 	/**

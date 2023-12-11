@@ -6,7 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>(주)도전하는사람들 KMS-지식관리시스템</title>
+<title>FUNNET KMS 시스템</title>
 
 <script language="javascript">
 function fncGoAfterErrorPage(){

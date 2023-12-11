@@ -6,7 +6,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>한마음 점검중</title>
+<title>FUNNET 점검중</title>
 
 <link rel="stylesheet" href="/common/css/default.css" type="text/css" media="all" />
 <script language="javascript">
@@ -21,7 +21,7 @@ function fncGoAfterErrorPage(){
 	<ul>
 		<li class="mB20">
 			<span class="txtB_orange pB10" >Under maintenance</span>
-			<br/>한마음 시스템 점검중입니다
+			<br/>FUNNET 시스템 점검중입니다
 			<br/>기간 : ${maintenancePeriod.codeDc}
 			<br/>사유 : ${maintenanceReason.codeDc}
 		</li>

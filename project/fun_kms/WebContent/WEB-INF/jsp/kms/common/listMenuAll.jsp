@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-<title>한마음 시스템</title>
+<title>FUNNET KMS 시스템</title>
 <%@ include file="../include/top_inc.jsp"%>
 <script>
 function modify(no) {
@@ -94,7 +94,7 @@ $(document).ready(function(){
 								<th>나의업무</th>
 								<th>프로젝트관리</th>
 								<th>전자결재</th>
-								<th>한마음회의실</th>
+								<th>펀네트회의실</th>
 							</tr>
 						</thead>
 						<tbody id="tableBody">
@@ -124,7 +124,7 @@ $(document).ready(function(){
 								<th>나의업무</th>
 								<th>프로젝트관리</th>
 								<th>전자결재</th>
-								<th>한마음회의실</th>
+								<th>펀네트회의실</th>
 							</tr>
 						</thead>
 						<tbody id="tableBody">

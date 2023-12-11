@@ -285,8 +285,8 @@ test="${headSearchVO.searchCondition == 1}">checked="checked"</c:if>></label>
 				            	<!-- mail -->
 				                <table width="100%" border="0" cellspacing="0" cellpadding="0">
 				                  <tr>
-				                    <td height="30" valign="top"><b>도전하는사람들</b></td>
-				                    <td valign="top" style="color:#1285de;">mail.dosanet.co.kr</td>
+				                    <td height="30" valign="top"><b>펀네트</b></td>
+				                    <td valign="top" style="color:#1285de;">mail.fun-net.co.kr</td>
 				                  </tr>
 				                  <tr>
 				                    <td height="30" valign="top"><b>새하컴즈</b></td>
@@ -396,7 +396,7 @@ class="pL10" src="${imagePath}/btn/btn_write01.gif" alt="외근등록"/>
 									<li id="snbmenu01m1"><a href="${rootPath}/daily/DailyByWeekL.do">나의업무</a></li>
 									<li id="snbmenu01m2"><a href="${rootPath}/project/listMyProject.do">나의 프로젝트</a></li>
 									<li id="snbmenu01m3"><a href="${rootPath}/approval/main.do">전자결재</a></li>
-									<li id="snbmenu01m4"><a href="${rootPath}/cooperation/selectMeetingRoomList.do">한마음회의실</a></li>
+									<li id="snbmenu01m4"><a href="${rootPath}/cooperation/selectMeetingRoomList.do">펀네트회의실</a></li>
 									<li id="snbmenu01m5"><a href="javascript:myTask('today');">나의업무[기존]</a></li>
 								</ul>
 							</li>
