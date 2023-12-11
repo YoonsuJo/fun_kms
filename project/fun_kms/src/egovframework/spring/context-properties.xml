@@ -11,14 +11,14 @@
 			<entry key="pageUnit_15" value="15"/>
 			<entry key="pageUnit_10" value="10"/>
 			<entry key="pageSize" value="10"/>
-			<entry key="topOrgId" value="ORGAN_TOP_ORGAN_CODE"/>
-			<entry key="retireOrgId" value="ORGAN_RET_ORGAN_CODE"/>
-			<entry key="standOrgId" value="ORGAN_STD_ORGAN_CODE"/>
+			<entry key="topOrgId" value="1"/>
+			<entry key="retireOrgId" value="1"/>
+			<entry key="standOrgId" value="1"/>
 			<entry key="isHmServer" value="false"/>  <!-- 서버만 true 그 외 false -->
 			<entry key="smsSendHour" value="9"/>
 			<entry key="updateStatisticHour" value="2"/>
 			<!-- entry key="Globals.fileStorePath" value="/product/jeus/egovProps/upload/"/-->
-			<entry key="Globals.fileStorePath" value="C:/product/jeus/egovProps/upload/"/> <!-- 업로드 파일 경로 변경-->
+			<entry key="Globals.fileStorePath" value="/data/server/kms_upload"/> <!-- 업로드 파일 경로 변경-->
 			
 			<!-- 푸시 -->
 			<!-- 알림톡 서비스 -->

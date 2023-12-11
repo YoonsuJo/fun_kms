@@ -380,7 +380,7 @@ public class MemberController {
 		//그것도 selectpk 함수를 써서 두줄 이상 나오면 시스템 오류나고 집 그림 나옴.
 		//전체 시스템 검사 및 수정은 시간도 오래걸리고 또 어떤 문제가 생길지 몰라서 그냥 이 추가된 KMS032코드를 불러와서 하드코딩 매치함
 		String companyId = memberVO.getCompnyId();
-		if(companyId.equals("dosanet")){
+		if(companyId.equals("fuunet")){
 			vo.setCode("1");
 		}else if(companyId.equals("probits")){
 			vo.setCode("2");

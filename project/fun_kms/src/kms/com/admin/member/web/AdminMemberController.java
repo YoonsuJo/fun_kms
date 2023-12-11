@@ -503,6 +503,9 @@ public class AdminMemberController {
 		
 		Map<String, Object> memberResult = memberService.selectMember(memberVO);
 		PositionHistoryVO positionHistory = memberService.selectPositionHistory(memberVO);
+		if( positionHistory == null) {
+			positionHistory = new PositionHistoryVO();
+		}
 		
 		ComDefaultCodeVO vo = new ComDefaultCodeVO();
 		vo.setCodeId("KMS003");
@@ -510,10 +513,10 @@ public class AdminMemberController {
 		vo.setCodeId("KMS007");
 		List compList = cmmUseService.selectCmmCodeDetail(vo);
 		
-		model.addAttribute("result", memberResult);
-		model.addAttribute("new", positionHistory);
-		model.addAttribute("rankList", rankList);
-		model.addAttribute("compList", compList);
+		model.addAttribute("cresult", memberResult);
+		model.addAttribute("cnew", positionHistory);
+		model.addAttribute("crankList", rankList);
+		model.addAttribute("ccompList", compList);
 		
 		return "admin/member/member_positionHistoryW";
 	}

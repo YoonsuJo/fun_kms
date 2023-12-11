@@ -4,36 +4,36 @@ import kms.com.common.utils.CommonUtil;
 
 public class PositionHistoryVO {
 	
-	private Integer no;
-	private Integer userNo;
-	private String chngCode;
-	private String bfrRankId;
-	private String bfrCompId;
-	private String bfrOrgnztId;
-	private String bfrPosition;
-	private String aftRankId;
-	private String aftCompId;
-	private String aftOrgnztId;
-	private String aftPosition;
-	private String chngDt;
-	private String note;
-	private Integer adminNo;
+	private Integer no = 0;
+	private Integer userNo = 0;
+	private String chngCode = "";
+	private String bfrRankId = "";
+	private String bfrCompId = "";
+	private String bfrOrgnztId = "";
+	private String bfrPosition = "";
+	private String aftRankId = "";
+	private String aftCompId = "";
+	private String aftOrgnztId = "";
+	private String aftPosition = "";
+	private String chngDt = "";
+	private String note = "";
+	private Integer adminNo = 0;
 	
-	private String bfrRankNm;
-	private String bfrCompNm;
-	private String bfrOrgnztNm;
-	private String aftRankNm;
-	private String aftCompNm;
-	private String aftOrgnztNm;
-	private String aftPositionNm;
-	private String headNm;
-	private String subheadNm;
-	private String adminNm;
+	private String bfrRankNm = "";
+	private String bfrCompNm = "";
+	private String bfrOrgnztNm = "";
+	private String aftRankNm = "";
+	private String aftCompNm = "";
+	private String aftOrgnztNm = "";
+	private String aftPositionNm = "";
+	private String headNm = "";
+	private String subheadNm = "";
+	private String adminNm = "";
 	
-	private String userNm;
-	private String userId;
+	private String userNm = "";
+	private String userId = "";
 	
-	private String lastYn;
+	private String lastYn = "";
 	
 	/**
 	 * @return the no

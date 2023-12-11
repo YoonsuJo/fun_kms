@@ -341,7 +341,7 @@ public class WorkStateStatistic {
 	}
 	
 	public Integer getAbs() {
-		return vac + bizTrip + send + workOut;
+		return (vac!=null?vac:0) + (bizTrip!=null?bizTrip:0) + (send!=null?send:0) + (workOut!=null?workOut:0);
 	}
 	public Integer getAttend() {
 		return earlyAtnd + atnd;
