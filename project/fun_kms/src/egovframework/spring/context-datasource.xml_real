@@ -19,11 +19,11 @@
 	<!-- MySQL -->
 	<bean id="dataSource-mysql" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="net.sf.log4jdbc.DriverSpy"/>
-		<!--  Real      
+		<!--  Real  -->      
 		<property name="url" value="jdbc:mysql://172.27.0.116:3306/fun_kms?characterEncoding=UTF-8&amp;autoReconnect=true"/>
  		<property name="username" value="funnet"/>
 		<property name="password" value="vjsspxm1!"/>
-		-->
+		
 		
 		<!--  Dev  
 		<property name="url" value="jdbc:mysql://172.27.0.116:3306/fun_kms_dev?characterEncoding=UTF-8&amp;autoReconnect=true"/>
@@ -31,10 +31,11 @@
 		<property name="password" value="vjsspxm1!"/>
 		-->
 		
-		<!--  localhost  -->  
+		<!--  localhost  
 		<property name="url" value="jdbc:mysql://211.253.25.233:13306/fun_kms_dev?characterEncoding=UTF-8&amp;autoReconnect=true"/>
  		<property name="username" value="funnet"/>
 		<property name="password" value="vjsspxm1!"/>
+		-->
 		
 		
 		
