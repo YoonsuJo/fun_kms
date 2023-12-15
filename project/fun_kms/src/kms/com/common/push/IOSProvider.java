@@ -1,5 +1,6 @@
 package kms.com.common.push;
-import javapns.*;
+
+import javapns.Push;
 
 public class IOSProvider implements IProvider {
 	final String CERTIFICATE_NAME = "mkms_apns.p12";

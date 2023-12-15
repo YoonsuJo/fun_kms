@@ -1,24 +1,18 @@
 package kms.com.common.web;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
 import kms.com.common.service.FileMngService;
 import kms.com.common.service.FileVO;
 import kms.com.common.utils.SessionUtil;
-import kms.com.cooperation.service.BusinessContactComment;
-
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import egovframework.com.sec.ram.security.userdetails.util.EgovUserDetailsHelper;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 파일 조회, 삭제, 다운로드 처리를 위한 컨트롤러 클래스

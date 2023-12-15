@@ -1,56 +1,26 @@
 package kms.com.admin.approval.web;
 
-import java.io.File;
-import java.net.URLDecoder;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import jxl.Cell;
-import jxl.Sheet;
-import jxl.Workbook;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-import org.json.simple.parser.JSONParser;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
-import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-
-import egovframework.com.cmm.ComDefaultCodeVO;
 import egovframework.com.cmm.service.EgovCmmUseService;
-import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 import egovframework.rte.fdl.property.EgovPropertyService;
-import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
-import kms.com.admin.approval.service.KmsApprovalTyp;
-import kms.com.admin.approval.service.KmsApprovalTypService;
-import kms.com.admin.approval.service.KmsApprovalTypVO;
-import kms.com.app.service.AccountVO;
-import kms.com.app.service.ApprovalVO;
-import kms.com.app.service.ApprovalVacVO;
-import kms.com.app.service.KmsAccountService;
-import kms.com.app.service.KmsSelfdevService;
-import kms.com.app.service.SelfdevVO;
+import jxl.Workbook;
 import kms.com.common.service.FileMngService;
 import kms.com.common.service.FileMngUtil;
 import kms.com.common.service.FileVO;
-import kms.com.common.utils.CalendarUtil;
 import kms.com.common.utils.CommonUtil;
 import kms.com.support.service.CardService;
 import kms.com.support.service.CardSpendVO;
 import kms.com.support.service.CardVO;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import javax.annotation.Resource;
+import java.io.File;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Class Name : KmsApprovalTypController.java
@@ -142,6 +112,7 @@ public class AdminCardController {
 			atchFileId = fileMngService.insertFileInfs(result);
 		}
 		Workbook workbook = Workbook.getWorkbook(new File(result.get(0).getFileStreCours() + result.get(0).getStreFileNm()));
+//		Workbook workbook = Workbook.getWorkbook(new File(result.get(0).getFileStreCours() + File.separator + result.get(0).getStreFileNm() + "." + result.get(0).getFileExtsn()));
 		cardService.insertCardSpendExcel(workbook);
 		
 		return "redirect:/admin/approval/selectCardSpendList.do";

@@ -1,8 +1,6 @@
 package kms.com.app.service;
 
 import java.util.List;
-import kms.com.app.service.ApprovalCommentVO;
-import kms.com.app.service.ApprovalComment;
 
 /**
  * @Class Name : KmsEappCommentService.java

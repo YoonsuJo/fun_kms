@@ -1,27 +1,19 @@
 package kms.com.common.web;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.URLEncoder;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import kms.com.common.service.FileMngService;
+import kms.com.common.service.FileVO;
+import kms.com.common.utils.SessionUtil;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import kms.com.common.service.FileMngService;
-import kms.com.common.service.FileVO;
-import kms.com.common.utils.SessionUtil;
-import egovframework.com.sec.ram.security.userdetails.util.EgovUserDetailsHelper;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLEncoder;
+import java.util.Map;
 
 
 /**

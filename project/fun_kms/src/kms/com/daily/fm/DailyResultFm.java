@@ -1,9 +1,9 @@
 package kms.com.daily.fm;
 
-import java.io.Serializable;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
 
 public class DailyResultFm implements Serializable{
 	private static final long serialVersionUID = 1L;

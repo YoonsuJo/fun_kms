@@ -1,12 +1,10 @@
 package kms.com.common.timer;
 
-import javax.annotation.Resource;
-
+import com.ibm.icu.util.Calendar;
+import egovframework.rte.fdl.property.EgovPropertyService;
 import org.springframework.scheduling.timer.ScheduledTimerTask;
 
-import com.ibm.icu.util.Calendar;
-
-import egovframework.rte.fdl.property.EgovPropertyService;
+import javax.annotation.Resource;
 
 public class UpdateTimerTask extends ScheduledTimerTask {
 	

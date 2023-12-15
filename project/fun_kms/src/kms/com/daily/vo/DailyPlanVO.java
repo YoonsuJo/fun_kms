@@ -1,11 +1,11 @@
 package kms.com.daily.vo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import lombok.Getter;
-import lombok.Setter;
 
 public class DailyPlanVO implements Serializable{
 	private static final long serialVersionUID = 1L;

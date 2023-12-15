@@ -1,18 +1,12 @@
 package kms.com.admin.dbManage.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
+import egovframework.rte.psl.dataaccess.util.EgovMap;
+import kms.com.admin.dbManage.service.AdminDbManageService;
 import org.springframework.stereotype.Service;
 
-import egovframework.rte.fdl.idgnr.EgovIdGnrService;
-import egovframework.rte.psl.dataaccess.util.EgovMap;
-
-import kms.com.admin.dbManage.service.AdminDbManageService;
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 
 
 @Service("KmsAdminDbManageService")

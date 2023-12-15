@@ -138,7 +138,11 @@ function goList() {
 								    <td class="title">입사전 인정경력</td>
 								    <td class="pL10" colspan="2"><c:out value="${info.careerMonthPrint}" /></td>
 								    <td class="title">생일</td>
-								    <td class="pL10"><c:out value="${info.brthPrint}" /> (<c:out value="${info.greLunPrint}" />)</td>
+								    <td class="pL10"><c:out value="${info.brthPrint}" />
+										<c:if test="${not empty info.brthPrint}">
+											(<c:out value="${info.greLunPrint}" />)
+										</c:if>
+									</td>
 		                    	</tr>		
 								<tr>
 								    <td class="title">주민등록번호</td>
@@ -150,6 +154,16 @@ function goList() {
 								    </td>
 								    <td class="title">나이</td>
 								    <td class="pL10">
+										<c:choose>
+											<c:when test="${not empty info.age}">
+												만 <c:out value="${info.age}" />세
+											</c:when>
+										</c:choose>
+										<c:choose>
+											<c:when test="${not empty info.ageKor}">
+												(<c:out value="${info.ageKor}" />세)
+											</c:when>
+										</c:choose>
 								    	<c:out value="${result.agePrint}" />
 									</td>
 								</tr>
@@ -199,11 +213,21 @@ function goList() {
 								<tr>
 								    <td class="title" rowspan="2">회사연락처</td>
 								    <td class="title3">근무장소</td>
-								    <td class="pL10" colspan="3"><c:out value="${info.offmNm}" /> (<c:out value="${info.offmAdres}" />)</td>
+								    <td class="pL10" colspan="3">
+										<c:out value="${info.offmNm}" />
+										<c:if test="${not empty info.offmAdres}">
+											(<c:out value="${info.offmAdres}" />)
+										</c:if>
+									</td>
 								</tr>
 								<tr>
 								    <td class="title3">전화번호</td>
-								    <td class="pL10" colspan="3"><c:out value="${info.offmTelno}" /> (내선 <c:out value="${info.offmTelnoInner}" />)</td>
+								    <td class="pL10" colspan="3">
+										<c:out value="${info.offmTelno}" />
+										<c:if test="${not empty info.offmTelnoInner}">
+											(내선 <c:out value="${info.offmTelnoInner}" />)
+										</c:if>
+									</td>
 								</tr>
 								<tr>
 								    <td class="title" rowspan="2">사진</td>

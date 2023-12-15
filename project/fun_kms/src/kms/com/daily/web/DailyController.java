@@ -1,12 +1,24 @@
 package kms.com.daily.web;
 
-import java.net.URLEncoder;
-import java.util.*;
-import java.text.*; 
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
+import kms.com.admin.organ.service.Organ;
+import kms.com.admin.organ.service.OrganVO;
+import kms.com.admin.organ.service.impl.OrganDAO;
+import kms.com.common.utils.CalendarUtil;
+import kms.com.common.utils.SessionUtil;
+import kms.com.cooperation.service.ProjectVO;
+import kms.com.daily.dao.DailyDAO;
+import kms.com.daily.fm.DailyPlanFm;
+import kms.com.daily.fm.DailyResultFm;
+import kms.com.daily.service.DailyService;
+import kms.com.daily.vo.DailyPlanVO;
+import kms.com.daily.vo.DailyResultVO;
+import kms.com.member.service.MemberVO;
+import kms.com.member.service.impl.MemberDAO;
+import kms.com.member.vo.UserVO;
+import kms.com.project.dao.ProjectDAO2;
+import kms.com.request.dao.RequestDAO;
+import kms.com.request.vo.ReqTaskVO;
+import kms.com.request.vo.RequestDailyVO;
 import org.apache.cxf.common.util.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -14,23 +26,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import kms.com.member.service.MemberVO;
-import kms.com.member.service.impl.MemberDAO;
-import kms.com.member.vo.UserVO;
-import kms.com.common.utils.CalendarUtil;
-import kms.com.common.utils.SessionUtil;
-import kms.com.cooperation.service.ProjectVO;
-import kms.com.project.dao.ProjectDAO2;
-import kms.com.daily.service.DailyService;
-import kms.com.daily.dao.DailyDAO;
-import kms.com.daily.fm.*;
-import kms.com.daily.vo.*;
-import kms.com.admin.organ.service.impl.OrganDAO;
-import kms.com.admin.organ.service.Organ;
-import kms.com.admin.organ.service.OrganVO;
-import kms.com.request.dao.RequestDAO;
-import kms.com.request.vo.ReqTaskVO;
-import kms.com.request.vo.RequestDailyVO;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 
 
 @Controller

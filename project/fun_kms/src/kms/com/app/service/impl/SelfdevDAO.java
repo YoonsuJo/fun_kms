@@ -1,24 +1,12 @@
 package kms.com.app.service.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import egovframework.rte.psl.dataaccess.EgovAbstractDAO;
+import kms.com.app.service.SelfdevVO;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Repository;
 
-import egovframework.rte.psl.dataaccess.EgovAbstractDAO;
-import egovframework.rte.psl.dataaccess.util.EgovMap;
-import kms.com.app.service.AccountVO;
-import kms.com.app.service.ApprovalJobgVO;
-import kms.com.app.service.ApprovalOfficialVO;
-import kms.com.app.service.SelfdevVO;
-import kms.com.app.service.ApprovalReaderVO;
-import kms.com.app.service.ApprovalVO;
-import kms.com.app.service.ApprovalVacVO;
-import kms.com.community.service.BoardVO;
-import kms.com.member.service.WorkStateVO;
+import java.util.List;
 
 /**
  * 일반 로그인, 인증서 로그인을 처리하는 DAO 클래스

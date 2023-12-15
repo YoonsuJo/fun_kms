@@ -24,7 +24,8 @@ public class EgovProperties{
 	
 	//프로퍼티값 로드시 에러발생하면 반환되는 에러문자열 
 	public static final String ERR_CODE =" EXCEPTION OCCURRED";
-	public static final String ERR_CODE_FNFE =" EXCEPTION(FNFE) OCCURRED";
+	public static final String ERR_CODE_FNFE =" EXCEPT" +
+			"         ION(FNFE) OCCURRED";
 	public static final String ERR_CODE_IOE =" EXCEPTION(IOE) OCCURRED";
 	
 	//파일구분자

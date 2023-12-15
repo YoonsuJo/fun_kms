@@ -18,8 +18,8 @@
 			<entry key="smsSendHour" value="9"/>
 			<entry key="updateStatisticHour" value="2"/>
 			<!-- entry key="Globals.fileStorePath" value="/product/jeus/egovProps/upload/"/-->
-			<entry key="Globals.fileStorePath" value="/data/server/kms_upload"/> <!-- 업로드 파일 경로 변경-->
-			
+<!--			<entry key="Globals.fileStorePath" value="/data/server/kms_upload"/> &lt;!&ndash; 업로드 파일 경로 변경&ndash;&gt;-->
+			<entry key="Globals.fileStorePath" value="C:\\data\\server\\kms_upload"/> <!-- 로컬사용 -->
 			<!-- 푸시 -->
 			<!-- 알림톡 서비스 -->
 			<!-- 2014/06/16 변경 -->

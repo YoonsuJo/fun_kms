@@ -1,8 +1,8 @@
 package kms.com.common.push;
 
-import java.util.List;
-
 import kms.com.member.service.MemberVO;
+
+import java.util.List;
 
 public class PushVO {
 	private MemberVO senderVO;

@@ -3,8 +3,6 @@ package kms.com.admin.organ.service;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 /**
  * @Class Name : OrganVO.java
  * @Description : Organ VO class

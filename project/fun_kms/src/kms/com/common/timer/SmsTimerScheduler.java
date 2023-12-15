@@ -1,21 +1,7 @@
 package kms.com.common.timer;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TimerTask;
-
-import javax.annotation.Resource;
-
+import egovframework.rte.fdl.property.EgovPropertyService;
+import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kms.com.common.push.PushSender;
 import kms.com.common.push.PushVO;
 import kms.com.common.service.LoginService;
@@ -26,12 +12,17 @@ import kms.com.management.service.InputResultService;
 import kms.com.member.service.MemberService;
 import kms.com.member.service.MemberVO;
 import kms.com.member.service.impl.MemberDAO;
-
-import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;
 
-import egovframework.rte.fdl.property.EgovPropertyService;
-import egovframework.rte.psl.dataaccess.util.EgovMap;
+import javax.annotation.Resource;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Component("smsTimer")
 public class SmsTimerScheduler extends TimerTask {

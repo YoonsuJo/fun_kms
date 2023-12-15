@@ -1,15 +1,11 @@
 package kms.com.common.push;
 
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.List;
-
 import kms.com.common.utils.CommonUtil;
 import kms.com.member.service.MemberVO;
-
-import org.json.simple.JSONObject;
-import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PushSenderTest {
 	

@@ -1,15 +1,8 @@
 package kms.com.common.timer;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TimerTask;
-
-import javax.annotation.Resource;
-
+import com.ibm.icu.util.Calendar;
+import egovframework.rte.fdl.property.EgovPropertyService;
+import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kms.com.common.push.PushSender;
 import kms.com.common.push.PushVO;
 import kms.com.common.service.LoginService;
@@ -17,13 +10,11 @@ import kms.com.community.service.NoteService;
 import kms.com.cooperation.service.DayReportService;
 import kms.com.member.service.MemberVO;
 import kms.com.member.service.impl.MemberDAO;
-
 import org.springframework.stereotype.Component;
 
-import com.ibm.icu.util.Calendar;
-
-import egovframework.rte.fdl.property.EgovPropertyService;
-import egovframework.rte.psl.dataaccess.util.EgovMap;
+import javax.annotation.Resource;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Component("dayReportTimer")
 public class DayReportScheduler extends TimerTask {

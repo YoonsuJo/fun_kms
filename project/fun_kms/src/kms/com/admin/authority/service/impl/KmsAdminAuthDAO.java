@@ -1,15 +1,11 @@
 package kms.com.admin.authority.service.impl;
 
-import java.util.List;
-import java.util.Map;
-
+import egovframework.rte.psl.dataaccess.EgovAbstractDAO;
+import kms.com.admin.authority.service.AuthVO;
 import org.springframework.stereotype.Repository;
 
-import egovframework.rte.psl.dataaccess.EgovAbstractDAO;
-import egovframework.rte.psl.dataaccess.util.EgovMap;
-import kms.com.admin.approval.service.KmsApprovalTyp;
-import kms.com.admin.approval.service.KmsApprovalTypVO;
-import kms.com.admin.authority.service.AuthVO;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @Class Name : KmsEappDoctypDAO.java

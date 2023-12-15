@@ -1,18 +1,11 @@
 package kms.com.support.service.impl;
 
-import java.util.List;
-import java.util.Map;
-
-import kms.com.support.service.CarFixVO;
-import kms.com.support.service.CarReservation;
-import kms.com.support.service.CarVO;
-import kms.com.support.service.CardVO;
-import kms.com.support.service.EquipVO;
-import kms.com.support.service.IpVO;
-
+import egovframework.rte.psl.dataaccess.EgovAbstractDAO;
+import kms.com.support.service.*;
 import org.springframework.stereotype.Repository;
 
-import egovframework.rte.psl.dataaccess.EgovAbstractDAO;
+import java.util.List;
+import java.util.Map;
 
 @Repository("KmsResourceDAO")
 public class ResourceDAO extends EgovAbstractDAO{

@@ -1,16 +1,13 @@
 package kms.com.admin.approval.service.impl;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import egovframework.rte.fdl.cmmn.AbstractServiceImpl;
-import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 import kms.com.admin.approval.service.KmsApprovalTyp;
 import kms.com.admin.approval.service.KmsApprovalTypService;
 import kms.com.admin.approval.service.KmsApprovalTypVO;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Class Name : KmsEappDoctypServiceImpl.java

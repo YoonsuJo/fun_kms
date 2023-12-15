@@ -1,13 +1,11 @@
 package kms.com.common.timer;
 
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Map;
-
+import com.ibm.icu.util.Calendar;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.ibm.icu.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DayReportTest {
 	

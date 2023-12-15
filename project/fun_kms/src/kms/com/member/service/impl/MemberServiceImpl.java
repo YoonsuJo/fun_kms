@@ -1,34 +1,25 @@
 package kms.com.member.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import kms.com.common.exception.IdMixInputException;
-import kms.com.common.utils.CalendarUtil;
-import kms.com.common.utils.CommonUtil;
-import kms.com.community.service.MvucVO;
-import kms.com.cooperation.service.DayReport;
-import kms.com.member.service.MemberService;
-import kms.com.member.service.MemberVO;
-import kms.com.member.service.MobileDeviceVO;
-import kms.com.member.service.Msn;
-import kms.com.member.service.PositionHistoryVO;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-import org.springframework.stereotype.Service;
-
 import egovframework.com.cmm.ComDefaultCodeVO;
 import egovframework.com.cmm.service.EgovCmmUseService;
 import egovframework.com.sym.ccm.cde.service.CmmnDetailCode;
 import egovframework.rte.fdl.property.EgovPropertyService;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
+import kms.com.common.exception.IdMixInputException;
+import kms.com.common.utils.CalendarUtil;
+import kms.com.common.utils.CommonUtil;
+import kms.com.community.service.MvucVO;
+import kms.com.member.service.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 @Service("KmsMemberService")
 public class MemberServiceImpl implements MemberService {
@@ -94,7 +85,10 @@ public class MemberServiceImpl implements MemberService {
 		MemberVO member = memberDAO.selectMember(memberVO);
 		List<EgovMap> insaFileList = memberDAO.selectMemberInsa(memberVO);
 		List<Msn> msnList = memberDAO.selectMemberMsn(memberVO);
-		
+
+		if(Integer.parseInt(member.getAge()) > 100) member.setAge(null);
+		if(Integer.parseInt(member.getAgeKor()) > 100) member.setAgeKor(null);
+
 		map.put("member", member);
 		map.put("insaFileList", insaFileList);
 		map.put("msnList", msnList);

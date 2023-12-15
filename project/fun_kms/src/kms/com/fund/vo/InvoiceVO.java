@@ -1,16 +1,9 @@
 package kms.com.fund.vo;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.collections.FactoryUtils;
-import org.apache.commons.collections.ListUtils;
-
-// import lombok.Data;
-// import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
 
 public class InvoiceVO implements Serializable {
 

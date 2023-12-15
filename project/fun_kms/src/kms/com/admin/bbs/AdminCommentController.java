@@ -1,27 +1,15 @@
 package kms.com.admin.bbs;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-
+import egovframework.com.cmm.EgovMessageSource;
+import egovframework.rte.fdl.property.EgovPropertyService;
 import kms.com.admin.score.service.ScoreService;
-import kms.com.admin.score.service.ScoreVO;
 import kms.com.common.service.FileMngService;
 import kms.com.common.service.FileMngUtil;
 import kms.com.common.service.FileVO;
-import kms.com.common.utils.SessionUtil;
 import kms.com.common.utils.CommonUtil;
-import kms.com.community.service.BBSAttributeManageService;
-import kms.com.community.service.BBSCommentService;
-import kms.com.community.service.BBSManageService;
-import kms.com.community.service.BoardMasterVO;
-import kms.com.community.service.BoardVO;
-import kms.com.community.service.Comment;
-import kms.com.community.service.CommentVO;
+import kms.com.common.utils.SessionUtil;
+import kms.com.community.service.*;
 import kms.com.member.service.MemberVO;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,10 +21,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springmodules.validation.commons.DefaultBeanValidator;
 
-import egovframework.com.cmm.EgovMessageSource;
-import egovframework.com.utl.sim.service.EgovFileScrty;
-import egovframework.rte.fdl.property.EgovPropertyService;
-import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 댓글관리 서비스 컨트롤러 클래스

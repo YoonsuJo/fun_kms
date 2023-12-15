@@ -1,67 +1,39 @@
 package kms.com.common.web;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javapns.Push;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.annotation.Resource;
-
+import egovframework.com.cmm.ComDefaultCodeVO;
+import egovframework.com.cmm.EgovMessageSource;
+import egovframework.com.cmm.service.EgovCmmUseService;
+import egovframework.com.sym.ccm.cde.service.CmmnDetailCode;
+import egovframework.com.utl.sim.service.EgovClntInfo;
+import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kms.com.common.config.ConditionSettingKey;
-import kms.com.common.push.AndroidProvider;
 import kms.com.common.service.CommonService;
 import kms.com.common.service.LoginService;
 import kms.com.common.utils.CalendarUtil;
 import kms.com.common.utils.CommonUtil;
 import kms.com.common.utils.SessionUtil;
-import kms.com.community.service.Note;
 import kms.com.community.service.NoteService;
-import kms.com.community.service.NoteVO;
 import kms.com.management.service.InputResultPerson;
 import kms.com.management.service.InputResultService;
 import kms.com.member.service.Member;
 import kms.com.member.service.MemberService;
 import kms.com.member.service.MemberVO;
-import kms.com.member.service.MobileLogVO;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.ibm.icu.text.SimpleDateFormat;
-
-import egovframework.com.cmm.ComDefaultCodeVO;
-import egovframework.com.cmm.EgovMessageSource;
-import egovframework.com.cmm.service.EgovCmmUseService;
-import egovframework.com.cmm.service.Globals;
-import egovframework.com.sec.ram.security.userdetails.util.EgovUserDetailsHelper;
-import egovframework.com.sym.ccm.cde.service.CmmnDetailCode;
-import egovframework.com.uat.uia.service.LoginVO;
-import egovframework.com.utl.sim.service.EgovClntInfo;
-import egovframework.rte.psl.dataaccess.util.EgovMap;
+import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 일반 로그인, 인증서 로그인을 처리하는 컨트롤러 클래스

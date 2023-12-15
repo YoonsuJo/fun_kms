@@ -1,22 +1,12 @@
 package kms.com.member.web;
 
-import java.net.URLDecoder;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.apache.log4j.Logger;
-
-import kms.com.app.service.ApprovalCommentVO;
-import kms.com.app.service.ApprovalReaderVO;
-import kms.com.app.service.ApprovalVO;
+import egovframework.com.cmm.ComDefaultCodeVO;
+import egovframework.com.cmm.EgovMessageSource;
+import egovframework.com.cmm.service.EgovCmmUseService;
+import egovframework.com.sym.ccm.cde.service.CmmnDetailCode;
+import egovframework.rte.fdl.property.EgovPropertyService;
+import egovframework.rte.psl.dataaccess.util.EgovMap;
+import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import kms.com.app.service.KmsApprovalService;
 import kms.com.common.config.ConditionSettingKey;
 import kms.com.common.config.PathConfig;
@@ -28,33 +18,17 @@ import kms.com.common.utils.CalendarUtil;
 import kms.com.common.utils.CommonUtil;
 import kms.com.common.utils.SessionUtil;
 import kms.com.community.service.BBSAttributeManageService;
-import kms.com.community.service.BoardMaster;
-import kms.com.community.service.BoardMasterVO;
-import kms.com.community.service.MailVO;
-import kms.com.community.service.NoteService;
 import kms.com.cooperation.service.DayReportDetail;
 import kms.com.cooperation.service.DayReportService;
 import kms.com.management.service.InputResultPerson;
 import kms.com.management.service.InputResultPersonVO;
 import kms.com.management.service.InputResultService;
-import kms.com.member.service.MemberService;
-import kms.com.member.service.MemberVO;
-import kms.com.member.service.Msn;
-import kms.com.member.service.PositionHistoryVO;
-import kms.com.member.service.WorkStateDetail;
-import kms.com.member.service.WorkStateService;
-import kms.com.member.service.WorkStateStatistic;
-import kms.com.member.service.WorkStateVO;
+import kms.com.member.service.*;
 import kms.com.salary.service.KmsSalaryService;
-import kms.com.salary.service.MemberEvaVO;
 import kms.com.salary.service.SalaryVO;
-import kms.com.support.service.CarVO;
-
-import org.apache.catalina.connector.Request;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -64,14 +38,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springmodules.validation.commons.DefaultBeanValidator;
 
-import egovframework.com.cmm.ComDefaultCodeVO;
-import egovframework.com.cmm.EgovMessageSource;
-import egovframework.com.cmm.service.EgovCmmUseService;
-import egovframework.com.cop.bbs.service.Satisfaction;
-import egovframework.com.sym.ccm.cde.service.CmmnDetailCode;
-import egovframework.rte.fdl.property.EgovPropertyService;
-import egovframework.rte.psl.dataaccess.util.EgovMap;
-import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
+import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.net.URLDecoder;
+import java.util.*;
 
 @Controller
 public class MemberController {

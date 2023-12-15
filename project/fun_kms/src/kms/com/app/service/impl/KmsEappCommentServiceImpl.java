@@ -1,17 +1,13 @@
 package kms.com.app.service.impl;
 
-import java.util.List;
-
-import javax.annotation.Resource;
-
+import egovframework.rte.fdl.cmmn.AbstractServiceImpl;
+import kms.com.app.service.ApprovalComment;
+import kms.com.app.service.ApprovalCommentVO;
+import kms.com.app.service.KmsEappCommentService;
 import org.springframework.stereotype.Service;
 
-import egovframework.rte.fdl.cmmn.AbstractServiceImpl;
-import egovframework.rte.fdl.idgnr.EgovIdGnrService;
-import kms.com.app.service.KmsEappCommentService;
-import kms.com.app.service.ApprovalCommentVO;
-import kms.com.app.service.ApprovalComment;
-import kms.com.app.service.impl.KmsEappCommentDAO;
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Class Name : KmsEappCommentServiceImpl.java

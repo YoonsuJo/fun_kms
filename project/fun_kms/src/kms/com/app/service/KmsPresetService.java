@@ -1,13 +1,6 @@
 package kms.com.app.service;
 
 import java.util.List;
-import java.util.Map;
-
-import org.json.simple.JSONObject;
-
-import kms.com.member.service.WorkStateVO;
-
-import egovframework.rte.psl.dataaccess.util.EgovMap;
 
 /**
  * 일반 로그인, 인증서 로그인을 처리하는 비즈니스 인터페이스 클래스

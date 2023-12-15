@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    
-<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"xmlns="http://www.w3.org/TR/REC-html40">
+
+<html xmlns="http://www.w3.org/TR/REC-html40">
 <head>
 <meta name="ProgId" content="Excel.Sheet">
 <meta name="Generator" content="Microsoft Excel 11">

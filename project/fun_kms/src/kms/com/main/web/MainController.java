@@ -1,23 +1,9 @@
 package kms.com.main.web;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import kms.com.admin.score.service.ScoreDetailVO;
+import egovframework.com.cmm.EgovMessageSource;
+import egovframework.rte.fdl.property.EgovPropertyService;
+import egovframework.rte.psl.dataaccess.util.EgovMap;
+import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
 import kms.com.admin.score.service.ScoreService;
 import kms.com.app.service.ApprovalVO;
 import kms.com.app.service.KmsApprovalService;
@@ -26,26 +12,20 @@ import kms.com.common.service.BannerVO;
 import kms.com.common.service.impl.CommonDAO;
 import kms.com.common.utils.CalendarUtil;
 import kms.com.common.utils.SessionUtil;
-import kms.com.common.utils.XmlParseUtil;
-import kms.com.community.service.BBSAttributeManageService;
-import kms.com.community.service.BBSManageService;
-import kms.com.community.service.BoardMasterVO;
-import kms.com.community.service.BoardVO;
-import kms.com.community.service.MvucVO;
-import kms.com.community.service.ScheduleService;
-import kms.com.community.service.ScheduleVO;
-import kms.com.cooperation.service.BusiCntctService;
-import kms.com.cooperation.service.BusinessContactVO;
-import kms.com.cooperation.service.DayReportDetail;
-import kms.com.cooperation.service.DayReportService;
-import kms.com.cooperation.service.TaskVO;
+import kms.com.community.service.*;
+import kms.com.cooperation.service.*;
 import kms.com.management.service.ContractService;
 import kms.com.member.service.MemberService;
 import kms.com.member.service.MemberVO;
-import egovframework.com.cmm.EgovMessageSource;
-import egovframework.rte.fdl.property.EgovPropertyService;
-import egovframework.rte.psl.dataaccess.util.EgovMap;
-import egovframework.rte.ptl.mvc.tags.ui.pagination.PaginationInfo;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class MainController {

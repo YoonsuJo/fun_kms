@@ -1,8 +1,8 @@
 package kms.com.app.service;
 
-import java.io.Serializable;
-
 import kms.com.common.utils.CommonUtil;
+
+import java.io.Serializable;
 
 /**
  * @Class Name : TblEappHolVO.java

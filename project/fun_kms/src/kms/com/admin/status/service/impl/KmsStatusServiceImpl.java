@@ -1,27 +1,15 @@
 package kms.com.admin.status.service.impl;
 
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import org.springframework.stereotype.Service;
-
 import egovframework.rte.fdl.cmmn.AbstractServiceImpl;
-import egovframework.rte.fdl.cmmn.exception.FdlException;
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
-
-import kms.com.admin.organ.service.OrganService;
-import kms.com.admin.organ.service.Organ;
-import kms.com.admin.organ.service.OrganVO;
-import kms.com.admin.organ.service.impl.OrganDAO;
-import kms.com.admin.score.service.ScoreDAO;
-import kms.com.admin.score.service.ScoreDetailVO;
-import kms.com.admin.score.service.ScoreService;
-import kms.com.admin.score.service.ScoreVO;
 import kms.com.admin.status.service.KmsStatusDAO;
 import kms.com.admin.status.service.KmsStatusService;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
 
 
 

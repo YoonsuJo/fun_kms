@@ -1,6 +1,5 @@
 package kms.com.admin.score.service;
 
-import java.io.Serializable;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**

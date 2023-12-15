@@ -101,6 +101,40 @@ function pop_photo(typ) {
 	}
 	popup.focus();
 }
+
+$(document).ready(function() {
+	$('.calGen.birthDate').each(function() {
+		if (!$(this).data("datepicker")) {
+			$(this).datepicker();
+		}
+		$(this).datepicker('option', 'yearRange', '1900:2023');
+	});
+
+	var members = [
+		<c:forEach items="${memberList}" var="member" varStatus="status">
+		{ label: "<c:out value='${member.userNm}'/>", value: "<c:out value='${member.userNm}'/>" }
+		<c:if test="${!status.last}">,</c:if>
+		</c:forEach>
+	];
+
+	$('.memberSelector').autocomplete({
+		source: members,
+		select: function(event, ui) {
+			$(this).val(ui.item.label);
+			return false;
+		}
+	});
+
+	$('#offmIdSelect').change(function() {
+		var selectedOption = $(this).find('option:selected');
+		if (selectedOption.val() === "") {
+			$('#offmNm').html('');
+		} else {
+			var selectedColumn1 = selectedOption.data('column1');
+			$('#offmNm').html(selectedColumn1);
+		}
+	});
+});
 </script>
 </head>
 
@@ -240,7 +274,7 @@ function pop_photo(typ) {
 								    </td>
 							        <td class="title">생일</td>
 							        <td class="pL10">
-							        	<input type="text" name="brth" maxlength="8" value="<c:out value="${info.brth}" />" class="calGen span_3" />
+							        	<input type="text" name="brth" maxlength="8" value="<c:out value="${info.brth}" />" class="calGen span_3 birthDate" autocomplete="off" />
 							        	<input type="checkbox" name="greLun" value="L" <c:if test="${info.greLun == 'L'}">checked="checked"</c:if> />음력
 							        </td>
 		                    	</tr>		
@@ -252,7 +286,24 @@ function pop_photo(typ) {
 							        	<input type="text" name="ihidNumBack" value="<c:out value="${info.ihidNumBack}" />" class="span_3" maxlength="7" />
 							        </td>
 								    <td class="title">나이</td>
-								    <td class="pL10">만 <c:out value="${info.age}" />세 (<c:out value="${info.ageKor}" />세)</td>
+									<td class="pL10">
+										<c:choose>
+											<c:when test="${empty info.age}">
+												만 -세
+											</c:when>
+											<c:otherwise>
+												만 <c:out value="${info.age}" />세
+											</c:otherwise>
+										</c:choose>
+										(<c:choose>
+											<c:when test="${empty info.ageKor}">
+												-세
+											</c:when>
+											<c:otherwise>
+												<c:out value="${info.ageKor}" />세
+											</c:otherwise>
+										</c:choose>)
+									</td>
 		                    	</tr>
 		                    	<tr>
 								    <td class="title">학력</td>
@@ -267,7 +318,7 @@ function pop_photo(typ) {
 							        	</select>							        	
 								    </td>
 								    <td class="title">인정입사일</td>
-								    <td class="pL10"><input type="text" name="acceptCompinDt" maxlength="8" value="<c:out value="${info.acceptCompinDt}" />" class="calGen span_3" /></td>							    
+								    <td class="pL10"><input type="text" name="acceptCompinDt" maxlength="8" value="<c:out value="${info.acceptCompinDt}" />" class="calGen span_3" autocomplete="off"/></td>
 		                    	</tr>	
 		                    	
 		                    	
@@ -338,13 +389,13 @@ function pop_photo(typ) {
 		                    	<tr>
 							        <td class="title">회사연락처</td>
 							        <td colspan="3">
-							        	<ul class="address">
+							        	<ul class="address" style="display: flex; align-items: center; white-space: nowrap;">
 							        		<li class="left">근무장소</li>
-							        		<li class="right">
-									        	<select name="offmId">
+							        		<li class="right" style="display: flex; align-items: center; white-space: nowrap;">
+									        	<select name="offmId" id="offmIdSelect">
 								    				<option value="" <c:if test="${info.offmId == ''}">selected="selected"</c:if>>== 선택 ==</option>
 									        		<c:forEach items="${offmCode}" var="offm">
-										        		<option value="${offm.code}" onclick="$('#offmNm').html('${offm.column1}')" <c:if test="${info.offmId == offm.code}">selected="selected"</c:if> ><c:out value="${offm.codeNm}" /></option>
+										        		<option value="${offm.code}" data-column1="${offm.column1}" <c:if test="${info.offmId == offm.code}">selected="selected"</c:if> ><c:out value="${offm.codeNm}" /></option>
 									        		</c:forEach>
 									        	</select>
 										    	<p id="offmNm">${info.offmAdres}</p>
@@ -385,9 +436,9 @@ function pop_photo(typ) {
 								    </td>
 								    <td class="title">입사추천인</td>
 								    <td class="pL10">								   
-										<input type="text" name="recommender" value="<c:out value="${info.recommender}" />" class="span_11" />										
+										<input type="text" name="recommender" value="<c:out value="${info.recommender}" />" class="span_11 memberSelector" autocomplete="off" />
 								    </td>
-		                    	</tr>		                    		    
+		                    	</tr>
 		                    	<tr>
 								    <td class="title">좌우명</td>
 								    <td class="pL10 pT5 pB5" colspan="4">

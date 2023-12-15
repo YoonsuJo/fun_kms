@@ -1,14 +1,10 @@
 package kms.com.admin.member.web;
 
-import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import egovframework.com.cmm.ComDefaultCodeVO;
+import egovframework.com.cmm.EgovMessageSource;
+import egovframework.com.cmm.service.EgovCmmUseService;
+import egovframework.com.sym.ccm.cde.service.CmmnDetailCode;
+import egovframework.rte.fdl.property.EgovPropertyService;
 import kms.com.common.config.PathConfig;
 import kms.com.common.service.FileMngService;
 import kms.com.common.service.FileMngUtil;
@@ -20,7 +16,6 @@ import kms.com.member.service.MemberService;
 import kms.com.member.service.MemberVO;
 import kms.com.member.service.Msn;
 import kms.com.member.service.PositionHistoryVO;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -31,11 +26,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springmodules.validation.commons.DefaultBeanValidator;
 
-import egovframework.com.cmm.ComDefaultCodeVO;
-import egovframework.com.cmm.EgovMessageSource;
-import egovframework.com.cmm.service.EgovCmmUseService;
-import egovframework.com.sym.ccm.cde.service.CmmnDetailCode;
-import egovframework.rte.fdl.property.EgovPropertyService;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 게시물 관리를 위한 컨트롤러 클래스
@@ -220,13 +217,17 @@ public class AdminMemberController {
 		List<CmmnDetailCode> compnyCode = cmmUseService.selectCmmCodeDetail(codeVO);    	
 		codeVO.setCodeId("KMS033");
 		List<CmmnDetailCode> degreeCode = cmmUseService.selectCmmCodeDetail(codeVO);
-		
+
 		Map<String, Object> result = memberService.selectMember(memberVO);    	    	
 		model.addAttribute("result", result);
 		model.addAttribute("offmCode", offmCode);
 		model.addAttribute("compnyCode", compnyCode);
 		model.addAttribute("degreeCode", degreeCode);
-		
+
+		MemberVO memberListVO = new MemberVO();
+		memberVO.setOrderBy("name");
+		model.addAttribute("memberList", memberService.selectMemberList(memberListVO));
+
 		//목록으로 돌아갈 검색조건들
 		model.addAttribute("searchCondition", memberVO.getSearchCondition());    	
 		model.addAttribute("searchKeyword", memberVO.getSearchKeyword());    	
