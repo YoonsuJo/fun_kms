@@ -1,14 +1,11 @@
 package kms.com.member.service;
 
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
-
-import egovframework.com.cmm.ComDefaultCodeVO;
 import egovframework.rte.psl.dataaccess.util.EgovMap;
 import kms.com.common.utils.CalendarUtil;
 import kms.com.common.utils.CommonUtil;
-import kms.com.common.utils.LunarHandler;
+import org.apache.commons.lang.StringUtils;
+
+import java.util.List;
 
 /**
  * @Class Name : MemberVO.java
@@ -683,7 +680,7 @@ public class Member {
 		return workSt;
 	}
 	public String[] getWorkStArray() {
-		String tmp = workSt == null ? "W,L" : workSt;
+		String tmp = workSt == null ? "W,L,N" : workSt;
 		return tmp.split(",");
 	}
 	public String getWorkStPrint() {
@@ -698,6 +695,9 @@ public class Member {
 		}
 		else if (ws.equals("W")) {
 			return "근무";
+		}
+		else if (ws.equals("N")) {
+			return "신규";
 		}
 		else return workSt;
 	}

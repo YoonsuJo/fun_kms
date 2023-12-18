@@ -431,7 +431,7 @@
 				</iterate>
 			</isNotEmpty>
 			<isEmpty prepend="AND" property="workStList">
-				a.WORK_ST IN ('W', 'L')
+				a.WORK_ST IN ('W', 'L', 'N')
 			</isEmpty>
 			<isEqual property="searchCondition" compareValue="0">
 				<isNotEmpty prepend="AND" property="rankId">

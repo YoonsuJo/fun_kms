@@ -103,7 +103,7 @@ function excelDown() {
 								<tr>
 									<td>
 										검색범위 :
-										<input type="checkbox" name="workSt" value="W,L" <c:if test="${searchVO.working}">checked="checked"</c:if> /> 재직자
+										<input type="checkbox" name="workSt" value="W,L,N" <c:if test="${searchVO.working}">checked="checked"</c:if> /> 재직자
 										<span class="pL7"></span>
 										<input type="checkbox" name="workSt" value="R" <c:if test="${searchVO.retired}">checked="checked"</c:if> /> 퇴직자
 									</td>

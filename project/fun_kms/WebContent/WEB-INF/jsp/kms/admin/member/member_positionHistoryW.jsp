@@ -30,10 +30,10 @@
 										<c:if test="${not empty cnew && cresult.member.workSt == 'W'}">
 										<label><input type="radio" name="chngCode" value="CH" onclick="disableSetting(this);" /> 변경</label>
 										</c:if>
-										<c:if test="${empty cnew}">
+										<c:if test="${not empty cnew && cresult.member.workSt == 'N'}">
 										<label><input type="radio" name="chngCode" value="EN" onclick="disableSetting(this);" /> 입사</label>
 										</c:if>
-										<c:if test="${not empty cnew && cresult.member.workSt != 'R'}">
+										<c:if test="${not empty cnew && cresult.member.workSt != 'R'&&'N'}">
 										<label><input type="radio" name="chngCode" value="RT" onclick="disableSetting(this);" /> 퇴직</label>
 										</c:if>
 										<c:if test="${not empty cnew && cresult.member.workSt == 'R'}">
