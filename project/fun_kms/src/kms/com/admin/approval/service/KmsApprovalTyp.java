@@ -22,7 +22,7 @@ public class KmsApprovalTyp implements Serializable{
     private String companyNm;
     
     /** TEMPLT_ID */
-    private String templtId;
+    private Integer templtId;
     private String templtNm;
     
     /** DOC_ORD */
@@ -70,11 +70,11 @@ public class KmsApprovalTyp implements Serializable{
     /** DECIDER_MIX */
     private String deciderMix;
     
-    public String getTempltId() {
+    public Integer getTempltId() {
         return this.templtId;
     }
     
-    public void setTempltId(String templtId) {
+    public void setTempltId(Integer templtId) {
         this.templtId = templtId;
     }
     

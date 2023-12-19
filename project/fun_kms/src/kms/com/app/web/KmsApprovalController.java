@@ -987,7 +987,7 @@ public class KmsApprovalController {
 					
 					//전결이 났을 경우 처리담당자를 reader에 삽입해 줌.
 					KmsApprovalTyp appTyp = new KmsApprovalTyp();
-					appTyp.setTempltId(vo.getTempltId());
+					appTyp.setTempltId(Integer.parseInt(vo.getTempltId()));
 					appTyp = kmsApprovalTypService.selectKmsEappDoctyp(appTyp);
 					List<String> handlers = CommonUtil.parseIdFromMixs2(appTyp.getHandlerMixs());
 					if (handlers != null){
@@ -2275,7 +2275,7 @@ public class KmsApprovalController {
 		List<KmsApprovalTypVO> voList = kmsApprovalTypService.selectKmsEappDoctypList(searchVO);
 		Map<String, KmsApprovalTypVO> result = new HashMap();
 		for (KmsApprovalTypVO vo : voList) {
-			result.put(vo.getTempltId(), vo);
+			result.put(vo.getTempltId().toString(), vo);
 		}
 		return result;
 	}
@@ -2298,7 +2298,7 @@ public class KmsApprovalController {
 		if(includeAll)
 			result.put("","모든 결재양식");
 		for (KmsApprovalTypVO vo : voList) {
-			result.put(vo.getTempltId(), vo.getDocSj());
+			result.put(vo.getTempltId().toString(), vo.getDocSj());
 		}
 		return result;
 	}

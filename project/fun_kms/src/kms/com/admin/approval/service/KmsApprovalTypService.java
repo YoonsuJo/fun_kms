@@ -23,7 +23,7 @@ public interface KmsApprovalTypService {
 	 * @return 등록 결과
 	 * @exception Exception
 	 */
-    String insertKmsEappDoctyp(KmsApprovalTyp vo) throws Exception;
+    Integer insertKmsEappDoctyp(KmsApprovalTyp vo) throws Exception;
     
     /**
 	 * KMS_EAPP_DOCTYP을 수정한다.

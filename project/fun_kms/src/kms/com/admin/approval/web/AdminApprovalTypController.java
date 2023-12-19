@@ -122,16 +122,15 @@ public class AdminApprovalTypController {
 		kmsEappDoctypVO.setDocIcon(atchFileId);
 		if(kmsEappDoctypVO.getDeciderRule4()==null || kmsEappDoctypVO.getDeciderRule4().equals(""))
 				kmsEappDoctypVO.setDeciderRule4("0");
-        kmsApprovalTypService.insertKmsEappDoctyp(kmsEappDoctypVO);
-        
-        return "redirect:/admin/approval/approvalV.do?templtId=" + kmsEappDoctypVO.getTempltId() ;
+        Integer templtId = kmsApprovalTypService.insertKmsEappDoctyp(kmsEappDoctypVO);
+        return "redirect:/admin/approval/approvalV.do?templtId=" + templtId;
     }
-        
+
     @RequestMapping("/admin/approval/approvalU.do")
     public String updateKmsEappDoctyp(MultipartHttpServletRequest multiRequest,
             @ModelAttribute("searchVO") KmsApprovalTypVO searchVO, SessionStatus status)
             throws Exception {
-    	
+
     	String docIcon = searchVO.getDocIcon();
 	    final Map<String, MultipartFile> files = multiRequest.getFileMap();
 	    if (!files.isEmpty()) {
@@ -147,23 +146,23 @@ public class AdminApprovalTypController {
 			    fileMngService.updateFileInfs(_result);
 			}
 	    }
-	    
+
         kmsApprovalTypService.updateKmsEappDoctyp(searchVO);
         return "redirect:/admin/approval/approvalV.do?templtId=" + searchVO.getTempltId() ;
     }
-        
+
     @RequestMapping("/admin/approval/approvalV.do")
     public String updateKmsEappDoctypView(
             @ModelAttribute("searchVO") KmsApprovalTypVO searchVO
             , Model model)
             throws Exception {
-        
+
         // 변수명은 CoC 에 따라 kmsEappDoctypVO
         model.addAttribute("result", kmsApprovalTypService.selectKmsEappDoctyp(searchVO));
-        
+
         return "admin/approval/approvalV";
     }
-       
+
     @RequestMapping("/kmsEappDoctyp/deleteKmsEappDoctyp.do")
     public String deleteKmsEappDoctyp(
             KmsApprovalTyp kmsEappDoctypVO,
@@ -173,7 +172,7 @@ public class AdminApprovalTypController {
         status.setComplete();
         return "forward:/kmsEappDoctyp/KmsEappDoctypList.do";
     }
-    
+
     @RequestMapping("/admin/approval/ajaxOrderUpdate.do")
     public void ajaxOrderUpdate(
             @ModelAttribute("searchVO") KmsApprovalTypVO searchVO,
@@ -181,15 +180,15 @@ public class AdminApprovalTypController {
             HttpServletResponse response,
              Model model)
             throws Exception {
-        
-        
+
+
         String orderResultDecode = URLDecoder.decode(orderResult, "UTF-8");
         JSONObject orderResultJ=  (JSONObject)JSONValue.parseWithException(orderResultDecode);
         Set set = orderResultJ.keySet();
         Iterator it = set.iterator();
         while(it.hasNext())
         {
-        	String templtId = (String) it.next();
+            Integer templtId = (Integer) it.next();
         	int ord = Integer.parseInt((String) orderResultJ.get(templtId));
     		searchVO.setTempltId(templtId);
     		searchVO.setDocOrd(ord);

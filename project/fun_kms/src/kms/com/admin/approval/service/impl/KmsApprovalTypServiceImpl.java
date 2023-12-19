@@ -39,7 +39,7 @@ public class KmsApprovalTypServiceImpl extends AbstractServiceImpl implements
 	 * @return 등록 결과
 	 * @exception Exception
 	 */
-    public String insertKmsEappDoctyp(KmsApprovalTyp vo) throws Exception {
+    public Integer insertKmsEappDoctyp(KmsApprovalTyp vo) throws Exception {
     	log.debug(vo.toString());
     	
     	/** ID Generation Service */
@@ -47,10 +47,11 @@ public class KmsApprovalTypServiceImpl extends AbstractServiceImpl implements
     	//String id = egovIdGnrService.getNextStringId();
     	//vo.setId(id);
     	log.debug(vo.toString());
-    	
+
     	kmsEappDoctypDAO.insertKmsEappDoctyp(vo);
-    	//TODO 해당 테이블 정보에 맞게 수정    	
-        return null;
+    	//TODO 해당 테이블 정보에 맞게 수정
+
+		return kmsEappDoctypDAO.selectMaxTempltId();
     }
 
     /**

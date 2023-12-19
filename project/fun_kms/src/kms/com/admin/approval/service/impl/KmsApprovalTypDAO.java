@@ -32,6 +32,9 @@ public class KmsApprovalTypDAO extends EgovAbstractDAO {
     public void  insertKmsEappDoctyp(KmsApprovalTyp vo) throws Exception {
     	insert("kmsEappDoctypDAO.insertKmsEappDoctyp_S", vo);
     }
+	public Integer selectMaxTempltId() throws Exception {
+		return (Integer) getSqlMapClientTemplate().queryForObject("kmsEappDoctypDAO.selectMaxTempltId");
+	}
 
     /**
 	 * KMS_EAPP_DOCTYP을 수정한다.

@@ -212,7 +212,7 @@ public class AdminSelfdevController {
 			ModelMap model)
 	throws Exception {
 		searchVO = selfdevService.selectSelfdevUsrView(searchVO);  
-		searchVO.setExtraCharge(Integer.toString(Integer.parseInt(searchVO.getExtraCharge())/1000)); 
+		searchVO.setExtraCharge(Integer.toString(Integer.parseInt(searchVO.getExtraCharge())/1000));
 		model.addAttribute("selfdevUsrVO", searchVO);
 		return "/admin/approval/include/selfdevUsrW";
 	}
@@ -230,7 +230,10 @@ public class AdminSelfdevController {
 			@ModelAttribute("selfdevVO") SelfdevVO selfdevVO,
 			ModelMap model)
 	throws Exception {
-		selfdevVO.setExtraCharge(Integer.toString(Integer.parseInt(selfdevVO.getExtraCharge()) * 1000)); 
+//		selfdevVO.setExtraCharge(Integer.toString(Integer.parseInt(selfdevVO.getExtraCharge()) * 1000));
+		String extraCharge = selfdevVO.getExtraCharge().replaceAll(",", "");
+		int intValue = (extraCharge != null && !extraCharge.isEmpty()) ? Integer.parseInt(extraCharge) : 0;
+		selfdevVO.setExtraCharge(String.valueOf(intValue * 1000));
 		selfdevService.insertSelfdevUsr(selfdevVO);
 		return "success";
 	}
@@ -241,7 +244,10 @@ public class AdminSelfdevController {
 			@ModelAttribute("selfdevVO") SelfdevVO selfdevVO,
 			ModelMap model)
 	throws Exception {
-		selfdevVO.setExtraCharge(Integer.toString(Integer.parseInt(selfdevVO.getExtraCharge()) * 1000)); 
+//		selfdevVO.setExtraCharge(Integer.toString(Integer.parseInt(selfdevVO.getExtraCharge()) * 1000));
+		String extraCharge = selfdevVO.getExtraCharge().replaceAll(",", "");
+		int intValue = (extraCharge != null && !extraCharge.isEmpty()) ? Integer.parseInt(extraCharge) : 0;
+		selfdevVO.setExtraCharge(String.valueOf(intValue * 1000));
 		selfdevService.updateSelfdevUsr(selfdevVO);
 		return "success";
 	}

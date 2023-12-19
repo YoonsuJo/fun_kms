@@ -199,6 +199,10 @@
 			WHERE CODE_ID = 'KMS007'
 			AND USE_AT = 'Y';
 		]]>
-	</select>	
+	</select>
+
+	<select id="kmsEappDoctypDAO.selectMaxTempltId" resultClass="java.lang.Integer">
+		SELECT MAX(TEMPLT_ID) FROM TBL_EAPP_DOCTYP
+	</select>
 	
 </sqlMap>
