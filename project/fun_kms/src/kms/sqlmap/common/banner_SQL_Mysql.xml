@@ -116,6 +116,7 @@
 	<update id="BannerDAO.updateBanner">
 		UPDATE TBL_BANNER
 		SET
+			BNR_FILE_ID = #bnrFileId#,
 			BNR_SJ = #bnrSj#,
 			NTCE_SDT = #ntceSdt#,
 			NTCE_EDT = #ntceEdt#,

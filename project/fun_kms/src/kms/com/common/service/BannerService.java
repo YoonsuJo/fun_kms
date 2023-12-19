@@ -7,6 +7,7 @@ public interface BannerService {
 	List<BannerVO> selectAllBannerList(BannerVO bannerVO) throws Exception;
 	int selectAllBannerListTotCnt(BannerVO bannerVO) throws Exception;
 	
+//	User main
 	List<BannerVO> selectBannerList(BannerVO bannerVO) throws Exception;
 	int selectBannerListTotCnt(BannerVO bannerVO) throws Exception;
 	

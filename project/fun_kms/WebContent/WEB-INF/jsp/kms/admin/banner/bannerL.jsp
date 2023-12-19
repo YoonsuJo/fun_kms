@@ -103,6 +103,7 @@ function chnageOrder(bnrId, ordNo, type) {
 		                    						<c:otherwise>
 		                    							<c:import url="/selectImageFileInfs.do" charEncoding="utf-8">
 															<c:param name="param_atchFileId" value="${result.bnrFileId}" />
+															<c:param name="param_width" value="150" />
 														</c:import>
 		                    						</c:otherwise>
 		                    					</c:choose>

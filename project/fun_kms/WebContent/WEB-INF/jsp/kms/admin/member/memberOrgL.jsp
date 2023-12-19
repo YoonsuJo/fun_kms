@@ -118,7 +118,7 @@ function orgSave(userNo) {
 						<form name="frm" method="POST" action="${rootPath}/admin/member/selectMemberListSecOrg.do" onsubmit="search(); return false;">
 						<input type="hidden" name="no" value="0"/>
 						<input type="hidden" name="searchOrgId" id="orgId" value="${searchVO.searchOrgId}"/>
-						<input type="hidden" name="workSt" value="W,L" />
+						<input type="hidden" name="workSt" value="W,L,N" />
 						<!-- 상단 검색창 시작 -->
 						<fieldset>
 						<legend>상단 검색</legend>
@@ -198,14 +198,23 @@ function orgSave(userNo) {
 										<td class="txt_center">${result.initial}</td>
 										<td class="txt_center"><c:out value="${result.userId}"/></td>
 										<td class="txt_center"><c:out value="${result.rankNm}"/></td>
-										<td class="txt_center"><print:org orgnztNm="${result.orgnztNm}" orgnztId="${result.orgnztId}"/></td>
-										<td class="txt_center">
-											<input type="text" name="searchOrgNm_${result.no}" id="orgNm_${result.no}" class="search_txt02" value="${result.orgnztNmSec}" 
-													onfocus="orgGen('orgNm_${result.no}','orgId_${result.no}',1);" readonly="readonly"/>
-											<img src="${imagePath}/btn/btn_tree.gif" class="cursorPointer" onclick="orgGen('orgNm_${result.no}','orgId_${result.no}',1);"/>
-											<input type="hidden" name="searchOrgId_${result.no}" id="orgId_${result.no}" value="${result.orgnztIdSec}"/>
-										</td>
-										<td class="txt_center"><img class="cursorPointer" onclick="orgSave('${result.no}');" src="${imagePath}/admin/btn/btn_save.gif"/></td>
+										<c:choose>
+											<c:when test="${result.workSt != 'N'}">
+												<td class="txt_center"><print:org orgnztNm="${result.orgnztNm}" orgnztId="${result.orgnztId}"/></td>
+												<td class="txt_center">
+													<input type="text" name="searchOrgNm_${result.no}" id="orgNm_${result.no}" class="search_txt02" value="${result.orgnztNmSec}"
+															onfocus="orgGen('orgNm_${result.no}','orgId_${result.no}',1);" readonly="readonly"/>
+													<img src="${imagePath}/btn/btn_tree.gif" class="cursorPointer" onclick="orgGen('orgNm_${result.no}','orgId_${result.no}',1);"/>
+													<input type="hidden" name="searchOrgId_${result.no}" id="orgId_${result.no}" value="${result.orgnztIdSec}"/>
+												</td>
+												<td class="txt_center"><img class="cursorPointer" onclick="orgSave('${result.no}');" src="${imagePath}/admin/btn/btn_save.gif"/></td>
+											</c:when>
+											<c:otherwise>
+												<td class="txt_center"></td>
+												<td class="txt_center"></td>
+												<td class="txt_center"></td>
+											</c:otherwise>
+										</c:choose>
 									</tr>
 								</c:forEach>
 							</tbody>

@@ -47,13 +47,13 @@
 						}
 						</script>
 
-						<li><a href="#">알림톡 관리</a>
-							<ul class="smenu">
-								<li><a href="javascript:openPop('http://www.allimtalk.com/app/msgHistory_pop.do','_blank','width=820, height=750');">전송 이력</a></li>
-								<li><a href="javascript:openPop('http://www.allimtalk.com/statistics/msgOfApp_pop.do','_blank','width=700, height=750');">전송 통계</a></li>
-								<li><a href="javascript:openPop('http://www.allimtalk.com/statistics/statsRecOfDay.do','_blank','width=1900, height=840');">수신 현황(일별)</a></li>															
-							</ul>
-						</li>
+<%--						<li><a href="#">알림톡 관리</a>--%>
+<%--							<ul class="smenu">--%>
+<%--								<li><a href="javascript:openPop('http://www.allimtalk.com/app/msgHistory_pop.do','_blank','width=820, height=750');">전송 이력</a></li>--%>
+<%--								<li><a href="javascript:openPop('http://www.allimtalk.com/statistics/msgOfApp_pop.do','_blank','width=700, height=750');">전송 통계</a></li>--%>
+<%--								<li><a href="javascript:openPop('http://www.allimtalk.com/statistics/statsRecOfDay.do','_blank','width=1900, height=840');">수신 현황(일별)</a></li>															--%>
+<%--							</ul>--%>
+<%--						</li>--%>
 
 
 						<li><a href="${rootPath}/admin/salary/salaryMain.do">인건비 관리</a>

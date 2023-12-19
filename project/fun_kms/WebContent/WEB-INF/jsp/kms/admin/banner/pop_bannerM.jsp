@@ -47,14 +47,14 @@ function register() {
 				<tr>
 					<td class="subtitle">이미지</td>
 					<td class="subtitle2" colspan="2">
-						<c:if test="${not empty result.bnrFileId}">
+<%--						<c:if test="${not empty result.bnrFileId}">--%>
 							<c:import url="${rootPath}/selectFileInfsForUpdate.do" charEncoding="utf-8">
 								<c:param name="param_atchFileId" value="${result.bnrFileId}" />
 							</c:import>
-						</c:if>	
-						<c:if test="${result.bnrFileId == ''}">
-							<input type="hidden" name="fileListCnt" value="0" />
-						</c:if>
+<%--						</c:if>	--%>
+<%--						<c:if test="${result.bnrFileId == ''}">--%>
+<%--							<input type="hidden" name="fileListCnt" value="0" />--%>
+<%--						</c:if>--%>
 						<div id="file_upload_posbl"  style="display:none;" >	
 							<input name="file_1" id="egovComFileUploader" type="file" />
 							<div id="egovComFileList"></div>
@@ -80,6 +80,7 @@ function register() {
 							multi_selector.addElement( document.getElementById( 'egovComFileUploader' ) );
 						} else {
 							fn_egov_check_file('N');
+							document.frm.bnrFileId.value = '';
 						}			
 						</script>
 					</td>
@@ -98,6 +99,7 @@ function register() {
 							<c:otherwise>
 								<c:import url="/selectImageFileInfs.do" charEncoding="utf-8">
 									<c:param name="param_atchFileId" value="${result.bnrFileId}" />
+									<c:param name="param_width" value="240" />
 								</c:import>
 							</c:otherwise>
 						</c:choose>
