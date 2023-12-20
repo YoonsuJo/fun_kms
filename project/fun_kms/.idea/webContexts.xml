@@ -4,6 +4,7 @@
     <option name="state">
       <map>
         <entry key="file://$PROJECT_DIR$/WebContent/WEB-INF/jsp/kms/admin/banner/pop_bannerM.jsp" value="file://$PROJECT_DIR$/WebContent/WEB-INF/jsp/kms/admin/banner" />
+        <entry key="file://$PROJECT_DIR$/WebContent/WEB-INF/jsp/kms/admin/holiday/holidayM.jsp" value="file://$PROJECT_DIR$/WebContent/WEB-INF/jsp/kms/admin/holiday" />
       </map>
     </option>
   </component>

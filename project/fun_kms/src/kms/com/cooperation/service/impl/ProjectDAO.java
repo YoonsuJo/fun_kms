@@ -1,24 +1,20 @@
 package kms.com.cooperation.service.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import egovframework.rte.psl.dataaccess.EgovAbstractDAO;
+import egovframework.rte.psl.dataaccess.util.EgovMap;
+import kms.com.admin.organ.service.Organ;
+import kms.com.cooperation.service.ProjectInputVO;
+import kms.com.cooperation.service.ProjectVO;
+import kms.com.management.service.StepResultVO;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import egovframework.rte.psl.dataaccess.EgovAbstractDAO;
-import egovframework.rte.psl.dataaccess.util.EgovMap;
-import kms.com.admin.organ.service.Organ;
-import kms.com.cooperation.service.BusinessContactVO;
-import kms.com.cooperation.service.ProjectInputVO;
-import kms.com.cooperation.service.ProjectVO;
-import kms.com.fund.vo.BondCheckVO;
-import kms.com.management.service.ProjectResultVO;
-import kms.com.management.service.StepResultVO;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 
@@ -280,7 +276,7 @@ public class ProjectDAO extends EgovAbstractDAO {
 		}
 		update("KmsProjectDAO.update_tbl_prj_input", projectVO);
 		
-		update("KmsProjectDAO.update_tbl_prj_input_plan", projectVO);
+//		update("KmsProjectDAO.update_tbl_prj_input_plan", projectVO);
 		update("KmsProjectDAO.update_tbl_prj_interest", projectVO);
 		//update("KmsProjectDAO.update_tbl_prj_result_total", projectVO); // 2014-03-18 PK인 ID가 변경되지 않고 남아서 전일집계 할 때 중복 데이터 발생	
 		delete("KmsProjectDAO.delete_tbl_prj_result_total", projectVO); // 전일집계 데이터는 삭제하도록 변경

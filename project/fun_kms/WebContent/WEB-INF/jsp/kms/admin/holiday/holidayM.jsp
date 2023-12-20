@@ -20,7 +20,15 @@ function update() {
 	document.frm.submit();
 }
 function list() {
-	
+	location.href = "/admin/holiday/holidayList.do";
+}
+function fnDelete(){
+	if (confirm("<spring:message code="common.delete.msg" />")) {
+		var varForm				 = document.all["frm"];
+		varForm.action           = "<c:url value='/admin/holiday/deleteHoliday.do'/>";
+		varForm.scheId.value     = "${result.scheId}";
+		varForm.submit();
+	}
 }
 </script>
 </head>
@@ -59,7 +67,7 @@ function list() {
 		                    <tbody>
 		                    	<tr> 
 			                    	<td class="title">휴일일자</td>
-			                    	<td class="pL10" ><input type="text" name="date" class="span_7 calGen" value="${result.scheYear}${result.scheMonth}${result.scheDate}"/></td>
+			                    	<td class="pL10" ><input type="text" name="date" class="span_7 calGen" autocomplete="off" value="${result.scheYear}${result.scheMonth}${result.scheDate}"/></td>
 		                    	</tr>
 								<tr>
 								    <td class="title">휴일명</td>
@@ -98,8 +106,8 @@ function list() {
 						<!-- 버튼 시작 -->
 		                <div class="btn_area">
 		                	<a href="javascript:update();"><img src="${imagePath}/admin/btn/btn_save.gif"/></a>
+							<a href="#noscript" onclick="fnDelete(); return false;"><img src="${imagePath}/admin/btn/btn_delete.gif"/></a>
 		                	<a href="javascript:list();"><img src="${imagePath}/admin/btn/btn_list.gif"/></a>
-		                </div>
 		                <!-- 버튼 끝 -->						
 						
 					</div>

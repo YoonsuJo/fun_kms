@@ -20,7 +20,7 @@ function register() {
 	document.frm.submit();
 }
 function list() {
-	
+	location.href = "/admin/holiday/holidayList.do";
 }
 </script>
 </head>
@@ -58,7 +58,7 @@ function list() {
 		                    <tbody>
 		                    	<tr> 
 			                    	<td class="title">휴일일자</td>
-			                    	<td class="pL10" ><input type="text" name="date" class="span_7 calGen" /></td>
+			                    	<td class="pL10" ><input type="text" name="date" class="span_7 calGen" autocomplete="off"/></td>
 		                    	</tr>
 								<tr>
 								    <td class="title">휴일명</td>
