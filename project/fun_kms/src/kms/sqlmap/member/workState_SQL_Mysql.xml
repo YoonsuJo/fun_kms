@@ -1401,22 +1401,6 @@
 		 GROUP BY A.USER_NO,SUBSTR(A.TM,1,10)) TB
   	 GROUP BY TB.USER_NO		
 	</select>
-
-	SELECT
-		B.NO AS USER_NO
-		,B.USER_NM
-		,B.USER_ID
-		,MIN(SUBSTR(A.TM,1,10)) AS TM
-	FROM
-		TBL_LOGIN_LOG A,
-		TBL_USERINFO B
-	WHERE
-		A.USER_NO = B.NO
-		AND B.GHOST = '0'
-		AND B.COMPIN_DT IS NOT NULL
-		AND A.TM IS NOT NULL
-		AND SUBSTR(A.TM, 1, 4) = #searchYear#
-		GROUP BY A.USER_NO,SUBSTR(A.TM,1,10)
 	
 	<select id="WorkStateDAO.selectLoginStatusExcel" resultClass="egovMap">
 		SELECT
