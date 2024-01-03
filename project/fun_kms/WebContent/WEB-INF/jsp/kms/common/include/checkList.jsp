@@ -323,7 +323,7 @@ function writeRequest2() {
 			<span class="txt_blue" onmouseover="showLayerCheckList('commFree',this)" onmouseout="hideLayerCheckList()">
 				0,</span></a>
 			<a href="${rootPath}/community/selectBoardList.do?bbsId=BBSMSTR_000000000085">
-			<span class="txt_blue" >
+			<span class="txt_blue" onmouseover="showLayerCheckList('solution',this)" onmouseout="hideLayerCheckList()">
 				0]</span></a>
 		</span>
 		<a href="${rootPath}/community/addBoardArticle.do?bbsId=BBSMSTR_000000000001"><img src="${imagePath}/btn/btn_write01.gif" alt="글쓰기"/></a>
@@ -429,6 +429,7 @@ function writeRequest2() {
 <div class="simpleMsg_layer"  id="reject">반려된문서</div>
 <div class="simpleMsg_layer"  id="notice">공지사항</div>
 <div class="simpleMsg_layer"  id="commFree">자유게시판</div>
+<div class="simpleMsg_layer"  id="solution">솔루션 게시판</div>
 
 <div class="simpleMsg_layer"  id="todayMission">오늘</div>
 <div class="simpleMsg_layer"  id="sevenMission">이번주</div>

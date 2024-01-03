@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="fun_kms"  default="war" basedir=".">
+    <!-- java源代码目录 -->
+    <property name="src.dir" location="src" />
+    <!-- 构建存放目录 -->
+    <property name="build.dir" location="build" />
+    <!-- class文件存放目录 -->
+    <property name="build.classes" location="${build.dir}/classes" />
+    <!-- 打包目录 -->
+    <property name="build.war" location="${build.dir}/war" />
+
+    <property name="lib.dir" location="lib" />
+
+    <!-- tomcat根目录 -->
+    <property name="tomcat.home" location="C:\dev\apache-tomcat-7.0.96" />
+    <!-- tomcat项目存放-->
+    <property name="tomcat.WebContent" location="${tomcat.home}/webContent" />
+
+    <!-- war包名字 -->
+    <property name="war.name" value="fun_kms" />
+    <!-- web 根目录 -->
+    <property name="web.root" location="WebContent" />
+    <!-- web jar包所在 -->
+    <property name="web.lib" location="${web.root}/WEB-INF/lib" />
+
+    <!-- 加载环境变量 -->
+    <property environment="env" />
+
+    <!-- 定义编译时的jar -->
+    <path id="compile.path">
+        <fileset dir="${web.lib}" includes="*.jar" />
+        <fileset dir="${tomcat.home}/lib" includes="**/*.jar"/>
+        <fileset dir="${lib.dir}" includes="*.jar" />
+    </path>
+
+    <!-- 初始化需要的文件夹 -->
+    <target name="init" description="初始化">
+        <mkdir dir="${build.dir}" />
+        <mkdir dir="${build.classes}" />
+        <mkdir dir="${build.war}" />
+        <echo>初始化工作结束！</echo>
+    </target>
+
+    <!-- 编译java文件为class -->
+    <target name="compile" depends="clean, init" description="编译">
+        <javac destdir="${build.classes}" srcdir="${src.dir}" debug="true">
+            <compilerarg line="-encoding UTF-8 " />
+            <classpath refid="compile.path" />
+        </javac>
+        <echo message="编译完成！" />
+
+        <!-- 复制XML配置文件到类路径 -->
+        <copy todir="${build.classes}">
+            <fileset dir="${src.dir}" includes="**/*.xml, **/*.properties" />
+        </copy>
+        <echo>Spring配置文件复制完成！</echo>
+    </target>
+    <!-- 把项目打包成war包存放在指定位置 -->
+    <target name="war" depends="compile" description="打包war文件">
+        <war destfile="${build.war}/${war.name}.war" webxml="${web.root}/WEB-INF/web.xml">
+            <fileset dir="${web.root}" includes="**/*.*" />
+            <lib dir="${web.lib}" />
+            <classes dir="${build.classes}" />
+        </war>
+        <echo>打包完成！</echo>
+    </target>
+
+    <!-- 拷贝war包到tomcat发布目录 -->
+    <target name="deploy" depends="war" description="发布">
+        <copy todir="${tomcat.WebContent}">
+            <fileset dir="${build.war}" includes="*.war" />
+        </copy>
+        <echo>已发布到Tomcat！</echo>
+    </target>
+
+    <target name="clean" description="清理">
+        <delete dir="${build.dir}" />
+        <delete dir="${tomcat.WebContent}/${war.name}"/>
+        <delete file="${tomcat.WebContent}/${war.name}.war"/>
+        <echo>清理完成！</echo>
+    </target>
+
+</project>
