@@ -46,7 +46,7 @@
 
     <!-- 编译java文件为class -->
     <target name="compile" depends="clean, init" description="编译">
-        <javac destdir="${build.classes}" srcdir="${src.dir}" debug="true" includeantruntime="false">
+        <javac destdir="${build.classes}" srcdir="${src.dir}" debug="true" encoding="UTF-8" includeantruntime="false">
             <compilerarg line="-encoding UTF-8 " />
             <classpath refid="compile.path" />
         </javac>
