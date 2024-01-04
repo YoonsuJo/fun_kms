@@ -13,7 +13,7 @@
 
     <!-- tomcat根目录 -->
 <!--    <property name="tomcat.home" location="C:\dev\apache-tomcat-7.0.96" />-->
-    <!-- tomcat项目存放-->
+    <!--tomcat项目存放-->
 <!--    <property name="tomcat.WebContent" location="${tomcat.home}/webContent" />-->
 
     <!-- war包名字 -->
@@ -25,14 +25,14 @@
 
     <!-- 加载环境变量 -->
     <property environment="env" />
-    <property name="tomcat.path" value="${env.TOMCAT_PATH}"/>
+<!--    <property name="tomcat.path" value="${env.TOMCAT_PATH}"/>-->
 
-    <property name="tomcat.WebContent" location="${tomcat.path}/webContent" />
+<!--    <property name="tomcat.WebContent" location="${tomcat.path}/webContent" />-->
 
     <!-- 定义编译时的jar -->
     <path id="compile.path">
         <fileset dir="${web.lib}" includes="*.jar" />
-        <fileset dir="${tomcat.path}/lib" includes="**/*.jar"/>
+<!--        <fileset dir="${tomcat.home}/lib" includes="**/*.jar"/>-->
         <fileset dir="${lib.dir}" includes="*.jar" />
     </path>
 
@@ -69,17 +69,17 @@
     </target>
 
     <!-- 拷贝war包到tomcat发布目录 -->
-    <target name="deploy" depends="war" description="发布">
-        <copy todir="${tomcat.WebContent}">
-            <fileset dir="${build.war}" includes="*.war" />
-        </copy>
-        <echo>已发布到Tomcat！</echo>
-    </target>
+<!--    <target name="deploy" depends="war" description="发布">-->
+<!--        <copy todir="${tomcat.WebContent}">-->
+<!--            <fileset dir="${build.war}" includes="*.war" />-->
+<!--        </copy>-->
+<!--        <echo>已发布到Tomcat！</echo>-->
+<!--    </target>-->
 
     <target name="clean" description="清理">
         <delete dir="${build.dir}" />
-        <delete dir="${tomcat.WebContent}/${war.name}"/>
-        <delete file="${tomcat.WebContent}/${war.name}.war"/>
+<!--        <delete dir="${tomcat.WebContent}/${war.name}"/>-->
+<!--        <delete file="${tomcat.WebContent}/${war.name}.war"/>-->
         <echo>清理完成！</echo>
     </target>
 
