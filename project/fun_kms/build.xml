@@ -12,9 +12,9 @@
     <property name="lib.dir" location="lib" />
 
     <!-- tomcat根目录 -->
-    <property name="tomcat.home" location="C:\dev\apache-tomcat-7.0.96" />
+<!--    <property name="tomcat.home" location="C:\dev\apache-tomcat-7.0.96" />-->
     <!-- tomcat项目存放-->
-    <property name="tomcat.WebContent" location="${tomcat.home}/webContent" />
+<!--    <property name="tomcat.WebContent" location="${tomcat.home}/webContent" />-->
 
     <!-- war包名字 -->
     <property name="war.name" value="fun_kms" />
@@ -25,11 +25,14 @@
 
     <!-- 加载环境变量 -->
     <property environment="env" />
+    <property name="tomcat.path" value="${env.TOMCAT_PATH}"/>
+
+    <property name="tomcat.WebContent" location="${tomcat.path}/webContent" />
 
     <!-- 定义编译时的jar -->
     <path id="compile.path">
         <fileset dir="${web.lib}" includes="*.jar" />
-        <fileset dir="${tomcat.home}/lib" includes="**/*.jar"/>
+        <fileset dir="${tomcat.path}/lib" includes="**/*.jar"/>
         <fileset dir="${lib.dir}" includes="*.jar" />
     </path>
 
@@ -43,7 +46,7 @@
 
     <!-- 编译java文件为class -->
     <target name="compile" depends="clean, init" description="编译">
-        <javac destdir="${build.classes}" srcdir="${src.dir}" debug="true">
+        <javac destdir="${build.classes}" srcdir="${src.dir}" debug="true" includeantruntime="false">
             <compilerarg line="-encoding UTF-8 " />
             <classpath refid="compile.path" />
         </javac>
