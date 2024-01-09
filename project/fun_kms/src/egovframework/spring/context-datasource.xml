@@ -17,8 +17,27 @@
 	<alias name="dataSource-${Globals.DbType}" alias="dataSource" />
 
 	<!-- MySQL -->
-	<bean id="dataSource-mysql" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName" value="net.sf.log4jdbc.DriverSpy"/>
+	<bean id="dataSource-mysql" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass" value="com.mysql.jdbc.Driver"/>
+		<property name="jdbcUrl" value="jdbc:mysql://211.253.25.233:13306/fun_kms_dev?characterEncoding=UTF-8&amp;autoReconnect=true"/>
+		<property name="user" value="funnet"/>
+		<property name="password" value="vjsspxm1!"/>
+
+		<!-- C3P0 特有的配置 -->
+		<property name="initialPoolSize" value="5"/>
+		<property name="minPoolSize" value="5"/>
+		<property name="maxPoolSize" value="20"/>
+		<property name="maxIdleTime" value="300"/>
+		<property name="acquireIncrement" value="1"/>
+		<property name="acquireRetryAttempts" value="5"/>
+		<property name="acquireRetryDelay" value="1000"/>
+		<property name="checkoutTimeout" value="10000"/>
+		<property name="maxStatements" value="100"/>
+		<property name="idleConnectionTestPeriod" value="3000"/>
+	</bean>
+
+<!--		<bean id="dataSource-mysql" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">-->
+<!--		<property name="driverClassName" value="net.sf.log4jdbc.DriverSpy"/>-->
 		<!--  Real      
 		<property name="url" value="jdbc:mysql://172.27.0.116:3306/fun_kms?characterEncoding=UTF-8&amp;autoReconnect=true"/>
  		<property name="username" value="funnet"/>
@@ -32,18 +51,18 @@
 		-->
 		
 		<!--  localhost  -->  
-		<property name="url" value="jdbc:mysql://211.253.25.233:13306/fun_kms_dev?characterEncoding=UTF-8&amp;autoReconnect=true"/>
- 		<property name="username" value="funnet"/>
-		<property name="password" value="vjsspxm1!"/>
-		
-		
-		
-        <property name="validationQuery" value="SELECT 1" />
-        <property name="testWhileIdle" value="true" />
-        <property name="timeBetweenEvictionRunsMillis" value="600000" />
-		 
-	
-	</bean>
+<!--		<property name="url" value="jdbc:mysql://211.253.25.233:13306/fun_kms_dev?characterEncoding=UTF-8&amp;autoReconnect=true"/>-->
+<!-- 		<property name="username" value="funnet"/>-->
+<!--		<property name="password" value="vjsspxm1!"/>-->
+<!--		-->
+<!--		-->
+<!--		-->
+<!--        <property name="validationQuery" value="SELECT 1" />-->
+<!--        <property name="testWhileIdle" value="true" />-->
+<!--        <property name="timeBetweenEvictionRunsMillis" value="600000" />-->
+<!--		 -->
+<!--	-->
+<!--	</bean>-->
 	
 	<!-- Oracle -->
 	<!-- No Used 
